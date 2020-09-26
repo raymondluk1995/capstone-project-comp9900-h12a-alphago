@@ -1,0 +1,20 @@
+server:
+  servlet:
+    context-path: /ppsale
+
+# datasource
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/property_sale?serverTimezone=UTC&&useUnicode=true&characterEncoding=UTF-8&&useSSL=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+# redis
+  redis:
+    password: 123456
+
+# mybatis plus
+mybatis-plus:
+  mapper-locations:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
