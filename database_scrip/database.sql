@@ -35,6 +35,7 @@ create table property(
 	`n_garage` int(3) NOT NULL,
 	`auction` boolean NOT NULL,
 	`public_access` boolean NOT NULL,
+	`area` int(6) NOT NULL,
 	
 	primary key(pid),
 	foreign key (owner) references user(uid),
