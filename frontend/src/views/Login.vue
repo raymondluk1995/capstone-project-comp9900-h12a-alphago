@@ -28,7 +28,7 @@
         <div class="btns">
           <el-button round @click="goto('register')">Sign Up</el-button>
 <!--          <el-button round type="info" plane @click="goto('reset')">Forget Password?</el-button>-->
-          <el-button round type="info" plane @click="">Forget Password?</el-button>
+          <el-button round type="info" plane @click="goto('reset')">Forget Password?</el-button>
           <el-button round type="primary" @click="signIn" style="float: right;">Sign in</el-button>
         </div>
       </el-col>
@@ -68,12 +68,28 @@ export default {
     signIn() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          let email = this.form.email;
-          let avatar =
-                  'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4286252317,3833864906&fm=26&gp=0.jpg';
-          // this.login({ email, avatar });
-          this.$message.success("Login successful");
-          this.$router.replace("/");
+          // let email = this.form.email;
+          // let avatar =
+          //         'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4286252317,3833864906&fm=26&gp=0.jpg';
+          // // this.login({ email, avatar });
+          // this.$message.success("Login successful");
+          // this.$router.replace("/");
+          let data = this.$qs.stringify(this.form)
+          this.$axios.post('/user/login', data)
+                  .then((response) => {
+                    if (response.data.code === 200) {
+                      console.log('login successfully')
+                      this.$store.commit('$_setStorage', response.data.email)
+                      this.$router.push({name: 'home'})
+                    } else if (response.data.code === 400) {
+                      this.$message.error('Wrong email or password')
+                      console.log(response.data.msg)
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log('ERROR')
+                    console.log(error)
+                  })
         } else {
           return false;
         }

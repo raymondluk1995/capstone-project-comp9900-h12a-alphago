@@ -3,22 +3,46 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 
+const key = 'user'
 export default new Vuex.Store({
-  state: {
-    hasLogin: true,
-    avatar: '',
-    firstname: '',
+  // state: {
+    hasLogin: false,
+  //   avatar: '',
+  //   firstname: '',
+  // },
+  state () {
+    return {
+      token:null,
+      user: null
+    }
+  },
+  getters: {
+    getStorage: function (state) {
+      if (!state.user) {
+        state.user = JSON.parse(localStorage.getItem(key))
+      }
+      return state.user
+    }
   },
   mutations: {
-    setHasLogin(state, status) {
-      state.hasLogin = status;
+    // setHasLogin(state, status) {
+    //   state.hasLogin = status;
+    // }
+    $_setStorage (state, value) {
+      state.user = value
+      state.token =
+      localStorage.setItem(key, JSON.stringify(value))
+    },
+    $_removeStorage (state) {
+      state.user = null
+      localStorage.removeItem(key)
     }
   },
   actions: {
-    logout({commit}) {
-      console.log("logout state");
-      commit('setHasLogin', false);
-    },
+    // logout({commit}) {
+    //   console.log("logout state");
+    //   commit('setHasLogin', false);
+    // },
   },
   modules: {
   }
