@@ -77,11 +77,12 @@ export default {
           // this.$router.replace("/");
           let data = this.$qs.stringify(this.form)
           let config = {
-            headers: { 'token': this.token}
+            headers: { 'token': this.$store.state.token}
           }
           this.$axios.post('/user/login', data, config)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
+                      this.$store.state.token = response.jwt;
                       console.log(response.data);
                     } else {
                       console.log(response.message);

@@ -6,16 +6,15 @@ Vue.use(Vuex);
 const key = 'user'
 export default new Vuex.Store({
   // state: {
-    hasLogin: false,
+  //   hasLogin: false,
   //   avatar: '',
   //   firstname: '',
   // },
-  state () {
-    return {
-      token: 'thisisatokenkenkenkenkenekneknekneknek',
-      user: null
-    }
+  state: {
+      hasLogin: false,
+      jwt: '',
   },
+
   getters: {
     getStorage: function (state) {
       if (!state.user) {

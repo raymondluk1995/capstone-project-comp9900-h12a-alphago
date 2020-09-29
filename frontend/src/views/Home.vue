@@ -87,7 +87,7 @@
                 class="input"
                 placeholder="Search by address/suburb/others"
                 prefix-icon="el-icon-search"
-                v-model="serachKey"
+                v-model="searchKey"
         >
           <el-button
                   slot="append"
@@ -112,6 +112,10 @@ export default {
   },
     data() {
       return {
+          bathNum: 1,
+          bedroomNum: 1,
+          carNum: 1,
+          searchKey: '',
         bigScreen: {
           images: [
             {
@@ -154,7 +158,7 @@ export default {
             label: 5,
           }
         ],
-        searchKey: '',
+
         // options: [
         //   {
         //     value: 1,
