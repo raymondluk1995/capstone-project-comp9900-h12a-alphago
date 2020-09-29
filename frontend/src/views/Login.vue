@@ -77,10 +77,9 @@ export default {
           // this.$router.replace("/");
           let data = this.$qs.stringify(this.form)
           let config = {
-            headers: { 'token': state.token
-            }
+            headers: { 'token': this.token}
           }
-          this.$axios.post('/login', data,config)
+          this.$axios.post('/user/login', data, config)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                       console.log(response.data);
