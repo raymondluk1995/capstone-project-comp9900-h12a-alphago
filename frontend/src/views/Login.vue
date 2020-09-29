@@ -75,23 +75,25 @@ export default {
           // // this.login({ email, avatar });
           // this.$message.success("Login successful");
           // this.$router.replace("/");
-          let data = this.$qs.stringify(this.form)
+          let data = this.$qs.stringify(this.form);
           let config = {
-            headers: { 'token': this.$store.state.token}
-          }
-          this.$axios.post('/user/login', data, config)
+            headers: { 'jwt': this.$store.state.jwt}
+          };
+          this.$axios.post('/user/login', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
-                      this.$store.state.token = response.jwt;
+                      this.$store.state.jwt = response.jwt;
+                      this.$store.commit('$_setStorage', response.data.username)
+                      this.$store.state.hasLogin = true;
                       console.log(response.data);
                     } else {
                       console.log(response.message);
                     }
                   })
-                  // .catch(function (error) {
-                  //   console.log('ERROR')
-                  //   console.log(error)
-                  // })
+                  .catch(function (error) {
+                    console.log('ERROR')
+                    console.log(error)
+                  })
         } else {
           return false;
         }

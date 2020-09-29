@@ -13,6 +13,7 @@ export default new Vuex.Store({
   state: {
       hasLogin: false,
       jwt: '',
+      user: null
   },
 
   getters: {
