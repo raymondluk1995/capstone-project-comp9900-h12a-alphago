@@ -69,7 +69,7 @@ export default {
     signIn() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          // let email = this.form.email;
+          let username = this.form.username;
           // let avatar =
           //         'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4286252317,3833864906&fm=26&gp=0.jpg';
           // // this.login({ email, avatar });
@@ -82,18 +82,19 @@ export default {
           this.$axios.post('/user/login', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
-                      this.$store.state.jwt = response.jwt;
-                      this.$store.commit('$_setStorage', response.data.username)
-                      this.$store.state.hasLogin = true;
+                      // this.$store.state.jwt = response.jwt;
+                      // this.$store.state.hasLogin = true;
+                      this.$store.commit('setJwt', response.jwt)
+                      this.login({ username });
                       console.log(response.data);
                     } else {
                       console.log(response.message);
                     }
                   })
-                  .catch(function (error) {
-                    console.log('ERROR')
-                    console.log(error)
-                  })
+                  // .catch(function (error) {
+                  //   console.log('ERROR')
+                  //   console.log(error)
+                  // })
         } else {
           return false;
         }
