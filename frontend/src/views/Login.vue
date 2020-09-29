@@ -75,7 +75,11 @@ export default {
           // this.$message.success("Login successful");
           // this.$router.replace("/");
           let data = this.$qs.stringify(this.form)
-          this.$axios.post('/login', data)
+          let config = {
+            headers: { 'token': state.token
+            }
+          }
+          this.$axios.post('/login', data,config)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                       console.log(response.data);

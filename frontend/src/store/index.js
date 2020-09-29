@@ -12,7 +12,7 @@ export default new Vuex.Store({
   // },
   state () {
     return {
-      token:null,
+      token: 'thisisatokenkenkenkenkenekneknekneknek',
       user: null
     }
   },
