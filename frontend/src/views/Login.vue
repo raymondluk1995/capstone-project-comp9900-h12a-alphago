@@ -86,8 +86,11 @@ export default {
                     if (response.status >= 200 && response.status < 300) {
                       // this.$store.state.jwt = response.jwt;
                       // this.$store.state.hasLogin = true;
-                      this.$store.commit('setJwt', response.jwt)
+                      this.$store.commit('setJwt', response.jwt);
                       this.login({ username });
+                      this.$router.push({name: 'home'});
+                      console.log( response.jwt) ;
+                      console.log( response.username) ;
                       console.log(response.data);
                     } else {
                       console.log(response.message);

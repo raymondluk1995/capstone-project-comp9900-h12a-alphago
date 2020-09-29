@@ -27,6 +27,7 @@ export default new Vuex.Store({
   },
   actions: {
     login({commit}, {username}) {
+      console.log( 'actions:'+username) ;
       commit('setUsername', username)
       commit('setHasLogin', true)
     },
