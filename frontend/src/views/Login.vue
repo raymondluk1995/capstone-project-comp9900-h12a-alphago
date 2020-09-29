@@ -14,8 +14,8 @@
           label-width="100px"
           label-position="left"
         >
-          <el-form-item label="Email" prop="email">
-            <el-input v-model="form.email"></el-input>
+          <el-form-item label="Username" prop="username">
+            <el-input v-model="form.username"></el-input>
           </el-form-item>
           <el-form-item label="Password" prop="password">
             <el-input
@@ -55,11 +55,11 @@ export default {
   data() {
     return {
       form: {
-        email: '',
+        username: '',
         password: '',
       },
       rules: {
-        email: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
+        username: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
         password: [{required: true, message: "Please enter password", trigger: "blur",},],
       },
     };
@@ -75,21 +75,18 @@ export default {
           // this.$message.success("Login successful");
           // this.$router.replace("/");
           let data = this.$qs.stringify(this.form)
-          this.$axios.post('/user/login', data)
+          this.$axios.post('/login', data)
                   .then((response) => {
-                    if (response.data.code === 200) {
-                      console.log('login successfully')
-                      this.$store.commit('$_setStorage', response.data.email)
-                      this.$router.push({name: 'home'})
-                    } else if (response.data.code === 400) {
-                      this.$message.error('Wrong email or password')
-                      console.log(response.data.msg)
+                    if (response.status >= 200 && response.status < 300) {
+                      console.log(response.data);
+                    } else {
+                      console.log(response.message);
                     }
                   })
-                  .catch(function (error) {
-                    console.log('ERROR')
-                    console.log(error)
-                  })
+                  // .catch(function (error) {
+                  //   console.log('ERROR')
+                  //   console.log(error)
+                  // })
         } else {
           return false;
         }
