@@ -38,6 +38,7 @@
 
 <script>
 import Header from "@/components/Header.vue";
+import {mapActions} from "vuex";
 
 // const validateEmail = (rule, value, callback) => {
 //   const emailReg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
@@ -66,6 +67,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["login"]),
     signIn() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
