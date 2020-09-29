@@ -39,14 +39,14 @@
 <script>
 import Header from "@/components/Header.vue";
 
-const validateEmail = (rule, value, callback) => {
-  const emailReg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
-  if (!emailReg.test(value)) {
-    callback(new Error("Please enter the correct email address"));
-  } else {
-    callback();
-  }
-};
+// const validateEmail = (rule, value, callback) => {
+//   const emailReg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+//   if (!emailReg.test(value)) {
+//     callback(new Error("Please enter the correct email address"));
+//   } else {
+//     callback();
+//   }
+// };
 
 export default {
   components: {
@@ -59,7 +59,8 @@ export default {
         password: '',
       },
       rules: {
-        username: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
+        // username: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
+        username: [{required: true, message: "Please enter email address", trigger: "blur",},],
         password: [{required: true, message: "Please enter password", trigger: "blur",},],
       },
     };
