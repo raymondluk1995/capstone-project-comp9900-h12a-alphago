@@ -5,7 +5,6 @@ import alphago.propertysale.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +45,6 @@ public class MyRealm extends AuthorizingRealm {
         if(user == null){
             throw new UnknownAccountException("username not exist!");
         }
-        return new SimpleAuthenticationInfo(user , jwtToken.getCredentials() , getName());
+        return new SimpleAuthenticationInfo(user.getUsername() , jwtToken.getCredentials() , getName());
     }
 }

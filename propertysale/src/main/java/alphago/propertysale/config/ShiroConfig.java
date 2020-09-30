@@ -2,6 +2,7 @@ package alphago.propertysale.config;
 
 import alphago.propertysale.shiro.JwtFilter;
 import alphago.propertysale.shiro.MyRealm;
+import alphago.propertysale.shiro.cahche.RedisCacheManager;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.realm.Realm;
@@ -25,9 +26,13 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
+    /**
+    * Inject shiroFilterFactoryBean
+    */
     @Bean
     ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager defaultWebSecurityManager , JwtFilter jwtFilter){
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        // set security manager
         shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
         // 添加过滤器
         Map<String , Filter> filterMap = new HashMap<>();
@@ -44,6 +49,7 @@ public class ShiroConfig {
     DefaultWebSecurityManager defaultWebSecurityManager(Realm realm){
         DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
         defaultWebSecurityManager.setRealm(realm);
+        // Disable session
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
         DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
         defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
@@ -56,6 +62,10 @@ public class ShiroConfig {
     Realm realm(){
         MyRealm myRealm = new MyRealm();
         // Enable Cache
+        myRealm.setCachingEnabled(true);
+        myRealm.setCacheManager(new RedisCacheManager());
+        myRealm.setAuthenticationCachingEnabled(true);
+        myRealm.setAuthenticationCacheName("Authentication");
 
         return myRealm;
     }

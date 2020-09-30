@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /ppsale
+    context-path:
 
 # datasource
 spring:
