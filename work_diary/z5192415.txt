@@ -1,0 +1,8 @@
+Week 1
+We set up a group. Then discussed the theme and needs we wanted to do. As a frontend developer I start to learn the framework we used.
+
+Week 2
+We have a meeting to discuss the project details like the website design and database schema. And I start to init a Vue project and keep learning. Meanwhile, the proposal is on the way, I was responsible to draw the interface and flow diagram.
+
+Week 3
+Still learning. And when other group member finished their part of proposal, I need to collect them and continuing explore the Vue project. 
