@@ -1,0 +1,22 @@
+Week 1
+
+The group was formed. I created the Jira account and invited other members. Moreover,
+I started to learn the fundamental knowledge of front end from HTML and CSS. During 
+this week, under the leadership of Wanchao, we discussed the practical softwares and tools
+for this project.
+
+
+Week 2
+
+I had a meeting with Wanchao and Ziqi to decide the frontend layouts. After discussion, 
+there are approximately 8 pages in total. Furthermore, the whole team held a meeting to 
+decide the database schema and discussed how to realize project objectives on each web page.
+On weekends, I wrote user stories on the Jira software. Throughout the whole week, I kept on
+learning the fundamental CSS and JavaScript knowledge.
+
+
+Week 3
+
+On Tuesday, the whole team held a meeting to decide what contents should be returned in the JSON
+format from the back end to the front end. I finished the part of User Stories and Sprints in
+the proposal. During this week, I kept on learning the JavaScript, CSS and VueJS.
