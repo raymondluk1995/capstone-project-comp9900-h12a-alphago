@@ -1,0 +1,20 @@
+Week1 
+
+We formed a group. I met other team members and join the Jira account. Moreover,
+I started to thinking about our responsiblity in the team and our role. Also, we 
+checked and disscuss all of the project options and made a final decision: onlinePropertySale.
+Under the leadership of Wanchao, we decided our softwares and technologies we gonna use.
+
+
+Week2 
+
+I joined a meeting with other team members. We disuccssed about the design of the tables, and for relationship 
+database we decided to use MySQL. It's community has lots of support and detailed documents, so we can have less
+difficulities when developing. Furthrmore, I met our backend team and know each other.
+
+
+Week3
+
+Working on our proposal and learning some new features about Sprint Boot. It is a powerful tool and has a lot of 
+micro-services. So I spent some time and dive into it. Hopefully we can start to code our backend and then we can 
+test some init functionalities like log in, log out or expire a user.
