@@ -23,6 +23,7 @@ export default new Vuex.Store({
     },
     setJwt(state, jwt) {
       state.jwt = jwt;
+
     },
   },
   actions: {
