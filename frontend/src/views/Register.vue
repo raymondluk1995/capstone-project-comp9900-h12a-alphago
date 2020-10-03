@@ -17,6 +17,9 @@
         >
           <el-row :gutter="50">
             <el-col :span="14">
+              <el-form-item label="Username:" prop="username">
+                <el-input v-model="form.username"></el-input>
+              </el-form-item>
               <el-form-item label="First Name:" prop="firstname">
                 <el-input v-model="form.firstname"></el-input>
               </el-form-item>
@@ -29,9 +32,9 @@
               <el-form-item label="Email:" prop="email">
                 <el-input v-model="form.email"></el-input>
               </el-form-item>
-              <el-form-item label="Payment:" prop="payment">
-                <el-input v-model="form.payment"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="Payment:" prop="payment">-->
+<!--                <el-input v-model="form.payment"></el-input>-->
+<!--              </el-form-item>-->
               <el-form-item label="Password:" prop="password">
                 <el-input
                   type="password"
@@ -70,7 +73,7 @@
 
 <script>
 import Header from "@/components/Header.vue";
-// import { mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 
 export default {
   components: {
@@ -104,34 +107,48 @@ export default {
     };
     return {
       form: {
+        username:'',
         firstname: '',
         lastname: '',
         phone: '',
         email: '',
-        payment: '',
+        // payment: '',
         password: '',
         passwordAgain: '',
         imageUrl: '',
       },
       rules: {
+        username: [{required: true, message: "Please enter username", trigger: "blur",},],
         firstname: [{required: true, message: "Please enter firstname", trigger: "blur",},],
         lastname: [{required: true, message: " Please enter lastname", trigger: "blur",},],
         phone: [{required: true, message: " Please enter phone", trigger: "blur",}, { validator: validatePhone, trigger: "blur" },],
         email: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
-        payment: [{required: true, message: " Please enter payment", trigger: "blur",},],
+        // payment: [{required: true, message: " Please enter payment", trigger: "blur",},],
         password: [{required: true, message: " Please enter password", trigger: "blur",},],
         passwordAgain: [{required: true, message: " Please enter password again", trigger: "blur",}, { validator: validatePasswordAgain, trigger: "blur" },],
       },
     };
   },
   methods: {
-    // ...mapMutations(["setFirstname"]),
+    ...mapMutations(["setFirstname"]),
+    // Here, register wont sign in, push to login if registered
     register() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          this.$message.success("Register successful");
-          this.setFirstname(this.form.firstname);
-          this.$router.replace("/login");
+          this.$axios.post('/user/register', data)
+                  .then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                      console.log(response.data);
+                      this.$message('Registration Successful!')
+                      this.$router.replace("/login");
+                    } else {
+                      console.log(response.msg);
+                    }
+                  })
+                  .catch((res) => {
+                    console.log('error ', res);
+                    this.$message.error('Registration Error');
+                  });
         } else {
           return false;
         }

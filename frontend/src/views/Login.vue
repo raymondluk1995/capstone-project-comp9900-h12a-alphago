@@ -28,7 +28,7 @@
         <div class="btns">
           <el-button round @click="goto('register')">Sign Up</el-button>
           <!--          <el-button round type="info" plane @click="goto('reset')">Forget Password?</el-button>-->
-          <el-button round type="info" plane @click="goto('reset')">Forget Password?</el-button>
+          <el-button round type="info" plane @click="forgetpwd">Forget Password?</el-button>
           <el-button round type="primary" @click="signIn" style="float: right;">Sign in</el-button>
         </div>
       </el-col>
@@ -38,16 +38,7 @@
 
 <script>
   import Header from "@/components/Header.vue";
-  import {mapActions} from "vuex";
-
-  // const validateEmail = (rule, value, callback) => {
-  //   const emailReg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
-  //   if (!emailReg.test(value)) {
-  //     callback(new Error("Please enter the correct email address"));
-  //   } else {
-  //     callback();
-  //   }
-  // };
+  import {mapActions, mapMutations} from "vuex";
 
   export default {
     components: {
@@ -60,6 +51,7 @@
           password: '',
         },
         rules: {
+          // TODO: check username format
           // username: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
           username: [{required: true, message: "Please enter email address", trigger: "blur",},],
           password: [{required: true, message: "Please enter password", trigger: "blur",},],
@@ -67,44 +59,55 @@
       };
     },
     methods: {
-      ...mapActions(["login"]),
+      ...mapActions(['login']),
+      ...mapMutations(['setFirstname']),
       signIn() {
         this.$refs["form"].validate((valid) => {
           if (valid) {
             let username = this.form.username;
-            // let avatar =
-            //         'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4286252317,3833864906&fm=26&gp=0.jpg';
-            // // this.login({ email, avatar });
-            // this.$message.success("Login successful");
-            // this.$router.replace("/");
+            let firstname = this.form.firstname;
             let data = this.$qs.stringify(this.form);
-            let config = {
-              headers: { 'jwt': this.$store.state.jwt}
-            };
+            // let config = {
+            //   headers: { 'jwt': this.$store.state.jwt}
+            // };
             this.$axios.post('/user/login', data)
                     .then((response) => {
                       if (response.status >= 200 && response.status < 300) {
-                        // this.$store.state.jwt = response.jwt;
-                        // this.$store.state.hasLogin = true;
                         this.$store.commit('setJwt', response.jwt);
-                        this.$store.commit('isLogin');
-                        this.login({ username });
+                        this.login({ username, firstname });
                         this.$router.push({name: 'home'});
-                        console.log( response.jwt) ;
-                        console.log( response.username) ;
                         console.log(response.data);
                       } else {
-                        console.log(response.message);
+                        console.log(response.msg);
                       }
                     })
-            // .catch(function (error) {
-            //   console.log('ERROR')
-            //   console.log(error)
-            // })
+                    .catch((res) => {
+                      console.log('error ', res);
+                      this.$message.error('Login failed!');
+                    })
+
           } else {
             return false;
           }
         });
+      },
+      forgetpwd(){
+        let username = this.$qs.stringify({username: this.form.username});
+        this.$axios.post('/user/forget_password', username)
+                .then((response) => {
+                  if (response.status === 200) {
+                    this.$message('Confirmation mail has been sent to your email.');
+                    console.log('username is correct')
+                  } else if (response.status === 404) {
+                    this.$message('This username is not registered!');
+                    console.log(response.msg)
+                  }
+                })
+                .catch((res) => {
+                  console.log('error ', res);
+                  this.$message.error('Forget password backend Error');
+                })
+
       },
       goto(name) {
         console.log(name);
