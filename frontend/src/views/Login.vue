@@ -87,6 +87,7 @@
                         // this.$store.state.jwt = response.jwt;
                         // this.$store.state.hasLogin = true;
                         this.$store.commit('setJwt', response.jwt);
+                        this.$store.commit('isLogin');
                         this.login({ username });
                         this.$router.push({name: 'home'});
                         console.log( response.jwt) ;
