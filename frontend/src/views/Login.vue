@@ -38,7 +38,7 @@
 
 <script>
 import Header from "@/components/Header.vue";
-import {mapActions} from "vuex";
+import {mapActions, mapMutations} from "vuex";
 
 // const validateEmail = (rule, value, callback) => {
 //   const emailReg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
@@ -67,7 +67,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["login"]),
+    ...mapMutations(["setJwt"]),
     signIn() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
@@ -78,28 +78,23 @@ export default {
           // this.$message.success("Login successful");
           // this.$router.replace("/");
           let data = this.$qs.stringify(this.form);
-          let config = {
-            headers: { 'jwt': this.$store.state.jwt}
-          };
+          // let config = {
+          //   headers: { 'jwt': this.$store.state.jwt}
+          // };
           this.$axios.post('/user/login', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
-                      // this.$store.state.jwt = response.jwt;
-                      // this.$store.state.hasLogin = true;
-                      this.$store.commit('setJwt', response.jwt);
-                      this.login({ username });
-                      this.$router.push({name: 'home'});
-                      console.log( response.jwt) ;
-                      console.log( response.username) ;
+                      this.$store.commit('$_setStorage', response.data.username)
+                      this.setJwt(response.headers.jwt);
                       console.log(response.data);
                     } else {
                       console.log(response.message);
                     }
                   })
-                  // .catch(function (error) {
-                  //   console.log('ERROR')
-                  //   console.log(error)
-                  // })
+                  .catch(function (error) {
+                    console.log('ERROR')
+                    console.log(error)
+                  })
         } else {
           return false;
         }
