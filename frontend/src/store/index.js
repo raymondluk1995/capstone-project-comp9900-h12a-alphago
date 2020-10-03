@@ -4,15 +4,11 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-    // state: {
-    //   hasLogin: false,
-    //   avatar: '',
-    //   firstname: '',
-    // },
     state: {
         username:'',
         hasLogin: false,
         jwt: '',
+        firstname:'',
     },
     mutations: {
         setHasLogin(state, status) {
@@ -24,12 +20,15 @@ export default new Vuex.Store({
         setJwt(state, jwt) {
             state.jwt = jwt;
         },
+        setFirstname(state, firstname) {
+            state.firstname = firstname;
+        },
     },
     actions: {
-        login({commit}, {username}) {
-            console.log( 'actions:'+username) ;
-            commit('setUsername', username)
-            commit('setHasLogin', true)
+        login({commit}, {username,firstname}) {
+            commit('setUsername', username);
+            commit('setHasLogin', true);
+            commit('setFirstname', firstname);
         },
     },
     modules: {
