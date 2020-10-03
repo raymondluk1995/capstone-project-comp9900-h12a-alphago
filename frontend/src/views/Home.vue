@@ -112,6 +112,10 @@ export default {
   },
     data() {
       return {
+          bathNum: 1,
+          bedroomNum: 1,
+          carNum: 1,
+          serachKey: "",
         bigScreen: {
           images: [
             {
@@ -154,7 +158,6 @@ export default {
             label: 5,
           }
         ],
-        searchKey: '',
         // options: [
         //   {
         //     value: 1,
@@ -170,7 +173,17 @@ export default {
       ...mapActions(["logout"]),
       handleCommand(command) {
         if (command == "logout") {
-          this.logout();
+            // this.$axios.post('/user/logout', data)
+            //     .then((response) => {
+            //         if (response.status >= 200 && response.status < 300) {
+            //             this.logout({ username });
+            //             this.$router.push({name: 'home'});
+            //             console.log(response.data);
+            //         } else {
+            //             console.log(response.msg);
+            //         }
+            //     })
+            this.logout();
         }
       },
       toSearch() {
