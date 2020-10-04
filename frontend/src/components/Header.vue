@@ -22,11 +22,20 @@
                 <img @click="goto('home')" src="@/assets/Alogo.png"
                              alt="render failure" style="width: 100px; height:90px; cursor: pointer">
             </el-col>
+            <el-col :span="6">
+                <el-row type="flex" justify="center">
+                    <h3>
+                        AlphaGo Auction
+                    </h3>
+                </el-row>
+            </el-col>
+            <el-col :span="6">
             <el-row type="flex" justify="center" style="align-items: center;">
-                <el-col>
+<!--                <el-col>-->
                     <slot></slot>
-                </el-col>
+<!--                </el-col>-->
             </el-row>
+            </el-col>
         </el-row>
     </div>
 </template>
@@ -49,7 +58,7 @@ export default {
 <style scoped lang="scss">
 .header {
   /*margin-bottom: 30px;*/
-  margin-left: 50px;
+  margin-left: 30px;
   margin-right: 50px;
   padding: 15px;
   border-bottom: 2px solid #f2f2f2;

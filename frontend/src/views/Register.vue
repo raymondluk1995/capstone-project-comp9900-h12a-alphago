@@ -139,7 +139,7 @@ export default {
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                       console.log(response.data);
-                      this.$message('Registration Successful!')
+                      this.$message('Registration Successful!');
                       this.$router.replace("/login");
                     } else {
                       console.log(response.msg);
