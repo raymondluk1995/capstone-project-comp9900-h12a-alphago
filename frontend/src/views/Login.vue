@@ -108,6 +108,9 @@ export default {
       this.$router.go(-1);
     },
   },
+  mounted(){
+      document.title = "AlphaGo Login";
+  }
 };
 </script>
 
