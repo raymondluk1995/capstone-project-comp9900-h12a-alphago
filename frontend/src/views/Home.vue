@@ -1,17 +1,20 @@
 <template>
   <div class="home">
     <Header>
-      <template v-if="hasLogin">
+      <template v-if="this.$store.state.username">
         <el-dropdown trigger="click" @command="handleCommand">
           <div class="user">
 <!--            <el-avatar :size="50" :src="avatar"></el-avatar>-->
-            <p>Welcome!  {{ firstname }}</p>
+<!--            <p>Welcome!  {{ firstname }} </p>-->
             <el-avatar :size="50" :src="avatar"></el-avatar>
+              <p>Welcome!  {{ this.$store.state.firstname }} </p>
           </div>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="profile">My profile</el-dropdown-item>
-            <el-dropdown-item command="logout">Log out</el-dropdown-item>
-          </el-dropdown-menu>
+            <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="profile">My profile</el-dropdown-item>
+                <el-dropdown-item command="auction">My Auctions</el-dropdown-item>
+                <el-dropdown-item command="notification">Notifications</el-dropdown-item>
+                <el-dropdown-item command="logout">Log out</el-dropdown-item>
+            </el-dropdown-menu>
         </el-dropdown>
       </template>
       <template v-else>
@@ -172,19 +175,20 @@ export default {
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
-        if (command == "logout") {
+        if (command === "logout") {
             // this.$axios.post('/user/logout', data)
             //     .then((response) => {
             //         if (response.status >= 200 && response.status < 300) {
-            //             this.logout({ username });
+            //             this.logout();
             //             this.$router.push({name: 'home'});
             //             console.log(response.data);
             //         } else {
             //             console.log(response.msg);
             //         }
-            //     })
+            //     });
             this.logout();
         }
+
       },
       toSearch() {
       },

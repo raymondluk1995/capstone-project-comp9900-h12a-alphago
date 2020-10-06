@@ -6,7 +6,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Resetpassword from "../views/Resetpassword";
 // import Property from "../views/Property";
-import PropertyReg from "../views/PropertyReg";
+// import PropertyReg from "../views/PropertyReg";
 
 Vue.use(VueRouter);
 
@@ -38,11 +38,11 @@ const routes = [
     name: 'reset',
     component: Resetpassword,
   },
-  {
-    path: '/alpha/propreg',
-    name: 'propertyreg',
-    component: PropertyReg,
-  }
+  // {
+  //   path: '/alpha/propreg',
+  //   name: 'propertyreg',
+  //   component: PropertyReg,
+  // }
 ];
 
 const router = new VueRouter({

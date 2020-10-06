@@ -5,30 +5,47 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        username:'',
-        hasLogin: false,
+        username:'Taria',
         jwt: '',
-        firstname:'',
+        firstname:'Taria',
     },
     mutations: {
-        setHasLogin(state, status) {
-            state.hasLogin = status;
-        },
-        setUsername(state, username) {
-            state.username = username;
-        },
-        setJwt(state, jwt) {
+        setJwt(state,jwt){
             state.jwt = jwt;
+            localStorage.setItem(jwt, JSON.stringify(jwt));
         },
-        setFirstname(state, firstname) {
+
+        setLogin(state, username, firstname, avatar) {
+            state.username = username;
             state.firstname = firstname;
+            state.avatar = avatar;
+            // state.jwt = jwt;
+
+            localStorage.setItem(username, JSON.stringify(username));
+            // localStorage.setItem(jwt, JSON.stringify(jwt));
+            localStorage.setItem(firstname, JSON.stringify(firstname));
+            localStorage.setItem(avatar, JSON.stringify(avatar));
         },
+
+        setLogout(state) {
+            state.username = '';
+            state.firstname = '';
+            state.avatar = '';
+            state.jwt = '';
+
+            localStorage.removeItem(username);
+            localStorage.removeItem(firstname);
+            localStorage.removeItem(avatar);
+            localStorage.removeItem(jwt);
+        },
+
     },
     actions: {
-        login({commit}, {username,firstname}) {
-            commit('setUsername', username);
-            commit('setHasLogin', true);
-            commit('setFirstname', firstname);
+        login({commit}, {username, firstname, avatar}) {
+            commit('setLogin', username, firstname, avatar);
+        },
+        logout({commit}) {
+            commit('setLogout');
         },
     },
     modules: {
