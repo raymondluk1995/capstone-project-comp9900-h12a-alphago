@@ -51,9 +51,10 @@
               </el-form-item>
             </el-col>
             <el-col :span="6" :offset="1">
+              <!--                action="https://jsonplaceholder.typicode.com/posts/"-->
               <el-upload
                 class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
               >
@@ -135,6 +136,7 @@ export default {
     register() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
+          let data = this.$qs.stringify(this.form);
           this.$axios.post('/user/register', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
