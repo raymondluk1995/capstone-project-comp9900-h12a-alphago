@@ -8,11 +8,16 @@ export default new Vuex.Store({
         username:'Taria',
         jwt: '',
         firstname:'Taria',
+        avatar:'',
     },
     mutations: {
         setJwt(state,jwt){
             state.jwt = jwt;
             localStorage.setItem(jwt, JSON.stringify(jwt));
+        },
+        setAvatar(state, avatar) {
+            state.avatar = avatar;
+            localStorage.setItem("avatar", avatar);
         },
 
         setLogin(state, username, firstname, avatar) {
@@ -21,10 +26,10 @@ export default new Vuex.Store({
             state.avatar = avatar;
             // state.jwt = jwt;
 
-            localStorage.setItem(username, JSON.stringify(username));
+            localStorage.setItem('username', username);
             // localStorage.setItem(jwt, JSON.stringify(jwt));
-            localStorage.setItem(firstname, JSON.stringify(firstname));
-            localStorage.setItem(avatar, JSON.stringify(avatar));
+            localStorage.setItem('firstname', firstname);
+            localStorage.setItem('avatar', avatar);
         },
 
         setLogout(state) {

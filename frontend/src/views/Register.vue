@@ -52,11 +52,14 @@
             </el-col>
             <el-col :span="6" :offset="1">
               <!--                action="https://jsonplaceholder.typicode.com/posts/"-->
+<!--              action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"-->
               <el-upload
                 class="avatar-uploader"
-                action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"
+                action="upload"
+                :auto-upload="false"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
+                :on-change="imgBroadcastChange"
               >
                 <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -90,7 +93,7 @@ export default {
       }
     };
     const validatePhone = (rule, value, callback) => {
-      const phoneReg = /^(?:(?:\+|00)61)?4\d{8}$/;
+      const phoneReg = /^((?:61)|(?:0))?4\d{8}$/;
       if (!phoneReg.test(value)) {
         callback(new Error("Please enter the valid phone number"));
       } else {
@@ -131,16 +134,26 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setFirstname"]),
+    ...mapMutations(["setFirstname",'setAvatar']),
     // Here, register wont sign in, push to login if registered
     register() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          let data = this.$qs.stringify(this.form);
+          // let data = this.$qs.stringify(this.form);
+          let data = new FormData();
+          data.append('username', this.form.username);
+          data.append('firstname', this.form.firstname);
+          data.append('lastname', this.form.lastname);
+          data.append('phone', this.form.phone);
+          data.append('email', this.form.email);
+          data.append('password', this.form.password);
+          data.append('avatar', this.form.imageUrl);
+          console.log(data);
           this.$axios.post('/user/register', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                       console.log(response.data);
+                      this.$store.commit('setAvatar', URL.createObjectURL(this.form.imageUrl));
                       this.$message('Registration Successful!');
                       this.$router.replace("/login");
                     } else {
@@ -148,7 +161,7 @@ export default {
                     }
                   })
                   .catch((res) => {
-                    console.log('error ', res);
+                    console.log('error', res);
                     this.$message.error('Registration Error');
                   });
         } else {
@@ -157,8 +170,28 @@ export default {
       });
     },
     handleAvatarSuccess(res, file) {
-      this.form.imageUrl = URL.createObjectURL(file.raw);
+      // this.form.imageUrl = URL.createObjectURL(file.raw);
     },
+    imgBroadcastChange(file){
+      this.form.imageUrl = file.raw;
+    },
+    // uploadAvatar (avatar) {
+    //   let formData = new FormData();
+    //   formData.append('username', this.$store.state.username);
+    //   formData.append('avatar', avatar.file);
+    //   console.log(formData);
+    //   this.$axios.post('/user/upload_avatar', formData)
+    //           .then((response) => {
+    //             if (response.data.code === 200) {
+    //               this.$store.commit('setAvatar', URL.createObjectURL(avatar.file));
+    //               // this.imageUrl = URL.createObjectURL(avatar.file)
+    //               // bus.$emit('updateUserAvatar', this.imageUrl)
+    //             }
+    //           })
+    //           .catch(function (error) {
+    //             console.log(error)
+    //           })
+    // },
     goto(name) {
       console.log(name);
       this.$router.push({ name: name });
