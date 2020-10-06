@@ -1,17 +1,20 @@
 <template>
   <div class="home">
     <Header>
-      <template v-if="hasLogin">
+      <template v-if="this.$store.state.username">
         <el-dropdown trigger="click" @command="handleCommand">
           <div class="user">
 <!--            <el-avatar :size="50" :src="avatar"></el-avatar>-->
-            <p>Welcome!  {{ firstname }}</p>
+<!--            <p>Welcome!  {{ firstname }} </p>-->
             <el-avatar :size="50" :src="avatar"></el-avatar>
+              <p>Welcome!  {{ this.$store.state.firstname }} </p>
           </div>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="profile">My profile</el-dropdown-item>
-            <el-dropdown-item command="logout">Log out</el-dropdown-item>
-          </el-dropdown-menu>
+            <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="profile">My profile</el-dropdown-item>
+                <el-dropdown-item command="auction">My Auctions</el-dropdown-item>
+                <el-dropdown-item command="notification">Notifications</el-dropdown-item>
+                <el-dropdown-item command="logout">Log out</el-dropdown-item>
+            </el-dropdown-menu>
         </el-dropdown>
       </template>
       <template v-else>
@@ -87,7 +90,7 @@
                 class="input"
                 placeholder="Search by address/suburb/others"
                 prefix-icon="el-icon-search"
-                v-model="searchKey"
+                v-model="serachKey"
         >
           <el-button
                   slot="append"
@@ -115,7 +118,7 @@ export default {
           bathNum: 1,
           bedroomNum: 1,
           carNum: 1,
-          searchKey: '',
+          serachKey: "",
         bigScreen: {
           images: [
             {
@@ -158,7 +161,6 @@ export default {
             label: 5,
           }
         ],
-
         // options: [
         //   {
         //     value: 1,
@@ -173,9 +175,20 @@ export default {
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
-        if (command == "logout") {
-          this.logout();
+        if (command === "logout") {
+            // this.$axios.post('/user/logout', data)
+            //     .then((response) => {
+            //         if (response.status >= 200 && response.status < 300) {
+            //             this.logout();
+            //             this.$router.push({name: 'home'});
+            //             console.log(response.data);
+            //         } else {
+            //             console.log(response.msg);
+            //         }
+            //     });
+            this.logout();
         }
+
       },
       toSearch() {
       },
@@ -192,7 +205,6 @@ export default {
     mounted() {
       // 首次加载时,需要调用一次
       this.screenWidth =  window.innerWidth;
-      document.title = "AlphaGo Auction Home";
       this.setSize();
       // 窗口大小发生改变时,调用一次
       window.onresize = () =>{
