@@ -27,17 +27,20 @@ export default {
 <style scoped lang="scss">
 .footer {
   width: 100%;
-  margin-top: 30px;
-  padding: 15px;
+  // margin-top: 30px;
+  // padding: 5px;
   background-color: #1e4061;
   color: #fff;
   position: fixed;
   bottom: 0;
+  height: 5%;
+  font-size: 10px;
 
   .footer-wrap {
     text-align: center;
     p {
-      margin: 10px 0;
+      margin: 5px 0;
+      // margin:0px;
     }
   }
 }
