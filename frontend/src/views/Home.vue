@@ -182,20 +182,14 @@ export default {
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
+          let config = {
+            headers: { 'jwt': this.$store.state.jwt}
+          };
         if (command === "logout") {
-            this.$axios.post('/user/logout', data)
-                .then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        this.logout();
-                        this.$router.push({name: 'home'});
-                        console.log(response.data);
-                    } else {
-                        console.log(response.msg);
-                    }
-                });
-            // this.logout();
+            this.$axios.post('/user/logout',config);
+            this.logout();
+            console.log(this.$store.state.jwt);
         }
-
       },
       toSearch() {
       },
