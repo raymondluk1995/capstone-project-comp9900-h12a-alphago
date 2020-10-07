@@ -7,6 +7,14 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 import qs from 'qs'
 
+import GooglePlacesAutocompletePlugin from 'vue-better-google-places-autocomplete'
+Vue.use(GooglePlacesAutocompletePlugin)
+import { GooglePlacesAutocomplete } from 'vue-better-google-places-autocomplete'
+Vue.component('google-places-autocomplete', GooglePlacesAutocomplete)
+
+
+
+
 
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'

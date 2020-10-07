@@ -162,7 +162,12 @@ export default {
           {
             value: 5,
             label: 5,
-          }
+          },
+          {
+            value: 5,
+            label: "6 +",
+          },
+          
         ],
         // options: [
         //   {

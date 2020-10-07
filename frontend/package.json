@@ -15,6 +15,8 @@
     "swiper": "^6.3.2",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
+    "vue-better-google-places-autocomplete": "^1.1.0",
+    "vue-place-autocomplete": "^0.5.3",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
   },

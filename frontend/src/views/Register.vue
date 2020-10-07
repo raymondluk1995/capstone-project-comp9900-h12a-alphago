@@ -32,12 +32,12 @@
               <el-form-item label="Email:" prop="email">
                 <el-input v-model="form.email"></el-input>
               </el-form-item>
-                <el-form-item label="Validate Code:" prop="validate">
-                  <el-input v-model="form.validate"></el-input>
+              <el-form-item label="Validate Code:" prop="validate">
+                <el-input v-model="form.validate"></el-input>
               </el-form-item>
-<!--              <el-form-item label="Payment:" prop="payment">-->
-<!--                <el-input v-model="form.payment"></el-input>-->
-<!--              </el-form-item>-->
+              <!--              <el-form-item label="Payment:" prop="payment">-->
+              <!--                <el-input v-model="form.payment"></el-input>-->
+              <!--              </el-form-item>-->
               <el-form-item label="Password:" prop="password">
                 <el-input
                   type="password"
@@ -55,7 +55,7 @@
             </el-col>
             <el-col :span="6" :offset="1">
               <!--                action="https://jsonplaceholder.typicode.com/posts/"-->
-<!--              action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"-->
+              <!--              action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"-->
               <el-upload
                 class="avatar-uploader"
                 action="upload"
@@ -71,15 +71,21 @@
               <div id="upload-avatar-text">
                 <p>Please upload your avatar photo here (png or jpg format)</p>
               </div>
-              
+
               <div class="btns">
                 <div class="validate" @click="validate" id="validate">
                   <span v-show="show">validate</span>
                   <span v-show="!show">{{ count }} s</span>
                 </div>
-<!--                <el-button round type="ordinary" v-show="show"  @click="validate">validate</el-button>-->
-<!--                <el-button round type="ordinary" v-show="!show">{{ count }} s</el-button>-->
-                <el-button round type="primary" @click="register" id="submit-btn">Submit</el-button>
+                <!--                <el-button round type="ordinary" v-show="show"  @click="validate">validate</el-button>-->
+                <!--                <el-button round type="ordinary" v-show="!show">{{ count }} s</el-button>-->
+                <el-button
+                  round
+                  type="primary"
+                  @click="register"
+                  id="submit-btn"
+                  >Submit</el-button
+                >
               </div>
             </el-col>
           </el-row>
@@ -129,34 +135,76 @@ export default {
       count: 60,
       timer: null,
       form: {
-        username:'',
-        firstname: '',
-        lastname: '',
-        phone: '',
-        email: '',
+        username: "",
+        firstname: "",
+        lastname: "",
+        phone: "",
+        email: "",
         // payment: '',
-        password: '',
-        passwordAgain: '',
-        imageUrl: '',
-        imageRaw:'',
+        password: "",
+        passwordAgain: "",
+        imageUrl: "",
+        imageRaw: "",
       },
       rules: {
-        username: [{required: true, message: "Please enter username", trigger: "blur",},],
-        firstname: [{required: true, message: "Please enter firstname", trigger: "blur",},],
-        lastname: [{required: true, message: " Please enter lastname", trigger: "blur",},],
-        phone: [{required: true, message: " Please enter phone", trigger: "blur",}, { validator: validatePhone, trigger: "blur" },],
-        email: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
-        validate: [{required: true, message: "Please enter validate code", trigger: "blur",},],
+        username: [
+          { required: true, message: "Please enter username", trigger: "blur" },
+        ],
+        firstname: [
+          {
+            required: true,
+            message: "Please enter firstname",
+            trigger: "blur",
+          },
+        ],
+        lastname: [
+          {
+            required: true,
+            message: " Please enter lastname",
+            trigger: "blur",
+          },
+        ],
+        phone: [
+          { required: true, message: " Please enter phone", trigger: "blur" },
+          { validator: validatePhone, trigger: "blur" },
+        ],
+        email: [
+          {
+            required: true,
+            message: "Please enter email address",
+            trigger: "blur",
+          },
+          { validator: validateEmail, trigger: "blur" },
+        ],
+        validate: [
+          {
+            required: true,
+            message: "Please enter validate code",
+            trigger: "blur",
+          },
+        ],
         // payment: [{required: true, message: " Please enter payment", trigger: "blur",},],
-        password: [{required: true, message: " Please enter password", trigger: "blur",},],
-        passwordAgain: [{required: true, message: " Please enter password again", trigger: "blur",}, { validator: validatePasswordAgain, trigger: "blur" },],
+        password: [
+          {
+            required: true,
+            message: " Please enter password",
+            trigger: "blur",
+          },
+        ],
+        passwordAgain: [
+          {
+            required: true,
+            message: " Please enter password again",
+            trigger: "blur",
+          },
+          { validator: validatePasswordAgain, trigger: "blur" },
+        ],
       },
     };
   },
   methods: {
-
-    ...mapMutations(["setFirstname",'setAvatar']),
-    validate(){
+    ...mapMutations(["setFirstname", "setAvatar"]),
+    validate() {
       // if (this.form.email === '' ) {
       //   alert('Email cannot be empty')
       // } else {
@@ -184,11 +232,10 @@ export default {
       //   }
       // }
 
-
       let data = new FormData();
-      data.append('email',this.form.email);
+      data.append("email", this.form.email);
       // todo time counter
-      this.$axios.post('/verify/email', data);
+      this.$axios.post("/verify/email", data);
     },
     // Here, register wont sign in, push to login if registered
     register() {
@@ -196,30 +243,31 @@ export default {
         if (valid) {
           // let data = this.$qs.stringify(this.form);
           let data = new FormData();
-          data.append('username', this.form.username);
-          data.append('firstname', this.form.firstname);
-          data.append('lastname', this.form.lastname);
-          data.append('phone', this.form.phone);
-          data.append('email', this.form.email);
-          data.append('password', this.form.password);
-          data.append('validate', this.form.validate);
-          data.append('avatar', this.form.imageRaw);
+          data.append("username", this.form.username);
+          data.append("firstname", this.form.firstname);
+          data.append("lastname", this.form.lastname);
+          data.append("phone", this.form.phone);
+          data.append("email", this.form.email);
+          data.append("password", this.form.password);
+          data.append("validate", this.form.validate);
+          data.append("avatar", this.form.imageRaw);
           console.log(data);
-          this.$axios.post('/user/register', data)
-                  .then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                      console.log(response.data);
-                      this.$store.commit('setAvatar', this.form.imageUrl);
-                      this.$message('Registration Successful!');
-                      this.$router.replace("/login");
-                    } else {
-                      console.log(response.msg);
-                    }
-                  })
-                  .catch((res) => {
-                    console.log('error', res);
-                    this.$message.error('Registration Error');
-                  });
+          this.$axios
+            .post("/user/register", data)
+            .then((response) => {
+              if (response.status >= 200 && response.status < 300) {
+                console.log(response.data);
+                this.$store.commit("setAvatar", this.form.imageUrl);
+                this.$message("Registration Successful!");
+                this.$router.replace("/login");
+              } else {
+                console.log(response.msg);
+              }
+            })
+            .catch((res) => {
+              console.log("error", res);
+              this.$message.error("Registration Error");
+            });
         } else {
           return false;
         }
@@ -229,36 +277,36 @@ export default {
       // this.form.imageUrl = URL.createObjectURL(file.raw);
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
+      const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+        this.$message.error("上传头像图片只能是 JPG 格式!");
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
     },
-    imgBroadcastChange(file){
+    imgBroadcastChange(file) {
       this.form.imageRaw = file.raw;
       this.form.imageUrl = URL.createObjectURL(file.raw);
     },
     // uploadAvatar (avatar) {
-      // let formData = new FormData();
-      // this.formData.append('avatar', avatar.file);
-      // console.log(formData);
-      // this.$axios.post('/user/upload_avatar', formData)
-      //         .then((response) => {
-      //           if (response.data.code === 200) {
-      //             this.$store.commit('setAvatar', URL.createObjectURL(avatar.file));
-      //             // this.imageUrl = URL.createObjectURL(avatar.file)
-      //             // bus.$emit('updateUserAvatar', this.imageUrl)
-      //           }
-      //         })
-      //         .catch(function (error) {
-      //           console.log(error)
-      //         })
+    // let formData = new FormData();
+    // this.formData.append('avatar', avatar.file);
+    // console.log(formData);
+    // this.$axios.post('/user/upload_avatar', formData)
+    //         .then((response) => {
+    //           if (response.data.code === 200) {
+    //             this.$store.commit('setAvatar', URL.createObjectURL(avatar.file));
+    //             // this.imageUrl = URL.createObjectURL(avatar.file)
+    //             // bus.$emit('updateUserAvatar', this.imageUrl)
+    //           }
+    //         })
+    //         .catch(function (error) {
+    //           console.log(error)
+    //         })
     // },
     goto(name) {
       console.log(name);
@@ -267,17 +315,17 @@ export default {
     back() {
       this.$router.go(-1);
     },
-  // },
-  // watch:{
-  //   timer: function(val){
-  //     console.log(val)
-  //     if(val == null){
-  //       //  监听timer变化，移除不可点击样式
-  //       $(".validate").removeClass("huise")
-  //       document.getElementById('validate').style.cursor = 'pointer'
-  //     }
-  //   }
-  }
+    // },
+    // watch:{
+    //   timer: function(val){
+    //     console.log(val)
+    //     if(val == null){
+    //       //  监听timer变化，移除不可点击样式
+    //       $(".validate").removeClass("huise")
+    //       document.getElementById('validate').style.cursor = 'pointer'
+    //     }
+    //   }
+  },
 };
 </script>
 
@@ -296,10 +344,10 @@ export default {
   margin-top: 47px;
   text-align: center;
 }
-.validate:active{
-  background-color: #0F996B;
+.validate:active {
+  background-color: #0f996b;
 }
-.validate:hover{
+.validate:hover {
   cursor: pointer;
   box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.2);
 }
@@ -326,7 +374,7 @@ export default {
   height: 178px;
   display: block;
 }
-.huise{
+.huise {
   background-color: #dcdcdc !important;
   color: black;
 }
@@ -346,8 +394,8 @@ export default {
 //   user-select:none;
 // }
 
-.validate{
-  display:inline-block;
+.validate {
+  display: inline-block;
   width: 180px;
   height: 35px;
   background-color: rgb(7, 187, 127);
@@ -356,29 +404,29 @@ export default {
   font-family: PingFangSC-Regular;
   color: #ffffff;
   border-radius: 5px;
-  -webkit-user-select:none;
-  -moz-user-select:none;
-  -ms-user-select:none;
-  user-select:none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
-#submit-btn{
+#submit-btn {
   width: 180px;
-  height:35px;
+  height: 35px;
   margin: 0 auto 20px 0;
   line-height: 35px;
   border-radius: 5px;
-  -webkit-user-select:none;
-  -moz-user-select:none;
-  -ms-user-select:none;
-  user-select:none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   text-align: center;
-  padding:0px;
+  padding: 0px;
   margin-top: 135px;
 }
 
-#upload-avatar-text{
-  width :180px;
+#upload-avatar-text {
+  width: 180px;
   font-size: 10px;
   text-align: center;
 }

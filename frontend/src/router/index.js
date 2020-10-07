@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Resetpassword from "../views/Resetpassword";
+import RegisterProperty from "../views/RegisterProperty"
 // import Property from "../views/Property";
 // import PropertyReg from "../views/PropertyReg";
 
@@ -38,6 +39,11 @@ const routes = [
     name: 'reset',
     component: Resetpassword,
   },
+  {
+    path: '/alpha/register-property',
+    name: 'register-property',
+    component: RegisterProperty,
+  }
   // {
   //   path: '/alpha/propreg',
   //   name: 'propertyreg',
