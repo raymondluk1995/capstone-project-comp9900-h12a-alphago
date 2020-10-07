@@ -13,7 +13,7 @@ export default new Vuex.Store({
     getters: {
         getFirstname: function (state) {
             if (state.username) {
-                state.firstname = JSON.parse(localStorage.getItem('firstname'))
+                state.firstname = JSON.parse(localStorage.getItem("firstname"))
             }
             return state.firstname
         }
@@ -30,7 +30,6 @@ export default new Vuex.Store({
         setFirstName(state, firstname) {
             state.firstname = firstname;
             localStorage.setItem("firstname", firstname);
-            console.log(state.firstname)
         },
         setUserName(state, username) {
             state.username = username;
