@@ -193,7 +193,7 @@ export default {
             this.$axios.post('/user/logout',data)
                 .then((response) => {
                     if (response.status >= 200 && response.status < 300){
-                        if (response.data.code == 200){
+                        if (response.data.code === 200){
                             this.logout();
                             location.reload()
                         }else{
