@@ -10,6 +10,14 @@ export default new Vuex.Store({
         firstname:'Taria',
         avatar:'',
     },
+    getters: {
+        getFirstname: function (state) {
+            if (!state.username) {
+                state.firstname = JSON.parse(localStorage.getItem('firstname'))
+            }
+            return state.firstname
+        }
+    },
     mutations: {
         setJwt(state,jwt){
             state.jwt = jwt;

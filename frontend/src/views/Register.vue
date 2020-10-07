@@ -68,7 +68,12 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
               <div class="btns">
-                <el-button round type="ordinary" @click="validate">validate</el-button>
+                <div class="validate" @click="validate" id="validate">
+                  <span v-show="show">validate</span>
+                  <span v-show="!show">{{ count }} s</span>
+                </div>
+<!--                <el-button round type="ordinary" v-show="show"  @click="validate">validate</el-button>-->
+<!--                <el-button round type="ordinary" v-show="!show">{{ count }} s</el-button>-->
                 <el-button round type="primary" @click="register">Submit</el-button>
               </div>
             </el-col>
@@ -82,6 +87,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import { mapMutations } from "vuex";
+// import $ from 'jquery'
 
 export default {
   components: {
@@ -114,6 +120,9 @@ export default {
       }
     };
     return {
+      show: true,
+      count: 60,
+      timer: null,
       form: {
         username:'',
         firstname: '',
@@ -124,6 +133,7 @@ export default {
         password: '',
         passwordAgain: '',
         imageUrl: '',
+        imageRaw:'',
       },
       rules: {
         username: [{required: true, message: "Please enter username", trigger: "blur",},],
@@ -139,12 +149,41 @@ export default {
     };
   },
   methods: {
+
     ...mapMutations(["setFirstname",'setAvatar']),
     validate(){
-      let data = new FormData();
-      data.append('email',this.form.email);
-      // todo time counter
-      this.$axios.post('/verify/email', data);
+      // if (this.form.email === '' ) {
+      //   alert('Email cannot be empty')
+      // } else {
+      //   if(this.timer == null){
+      //     let data = new FormData();
+      //     data.append('email', this.form.email);
+      //     this.$axios.post('/verify/email', data);
+      //   }
+      //   if (!this.timer) {
+      //     this.count = 60;
+      //     this.show = false;
+      //     $(".validate").addClass("huise")
+      //
+      //     // 将鼠标设置为不可点击状态
+      //     document.getElementById('validate').style.cursor = 'not-allowed'
+      //     this.timer = setInterval(() => {
+      //       if (this.count > 0 && this.count <= 60) {
+      //         this.count--
+      //       } else {
+      //         this.show = true
+      //         clearInterval(this.timer)
+      //         this.timer = null
+      //       }
+      //     }, 1000)
+      //   }
+      // }
+
+
+      // let data = new FormData();
+      // data.append('email',this.form.email);
+      // // todo time counter
+      // this.$axios.post('/verify/email', data);
     },
     // Here, register wont sign in, push to login if registered
     register() {
@@ -159,7 +198,7 @@ export default {
           data.append('email', this.form.email);
           data.append('password', this.form.password);
           data.append('validate', this.form.validate);
-          data.append('avatar', this.form.imageUrl);
+          data.append('avatar', this.form.imageRaw);
           console.log(data);
           this.$axios.post('/user/register', data)
                   .then((response) => {
@@ -185,7 +224,8 @@ export default {
       // this.form.imageUrl = URL.createObjectURL(file.raw);
     },
     imgBroadcastChange(file){
-      this.form.imageUrl = file.raw;
+      this.form.imageRaw = file.raw;
+      this.form.imageUrl = URL.createObjectURL(file.raw);
     },
     // uploadAvatar (avatar) {
       // let formData = new FormData();
@@ -211,6 +251,16 @@ export default {
       this.$router.go(-1);
     },
   },
+  watch:{
+    timer: function(val){
+      console.log(val)
+      if(val == null){
+        //  监听timer变化，移除不可点击样式
+        $(".validate").removeClass("huise")
+        document.getElementById('validate').style.cursor = 'pointer'
+      }
+    }
+  }
 };
 </script>
 
@@ -227,6 +277,12 @@ export default {
 .btns {
   margin-top: 190px;
   text-align: right;
+}
+.validate:active{
+  background-color: #0F996B;
+}
+.validate:hover{
+  cursor: pointer;
 }
 .avatar-uploader .el-upload {
   cursor: pointer;
@@ -250,5 +306,24 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+.huise{
+  background-color: #dcdcdc !important;
+  color: black;
+}
+.validate{
+  float: left;
+  width: 120px;
+  height: 35px;
+  background-color: rgb(7, 187, 127);
+  margin: 0 auto 20px 0;
+  line-height: 35px;
+  font-family: PingFangSC-Regular;
+  color: #ffffff;
+  border-radius: 5px;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
 }
 </style>
