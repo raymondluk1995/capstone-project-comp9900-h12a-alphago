@@ -78,7 +78,7 @@
                           this.$store.commit('setFirstName', response.data.result.firstname);
                           // this.login({ username, response.data.firstname, avatar});
                           this.$router.push({name: 'home'});
-                          console.log(response.data);
+                          console.log('stored:+++++',response.data);
                         }else{
                           console.log(response.data.msg);
                         }
