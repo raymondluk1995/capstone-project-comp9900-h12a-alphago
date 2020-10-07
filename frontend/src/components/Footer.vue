@@ -31,7 +31,8 @@ export default {
   // padding: 5px;
   background-color: #1e4061;
   color: #fff;
-  position: fixed;
+  // position: fixed;
+  position: absolute; 
   bottom: 0;
   height: 5%;
   font-size: 10px;
