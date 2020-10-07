@@ -176,9 +176,9 @@ export default {
         console.log('here',this.$store.getters.getFirstname);
         this.firstname = this.$store.getters.getFirstname;
     },
-    // computed: {
-    //   ...mapState(["hasLogin", "avatar", "firstname"]),
-    // },
+    computed: {
+      ...mapState(["firstname"]),
+    },
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
