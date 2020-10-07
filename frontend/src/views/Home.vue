@@ -7,7 +7,7 @@
 <!--            <el-avatar :size="50" :src="avatar"></el-avatar>-->
 <!--            <p>Welcome!  {{ firstname }} </p>-->
             <el-avatar :size="50" :src="avatar"></el-avatar>
-              <p>Welcome!  {{ this.$store.getters.getFirstname }} </p>
+              <p>Welcome!  {{ firstname }} </p>
 <!--              <p>Welcome!  {{ this.$store.state.firstname }} </p>-->
 
           </div>
@@ -108,7 +108,7 @@
 <script>
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
-import { mapState,mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: 'Home',
@@ -117,6 +117,7 @@ export default {
   },
     data() {
       return {
+          firstname:'',
           bathNum: 1,
           bedroomNum: 1,
           carNum: 1,
@@ -171,6 +172,9 @@ export default {
         // ]
       }
     },
+    created () {
+        this.firstname = this.$store.getters.getFirstname;
+    },
     // computed: {
     //   ...mapState(["hasLogin", "avatar", "firstname"]),
     // },
@@ -178,17 +182,17 @@ export default {
       ...mapActions(["logout"]),
       handleCommand(command) {
         if (command === "logout") {
-            // this.$axios.post('/user/logout', data)
-            //     .then((response) => {
-            //         if (response.status >= 200 && response.status < 300) {
-            //             this.logout();
-            //             this.$router.push({name: 'home'});
-            //             console.log(response.data);
-            //         } else {
-            //             console.log(response.msg);
-            //         }
-            //     });
-            this.logout();
+            this.$axios.post('/user/logout', data)
+                .then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        this.logout();
+                        this.$router.push({name: 'home'});
+                        console.log(response.data);
+                    } else {
+                        console.log(response.msg);
+                    }
+                });
+            // this.logout();
         }
 
       },
