@@ -187,7 +187,7 @@ export default {
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
-         let jwt = JSON.parse(localStorage.getItem('jwt'));
+         // let jwt = JSON.parse(localStorage.getItem('jwt'));
          let data = this.$qs.stringify(this.username);
         if (command === "logout") {
             this.$axios.post('/user/logout',data)

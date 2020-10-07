@@ -16,7 +16,7 @@ export default new Vuex.Store({
             return state.firstname
         },
         getJwt: function (state) {
-            state.jwt = JSON.parse(localStorage.getItem("jwt"))
+            state.jwt = localStorage.getItem("jwt")
             return state.jwt
         },
         getAvatar: function (state) {
@@ -26,11 +26,11 @@ export default new Vuex.Store({
     },
     mutations: {
         setJwt(state,jwt){
-            localStorage.setItem('jwt', JSON.stringify(jwt));
+            localStorage.setItem("jwt", jwt);
             state.jwt = jwt;
         },
         setAvatar(state, avatar) {
-            localStorage.setItem("avatar", avatar);
+            localStorage.setItem("avatar", JSON.stringify(avatar));
             state.avatar = avatar;
         },
         setFirstName(state, firstname) {
@@ -42,20 +42,20 @@ export default new Vuex.Store({
             state.username = username;
         },
 
-        setLogin(state, username, firstname, avatar) {
-            state.username = username;
-            state.firstname = firstname;
-            state.avatar = avatar;
-            // state.jwt = jwt;
-
-            localStorage.setItem('username', username);
-            // localStorage.setItem(jwt, JSON.stringify(jwt));
-            localStorage.setItem('firstname', firstname);
-            localStorage.setItem('avatar', avatar);
-
-            console.log(state.username)
-            console.log(state.firstname)
-        },
+        // setLogin(state, username, firstname, avatar) {
+        //     state.username = username;
+        //     state.firstname = firstname;
+        //     state.avatar = avatar;
+        //     // state.jwt = jwt;
+        //
+        //     localStorage.setItem('username', username);
+        //     // localStorage.setItem(jwt, JSON.stringify(jwt));
+        //     localStorage.setItem('firstname', firstname);
+        //     localStorage.setItem('avatar', avatar);
+        //
+        //     console.log(state.username)
+        //     console.log(state.firstname)
+        // },
 
         setLogout(state) {
             localStorage.removeItem('username');
