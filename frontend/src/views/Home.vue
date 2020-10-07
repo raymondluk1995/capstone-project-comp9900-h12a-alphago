@@ -174,6 +174,7 @@ export default {
     },
     created () {
         this.username = JSON.parse(localStorage.getItem('username'));
+        // this.username = this.$store.state.username;
         if(this.username!==null){
             this.hasLogin = true;
             this.avatar = JSON.parse(localStorage.getItem('avatar'));
@@ -186,7 +187,6 @@ export default {
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
-          console.log(this.$store.state.jwt);
          let jwt = JSON.parse(localStorage.getItem('jwt'));
          let data = this.$qs.stringify(this.username);
         if (command === "logout") {

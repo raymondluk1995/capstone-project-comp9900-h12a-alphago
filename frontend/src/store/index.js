@@ -26,7 +26,7 @@ export default new Vuex.Store({
     },
     mutations: {
         setJwt(state,jwt){
-            localStorage.setItem(jwt, JSON.stringify(jwt));
+            localStorage.setItem('jwt', JSON.stringify(jwt));
             state.jwt = jwt;
         },
         setAvatar(state, avatar) {
