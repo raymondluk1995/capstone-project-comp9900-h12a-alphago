@@ -181,10 +181,10 @@ export default {
       // }
 
 
-      // let data = new FormData();
-      // data.append('email',this.form.email);
-      // // todo time counter
-      // this.$axios.post('/verify/email', data);
+      let data = new FormData();
+      data.append('email',this.form.email);
+      // todo time counter
+      this.$axios.post('/verify/email', data);
     },
     // Here, register wont sign in, push to login if registered
     register() {
@@ -235,8 +235,7 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       return isJPG && isLt2M;
-    }
-  },
+    },
     imgBroadcastChange(file){
       this.form.imageRaw = file.raw;
       this.form.imageUrl = URL.createObjectURL(file.raw);
@@ -264,16 +263,16 @@ export default {
     back() {
       this.$router.go(-1);
     },
-  },
-  watch:{
-    timer: function(val){
-      console.log(val)
-      if(val == null){
-        //  监听timer变化，移除不可点击样式
-        $(".validate").removeClass("huise")
-        document.getElementById('validate').style.cursor = 'pointer'
-      }
-    }
+  // },
+  // watch:{
+  //   timer: function(val){
+  //     console.log(val)
+  //     if(val == null){
+  //       //  监听timer变化，移除不可点击样式
+  //       $(".validate").removeClass("huise")
+  //       document.getElementById('validate').style.cursor = 'pointer'
+  //     }
+  //   }
   }
 };
 </script>
