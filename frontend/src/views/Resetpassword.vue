@@ -113,7 +113,7 @@ export default {
       } else {
         if (this.timer == null) {
           let data = new FormData();
-          data.append('email', this.form.username);
+          data.append('username', this.form.username);
           this.$axios.post('/verify/reset', data);
         }
         if (!this.timer) {
