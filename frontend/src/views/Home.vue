@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Header>
-      <template v-if="this.$store.state.username">
+      <template v-if="this.hasLogin">
         <el-dropdown trigger="click" @command="handleCommand">
           <div class="user">
 <!--            <el-avatar :size="50" :src="avatar"></el-avatar>-->
@@ -101,7 +101,6 @@
           ></el-button>
         </el-input></el-col>
     </el-row>
-
   </div>
 </template>
 
@@ -117,7 +116,7 @@ export default {
   },
     data() {
       return {
-          // firstname: '',
+          hasLogin: false,
           bathNum: 1,
           bedroomNum: 1,
           carNum: 1,
@@ -173,6 +172,11 @@ export default {
       }
     },
     created () {
+        this.username = JSON.parse(localStorage.getItem('username'));
+        console.log(this.username);
+        if(this.username!==null){
+            this.hasLogin = true;
+        }
         this.firstname=JSON.parse(localStorage.getItem('firstname'));
     },
     // computed: {
