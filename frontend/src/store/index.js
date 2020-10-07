@@ -7,8 +7,8 @@ export default new Vuex.Store({
     state: {
         username:'',
         jwt: '',
-        firstname: ''
-        // avatar:'',
+        firstname: '',
+        avatar:'',
     },
     getters: {
         getFirstname: function (state) {
@@ -17,7 +17,11 @@ export default new Vuex.Store({
         },
         getJwt: function (state) {
             state.jwt = JSON.parse(localStorage.getItem("jwt"))
-            return state.firstname
+            return state.jwt
+        },
+        getAvatar: function (state) {
+            state.avatar = JSON.parse(localStorage.getItem("avatar"))
+            return state.avatar
         }
     },
     mutations: {
@@ -25,16 +29,15 @@ export default new Vuex.Store({
             localStorage.setItem(jwt, JSON.stringify(jwt));
             state.jwt = jwt;
         },
-        // setAvatar(state, avatar) {
-        //     localStorage.setItem("avatar", avatar);
-        //     state.avatar = avatar;
-        // },
+        setAvatar(state, avatar) {
+            localStorage.setItem("avatar", avatar);
+            state.avatar = avatar;
+        },
         setFirstName(state, firstname) {
             localStorage.setItem("firstname", JSON.stringify(firstname));
             state.firstname = firstname;
         },
         setUserName(state, username) {
-            state.username = username;
             localStorage.setItem("username", JSON.stringify(username));
             state.username = username;
         },
@@ -55,10 +58,10 @@ export default new Vuex.Store({
         },
 
         setLogout(state) {
-            localStorage.removeItem(username);
-            localStorage.removeItem(firstname);
-            localStorage.removeItem(avatar);
-            localStorage.removeItem(jwt);
+            localStorage.removeItem('username');
+            localStorage.removeItem('firstname');
+            localStorage.removeItem('avatar');
+            localStorage.removeItem('jwt');
             state.username = '';
             state.firstname = '';
             state.avatar = '';

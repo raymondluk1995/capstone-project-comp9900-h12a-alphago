@@ -65,20 +65,16 @@
         this.$refs["form"].validate((valid) => {
           if (valid) {
             let data = this.$qs.stringify(this.form);
-            // let config = {
-            //   headers: { 'jwt': this.$store.state.jwt}
-            // };
             this.$axios.post('/user/login', data)
                     .then((response) => {
                       if (response.status >= 200 && response.status < 300) {
                         if(response.data.code === 200){
                           this.$store.commit('setJwt', response.jwt);
                           this.$store.commit('setUserName', this.form.username);
-                          // this.$store.commit('setAvatar', response.avatar);
+                          this.$store.commit('setAvatar', response.avatar);
                           this.$store.commit('setFirstName', response.data.result.firstname);
-                          // this.login({ username, response.data.firstname, avatar});
                           this.$router.push({name: 'home'});
-                          console.log('stored:+++++',response.data);
+                          console.log(response.data);
                         }else{
                           console.log(response.data.msg);
                         }
@@ -97,22 +93,22 @@
         });
       },
       forgetpwd(){
-        let username = this.$qs.stringify({username: this.form.username});
-        this.$axios.post('/user/forget_password', username)
-                .then((response) => {
-                  if (response.status === 200) {
-                    this.$message('Confirmation mail has been sent to your email.');
-                    console.log('username is correct')
-                  } else if (response.status === 404) {
-                    this.$message('This username is not registered!');
-                    console.log(response.msg)
-                  }
-                })
-                .catch((res) => {
-                  console.log('error ', res);
-                  this.$message.error('Forget password backend Error');
-                })
-
+        this.$router.replace("/reset");
+        // let username = this.$qs.stringify({username: this.form.username});
+        // this.$axios.post('/user/forget_password', username)
+        //         .then((response) => {
+        //           if (response.status === 200) {
+        //             this.$message('Confirmation mail has been sent to your email.');
+        //             console.log('username is correct')
+        //           } else if (response.status === 404) {
+        //             this.$message('This username is not registered!');
+        //             console.log(response.msg)
+        //           }
+        //         })
+        //         .catch((res) => {
+        //           console.log('error ', res);
+        //           this.$message.error('Forget password backend Error');
+        //         })
       },
       goto(name) {
         console.log(name);
