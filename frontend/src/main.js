@@ -17,7 +17,7 @@ Vue.use(ElementUI);
 Vue.prototype.$axios = axios;
 
 // register the default baseURL for axios
-axios.defaults.baseURL = 'http://127.0.0.1:8010';
+axios.defaults.baseURL = 'http://127.0.0.1:8070';
 
 Vue.prototype.$qs = qs;
 
