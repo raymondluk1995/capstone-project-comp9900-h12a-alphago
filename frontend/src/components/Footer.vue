@@ -34,7 +34,7 @@ export default {
   position: fixed;
   bottom: 0;
   height: 5%;
-  font-size:5px;
+  font-size:10px;
 
   .footer-wrap {
     text-align: center;
