@@ -75,7 +75,7 @@
                 </div>
 <!--                <el-button round type="ordinary" v-show="show"  @click="validate">validate</el-button>-->
 <!--                <el-button round type="ordinary" v-show="!show">{{ count }} s</el-button>-->
-                <el-button round type="primary" @click="register">Submit</el-button>
+                <el-button round type="primary" @click="register" id="submit-btn">Submit</el-button>
               </div>
             </el-col>
           </el-row>
@@ -286,16 +286,18 @@ export default {
   padding: 30px;
   border: 1px solid #ccc;
   border-radius: 15px;
+  margin-bottom: 50px;
 }
 .btns {
-  margin-top: 190px;
-  text-align: right;
+  margin-top: 75px;
+  text-align: center;
 }
 .validate:active{
   background-color: #0F996B;
 }
 .validate:hover{
   cursor: pointer;
+  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.2);
 }
 .avatar-uploader .el-upload {
   cursor: pointer;
@@ -324,9 +326,25 @@ export default {
   background-color: #dcdcdc !important;
   color: black;
 }
+// .validate{
+//   float: left;
+//   width: 120px;
+//   height: 35px;
+//   background-color: rgb(7, 187, 127);
+//   margin: 0 auto 20px 0;
+//   line-height: 35px;
+//   font-family: PingFangSC-Regular;
+//   color: #ffffff;
+//   border-radius: 5px;
+//   -webkit-user-select:none;
+//   -moz-user-select:none;
+//   -ms-user-select:none;
+//   user-select:none;
+// }
+
 .validate{
-  float: left;
-  width: 120px;
+  display:inline-block;
+  width: 180px;
   height: 35px;
   background-color: rgb(7, 187, 127);
   margin: 0 auto 20px 0;
@@ -338,5 +356,20 @@ export default {
   -moz-user-select:none;
   -ms-user-select:none;
   user-select:none;
+}
+
+#submit-btn{
+  width: 180px;
+  height:35px;
+  margin: 0 auto 20px 0;
+  line-height: 35px;
+  border-radius: 5px;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  text-align: center;
+  padding:0px;
+  margin-top: 135px;
 }
 </style>
