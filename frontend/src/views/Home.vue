@@ -117,7 +117,7 @@ export default {
   },
     data() {
       return {
-          firstname: '',
+          // firstname: '',
           bathNum: 1,
           bedroomNum: 1,
           carNum: 1,
@@ -172,10 +172,10 @@ export default {
         // ]
       }
     },
-    created () {
-        console.log('here',this.$store.getters.getFirstname);
-        this.firstname = this.$store.getters.getFirstname;
-    },
+    // created () {
+    //     console.log('here',this.$store.getters.getFirstname);
+    //     this.firstname = this.$store.getters.getFirstname;
+    // },
     computed: {
       ...mapState(["firstname"]),
     },
@@ -194,7 +194,6 @@ export default {
       toSearch() {
       },
       goto(name) {
-        console.log(name);
         this.$router.push({name: name});
       },
       setSize:function () {
@@ -204,6 +203,7 @@ export default {
 
     },
     mounted() {
+      console.log(this.$store.state.firstname);
       // 首次加载时,需要调用一次
       this.screenWidth =  window.innerWidth;
       this.setSize();
