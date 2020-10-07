@@ -7,7 +7,7 @@
 <!--            <el-avatar :size="50" :src="avatar"></el-avatar>-->
 <!--            <p>Welcome!  {{ firstname }} </p>-->
             <el-avatar :size="50" :src="avatar"></el-avatar>
-              <p>Welcome!  {{ this.$store.state.firstname }} </p>
+              <p>Welcome!  {{ this.$store.state.firstname }} <i class="el-icon-arrow-down el-icon--right"></i></p>
           </div>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="profile">My profile</el-dropdown-item>

@@ -212,6 +212,7 @@ export default {
   padding: 30px;
   border: 1px solid #ccc;
   border-radius: 15px;
+  margin-bottom: 50px;
 }
 .btns {
   margin-top: 190px;
