@@ -68,6 +68,10 @@
                 <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
+              <div id="upload-avatar-text">
+                <p>Please upload your avatar photo here (png or jpg format)</p>
+              </div>
+              
               <div class="btns">
                 <div class="validate" @click="validate" id="validate">
                   <span v-show="show">validate</span>
@@ -289,7 +293,7 @@ export default {
   margin-bottom: 50px;
 }
 .btns {
-  margin-top: 75px;
+  margin-top: 47px;
   text-align: center;
 }
 .validate:active{
@@ -371,5 +375,11 @@ export default {
   text-align: center;
   padding:0px;
   margin-top: 135px;
+}
+
+#upload-avatar-text{
+  width :180px;
+  font-size: 10px;
+  text-align: center;
 }
 </style>
