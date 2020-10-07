@@ -117,7 +117,7 @@ export default {
   },
     data() {
       return {
-          firstname:'',
+          firstname: '',
           bathNum: 1,
           bedroomNum: 1,
           carNum: 1,
@@ -173,6 +173,7 @@ export default {
       }
     },
     created () {
+        console.log('here',this.$store.getters.getFirstname);
         this.firstname = this.$store.getters.getFirstname;
     },
     // computed: {

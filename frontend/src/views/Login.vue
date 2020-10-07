@@ -71,15 +71,19 @@
             this.$axios.post('/user/login', data)
                     .then((response) => {
                       if (response.status >= 200 && response.status < 300) {
-                        this.$store.commit('setJwt', response.jwt);
-                        this.$store.commit('setUserName', this.form.username);
-                        // this.$store.commit('setAvatar', response.avatar);
-                        this.$store.commit('setFirstName', response.result.firstname);
-                        // this.login({ username, response.data.firstname, avatar});
-                        this.$router.push({name: 'home'});
-                        console.log(response.data);
+                        if(response.data.code === 200){
+                          this.$store.commit('setJwt', response.jwt);
+                          this.$store.commit('setUserName', this.form.username);
+                          // this.$store.commit('setAvatar', response.avatar);
+                          this.$store.commit('setFirstName', response.data.result.firstname);
+                          // this.login({ username, response.data.firstname, avatar});
+                          this.$router.push({name: 'home'});
+                          console.log(response.data);
+                        }else{
+                          console.log(response.data.msg);
+                        }
                       } else {
-                        console.log(response.msg);
+                        console.log(response.data.msg);
                       }
                     })
                     .catch((res) => {
