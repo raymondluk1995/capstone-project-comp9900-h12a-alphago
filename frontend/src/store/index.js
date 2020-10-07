@@ -26,11 +26,11 @@ export default new Vuex.Store({
     },
     mutations: {
         setJwt(state,jwt){
-            localStorage.setItem('jwt', JSON.stringify(jwt));
+            localStorage.setItem("jwt", JSON.stringify(jwt));
             state.jwt = jwt;
         },
         setAvatar(state, avatar) {
-            localStorage.setItem("avatar", avatar);
+            localStorage.setItem("avatar", JSON.stringify(avatar));
             state.avatar = avatar;
         },
         setFirstName(state, firstname) {
