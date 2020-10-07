@@ -95,7 +95,7 @@
       forgetpwd(){
         this.$router.replace("/reset");
         // let username = this.$qs.stringify({username: this.form.username});
-        // this.$axios.post('/user/forget_password', username)
+        // this.$axios.post('/user/reset', username)
         //         .then((response) => {
         //           if (response.status === 200) {
         //             this.$message('Confirmation mail has been sent to your email.');

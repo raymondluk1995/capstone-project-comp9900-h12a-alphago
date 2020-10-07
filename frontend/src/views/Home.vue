@@ -190,10 +190,19 @@ export default {
          let jwt = JSON.parse(localStorage.getItem('jwt'));
          let data = this.$qs.stringify(this.username);
         if (command === "logout") {
-            this.$axios.defaults.headers["jwt"] = jwt;
-            this.$axios.post('/user/logout',data);
-            this.logout();
-            location.reload()
+            this.$axios.post('/user/logout',data)
+                .then((response) => {
+                    if (response.status >= 200 && response.status < 300){
+                        if (response.data.code == 200){
+                            this.logout();
+                            location.reload()
+                        }else{
+                            console.log(response.msg)
+                        }
+                    }else{
+                        console.log(response.msg)
+                    }
+        })
         }
       },
       toSearch() {

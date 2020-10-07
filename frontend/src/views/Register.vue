@@ -149,7 +149,7 @@ export default {
         if (this.timer == null) {
           let data = new FormData();
           data.append('email', this.form.email);
-          this.$axios.post('/verify/email', data);
+          this.$axios.post('/verify/register', data);
         }
         if (!this.timer) {
           this.count = 60;
