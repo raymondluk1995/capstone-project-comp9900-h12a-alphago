@@ -59,14 +59,11 @@
       };
     },
     methods: {
-      ...mapActions(['login']),
-      ...mapMutations(['setJwt']),
+      // ...mapActions(['login']),
+      ...mapMutations(['setJwt','setUserName','setFirstName']),
       signIn() {
         this.$refs["form"].validate((valid) => {
           if (valid) {
-            let username = this.form.username;
-            let firstname = this.form.firstname;
-            let avatar = this.form.imageUrl;
             let data = this.$qs.stringify(this.form);
             // let config = {
             //   headers: { 'jwt': this.$store.state.jwt}
@@ -75,7 +72,10 @@
                     .then((response) => {
                       if (response.status >= 200 && response.status < 300) {
                         this.$store.commit('setJwt', response.jwt);
-                        this.login({ username, firstname, avatar});
+                        this.$store.commit('setUserName', this.form.username);
+                        // this.$store.commit('setAvatar', response.avatar);
+                        this.$store.commit('setFirstName', response.result.firstname);
+                        // this.login({ username, response.data.firstname, avatar});
                         this.$router.push({name: 'home'});
                         console.log(response.data);
                       } else {

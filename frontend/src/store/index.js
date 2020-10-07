@@ -12,7 +12,7 @@ export default new Vuex.Store({
     },
     getters: {
         getFirstname: function (state) {
-            if (!state.username) {
+            if (state.username) {
                 state.firstname = JSON.parse(localStorage.getItem('firstname'))
             }
             return state.firstname
@@ -27,6 +27,16 @@ export default new Vuex.Store({
             state.avatar = avatar;
             localStorage.setItem("avatar", avatar);
         },
+        setFirstName(state, firstname) {
+            state.firstname = firstname;
+            localStorage.setItem("firstname", firstname);
+            console.log(state.firstname)
+        },
+        setUserName(state, username) {
+            state.username = username;
+            localStorage.setItem("username", username);
+            console.log(state.username)
+        },
 
         setLogin(state, username, firstname, avatar) {
             state.username = username;
@@ -38,6 +48,9 @@ export default new Vuex.Store({
             // localStorage.setItem(jwt, JSON.stringify(jwt));
             localStorage.setItem('firstname', firstname);
             localStorage.setItem('avatar', avatar);
+
+            console.log(state.username)
+            console.log(state.firstname)
         },
 
         setLogout(state) {
