@@ -32,6 +32,9 @@
               <el-form-item label="Email:" prop="email">
                 <el-input v-model="form.email"></el-input>
               </el-form-item>
+                <el-form-item label="Validate Code:" prop="validate">
+                  <el-input v-model="form.validate"></el-input>
+              </el-form-item>
 <!--              <el-form-item label="Payment:" prop="payment">-->
 <!--                <el-input v-model="form.payment"></el-input>-->
 <!--              </el-form-item>-->
@@ -65,6 +68,7 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
               <div class="btns">
+                <el-button round type="ordinary" @click="validate">validate</el-button>
                 <el-button round type="primary" @click="register">Submit</el-button>
               </div>
             </el-col>
@@ -127,6 +131,7 @@ export default {
         lastname: [{required: true, message: " Please enter lastname", trigger: "blur",},],
         phone: [{required: true, message: " Please enter phone", trigger: "blur",}, { validator: validatePhone, trigger: "blur" },],
         email: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
+        validate: [{required: true, message: "Please enter validate code", trigger: "blur",},],
         // payment: [{required: true, message: " Please enter payment", trigger: "blur",},],
         password: [{required: true, message: " Please enter password", trigger: "blur",},],
         passwordAgain: [{required: true, message: " Please enter password again", trigger: "blur",}, { validator: validatePasswordAgain, trigger: "blur" },],
@@ -135,6 +140,12 @@ export default {
   },
   methods: {
     ...mapMutations(["setFirstname",'setAvatar']),
+    validate(){
+      let data = new FormData();
+      data.append('email',this.form.email);
+      // todo time counter
+      this.$axios.post('/verify/email', data);
+    },
     // Here, register wont sign in, push to login if registered
     register() {
       this.$refs["form"].validate((valid) => {
@@ -147,13 +158,14 @@ export default {
           data.append('phone', this.form.phone);
           data.append('email', this.form.email);
           data.append('password', this.form.password);
+          data.append('validate', this.form.validate);
           data.append('avatar', this.form.imageUrl);
           console.log(data);
           this.$axios.post('/user/register', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                       console.log(response.data);
-                      this.$store.commit('setAvatar', URL.createObjectURL(this.form.imageUrl));
+                      this.$store.commit('setAvatar', this.form.imageUrl);
                       this.$message('Registration Successful!');
                       this.$router.replace("/login");
                     } else {
@@ -176,21 +188,20 @@ export default {
       this.form.imageUrl = file.raw;
     },
     // uploadAvatar (avatar) {
-    //   let formData = new FormData();
-    //   formData.append('username', this.$store.state.username);
-    //   formData.append('avatar', avatar.file);
-    //   console.log(formData);
-    //   this.$axios.post('/user/upload_avatar', formData)
-    //           .then((response) => {
-    //             if (response.data.code === 200) {
-    //               this.$store.commit('setAvatar', URL.createObjectURL(avatar.file));
-    //               // this.imageUrl = URL.createObjectURL(avatar.file)
-    //               // bus.$emit('updateUserAvatar', this.imageUrl)
-    //             }
-    //           })
-    //           .catch(function (error) {
-    //             console.log(error)
-    //           })
+      // let formData = new FormData();
+      // this.formData.append('avatar', avatar.file);
+      // console.log(formData);
+      // this.$axios.post('/user/upload_avatar', formData)
+      //         .then((response) => {
+      //           if (response.data.code === 200) {
+      //             this.$store.commit('setAvatar', URL.createObjectURL(avatar.file));
+      //             // this.imageUrl = URL.createObjectURL(avatar.file)
+      //             // bus.$emit('updateUserAvatar', this.imageUrl)
+      //           }
+      //         })
+      //         .catch(function (error) {
+      //           console.log(error)
+      //         })
     // },
     goto(name) {
       console.log(name);
