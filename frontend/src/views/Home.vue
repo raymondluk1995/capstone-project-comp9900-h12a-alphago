@@ -182,6 +182,7 @@ export default {
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
+          console.log(this.$store.state.jwt);
           let config = {
             headers: { 'jwt': this.$store.state.jwt}
           };
