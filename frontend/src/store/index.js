@@ -5,9 +5,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        username:'Taria',
+        username:'',
         jwt: '',
-        firstname:'Taria',
+        firstname:'',
         avatar:'',
     },
     getters: {
