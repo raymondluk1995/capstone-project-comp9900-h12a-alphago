@@ -172,13 +172,12 @@ export default {
         // ]
       }
     },
-    // created () {
-    //     console.log('here',this.$store.getters.getFirstname);
-    //     this.firstname = this.$store.getters.getFirstname;
-    // },
-    computed: {
-      ...mapState(["firstname"]),
+    created () {
+        this.firstname=JSON.parse(localStorage.getItem('firstname'));
     },
+    // computed: {
+    //   ...mapState(["firstname"]),
+    // },
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {

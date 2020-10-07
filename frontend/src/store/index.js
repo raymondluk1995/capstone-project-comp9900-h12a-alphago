@@ -5,22 +5,18 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        username:JSON.parse(localStorage.getItem("username")),
-        jwt: JSON.parse(localStorage.getItem("jwt")),
-        firstname:JSON.parse(localStorage.getItem("firstname")),
+        username:'',
+        jwt: '',
+        firstname: ''
         // avatar:'',
     },
     getters: {
         getFirstname: function (state) {
-            if (state.username) {
-                state.firstname = JSON.parse(localStorage.getItem("firstname"))
-            }
+            state.firstname = JSON.parse(localStorage.getItem("firstname"))
             return state.firstname
         },
         getJwt: function (state) {
-            if (state.username) {
-                state.jwt = JSON.parse(localStorage.getItem("firstname"))
-            }
+            state.jwt = JSON.parse(localStorage.getItem("jwt"))
             return state.firstname
         }
     },
