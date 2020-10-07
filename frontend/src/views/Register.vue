@@ -30,14 +30,11 @@
                 <el-input v-model="form.phone"></el-input>
               </el-form-item>
               <el-form-item label="Email:" prop="email">
-                <el-input v-model="form.email"></el-input>
+                <el-input v-model="form.email" ></el-input>
               </el-form-item>
                 <el-form-item label="Validate Code:" prop="validate">
-                  <el-input v-model="form.validate"></el-input>
+                  <el-input v-model="form.validate" placeholder="Press the Validate button to get the code"></el-input>
               </el-form-item>
-<!--              <el-form-item label="Payment:" prop="payment">-->
-<!--                <el-input v-model="form.payment"></el-input>-->
-<!--              </el-form-item>-->
               <el-form-item label="Password:" prop="password">
                 <el-input
                   type="password"
@@ -54,14 +51,11 @@
               </el-form-item>
             </el-col>
             <el-col :span="6" :offset="1">
-              <!--                action="https://jsonplaceholder.typicode.com/posts/"-->
-<!--              action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"-->
               <el-upload
                 class="avatar-uploader"
                 action="upload"
                 :auto-upload="false"
                 :show-file-list="false"
-                :on-success="handleAvatarSuccess"
                 :on-change="imgBroadcastChange"
                 :before-upload="beforeAvatarUpload"
               >
@@ -69,13 +63,11 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
               <div class="btns">
-                <div class="validate" @click="validate" id="validate">
+                <div class="validate" @click="validate"  id="validate">
                   <span v-show="show">validate</span>
                   <span v-show="!show">{{ count }} s</span>
                 </div>
-<!--                <el-button round type="ordinary" v-show="show"  @click="validate">validate</el-button>-->
-<!--                <el-button round type="ordinary" v-show="!show">{{ count }} s</el-button>-->
-                <el-button round type="primary" @click="register">Submit</el-button>
+                <el-button round type="primary" @click="register" id="submit-btn">Submit</el-button>
               </div>
             </el-col>
           </el-row>
@@ -88,7 +80,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import { mapMutations } from "vuex";
-// import $ from 'jquery'
+import $ from 'jquery'
 
 export default {
   components: {
@@ -143,48 +135,39 @@ export default {
         phone: [{required: true, message: " Please enter phone", trigger: "blur",}, { validator: validatePhone, trigger: "blur" },],
         email: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
         validate: [{required: true, message: "Please enter validate code", trigger: "blur",},],
-        // payment: [{required: true, message: " Please enter payment", trigger: "blur",},],
         password: [{required: true, message: " Please enter password", trigger: "blur",},],
         passwordAgain: [{required: true, message: " Please enter password again", trigger: "blur",}, { validator: validatePasswordAgain, trigger: "blur" },],
       },
     };
   },
   methods: {
+    ...mapMutations(["setFirstname", 'setAvatar']),
+    validate() {
+      if (this.form.email === '') {
+        alert('Email cannot be empty')
+      } else {
+        if (this.timer == null) {
+          let data = new FormData();
+          data.append('email', this.form.email);
+          this.$axios.post('/verify/email', data);
+        }
+        if (!this.timer) {
+          this.count = 60;
+          this.show = false;
+          $(".validate").addClass("huise")
 
-    ...mapMutations(["setFirstname",'setAvatar']),
-    validate(){
-      // if (this.form.email === '' ) {
-      //   alert('Email cannot be empty')
-      // } else {
-      //   if(this.timer == null){
-      //     let data = new FormData();
-      //     data.append('email', this.form.email);
-      //     this.$axios.post('/verify/email', data);
-      //   }
-      //   if (!this.timer) {
-      //     this.count = 60;
-      //     this.show = false;
-      //     $(".validate").addClass("huise")
-      //
-      //     // 将鼠标设置为不可点击状态
-      //     document.getElementById('validate').style.cursor = 'not-allowed'
-      //     this.timer = setInterval(() => {
-      //       if (this.count > 0 && this.count <= 60) {
-      //         this.count--
-      //       } else {
-      //         this.show = true
-      //         clearInterval(this.timer)
-      //         this.timer = null
-      //       }
-      //     }, 1000)
-      //   }
-      // }
-
-
-      let data = new FormData();
-      data.append('email',this.form.email);
-      // todo time counter
-      this.$axios.post('/verify/email', data);
+          document.getElementById('validate').style.cursor = 'not-allowed'
+          this.timer = setInterval(() => {
+            if (this.count > 0 && this.count <= 60) {
+              this.count--
+            } else {
+              this.show = true
+              clearInterval(this.timer)
+              this.timer = null
+            }
+          }, 1000)
+        }
+      }
     },
     // Here, register wont sign in, push to login if registered
     register() {
@@ -204,7 +187,6 @@ export default {
           this.$axios.post('/user/register', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
-                      console.log(response.data);
                       this.$store.commit('setAvatar', this.form.imageUrl);
                       this.$message('Registration Successful!');
                       this.$router.replace("/login");
@@ -221,122 +203,118 @@ export default {
         }
       });
     },
-    handleAvatarSuccess(res, file) {
-      // this.form.imageUrl = URL.createObjectURL(file.raw);
-    },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+      let types = ['image/jpeg', 'image/jpg', 'image/png'];
+      const isImage = types.includes(file.type);
+      if (!isImage) {
+        this.$message.error('上传图片只能是 JPG、JPEG、PNG 格式!');
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('Image size can not larger than 2MB!');
       }
-      return isJPG && isLt2M;
+      return isImage && isLt2M;
     },
-    imgBroadcastChange(file){
+    imgBroadcastChange(file) {
       this.form.imageRaw = file.raw;
       this.form.imageUrl = URL.createObjectURL(file.raw);
     },
-    // uploadAvatar (avatar) {
-      // let formData = new FormData();
-      // this.formData.append('avatar', avatar.file);
-      // console.log(formData);
-      // this.$axios.post('/user/upload_avatar', formData)
-      //         .then((response) => {
-      //           if (response.data.code === 200) {
-      //             this.$store.commit('setAvatar', URL.createObjectURL(avatar.file));
-      //             // this.imageUrl = URL.createObjectURL(avatar.file)
-      //             // bus.$emit('updateUserAvatar', this.imageUrl)
-      //           }
-      //         })
-      //         .catch(function (error) {
-      //           console.log(error)
-      //         })
-    // },
     goto(name) {
       console.log(name);
-      this.$router.push({ name: name });
+      this.$router.push({name: name});
     },
     back() {
       this.$router.go(-1);
     },
-  // },
-  // watch:{
-  //   timer: function(val){
-  //     console.log(val)
-  //     if(val == null){
-  //       //  监听timer变化，移除不可点击样式
-  //       $(".validate").removeClass("huise")
-  //       document.getElementById('validate').style.cursor = 'pointer'
-  //     }
-  //   }
+  },
+  watch:{
+    timer: function(val){
+      console.log(val)
+      if(val == null){
+        $(".validate").removeClass("huise")
+        document.getElementById('validate').style.cursor = 'pointer'
+      }
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
-.title {
-  margin: 30px;
-  text-align: center;
-}
-.form {
-  padding: 30px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-}
-.btns {
-  margin-top: 190px;
-  text-align: right;
-}
-.validate:active{
-  background-color: #0F996B;
-}
-.validate:hover{
-  cursor: pointer;
-}
-.avatar-uploader .el-upload {
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  border: 1px dashed #d9d9d9 !important;
-  border-radius: 6px;
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-.huise{
-  background-color: #dcdcdc !important;
-  color: black;
-}
-.validate{
-  float: left;
-  width: 120px;
-  height: 35px;
-  background-color: rgb(7, 187, 127);
-  margin: 0 auto 20px 0;
-  line-height: 35px;
-  font-family: PingFangSC-Regular;
-  color: #ffffff;
-  border-radius: 5px;
-  -webkit-user-select:none;
-  -moz-user-select:none;
-  -ms-user-select:none;
-  user-select:none;
-}
+  .title {
+    margin: 30px;
+    text-align: center;
+  }
+  .form {
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    margin-bottom: 50px;
+  }
+  .btns {
+    margin-top: 75px;
+    text-align: center;
+  }
+  .validate:active{
+    background-color: #0F996B;
+  }
+  .validate:hover{
+    cursor: pointer;
+    box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.2);
+  }
+  .avatar-uploader .el-upload {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409eff;
+  }
+  .avatar-uploader-icon {
+    border: 1px dashed #d9d9d9 !important;
+    border-radius: 6px;
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .huise{
+    background-color: #dcdcdc !important;
+    color: black;
+  }
+  .validate{
+    display:inline-block;
+    width: 180px;
+    height: 35px;
+    background-color: rgb(7, 187, 127);
+    margin: 0 auto 20px 0;
+    line-height: 35px;
+    font-family: PingFangSC-Regular;
+    color: #ffffff;
+    border-radius: 5px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+  }
+  #submit-btn{
+    width: 180px;
+    height:35px;
+    margin: 0 auto 20px 0;
+    line-height: 35px;
+    border-radius: 5px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    text-align: center;
+    padding:0px;
+    margin-top: 135px;
+  }
 </style>

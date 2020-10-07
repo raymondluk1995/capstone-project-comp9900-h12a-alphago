@@ -28,11 +28,16 @@
               show-password
             ></el-input>
           </el-form-item>
+<!--          <el-form-item label="Validate:" prop="validate">-->
+<!--            <el-input v-model="form.validate" placeholder="Press the Validate button to get the code"></el-input>-->
+<!--          </el-form-item>-->
         </el-form>
         <div class="btns">
-          <el-button round type="primary" @click="resetPassword"
-            >Submit</el-button
-          >
+<!--          <div class="validate" @click="validate"  id="validate">-->
+<!--            <span v-show="show">validate</span>-->
+<!--            <span v-show="!show">{{ count }} s</span>-->
+<!--          </div>-->
+          <el-button round type="primary" @click="resetPassword">Submit</el-button>
         </div>
       </el-col>
     </el-row>
@@ -59,10 +64,12 @@ export default {
       form: {
         password: '',
         passwordAgain: '',
+        // validate:''
       },
       rules: {
         password: [{required: true, message: "Please enter new password", trigger: "blur",},],
         passwordAgain: [{required: true, message: "Please enter the password again", trigger: "blur",}, { validator: validatePasswordAgain, trigger: "blur" },],
+        // validate: [{required: true, message: "Please enter validate code", trigger: "blur",},],
       },
     };
   },
@@ -70,8 +77,21 @@ export default {
     resetPassword() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          this.$message.success("Reset password successful");
-          this.$router.go(-1);
+          let data = this.$qs.stringify(this.form);
+          this.$axios.post('/user/reset', data)
+                  .then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                      console.log(response.data);
+                      this.$message.success("Reset password successful");
+                      this.$router.replace("/alpha");
+                    } else {
+                      console.log(response.msg);
+                    }
+                  })
+                  .catch((res) => {
+                    console.log('error', res);
+                    this.$message.error('Reset Error');
+                  });
         } else {
           return false;
         }

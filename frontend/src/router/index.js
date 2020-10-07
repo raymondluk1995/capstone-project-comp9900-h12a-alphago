@@ -23,18 +23,18 @@ const routes = [
   }
     ,
   {
-    path: '/alpha/login',
+    path: '/login',
     name: 'login',
     component: Login,
   },
   {
-    path: '/alpha/register',
+    path: '/register',
     name: 'register',
     component: Register,
   }
     ,
   {
-    path: '/alpha/reset',
+    path: '/reset',
     name: 'reset',
     component: Resetpassword,
   },

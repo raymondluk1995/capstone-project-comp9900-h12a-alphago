@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Header>
-      <template v-if="this.$store.state.username">
+      <template v-if="this.hasLogin">
         <el-dropdown trigger="click" @command="handleCommand">
           <div class="user">
 <!--            <el-avatar :size="50" :src="avatar"></el-avatar>-->
@@ -101,7 +101,6 @@
           ></el-button>
         </el-input></el-col>
     </el-row>
-
   </div>
 </template>
 
@@ -117,7 +116,8 @@ export default {
   },
     data() {
       return {
-          // firstname: '',
+          // avatar:'',
+          hasLogin: false,
           bathNum: 1,
           bedroomNum: 1,
           carNum: 1,
@@ -172,23 +172,28 @@ export default {
         // ]
       }
     },
-    // created () {
-    //     console.log('here',this.$store.getters.getFirstname);
-    //     this.firstname = this.$store.getters.getFirstname;
-    // },
-    computed: {
-      ...mapState(["firstname"]),
+    created () {
+        this.username = JSON.parse(localStorage.getItem('username'));
+        if(this.username!==null){
+            this.hasLogin = true;
+            this.avatar = JSON.parse(localStorage.getItem('avatar'));
+        }
+        this.firstname=JSON.parse(localStorage.getItem('firstname'));
     },
+    // computed: {
+    //   ...mapState(["firstname"]),
+    // },
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
-          let config = {
-            headers: { 'jwt': this.$store.state.jwt}
-          };
+          console.log(this.$store.state.jwt);
+         let jwt = JSON.parse(localStorage.getItem('jwt'));
+         let data = this.$qs.stringify(this.username);
         if (command === "logout") {
-            this.$axios.post('/user/logout',config);
+            this.$axios.defaults.headers["jwt"] = jwt;
+            this.$axios.post('/user/logout',data);
             this.logout();
-            console.log(this.$store.state.jwt);
+            location.reload()
         }
       },
       toSearch() {
@@ -200,10 +205,8 @@ export default {
         // 通过浏览器宽度(图片宽度)计算高度
         this.bannerHeight = 400 / 1920 * this.screenWidth;
       },
-
     },
     mounted() {
-      console.log(this.$store.state.firstname);
       // 首次加载时,需要调用一次
       this.screenWidth =  window.innerWidth;
       this.setSize();
