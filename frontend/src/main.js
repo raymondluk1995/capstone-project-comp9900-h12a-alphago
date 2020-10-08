@@ -19,7 +19,16 @@ Vue.prototype.$axios = axios;
 
 // register the default baseURL for axios
 axios.defaults.baseURL = 'http://127.0.0.1:8070';
-axios.defaults.headers["jwt"] = localStorage.getItem('jwt');
+
+axios.interceptors.request.use(
+    config => {
+    	config.headers["jwt"] = localStorage.getItem('jwt');      
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    });
+
 
 Vue.prototype.$qs = qs;
 
