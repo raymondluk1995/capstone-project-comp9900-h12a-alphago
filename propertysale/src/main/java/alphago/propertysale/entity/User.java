@@ -27,6 +27,10 @@ public class User implements Serializable {
 
     private String username;
 
+    private String firstname;
+
+    private String lastname;
+
     private String password;
 
     private String salt;

@@ -37,6 +37,7 @@ public class JwtFilter extends AuthenticatingFilter {
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
         String jwt = ((HttpServletRequest) request).getHeader("jwt");
+        System.out.println(jwt);
         try {
             DecodedJWT decodedJWT = JWTutil.decodedJWT(jwt);
             String username = decodedJWT.getClaim("username").asString();
@@ -53,7 +54,8 @@ public class JwtFilter extends AuthenticatingFilter {
         // 获取header中的JwtToken
         String jwt = ((HttpServletRequest) request).getHeader("jwt");
         // 如果没有， 放行
-        if(jwt == null || jwt.equals("")) return true;
+        if(jwt == null || jwt.equals("") || jwt.equals("null") || jwt.equals("undefined")) return true;
+//        if(jwt == null) return true;
         // 使用jwt登录
         return executeLogin(request, response);
     }

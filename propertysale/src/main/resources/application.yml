@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path:
-
+  port: 8070
 # datasource
 spring:
   datasource:
@@ -12,6 +12,27 @@ spring:
 # redis
   redis:
     password: 123456
+    host: 3.25.129.229
+  # mail
+  mail:
+    host: smtp.gmail.com
+    default-encoding: utf-8
+    username: zxhhaha@gmail.com
+    password: znx5201314
+    properties:
+      mail:
+        smtp:
+          # 如果是用 SSL 方式，需要配置如下属性,使用qq邮箱的话需要开启
+          ssl:
+            enable: true
+            required: true
+          # 邮件接收时间的限制，单位毫秒
+          timeout: 10000
+          # 连接时间的限制，单位毫秒
+          connectiontimeout: 10000
+          # 邮件发送时间的限制，单位毫秒
+          writetimeout: 10000
+          port: 465
 
 # mybatis plus
 mybatis-plus:
