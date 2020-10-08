@@ -1,5 +1,5 @@
 Week 1
-We formed a group and got to know each other. We discussed and decided our project topic and team leader, and all joined the Jira to achieve goals.
+We formed a group and got to know each other. We discussed and decided our project topic and team leader, and all joined the Jira to set our goals.
 
 Week 2
 We held a group meeting online to determine the details of the project, such as the framework for the back end, and the functions that needed to be implemented on the front end, and decided on the division of labor.
