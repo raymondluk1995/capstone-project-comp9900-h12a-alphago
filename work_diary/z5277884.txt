@@ -20,3 +20,6 @@ Week 3
 On Tuesday, the whole team held a meeting to decide what contents should be returned in the JSON
 format from the back end to the front end. I finished the part of User Stories and Sprints in
 the proposal. During this week, I kept on learning the JavaScript, CSS and VueJS.
+
+Week 4
+In this week, I keep on learning JavaScript and VueJS. I helped in improving CSS in project and finding bugs. Also, I spent some time on researching how to use Google Map API in this project for address validation.
