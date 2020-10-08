@@ -1,18 +1,11 @@
-{\rtf1\ansi\ansicpg936\cocoartf2513
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+Week 1
+We formed a group and got to know each other. We discussed and decided our project topic and team leader, and all joined the Jira to achieve goals.
 
-\f0\fs24 \cf0 Week 1\
-We formed a group and got to know each other. We discussed and decided our project topic and team leader, and all joined the Jira to achieve goals.\
-\
-Week 2\
-We held a group meeting online to determine the details of the project, such as the framework for the back end, and the functions that needed to be implemented on the front end, and decided on the division of labor.\
-\
-Week 3\
-We completed the proposal together. I was mainly responsible for completing the background. I investigated some house selling websites, observed and learned their functions and designs, and concluded the area which could be improved.\
-\
-Week 4\
-We started implementing our website, and I started designing and implementing the user detail interface. I need to learn more knowledge about VUE and JavaScript to help me achieve more beautiful web pages.}
+Week 2
+We held a group meeting online to determine the details of the project, such as the framework for the back end, and the functions that needed to be implemented on the front end, and decided on the division of labor.
+
+Week 3
+We completed the proposal together. I was mainly responsible for completing the background. I investigated some house selling websites, observed and learned their functions and designs, and concluded the area which could be improved.
+
+Week 4
+We started implementing our website, and I started designing and implementing the user detail interface. I need to learn more knowledge about VUE and JavaScript to help me achieve more beautiful web pages.
