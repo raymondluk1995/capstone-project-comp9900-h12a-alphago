@@ -70,9 +70,8 @@
                       if (response.status >= 200 && response.status < 300) {
                         if(response.data.code === 200){
                           this.$store.commit('setJwt', response.headers.jwt);
-                          console.log('jwt--------is-------'+response.headers.jwt);
                           this.$store.commit('setUserName', this.form.username);
-                          this.$store.commit('setAvatar', response.avatar);
+                          // this.$store.commit('setAvatar', response.avatar);
                           this.$store.commit('setFirstName', response.data.result.firstname);
                           this.$router.push({name: 'home'});
                           console.log(response.data);

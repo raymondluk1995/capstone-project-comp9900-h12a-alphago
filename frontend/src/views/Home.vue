@@ -4,12 +4,8 @@
       <template v-if="this.hasLogin">
         <el-dropdown trigger="click" @command="handleCommand">
           <div class="user">
-<!--            <el-avatar :size="50" :src="avatar"></el-avatar>-->
-<!--            <p>Welcome!  {{ firstname }} </p>-->
             <el-avatar :size="50" :src="avatar"></el-avatar>
               <p>Welcome!  {{ firstname }} </p>
-<!--              <p>Welcome!  {{ this.$store.state.firstname }} </p>-->
-
           </div>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="profile">My profile</el-dropdown-item>
@@ -187,8 +183,7 @@ export default {
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
-         // let jwt = JSON.parse(localStorage.getItem('jwt'));
-         let data = this.$qs.stringify(this.username);
+          let data = this.$qs.stringify(this.username);
         if (command === "logout") {
             this.$axios.post('/user/logout',data)
                 .then((response) => {
