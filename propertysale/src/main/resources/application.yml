@@ -33,9 +33,18 @@ spring:
           # 邮件发送时间的限制，单位毫秒
           writetimeout: 10000
           port: 465
+  # rabbitmq
+  rabbitmq:
+    host: 3.25.129.229
+    username: admin
+    password: admin
+    myExchange: alpha.go.sender
 
 # mybatis plus
 mybatis-plus:
   mapper-locations:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+remote:
+  url: http://localhost:8060/img/

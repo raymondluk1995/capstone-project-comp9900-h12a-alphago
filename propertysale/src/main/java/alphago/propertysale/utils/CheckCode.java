@@ -17,13 +17,16 @@ import java.util.concurrent.TimeUnit;
  **/
 public class CheckCode {
     private static final int timeout = 2;
+    public static final String REGISTER = "register";
+    public static final String RESET = "reset";
+    public static final String AVATAR = "avatar";
 
     public static void sendCode(JavaMailSender mailSender , String email , String usage){
         RedisTemplate valueRedis = RedisUtil.valueRedis();
         // generate id and code
         String code = RandomUtil.randomString(6);
         // put verify code into redis
-        valueRedis.opsForValue().set(email , code , timeout , TimeUnit.MINUTES);
+        valueRedis.opsForValue().set(usage+email , code , timeout , TimeUnit.MINUTES);
         // send Email
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("zxhhaha@gmail.com");
