@@ -46,21 +46,6 @@ export default new Vuex.Store({
             state.FixedFooter = flag;
         },
 
-        // setLogin(state, username, firstname, avatar) {
-        //     state.username = username;
-        //     state.firstname = firstname;
-        //     state.avatar = avatar;
-        //     // state.jwt = jwt;
-        //
-        //     localStorage.setItem('username', username);
-        //     // localStorage.setItem(jwt, JSON.stringify(jwt));
-        //     localStorage.setItem('firstname', firstname);
-        //     localStorage.setItem('avatar', avatar);
-        //
-        //     console.log(state.username)
-        //     console.log(state.firstname)
-        // },
-
         setLogout(state) {
             localStorage.removeItem('username');
             localStorage.removeItem('firstname');
@@ -74,9 +59,6 @@ export default new Vuex.Store({
 
     },
     actions: {
-        login({commit}, {username, firstname, avatar}) {
-            commit('setLogin', username, firstname, avatar);
-        },
         logout({commit}) {
             commit('setLogout');
         },
