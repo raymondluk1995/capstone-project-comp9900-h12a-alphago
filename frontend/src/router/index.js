@@ -19,27 +19,39 @@ const routes = [
   {
     path: '/alpha',
     name: 'alpha',
-    component: Home
+    component: Home,
+    meta: {
+      FixedFooter: true,
+    },
   }
     ,
   {
     path: '/login',
     name: 'login',
     component: Login,
+    meta: {
+      FixedFooter: true,
+    },
   },
   {
     path: '/register',
     name: 'register',
     component: Register,
+    meta: {
+      FixedFooter: true,
+    },
   }
     ,
   {
     path: '/reset',
     name: 'reset',
     component: Resetpassword,
+    meta: {
+      FixedFooter: true,
+    },
   },
   // {
-  //   path: '/alpha/propreg',
+  //   path: '/propreg',
   //   name: 'propertyreg',
   //   component: PropertyReg,
   // }
@@ -48,6 +60,16 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.FixedFooter) {
+    store.commit("setfixedBottom", true);
+    next();
+  } else {
+    store.commit("setfixedBottom", false);
+    next();
+  }
 });
 
 export default router

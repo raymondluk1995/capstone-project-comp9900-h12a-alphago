@@ -91,7 +91,11 @@ export default {
                         this.$message.success("Reset password successful");
                         this.$router.replace("/alpha");
                       }
-                    } else {
+                    } else if(response.data.code === 400){
+                        console.log(response.data);
+                        this.$message.error("Validate code incorrect");
+                        location.reload()
+                    }else{
                       console.log(response.msg);
                     }
                   })

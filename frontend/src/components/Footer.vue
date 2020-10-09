@@ -1,9 +1,9 @@
 <template>
-    <div class="footer">
+    <div class="footer"  :class="FixedFooter ? 'fixedbottom' : ''">
     <el-row type="flex" justify="center" style="align-items: center;">
       <div class="footer-wrap">
         <p>
-          wwww.onlinepropertysales.com
+          wwww.AlphagoAuction.com
         </p>
         <p>
           Copyright &copy; 2020. All rights reserved(v1.0.0)
@@ -15,9 +15,13 @@
 
 <script>
 export default {
+    computed: {
+        FixedFooter() {
+            return this.$store.state.FixedFooter;
+        },
+    },
   data() {
     return {
-        footerFixedBottom: 'true'
     };
   },
 };
@@ -26,26 +30,26 @@ export default {
 <style scoped lang="scss">
 .footer {
     width: 100%;
-    // margin-top: 30px;
-    // padding: 5px;
+    /*margin-top: 30px;*/
+    padding: 15px;
     background-color: #1e4061;
     color: #fff;
     // position: fixed;
-    position: absolute;
-    bottom: 0;
-    height: 5%;
-    font-size: 10px;
+    /*position: absolute;*/
+    /*bottom: 0;*/
+    /*height: 20%;*/
+    font-size: 15px;
     .footer-wrap {
         text-align: center;
         p {
-            margin: 5px 0;
+            margin: 10px 0;
             // margin:0px;
         }
     }
 }
-/*.fixedbottom {*/
-/*    position: fixed;*/
-/*    bottom: 0;*/
-/*}*/
+.fixedbottom {
+    position: fixed;
+    bottom: 0;
+}
 
 </style>

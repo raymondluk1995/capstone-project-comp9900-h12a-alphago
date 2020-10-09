@@ -5,10 +5,11 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        username:'',
-        jwt: '',
-        firstname: '',
-        avatar:'',
+        username: localStorage.getItem("username") || '',
+        jwt: localStorage.getItem("jwt") || '',
+        firstname: localStorage.getItem("firstname") || '',
+        avatar: localStorage.getItem("avatar") || '',
+        FixedFooter:false,
     },
     getters: {
         getFirstname: function (state) {
@@ -40,6 +41,9 @@ export default new Vuex.Store({
         setUserName(state, username) {
             localStorage.setItem("username", JSON.stringify(username));
             state.username = username;
+        },
+        setfixedBottom(state, flag) {
+            state.FixedFooter = flag;
         },
 
         // setLogin(state, username, firstname, avatar) {
