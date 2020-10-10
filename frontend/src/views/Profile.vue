@@ -221,7 +221,7 @@
                 });
             },
             submitF(){
-                this.canEditLastname = false;
+                this.canEditFirstname = false;
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         let data = new FormData();
@@ -303,7 +303,9 @@
             },
             validate() {
                     if (this.timer == null) {
-                        this.$axios.post('/verify/register');
+                        let data = new FormData();
+                        data.append('email', this.form.email);
+                        this.$axios.post('/verify/register',data);
                     }
                     if (!this.timer) {
                         this.count = 60;
