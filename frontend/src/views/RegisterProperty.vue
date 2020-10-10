@@ -39,8 +39,8 @@
             </span>
           </google-places-autocomplete>
 
-          <!-- <h3 class="mt-8 text-grey-dark" v-if="place">Result</h3>
-          <pre v-html="place" class="text-xs" /> -->
+          <h3 class="mt-8 text-grey-dark" v-if="place">Result</h3>
+          <pre v-if="place" v-html="place.formatted_address" class="text-xs" />
         </div>
 
       </el-col>
