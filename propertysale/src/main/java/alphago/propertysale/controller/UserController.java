@@ -28,7 +28,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author Xiaohan Zhu
@@ -49,29 +49,30 @@ public class UserController {
     MessageProducer messageProducer;
     @Value("${remote.url}")
     private String remote;
+
     /**
-     * @Description:  User Registration
+     * @Description: User Registration
      * @return:
      * @Author: Xiaohan
      * @Date: 6/10/20
      */
     @RequestMapping("/register")
-    Result save(User user , String validate , MultipartFile avatar , HttpServletRequest request , HttpServletResponse response) throws IOException, ServletException {
+    Result save(User user, String validate, MultipartFile avatar, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // Check verify code
-        if(!CheckCode.checkCode(validate, user.getEmail() , "register"))
+        if (!CheckCode.checkCode(validate, user.getEmail(), "register"))
             return Result.fail("Verification code is wrong or outdated");
 
         // Check username
         User resUser = userService.getOne(new QueryWrapper<User>().eq("username", user.getUsername()));
-        if(resUser != null) return Result.fail("Username is exist!");
+        if (resUser != null) return Result.fail("Username is exist!");
         // Register
-        if(avatar != null)
+        if (avatar != null)
             user.setAvatarType(FileUtil.getType(avatar.getOriginalFilename()));
         userService.save(user);
         // get User Id
         resUser = userService.getOne(new QueryWrapper<User>().eq("username", user.getUsername()));
         // upload avatar
-        if(resUser.getAvatarType() != null || !resUser.getAvatarType().equals("")) {
+        if (resUser.getAvatarType() != null || !resUser.getAvatarType().equals("")) {
             AvatarPorter porter = new AvatarPorter()
                     .setAvatar(avatar.getBytes())
                     .setType(resUser.getAvatarType())
@@ -83,30 +84,45 @@ public class UserController {
 
     @RequestMapping("/login")
     @CrossOrigin
-    Result login(User user , HttpServletResponse response , HttpServletRequest request){
+    Result login(User user, HttpServletResponse response, HttpServletRequest request) {
         User logUser = userService.getOne(new QueryWrapper<User>().eq("username", user.getUsername()));
-        if(logUser == null) return Result.fail("User is not exist!");
-        if(!logUser.getPassword().equals(user.getPassword())) return Result.fail("Wrong password!");
+        if (logUser == null) return Result.fail("User is not exist!");
+        if (!logUser.getPassword().equals(user.getPassword())) return Result.fail("Wrong password!");
         HashMap<String, String> map = new HashMap<>();
-        map.put("username" , user.getUsername());
+        map.put("username", user.getUsername());
         String jwt = JWTutil.getJwtToken(map);
-        response.setHeader("jwt" , jwt);
+        response.setHeader("jwt", jwt);
         response.setHeader("Access-Control-Expose-Headers", "jwt");
         // get return POJO
         LoginVO ret = new LoginVO()
-                        .setUsername(logUser.getUsername())
-                        .setFirstname(logUser.getFirstname())
-                        .setAvatar(remote + FileUtil.getUserAvatar(logUser));
+                .setUsername(logUser.getUsername())
+                .setFirstname(logUser.getFirstname())
+                .setAvatar(remote + FileUtil.getUserAvatar(logUser));
         return Result.success(ret);
     }
 
 
     @RequestMapping("/logout")
     @RequiresAuthentication
-    Result logout(){
+    Result logout() {
         Subject subject = SecurityUtils.getSubject();
         System.out.println(subject.getPrincipal());
         subject.logout();
         return Result.success("退出成功！");
+    }
+
+
+    @RequestMapping("/reset")
+    Result resetPassword(User user, String validate) {
+        User targetUser = userService.getOne(new QueryWrapper<User>().eq("username", user.getUsername()));
+        if (targetUser == null) return Result.fail("User name arg is wrong!");
+
+        System.out.println("validate = " + validate);
+        if (!CheckCode.checkCode(validate, targetUser.getEmail(), CheckCode.RESET)) {
+            return Result.fail("Verification code is wrong or outdated.");
+        }
+        targetUser.setPassword(user.getPassword());
+        userService.update(targetUser, new QueryWrapper<User>().eq("username", user.getUsername()));
+        return Result.success("reset password successful!");
     }
 }
