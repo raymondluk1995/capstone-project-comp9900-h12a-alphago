@@ -14,6 +14,11 @@
                 label-width="100px"
                 label-position="left"
         >
+          <el-form-item prop="tag">
+            <i class="el-icon-user-solid">Username</i>
+            <i class="el-icon-user-solid">Email</i>
+          </el-form-item>
+
           <el-form-item label="Username" prop="username">
             <el-input v-model="form.username"></el-input>
           </el-form-item>
