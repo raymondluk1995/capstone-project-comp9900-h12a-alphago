@@ -38,29 +38,35 @@
 
 <script>
   import Header from "@/components/Header.vue";
-  import {mapActions, mapMutations} from "vuex";
+  import { mapMutations } from "vuex";
 
   export default {
     components: {
       Header,
     },
     data() {
+      const validateUsername = (rule, value, callback) => {
+        const usernameReg = /^[A-Za-z0-9]+$/;
+        if (!usernameReg.test(value)) {
+          callback(new Error("Please enter the correct username"));
+        } else {
+          callback();
+        }
+      };
+
       return {
         form: {
           username: '',
           password: '',
         },
         rules: {
-          // TODO: check username format
-          // username: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
-          username: [{required: true, message: "Please enter email address", trigger: "blur",},],
+          username: [{required: true, message: "Please enter email address", trigger: "blur",}, {validator: validateUsername, trigger: "blur" },],
           password: [{required: true, message: "Please enter password", trigger: "blur",},],
         },
       };
     },
     methods: {
-      // ...mapActions(['login']),
-      ...mapMutations(['setJwt','setUserName','setFirstName']),
+      ...mapMutations(['setJwt','setUserName','setFirstName','setAvatar']),
       signIn() {
         this.$refs["form"].validate((valid) => {
           if (valid) {
@@ -71,7 +77,7 @@
                         if(response.data.code === 200){
                           this.$store.commit('setJwt', response.headers.jwt);
                           this.$store.commit('setUserName', this.form.username);
-                          // this.$store.commit('setAvatar', response.avatar);
+                          this.$store.commit('setAvatar', response.data.result.avatar);
                           this.$store.commit('setFirstName', response.data.result.firstname);
                           this.$router.push({name: 'home'});
                           console.log(response.data);
@@ -94,21 +100,6 @@
       },
       forgetpwd(){
         this.$router.replace("/reset");
-        // let username = this.$qs.stringify({username: this.form.username});
-        // this.$axios.post('/user/reset', username)
-        //         .then((response) => {
-        //           if (response.status === 200) {
-        //             this.$message('Confirmation mail has been sent to your email.');
-        //             console.log('username is correct')
-        //           } else if (response.status === 404) {
-        //             this.$message('This username is not registered!');
-        //             console.log(response.msg)
-        //           }
-        //         })
-        //         .catch((res) => {
-        //           console.log('error ', res);
-        //           this.$message.error('Forget password backend Error');
-        //         })
       },
       goto(name) {
         console.log(name);

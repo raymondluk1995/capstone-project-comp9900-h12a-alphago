@@ -152,7 +152,7 @@
     import Header from "@/components/Header.vue";
     import { GooglePlacesAutocomplete } from 'vue-better-google-places-autocomplete'
 
-    import { mapState, mapActions } from "vuex";
+    import { mapActions } from "vuex";
     export default {
         name: "PropertyRegistration",
         components: {
@@ -218,23 +218,20 @@
             };
         },
         created () {
-            this.username = JSON.parse(localStorage.getItem('username'));
+            this.username = localStorage.getItem('username');
             // this.username = this.$store.state.username;
             if(this.username!==null){
                 this.hasLogin = true;
-                this.avatar = JSON.parse(localStorage.getItem('avatar'));
+                this.avatar = localStorage.getItem('avatar');
             }
-            this.firstname=JSON.parse(localStorage.getItem('firstname'));
+            this.firstname=  localStorage.getItem('firstname');
         },
-        // computed: {
-        //     ...mapState(["hasLogin", "avatar", "firstname"]),
-        // },
         methods: {
             ...mapActions(["logout"]),
             handleCommand(command) {
                 switch (command) {
                     case "profile":
-                        // this.$router.push("/profile");
+                        this.$router.push("/profile");
                         break;
                     case "auction":
                         // this.$router.push("/auction");
@@ -242,7 +239,19 @@
                     case "notification":
                         break;
                     case "logout":
-                        this.logout();
+                        this.$axios.post('/user/logout',data)
+                            .then((response) => {
+                                if (response.status >= 200 && response.status < 300){
+                                    if (response.data.code === 200){
+                                        this.logout();
+                                        location.reload()
+                                    }else{
+                                        console.log(response.msg)
+                                    }
+                                }else{
+                                    console.log(response.msg)
+                                }
+                            })
                         break;
                     default:
                         break;

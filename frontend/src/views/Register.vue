@@ -15,8 +15,8 @@
           label-width="150px"
           label-position="left"
         >
-          <el-row :gutter="50">
-            <el-col :span="14">
+          <el-row :gutter="10">
+            <el-col :span="15">
               <el-form-item label="Username:" prop="username">
                 <el-input v-model="form.username"></el-input>
               </el-form-item>
@@ -30,7 +30,9 @@
                 <el-input v-model="form.phone"></el-input>
               </el-form-item>
               <el-form-item label="Email:" prop="email">
-                <el-input v-model="form.email" ></el-input>
+                <el-input style="width:60%;float:left;"  v-model="form.email" ></el-input>
+                <el-button round style="width:35%;float:right;" v-show="show" type="info" @click="validate">Validate</el-button>
+                <el-button round style="width:35%;float:right;" v-show="!show" type="ordinary">{{ count }} s</el-button>
               </el-form-item>
                 <el-form-item label="Validate Code:" prop="validate">
                   <el-input v-model="form.validate" placeholder="Press the Validate button to get the code"></el-input>
@@ -63,11 +65,12 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
               <div class="btns">
-                <div class="validate" @click="validate"  id="validate">
-                  <span v-show="show">validate</span>
-                  <span v-show="!show">{{ count }} s</span>
-                </div>
+<!--                <div class="validate" @click="validate"  id="validate">-->
+<!--                  <span v-show="show">validate</span>-->
+<!--                  <span v-show="!show">{{ count }} s</span>-->
+<!--                </div>-->
                 <el-button round type="primary" @click="register" id="submit-btn">Submit</el-button>
+<!--                <el-button round type="primary" @click="register" >Submit</el-button>-->
               </div>
             </el-col>
           </el-row>
@@ -304,17 +307,17 @@ export default {
     user-select:none;
   }
   #submit-btn{
-    width: 180px;
-    height:35px;
-    margin: 0 auto 20px 0;
-    line-height: 35px;
-    border-radius: 5px;
-    -webkit-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
-    text-align: center;
-    padding:0px;
+    /*width: 180px;*/
+    /*height:35px;*/
+    /*margin: 0 auto 20px 0;*/
+    /*line-height: 35px;*/
+    /*border-radius: 5px;*/
+    /*-webkit-user-select:none;*/
+    /*-moz-user-select:none;*/
+    /*-ms-user-select:none;*/
+    /*user-select:none;*/
+    /*text-align: center;*/
+    /*padding:0px;*/
     margin-top: 135px;
   }
 </style>
