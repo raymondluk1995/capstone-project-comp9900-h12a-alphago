@@ -197,7 +197,7 @@
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         let data = new FormData();
-                        data.append('email', this.form.lastname);
+                        data.append('lastname', this.form.lastname);
                         this.$axios.post('/user/information/changeLastname', data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
@@ -225,7 +225,7 @@
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         let data = new FormData();
-                        data.append('email', this.form.email);
+                        data.append('firstname', this.form.firstname);
                         this.$axios.post('/user/information/changeFirstname', data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
@@ -260,7 +260,7 @@
                                     if(response.data.code === 200){
                                         this.$store.commit('setAvatar', response.data.result.avatar);
                                         this.$message('Avatar Reset Successful!');
-                                        this.form.firstname = response.data.result.avatar;
+                                        this.form.avatar = response.data.result.avatar;
                                     }else{
                                         console.log(response.msg);
                                     }

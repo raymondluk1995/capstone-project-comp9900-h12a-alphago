@@ -3,7 +3,7 @@
     <Header>
       <el-button round type="primary" @click="back">Back</el-button>
     </Header>
-    <el-row type="flex" justify="center" style="margin: 40px 0">
+    <el-row type="flex" justify="center" style="margin: 20px 0">
       <el-col :span="9">
         <h1 class="title">Sign In</h1>
         <el-form
@@ -14,15 +14,20 @@
                 label-width="100px"
                 label-position="left"
         >
-          <el-form-item prop="tag">
-            <i class="el-icon-user-solid">Username</i>
-            <i class="el-icon-user-solid">Email</i>
+          <el-row type="flex" justify="center" style="margin-bottom: 20px">
+            <el-button type="primary" icon="el-icon-user-solid" circle @click="byuser"></el-button>
+            <el-button type="info" icon="el-icon-message" circle @click="byemail"></el-button>
+          </el-row>
+
+          <el-form-item v-if="loginByuser"  label="Username:" prop="username">
+          <el-input v-model="form.username"></el-input>
+        </el-form-item>
+
+          <el-form-item v-else label="Email:" prop="username">
+            <el-input v-model="form.email"></el-input>
           </el-form-item>
 
-          <el-form-item label="Username" prop="username">
-            <el-input v-model="form.username"></el-input>
-          </el-form-item>
-          <el-form-item label="Password" prop="password">
+          <el-form-item label="Password:" prop="password">
             <el-input
                     type="password"
                     v-model="form.password"
@@ -58,13 +63,24 @@
           callback();
         }
       };
+      const validateEmail = (rule, value, callback) => {
+        const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!emailReg.test(value)) {
+          callback(new Error("Please enter the correct email address"));
+        } else {
+          callback();
+        }
+      };
 
       return {
+        loginByuser:true,
         form: {
+          email:'',
           username: '',
           password: '',
         },
         rules: {
+          email: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
           username: [{required: true, message: "Please enter email address", trigger: "blur",}, {validator: validateUsername, trigger: "blur" },],
           password: [{required: true, message: "Please enter password", trigger: "blur",},],
         },
@@ -72,6 +88,13 @@
     },
     methods: {
       ...mapMutations(['setJwt','setUserName','setFirstName','setAvatar']),
+      byuser(){
+          this.loginByuser = true;
+      },
+      byemail(){
+        this.loginByuser = false;
+      },
+
       signIn() {
         this.$refs["form"].validate((valid) => {
           if (valid) {
