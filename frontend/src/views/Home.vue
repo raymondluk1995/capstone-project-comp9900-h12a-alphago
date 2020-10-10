@@ -169,13 +169,13 @@ export default {
       }
     },
     created () {
-        this.username = JSON.parse(localStorage.getItem('username'));
+        this.username = localStorage.getItem('username');
         // this.username = this.$store.state.username;
         if(this.username!==null){
             this.hasLogin = true;
-            this.avatar = JSON.parse(localStorage.getItem('avatar'));
+            this.avatar = localStorage.getItem('avatar');
         }
-        this.firstname=JSON.parse(localStorage.getItem('firstname'));
+        this.firstname= localStorage.getItem('firstname');
     },
     // computed: {
     //   ...mapState(["firstname"]),

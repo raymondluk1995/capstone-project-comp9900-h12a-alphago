@@ -4,7 +4,7 @@
       <el-button round type="primary" @click="back">Back</el-button>
     </Header>
     <el-row type="flex" justify="center">
-      <el-col :span="9">
+      <el-col :span="12">
         <h1 class="title">Reset Password</h1>
         <el-form
           class="form"
@@ -24,17 +24,18 @@
             <el-input type="password" v-model="form.passwordAgain" show-password></el-input>
           </el-form-item>
           <el-form-item label="Validate:" prop="validate">
-            <el-input v-model="form.validate" placeholder="Press the Validate button to get the code"></el-input>
+            <el-input  style="width:70%;float:left;" v-model="form.validate" placeholder="Press the Validate button to get the code"></el-input>
+              <el-button round style="width:25%;float:right;" type="info" v-show="show" @click="validate">Validate</el-button>
+              <el-button round  style="width:25%;float:right;" type="ordinary" v-show="!show">{{ count }} s</el-button>
           </el-form-item>
         </el-form>
         <div class="btns">
-          <div class="validate" @click="validate"  id="validate">
+<!--          <div class="validate" @click="validate"  id="validate">-->
 <!--            <span v-show="show">validate</span>-->
 <!--            <span v-show="!show">{{ count }} s</span>-->
-            <el-button round type="ordinary" v-show="show" @click="resetPassword">Validate</el-button>
-            <el-button round type="ordinary" v-show="!show" @click="resetPassword">{{ count }} s</el-button>
-          </div>
-
+<!--            <el-button round type="ordinary" v-show="show" @click="validate">Validate</el-button>-->
+<!--            <el-button round type="ordinary" v-show="!show">{{ count }} s</el-button>-->
+<!--          </div>-->
           <el-button round type="primary" @click="resetPassword">Submit</el-button>
         </div>
       </el-col>
@@ -125,7 +126,7 @@ export default {
           this.show = false;
           $(".validate").addClass("huise")
 
-          document.getElementById('validate').style.cursor = 'not-allowed'
+          // document.getElementById('validate').style.cursor = 'not-allowed'
           this.timer = setInterval(() => {
             if (this.count > 0 && this.count <= 60) {
               this.count--
@@ -144,7 +145,7 @@ export default {
       console.log(val)
       if(val == null){
         $(".validate").removeClass("huise")
-        document.getElementById('validate').style.cursor = 'pointer'
+        // document.getElementById('validate').style.cursor = 'pointer'
       }
     }
   }

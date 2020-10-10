@@ -6,6 +6,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Resetpassword from "../views/Resetpassword";
 import PropertyReg from "../views/PropertyReg";
+import Profile from "../views/Profile";
 
 Vue.use(VueRouter);
 
@@ -53,6 +54,14 @@ const routes = [
     path: '/propreg',
     name: 'propertyreg',
     component: PropertyReg,
+  }
+  ,{
+    path: '/profile',
+    name: 'profile',
+    component: Profile,
+    meta: {
+      FixedFooter: true,
+    },
   }
 ];
 
