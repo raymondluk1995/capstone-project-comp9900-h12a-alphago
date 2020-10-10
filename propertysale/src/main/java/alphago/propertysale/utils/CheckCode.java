@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @create: 2020-10-07 13:39
  **/
 public class CheckCode {
-    private static final int timeout = 2;
+    private static final int timeout = 10;
     public static final String REGISTER = "register";
     public static final String RESET = "reset";
     public static final String AVATAR = "avatar";
@@ -25,6 +25,7 @@ public class CheckCode {
         RedisTemplate valueRedis = RedisUtil.valueRedis();
         // generate id and code
         String code = RandomUtil.randomString(6);
+        System.out.println(code);
         // put verify code into redis
         valueRedis.opsForValue().set(usage+email , code , timeout , TimeUnit.MINUTES);
         // send Email

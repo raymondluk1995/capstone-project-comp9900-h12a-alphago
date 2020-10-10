@@ -41,10 +41,9 @@ public class JwtFilter extends AuthenticatingFilter {
         try {
             DecodedJWT decodedJWT = JWTutil.decodedJWT(jwt);
             String username = decodedJWT.getClaim("username").asString();
-            return new JwtToken(username);
-        }catch (ExpiredCredentialsException e){
-            throw e;
-        }catch (JWTDecodeException e){
+            long uid = Long.parseLong(decodedJWT.getClaim("uid").asString());
+            return new JwtToken(new JwtInfo(uid , username));
+        } catch (RuntimeException e){
             throw e;
         }
     }

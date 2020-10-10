@@ -28,6 +28,7 @@ public class VerificationController {
      */
     @RequestMapping("/register")
     Result sendRegisterCode(String email){
+        if(userService.emailExist(email)) return Result.fail("Email exist! Please Change!");
         messageProducer.sendMsg(email , CheckCode.REGISTER);
         return Result.success("成功发送");
     }

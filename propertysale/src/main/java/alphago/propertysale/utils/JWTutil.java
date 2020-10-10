@@ -31,7 +31,8 @@ public class JWTutil {
         return tokenBuilder.sign(algorithm);
     }
 
-    public static DecodedJWT decodedJWT(String token){
-        return JWT.require(algorithm).build().verify(token);
+    public static DecodedJWT decodedJWT(String token) throws IllegalArgumentException{
+        DecodedJWT verify = JWT.require(algorithm).build().verify(token);
+        return verify;
     }
 }

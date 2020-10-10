@@ -39,12 +39,13 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         JwtToken jwtToken = (JwtToken) token;
-        String username = (String)jwtToken.getPrincipal();
+        JwtInfo info = (JwtInfo)jwtToken.getPrincipal();
+        String username = info.getUsername();
         // get user based on the username in JwtToken
         User user = userService.getOne(new QueryWrapper<User>().eq("username", username));
         if(user == null){
             throw new UnknownAccountException("username not exist!");
         }
-        return new SimpleAuthenticationInfo(user.getUsername() , jwtToken.getCredentials() , getName());
+        return new SimpleAuthenticationInfo(info , jwtToken.getCredentials() , getName());
     }
 }

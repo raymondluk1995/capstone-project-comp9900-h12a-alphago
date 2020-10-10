@@ -1,5 +1,6 @@
 package alphago.propertysale.shiro;
 
+import alphago.propertysale.entity.LoginVO;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.apache.shiro.authc.AuthenticationToken;
 
@@ -10,19 +11,19 @@ import org.apache.shiro.authc.AuthenticationToken;
  * @create: 2020-09-26 22:43
  **/
 public class JwtToken implements AuthenticationToken {
-    private String username;
+    private JwtInfo user;
 
-    public JwtToken(String username) {
-        this.username = username;
+    public JwtToken(JwtInfo user) {
+        this.user = user;
     }
 
     @Override
     public Object getPrincipal() {
-        return username;
+        return user;
     }
 
     @Override
     public Object getCredentials() {
-        return username;
+        return user;
     }
 }

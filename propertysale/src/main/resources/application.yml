@@ -13,6 +13,8 @@ spring:
   redis:
     password: 123456
     host: 3.25.129.229
+    timeout: 5000
+
   # mail
   mail:
     host: smtp.gmail.com

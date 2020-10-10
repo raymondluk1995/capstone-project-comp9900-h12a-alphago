@@ -4,6 +4,7 @@ import alphago.propertysale.utils.ApplicationContextUtil;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.Collection;
@@ -27,26 +28,26 @@ public class RedisCache<K,V> implements Cache<K , V> {
     public RedisTemplate getRedisTemplate(){
         RedisTemplate<K,V> redis = (RedisTemplate) ApplicationContextUtil.getApplicationContext().getBean("redisTemplate");
         redis.setKeySerializer(new StringRedisSerializer()); // 设置序列化方式
-        redis.setHashKeySerializer(new StringRedisSerializer());
+        redis.setHashKeySerializer(new JdkSerializationRedisSerializer());
         return redis;
     }
 
     @Override
     public V get(K k) throws CacheException {
         RedisTemplate redisTemplate = getRedisTemplate();
-        return (V)redisTemplate.opsForHash().get(cacheName , k.toString());
+        return (V)redisTemplate.opsForHash().get(cacheName , k);
     }
 
     @Override
     public V put(K k, V v) throws CacheException {
         RedisTemplate redisTemplate = getRedisTemplate();
-        redisTemplate.opsForHash().put(cacheName , k.toString() , v);
+        redisTemplate.opsForHash().put(cacheName , k , v);
         return null;
     }
 
     @Override
     public V remove(K k) throws CacheException {
-        return (V) getRedisTemplate().opsForHash().delete(cacheName , k.toString());
+        return (V) getRedisTemplate().opsForHash().delete(cacheName , k);
     }
 
     @Override
