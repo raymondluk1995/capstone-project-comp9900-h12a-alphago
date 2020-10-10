@@ -239,7 +239,7 @@
                     case "notification":
                         break;
                     case "logout":
-                        this.$axios.post('/user/logout',data)
+                        this.$axios.post('/user/logout')
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
