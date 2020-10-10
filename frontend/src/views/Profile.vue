@@ -230,7 +230,7 @@
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
-                                        this.$store.commit('setFirstName', response.data.result.firstname);
+                                        this.$store.commit('setFirstName', response.data.result);
                                         this.$message('First Name Reset Successful!');
                                         this.form.firstname = response.data.result.firstname;
                                     }else{
