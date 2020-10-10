@@ -175,7 +175,7 @@
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
                                         this.$message('Email Reset Successful!');
-                                        this.form.email = response.data.result.email;
+                                        this.form.email = response.data.result;
                                     }else{
                                         console.log(response.msg);
                                     }
@@ -203,7 +203,7 @@
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
                                         this.$message('Last Name Reset Successful!');
-                                        this.form.lastname = response.data.result.lastname;
+                                        this.form.lastname = response.data.result;
                                     }else{
                                         console.log(response.msg);
                                     }
@@ -232,7 +232,7 @@
                                     if(response.data.code === 200){
                                         this.$store.commit('setFirstName', response.data.result);
                                         this.$message('First Name Reset Successful!');
-                                        this.form.firstname = response.data.result.firstname;
+                                        this.form.firstname = response.data.result;
                                     }else{
                                         console.log(response.msg);
                                     }
@@ -258,9 +258,9 @@
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
-                                        this.$store.commit('setAvatar', response.data.result.avatar);
+                                        this.$store.commit('setAvatar', response.data.result);
                                         this.$message('Avatar Reset Successful!');
-                                        this.form.avatar = response.data.result.avatar;
+                                        this.form.avatar = response.data.result;
                                     }else{
                                         console.log(response.msg);
                                     }
