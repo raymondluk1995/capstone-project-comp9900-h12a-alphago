@@ -152,7 +152,7 @@
     import Header from "@/components/Header.vue";
     import { GooglePlacesAutocomplete } from 'vue-better-google-places-autocomplete'
 
-    import { mapState, mapActions } from "vuex";
+    import { mapActions } from "vuex";
     export default {
         name: "PropertyRegistration",
         components: {
@@ -224,17 +224,14 @@
                 this.hasLogin = true;
                 this.avatar = localStorage.getItem('avatar');
             }
-            this.firstname=localStorage.getItem('firstname');
+            this.firstname=  localStorage.getItem('firstname');
         },
-        // computed: {
-        //     ...mapState(["hasLogin", "avatar", "firstname"]),
-        // },
         methods: {
             ...mapActions(["logout"]),
             handleCommand(command) {
                 switch (command) {
                     case "profile":
-                        // this.$router.push("/profile");
+                        this.$router.push("/profile");
                         break;
                     case "auction":
                         // this.$router.push("/auction");
@@ -242,7 +239,19 @@
                     case "notification":
                         break;
                     case "logout":
-                        this.logout();
+                        this.$axios.post('/user/logout',data)
+                            .then((response) => {
+                                if (response.status >= 200 && response.status < 300){
+                                    if (response.data.code === 200){
+                                        this.logout();
+                                        location.reload()
+                                    }else{
+                                        console.log(response.msg)
+                                    }
+                                }else{
+                                    console.log(response.msg)
+                                }
+                            })
                         break;
                     default:
                         break;

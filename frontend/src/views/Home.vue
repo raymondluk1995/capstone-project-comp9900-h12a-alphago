@@ -103,7 +103,7 @@
 <script>
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: 'Home',
@@ -112,7 +112,6 @@ export default {
   },
     data() {
       return {
-          // avatar:'',
           hasLogin: false,
           bathNum: 1,
           bedroomNum: 1,
@@ -175,7 +174,7 @@ export default {
             this.hasLogin = true;
             this.avatar = localStorage.getItem('avatar');
         }
-        this.firstname= localStorage.getItem('firstname');
+        this.firstname=  localStorage.getItem('firstname');
     },
     // computed: {
     //   ...mapState(["firstname"]),
@@ -183,21 +182,32 @@ export default {
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
-          let data = this.$qs.stringify(this.username);
-        if (command === "logout") {
+        switch (command) {
+          case "profile":
+            this.$router.push("/profile");
+            break;
+          case "auction":
+            // this.$router.push("/auction");
+            break;
+          case "notification":
+            break;
+          case "logout":
             this.$axios.post('/user/logout',data)
-                .then((response) => {
-                    if (response.status >= 200 && response.status < 300){
+                    .then((response) => {
+                      if (response.status >= 200 && response.status < 300){
                         if (response.data.code === 200){
-                            this.logout();
-                            location.reload()
+                          this.logout();
+                          location.reload()
                         }else{
-                            console.log(response.msg)
+                          console.log(response.msg)
                         }
-                    }else{
+                      }else{
                         console.log(response.msg)
-                    }
-        })
+                      }
+                    })
+            break;
+          default:
+            break;
         }
       },
       toSearch() {

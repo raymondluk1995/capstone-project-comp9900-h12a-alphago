@@ -83,7 +83,11 @@ export default {
     resetPassword() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          let data = this.$qs.stringify(this.form);
+          // let data = this.$qs.stringify(this.form);
+          let data = new FormData();
+          data.append('username', this.form.username);
+          data.append('password', this.form.password);
+          data.append('validate', this.form.validate);
           this.$axios.post('/user/reset', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {

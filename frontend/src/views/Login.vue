@@ -38,7 +38,7 @@
 
 <script>
   import Header from "@/components/Header.vue";
-  import {mapActions, mapMutations} from "vuex";
+  import { mapMutations } from "vuex";
 
   export default {
     components: {
@@ -60,14 +60,13 @@
           password: '',
         },
         rules: {
-          // TODO: check username format
-          username: [{required: true, message: "Please enter email address", trigger: "blur",}, {validator: validateUsername(), trigger: "blur" },],
+          username: [{required: true, message: "Please enter email address", trigger: "blur",}, {validator: validateUsername, trigger: "blur" },],
           password: [{required: true, message: "Please enter password", trigger: "blur",},],
         },
       };
     },
     methods: {
-      ...mapMutations(['setJwt','setUserName','setFirstName']),
+      ...mapMutations(['setJwt','setUserName','setFirstName','setAvatar']),
       signIn() {
         this.$refs["form"].validate((valid) => {
           if (valid) {
