@@ -3,12 +3,15 @@ create database property_sale;
 use property_sale;
 
 create table user(
-	`uid` int(6) NOT NULL auto_increment,
-	`username` varchar(10) NOT NULL,
+	`uid` bigint(10) NOT NULL auto_increment,
+	`username` varchar(255) NOT NULL,
+	`firstname` varchar(255) NOT NULL,
+	`lastname` varchar(255) NOT NULL,
 	`password` varchar(32) NOT NULL,
 	`salt` varchar(6) DEFAULT NULL,
 	`phone` varchar(10) NOT NULL,
 	`email` varchar(50) NOT NULL,
+	`avatar_type` varchar(100) default null,
 	
 	primary key(uid),
 	KEY `name_index` (`username`) USING BTREE
