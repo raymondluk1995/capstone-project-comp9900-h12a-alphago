@@ -15,7 +15,7 @@
             @blur = "sendPlace"
           >
             <div slot="input" slot-scope="{ context, events, actions }">
-              <label for="locationInput" class="block my-4 text-xl text-grey-dark">Address Search</label>
+              <label for="locationInput" class="middle address-label">Address Search</label><br>
               <input
                 v-model="context.input"
                 @focus="events.inputHasReceivedFocus"
@@ -25,22 +25,22 @@
                 @keydown.up.prevent="actions.unshiftResultsSelection"
                 type="search"
                 id="locationInput"
-                class="p-4 w-full max-w-sm outline-none rounded-t-lg"
-                placeholder="Type something ..."
+                class="middle form-control"
+                placeholder="Please type in your property's address for validation"
                 autocomplete="off"
               >
             </div>
 
-            <span slot="item" slot-scope="{ place }" class="block p-2">
+            <span slot="item" slot-scope="{ place }" class="btn btn-default">
               {{ place.description }}
             </span>
-            <span slot="activeItem" slot-scope="{ place }" class="block p-2 rounded bg-green-lightest font-bold">
+            <span slot="activeItem" slot-scope="{ place }" class="btn btn-default">
               {{ place.description }}
             </span>
           </google-places-autocomplete>
 
-          <h3 class="mt-8 text-grey-dark" v-if="place">Result</h3>
-          <pre v-if="place" v-html="place.formatted_address" class="text-xs" />
+          <p v-if="place">Your address is:</p>
+          <pre v-if="place" v-html="place.formatted_address" class="pre-place"/>
         </div>
 
       </el-col>
@@ -88,4 +88,36 @@ export default {
 .vbga-results {
   @apply .list-reset w-full max-w-sm p-4 bg-white border-t rounded-b-lg;
 }
+
+.address-label{
+  width: 180px;
+  text-align: center;
+  background-color: rgba(15, 128, 255,0.8);
+  border-radius: 5px;
+  font-size: 20px;
+  color:white;
+}
+
+.middle {
+  position: relative;
+  display:inline-block;
+  left: 50%;
+  -webkit-transform: translate(-50%,0);
+  transform: translate(-50%,0);
+}
+
+li{
+  list-style-type: none;
+}
+
+.btn-default:hover{
+  background-color:rgba(15, 128, 255,0.8);
+}
+
+.pre-place{
+  font-weight:bold;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
 </style>
