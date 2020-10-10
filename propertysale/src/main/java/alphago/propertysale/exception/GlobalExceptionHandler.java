@@ -20,7 +20,7 @@ import java.io.IOException;
  **/
 @Slf4j
 @RestControllerAdvice
-public class GlobalExcepitonHandler {
+public class GlobalExceptionHandler {
     // 捕捉shiro的异常
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ShiroException.class)
@@ -30,7 +30,7 @@ public class GlobalExcepitonHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = IllegalArgumentException.class)
-    public Result handler(IllegalArgumentException e) throws IOException {
+    public Result handler(IllegalArgumentException e) {
         log.error("Assert异常:-------------->{}",e.getMessage());
         return Result.fail(e.getMessage());
     }
