@@ -70,10 +70,13 @@
                                 <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
-                            <el-row type="flex" justify="space-around" style="align-items: center;">
-                                <el-button round type="ordinary" @click="cancelA">Cancel</el-button>
-                                <el-button round type="primary" @click="submitA">Submit</el-button>
-                            </el-row>
+                            <div class="btn-box">
+                                <el-row type="flex" justify="space-around" style="align-items: center;">
+                                    <el-button round type="ordinary" @click="cancelA">Cancel</el-button>
+                                    <el-button round type="primary" @click="submitA">Submit</el-button>
+                                </el-row>
+                            </div>
+                            
                         </el-col>
                     </el-row>
                 </el-form>
@@ -402,5 +405,12 @@
     .huise{
         background-color: #dcdcdc !important;
         color: black;
+    }
+
+
+    .btn-box{
+        margin-top:60px;
+        bottom:0px;
+        position: relative;
     }
 </style>

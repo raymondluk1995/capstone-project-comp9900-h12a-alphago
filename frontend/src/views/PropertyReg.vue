@@ -46,7 +46,7 @@
                 type="search"
                 id="locationInput"
                 class="middle form-control"
-                placeholder="Please type in your property's address here"
+                placeholder="Please type in your property's address here for validation. The input boxes will be enabled after validation."
                 autocomplete="off"
               />
             </div>
@@ -151,12 +151,43 @@
                     class="search-criteria"
                   >
                     <el-col>
-                      <el-checkbox label="These"></el-checkbox>
-                      <el-checkbox label="are"></el-checkbox>
-                      <el-checkbox label="some"></el-checkbox>
-                      <el-checkbox label="keywords"></el-checkbox>
+                      <el-checkbox label="House"></el-checkbox>
+                      <el-checkbox label="Apartment"></el-checkbox>
+                      <el-checkbox label="Townhouse"></el-checkbox>
+                      <el-checkbox label="Retirement Village"></el-checkbox>
                     </el-col>
                   </el-row>
+
+                <el-row
+                  type="flex"
+                  justify="space-between"
+                  class="search-criteria"
+                >
+                  <el-col>
+                      <el-checkbox label="School"></el-checkbox>
+                      <el-checkbox label="Shopping Center"></el-checkbox>
+                      <el-checkbox label="Bus Station"></el-checkbox>
+                      <el-checkbox label="Train Station"></el-checkbox>
+                    </el-col>
+
+                </el-row>
+
+                <el-row
+                  type="flex"
+                  justify="space-between"
+                  class="search-criteria"
+                >
+                  <el-col>
+                      <el-checkbox label="Light Rail Station"></el-checkbox>
+                      <el-checkbox label="Quiet Atmosphere"></el-checkbox>
+                      <el-checkbox label="Gym"></el-checkbox>
+                      <el-checkbox label="Beach"></el-checkbox>
+                    </el-col>
+
+                </el-row>
+
+
+
                 </el-checkbox-group>
               </el-form-item>
               <el-form-item label="Start Date:" prop="startDate">
