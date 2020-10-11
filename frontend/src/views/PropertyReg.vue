@@ -31,7 +31,6 @@
           <google-places-autocomplete
             @resultChanged="(placeDetail) => (place = placeDetail)"
             @resultCleared="() => (place = null)"
-            @blur="sendPlace"
           >
             <div slot="input" slot-scope="{ context, events, actions }">
               <label for="locationInput" class="middle address-label"
@@ -47,7 +46,7 @@
                 type="search"
                 id="locationInput"
                 class="middle form-control"
-                placeholder="Please type in your property's address for validation"
+                placeholder="Please type in your property's address here"
                 autocomplete="off"
               />
             </div>
@@ -234,6 +233,7 @@ export default {
       bathNum: 1,
       bedroomNum: 1,
       carNum: 1,
+      avatar:null,
       nums: [
         {
           value: 1,
@@ -394,35 +394,50 @@ export default {
       this.$router.push({ name: name });
     },
   },
-  computed:{
-    postcode_placeholder(){
+  watch:{
+    place: function(newPlace,oldPlace){
       if(this.place==null){
-        return null;
+        this.$set(this.form,'address',"");
+        this.$set(this.form,'postcode',"");
+        this.$set(this.form,'suburb',"");
+        this.$set(this.form,'state',"");
+        return ;
       }
-      return (this.place.address_components[6].long_name);
-    },
 
-    steet_placeholder(){
-      if(this.place==null){
-        return null;
-      }
-      return (this.place.address_components[0].long_name+" "+this.place.address_components[1].long_name);
-    },
+      let postcode, street,suburb, state;
+      let place_info = this.place.formatted_address.split(",");
 
-    suburb_placeholder(){
-      if(this.place==null){
-        return null;
-      }
-      return (this.place.address_components[2].long_name);
-    },
+      let country = place_info[place_info.length-1].trim();
 
-    state_placeholder(){
-      if(this.place==null){
-        return null;
+      if(country!="Australia"){
+        this.$message.error("Propery for registration must locate in Australia!!");
+        setTimeout(function(){
+          location.reload();
+        },2000);
+        return;
       }
-      return (this.place.address_components[4].long_name);
-    },
-  }
+      
+      if (place_info.length<3){
+        this.$message.error("On Google Map, this is not a residential area!");
+        setTimeout(function(){
+          location.reload();
+        },2000);
+        return;
+      }
+
+      let mid_info = place_info[place_info.length-2].split(" ");
+      let suburb_array = mid_info.slice(0,mid_info.length-2);
+      suburb = suburb_array.join(" ");
+      postcode = mid_info[mid_info.length-1];
+      state = mid_info[mid_info.length-2];
+      street = place_info.slice(0,place_info.length-2).join(" ");
+      this.$set(this.form,'address',street.trim());
+      this.$set(this.form,'postcode',postcode.trim());
+      this.$set(this.form,'suburb',suburb.trim());
+      this.$set(this.form,'state',state.trim());
+      return;
+    }
+  },
 };
 </script>
 
