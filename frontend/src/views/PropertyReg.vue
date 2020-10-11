@@ -81,16 +81,16 @@
           <el-row :gutter="50">
             <el-col :span="24">
               <el-form-item label="Address:" prop="address">
-                <el-input v-model="form.address" ></el-input>
+                <el-input v-model="form.address" :disabled="inputDisable" ></el-input>
               </el-form-item>
               <el-form-item label="Suburb:" prop="suburb">
-                <el-input v-model="form.suburb" ></el-input>
+                <el-input v-model="form.suburb" :disabled="inputDisable"></el-input>
               </el-form-item>
               <el-form-item label="State:" prop="state">
-                <el-input v-model="form.state"></el-input>
+                <el-input v-model="form.state" :disabled="inputDisable"></el-input>
               </el-form-item>
               <el-form-item label="Postcode:" prop="postcode">
-                <el-input v-model="form.postcode"></el-input>
+                <el-input v-model="form.postcode" :disabled="inputDisable"></el-input>
               </el-form-item>
               <el-form-item label="Area:" prop="area">
                 <el-input v-model="form.area"></el-input>
@@ -226,6 +226,7 @@ export default {
     };
     return {
       place: null,
+      inputDisable:true,
       dialogImageUrl: "",
       dialogVisible: false,
       // hasLogin: false,
@@ -401,8 +402,11 @@ export default {
         this.$set(this.form,'postcode',"");
         this.$set(this.form,'suburb',"");
         this.$set(this.form,'state',"");
+        this.inputDisable = true;
         return ;
       }
+      
+      this.inputDisable = false;
 
       let postcode, street,suburb, state;
       let place_info = this.place.formatted_address.split(",");
