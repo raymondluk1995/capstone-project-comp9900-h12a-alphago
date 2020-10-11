@@ -4,7 +4,7 @@
       <el-button round type="primary" @click="back">Back</el-button>
     </Header>
     <el-row type="flex" justify="center">
-      <el-col :span="9">
+      <el-col :span="12">
         <h1 class="title">Reset Password</h1>
         <el-form
           class="form"
@@ -14,25 +14,29 @@
           label-width="150px"
           label-position="left"
         >
-          <el-form-item label="Password" prop="password">
-            <el-input
-              type="password"
-              v-model="form.password"
-              show-password
-            ></el-input>
+          <el-form-item label="Username:" prop="username">
+            <el-input v-model="form.username"></el-input>
+          </el-form-item>
+          <el-form-item label="Password:" prop="password">
+            <el-input type="password" v-model="form.password" show-password></el-input>
           </el-form-item>
           <el-form-item label="Password Again:" prop="passwordAgain">
-            <el-input
-              type="password"
-              v-model="form.passwordAgain"
-              show-password
-            ></el-input>
+            <el-input type="password" v-model="form.passwordAgain" show-password></el-input>
+          </el-form-item>
+          <el-form-item label="Validate:" prop="validate">
+            <el-input  style="width:70%;float:left;" v-model="form.validate" placeholder="Press the Validate button to get the code"></el-input>
+              <el-button round style="width:25%;float:right;" type="info" v-show="show" @click="validate">Validate</el-button>
+              <el-button round  style="width:25%;float:right;" type="ordinary" v-show="!show">{{ count }} s</el-button>
           </el-form-item>
         </el-form>
         <div class="btns">
-          <el-button round type="primary" @click="resetPassword"
-            >Submit</el-button
-          >
+<!--          <div class="validate" @click="validate"  id="validate">-->
+<!--            <span v-show="show">validate</span>-->
+<!--            <span v-show="!show">{{ count }} s</span>-->
+<!--            <el-button round type="ordinary" v-show="show" @click="validate">Validate</el-button>-->
+<!--            <el-button round type="ordinary" v-show="!show">{{ count }} s</el-button>-->
+<!--          </div>-->
+          <el-button round type="primary" @click="resetPassword">Submit</el-button>
         </div>
       </el-col>
     </el-row>
@@ -41,6 +45,8 @@
 
 <script>
 import Header from "@/components/Header.vue";
+import $ from 'jquery'
+
 export default {
   components: {
     Header,
@@ -56,13 +62,20 @@ export default {
       }
     };
     return {
+      show: true,
+      count: 60,
+      timer: null,
       form: {
+        username:'',
         password: '',
         passwordAgain: '',
+        validate:''
       },
       rules: {
+        username: [{required: true, message: "Please enter username", trigger: "blur",},],
         password: [{required: true, message: "Please enter new password", trigger: "blur",},],
         passwordAgain: [{required: true, message: "Please enter the password again", trigger: "blur",}, { validator: validatePasswordAgain, trigger: "blur" },],
+        validate: [{required: true, message: "Please enter validate code", trigger: "blur",},],
       },
     };
   },
@@ -70,8 +83,31 @@ export default {
     resetPassword() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          this.$message.success("Reset password successful");
-          this.$router.go(-1);
+          // let data = this.$qs.stringify(this.form);
+          let data = new FormData();
+          data.append('username', this.form.username);
+          data.append('password', this.form.password);
+          data.append('validate', this.form.validate);
+          this.$axios.post('/user/reset', data)
+                  .then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                      if(response.data.code === 200){
+                        console.log(response.data);
+                        this.$message.success("Reset password successful");
+                        this.$router.replace("/login");
+                      }
+                    } else if(response.data.code === 400){
+                        console.log(response.data);
+                        this.$message.error("Validate code incorrect");
+                        location.reload()
+                    }else{
+                      console.log(response.msg);
+                    }
+                  })
+                  .catch((res) => {
+                    console.log('error', res);
+                    this.$message.error('Reset Error');
+                  });
         } else {
           return false;
         }
@@ -80,7 +116,43 @@ export default {
     back() {
       this.$router.go(-1);
     },
+    validate() {
+      if (this.form.username === '') {
+        alert('Username cannot be empty')
+      } else {
+        if (this.timer == null) {
+          let data = new FormData();
+          data.append('username', this.form.username);
+          this.$axios.post('/verify/reset', data);
+        }
+        if (!this.timer) {
+          this.count = 60;
+          this.show = false;
+          $(".validate").addClass("huise")
+
+          // document.getElementById('validate').style.cursor = 'not-allowed'
+          this.timer = setInterval(() => {
+            if (this.count > 0 && this.count <= 60) {
+              this.count--
+            } else {
+              this.show = true
+              clearInterval(this.timer)
+              this.timer = null
+            }
+          }, 1000)
+        }
+      }
+    },
   },
+  watch:{
+    timer: function(val){
+      console.log(val)
+      if(val == null){
+        $(".validate").removeClass("huise")
+        // document.getElementById('validate').style.cursor = 'pointer'
+      }
+    }
+  }
 };
 </script>
 
@@ -99,4 +171,30 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
+.huise{
+  /*background-color: #dcdcdc !important;*/
+  color: black;
+}
+/*.validate{*/
+/*  display:inline-block;*/
+/*  width: 180px;*/
+/*  height: 35px;*/
+/*  !*background-color: rgb(7, 187, 127);*!*/
+/*  margin: 0 auto 20px 0;*/
+/*  line-height: 35px;*/
+/*  font-family: PingFangSC-Regular;*/
+/*  color: #ffffff;*/
+/*  border-radius: 5px;*/
+/*  -webkit-user-select:none;*/
+/*  -moz-user-select:none;*/
+/*  -ms-user-select:none;*/
+/*  user-select:none;*/
+/*}*/
+/*.validate:active{*/
+/*  background-color: #0F996B;*/
+/*}*/
+/*.validate:hover{*/
+/*  cursor: pointer;*/
+/*  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.2);*/
+/*}*/
 </style>

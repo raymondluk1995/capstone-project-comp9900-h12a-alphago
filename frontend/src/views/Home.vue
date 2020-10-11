@@ -1,15 +1,11 @@
 <template>
   <div class="home">
     <Header>
-      <template v-if="this.$store.state.username">
+      <template v-if="this.hasLogin">
         <el-dropdown trigger="click" @command="handleCommand">
           <div class="user">
-<!--            <el-avatar :size="50" :src="avatar"></el-avatar>-->
-<!--            <p>Welcome!  {{ firstname }} </p>-->
             <el-avatar :size="50" :src="avatar"></el-avatar>
               <p>Welcome!  {{ firstname }} </p>
-<!--              <p>Welcome!  {{ this.$store.state.firstname }} </p>-->
-
           </div>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="profile">My profile</el-dropdown-item>
@@ -101,14 +97,13 @@
           ></el-button>
         </el-input></el-col>
     </el-row>
-
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: 'Home',
@@ -117,7 +112,7 @@ export default {
   },
     data() {
       return {
-          // firstname: '',
+          hasLogin: false,
           bathNum: 1,
           bedroomNum: 1,
           carNum: 1,
@@ -162,12 +157,7 @@ export default {
           {
             value: 5,
             label: 5,
-          },
-          {
-            value: 5,
-            label: "6 +",
-          },
-          
+          }
         ],
         // options: [
         //   {
@@ -177,23 +167,47 @@ export default {
         // ]
       }
     },
-    // created () {
-    //     console.log('here',this.$store.getters.getFirstname);
-    //     this.firstname = this.$store.getters.getFirstname;
-    // },
-    computed: {
-      ...mapState(["firstname"]),
+    created () {
+        this.username = localStorage.getItem('username');
+        // this.username = this.$store.state.username;
+        if(this.username!==null){
+            this.hasLogin = true;
+            this.avatar = localStorage.getItem('avatar');
+        }
+        this.firstname=  localStorage.getItem('firstname');
     },
+    // computed: {
+    //   ...mapState(["firstname"]),
+    // },
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
-          let config = {
-            headers: { 'jwt': this.$store.state.jwt}
-          };
-        if (command === "logout") {
-            this.$axios.post('/user/logout',config);
-            this.logout();
-            console.log(this.$store.state.jwt);
+        switch (command) {
+          case "profile":
+            this.$router.push("/profile");
+            break;
+          case "auction":
+            // this.$router.push("/auction");
+            break;
+          case "notification":
+            break;
+          case "logout":
+            this.$axios.post('/user/logout')
+                    .then((response) => {
+                      if (response.status >= 200 && response.status < 300){
+                        if (response.data.code === 200){
+                          this.logout();
+                          location.reload()
+                        }else{
+                          console.log(response.msg)
+                        }
+                      }else{
+                        console.log(response.msg)
+                      }
+                    })
+            break;
+          default:
+            break;
         }
       },
       toSearch() {
@@ -205,10 +219,8 @@ export default {
         // 通过浏览器宽度(图片宽度)计算高度
         this.bannerHeight = 400 / 1920 * this.screenWidth;
       },
-
     },
     mounted() {
-      console.log(this.$store.state.firstname);
       // 首次加载时,需要调用一次
       this.screenWidth =  window.innerWidth;
       this.setSize();
