@@ -7,6 +7,7 @@ import Register from '../views/Register.vue'
 import Resetpassword from "../views/Resetpassword";
 import PropertyReg from "../views/PropertyReg";
 import Profile from "../views/Profile";
+import Auction from "../views/Auction";
 
 Vue.use(VueRouter);
 
@@ -20,48 +21,38 @@ const routes = [
     path: '/alpha',
     name: 'alpha',
     component: Home,
-    meta: {
-      FixedFooter: true,
-    },
   }
     ,
   {
     path: '/login',
     name: 'login',
     component: Login,
-    meta: {
-      FixedFooter: true,
-    },
   },
   {
     path: '/register',
     name: 'register',
     component: Register,
-    meta: {
-      FixedFooter: true,
-    },
   }
     ,
   {
     path: '/reset',
     name: 'reset',
     component: Resetpassword,
-    meta: {
-      FixedFooter: true,
-    },
   },
   {
     path: '/propreg',
-    name: 'propertyreg',
+    name: 'propreg',
     component: PropertyReg,
-  }
-  ,{
+  },
+  {
     path: '/profile',
     name: 'profile',
     component: Profile,
-    meta: {
-      FixedFooter: true,
     },
+   {
+    path: '/auction',
+    name: 'auction',
+    component: Auction,
   }
 ];
 
@@ -70,14 +61,5 @@ const router = new VueRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.FixedFooter) {
-    store.commit("setfixedBottom", true);
-    next();
-  } else {
-    store.commit("setfixedBottom", false);
-    next();
-  }
-});
 
 export default router

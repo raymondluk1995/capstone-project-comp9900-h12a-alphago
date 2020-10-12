@@ -109,9 +109,11 @@
                           this.$store.commit('setFirstName', response.data.result.firstname);
                           this.$router.push({name: 'home'});
                           console.log(response.data);
-                        }else{
-                          console.log(response.data.msg);
-                        }
+                        }else if(response.data.code === 400){
+                          this.$message.error('Password Incorrect!');
+                          }else{
+                            console.log(response.data.msg);
+                          }
                       } else {
                         console.log(response.data.msg);
                       }

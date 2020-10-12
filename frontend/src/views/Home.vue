@@ -187,7 +187,7 @@ export default {
             this.$router.push("/profile");
             break;
           case "auction":
-            // this.$router.push("/auction");
+            this.$router.push("/auction");
             break;
           case "notification":
             break;
