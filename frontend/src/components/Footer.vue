@@ -1,5 +1,5 @@
 <template>
-    <div class="footer"  :class="FixedFooter ? 'fixedbottom' : ''">
+    <div class="footer">
     <el-row type="flex" justify="center" style="align-items: center;">
       <div class="footer-wrap">
         <p>
@@ -15,11 +15,6 @@
 
 <script>
 export default {
-    computed: {
-        FixedFooter() {
-            return this.$store.state.FixedFooter;
-        },
-    },
   data() {
     return {
     };
@@ -46,10 +41,6 @@ export default {
             // margin:0px;
         }
     }
-}
-.fixedbottom {
-    position: fixed;
-    bottom: 0;
 }
 
 </style>
