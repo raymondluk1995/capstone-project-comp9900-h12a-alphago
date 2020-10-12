@@ -318,6 +318,6 @@ export default {
     /*user-select:none;*/
     /*text-align: center;*/
     /*padding:0px;*/
-    margin-top: 135px;
+    margin-top: 100%;
   }
 </style>
