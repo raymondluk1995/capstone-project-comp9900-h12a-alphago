@@ -30,12 +30,6 @@
           </el-form-item>
         </el-form>
         <div class="btns">
-<!--          <div class="validate" @click="validate"  id="validate">-->
-<!--            <span v-show="show">validate</span>-->
-<!--            <span v-show="!show">{{ count }} s</span>-->
-<!--            <el-button round type="ordinary" v-show="show" @click="validate">Validate</el-button>-->
-<!--            <el-button round type="ordinary" v-show="!show">{{ count }} s</el-button>-->
-<!--          </div>-->
           <el-button round type="primary" @click="resetPassword">Submit</el-button>
         </div>
       </el-col>
@@ -175,26 +169,4 @@ export default {
   /*background-color: #dcdcdc !important;*/
   color: black;
 }
-/*.validate{*/
-/*  display:inline-block;*/
-/*  width: 180px;*/
-/*  height: 35px;*/
-/*  !*background-color: rgb(7, 187, 127);*!*/
-/*  margin: 0 auto 20px 0;*/
-/*  line-height: 35px;*/
-/*  font-family: PingFangSC-Regular;*/
-/*  color: #ffffff;*/
-/*  border-radius: 5px;*/
-/*  -webkit-user-select:none;*/
-/*  -moz-user-select:none;*/
-/*  -ms-user-select:none;*/
-/*  user-select:none;*/
-/*}*/
-/*.validate:active{*/
-/*  background-color: #0F996B;*/
-/*}*/
-/*.validate:hover{*/
-/*  cursor: pointer;*/
-/*  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.2);*/
-/*}*/
 </style>

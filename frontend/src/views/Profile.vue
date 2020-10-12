@@ -59,6 +59,8 @@
 
                         </el-col>
                         <el-col :span="6" :offset="1" >
+                            <div class="user-avatar-container">
+                            <div class="user-avatar">
                             <el-upload
                                     class="avatar-uploader"
                                     action="upload"
@@ -70,10 +72,14 @@
                                 <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
+                            </div>
+                                <div class="user-avatar-button">
                             <el-row type="flex" justify="space-around" style="align-items: center;">
-                                <el-button round type="ordinary" @click="cancelA">Cancel</el-button>
-                                <el-button round type="primary" @click="submitA">Submit</el-button>
+                                <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>
+                                <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>
                             </el-row>
+                            </div>
+                            </div>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -354,17 +360,27 @@
         margin-top: 10px;
         text-align: center;
     }
+    .user-avatar{
+        margin-top: 20px;
+        text-align: center;
+    }
     .avatar-uploader .el-upload {
         cursor: pointer;
+        border-radius: 10%;
         position: relative;
         overflow: hidden;
     }
     .avatar-uploader .el-upload:hover {
         border-color: #409eff;
     }
+    .user-avatar-button{
+        border-radius: 10%;
+        margin-top: 10px;
+    }
     .avatar-uploader-icon {
         border: 1px dashed #d9d9d9 !important;
-        border-radius: 6px;
+        /*border-radius: 50%;*/
+        border-radius: 10%;
         font-size: 28px;
         color: #8c939d;
         width: 178px;
@@ -376,29 +392,15 @@
         width: 178px;
         height: 178px;
         display: block;
+        border-radius: 10%;
     }
-    /*.validate{*/
-    /*    display:inline-block;*/
-    /*    width: 180px;*/
-    /*    height: 35px;*/
-    /*    background-color: rgb(7, 187, 127);*/
-    /*    margin: 0 auto 20px 0;*/
-    /*    line-height: 35px;*/
-    /*    font-family: PingFangSC-Regular;*/
-    /*    color: #ffffff;*/
-    /*    border-radius: 5px;*/
-    /*    -webkit-user-select:none;*/
-    /*    -moz-user-select:none;*/
-    /*    -ms-user-select:none;*/
-    /*    user-select:none;*/
-    /*}*/
-    /*.validate:active{*/
-    /*    background-color: #0F996B;*/
-    /*}*/
-    /*.validate:hover{*/
-    /*    cursor: pointer;*/
-    /*    box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.2);*/
-    /*}*/
+    .user-avatar-container {
+        position: absolute;
+        /*top: 180px;*/
+        /*left: 15%;*/
+        width: 20%;
+        border: 0;
+    }
     .huise{
         background-color: #dcdcdc !important;
         color: black;
