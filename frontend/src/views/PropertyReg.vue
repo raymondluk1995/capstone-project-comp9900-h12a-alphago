@@ -160,19 +160,10 @@
                   <el-col :span="24">
               <el-form-item label="Keywords:">
             <el-checkbox-group v-model="form.keywords">
-              <el-row
-                      type="flex"
-                      justify="space-between"
-                      class="keywords-criteria"
-              >
-
+              <el-row type="flex" justify="space-between" class="keywords-criteria">
               </el-row>
 
-              <el-row
-                      type="flex"
-                      justify="space-between"
-                      class="keywords-criteria2"
-              >
+              <el-row type="flex" justify="space-between"class="keywords-criteria2">
                 <el-col>
                   <el-checkbox label="School"></el-checkbox>
                   <el-checkbox label="Shopping Center"></el-checkbox>
@@ -181,11 +172,7 @@
                 </el-col>
               </el-row>
 
-              <el-row
-                      type="flex"
-                      justify="space-between"
-                      class="keywords-criteria2"
-              >
+              <el-row type="flex" justify="space-between" class="keywords-criteria2">
                 <el-col>
                   <el-checkbox label="Light Rail Station"></el-checkbox>
                   <el-checkbox label="Quiet Atmosphere"></el-checkbox>
@@ -204,7 +191,7 @@
         </el-tab-pane>
         <el-tab-pane label="Photos" name="3">
           <el-row type="flex" justify="center">
-            <el-col :span="12">
+            <el-col :span="20">
               <el-form
                       class="form"
                       ref="form"
@@ -216,9 +203,8 @@
                 <el-row :gutter="50">
                   <el-col :span="24">
                     <el-form-item label="Photos:" prop="photo">
-
                       <el-upload
-                              :multiple="true"
+                              :multiple="multiple"
                               class="avatar-uploader"
                               action="upload"
                               accept="image/*"
@@ -509,6 +495,7 @@ export default {
       this.$set(this.form,'postcode',postcode.trim());
       this.$set(this.form,'suburb',suburb.trim());
       this.$set(this.form,'state',state.trim());
+      this.$set(this.form,'country',country.trim());
       return;
     }
   },
