@@ -17,14 +17,12 @@
       </template>
       <template v-else>
         <el-button round @click="goto('login')">Sign In</el-button>
-        <el-button round type="primary" @click="goto('register')"
-          >Sign Up</el-button
-        >
+        <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
       </template>
     </Header>
 
     <h1 class="title">Property Registration</h1>
-    <div style="height: 100px;margin:0 20%;">
+    <div style="height: 100px; margin:0 15%;">
       <el-steps  :active="activateIndex - 0" align-center finish-status="success" >
         <el-step title="Basic"></el-step>
         <el-step title="Interior"></el-step>
@@ -103,7 +101,6 @@
               </el-form>
             </el-col>
           </el-row>
-
         </el-tab-pane>
 
         <el-tab-pane label="Interior" name="1">
@@ -120,8 +117,8 @@
                 <el-row :gutter="50">
                   <el-col :span="24">
                     <el-form-item label="Type:" v-model="form.type" prop="area">
-                    <el-radio v-model="form.type" label="Apartment">Apartment</el-radio>
-                    <el-radio v-model="form.type" label="Studio">Studio</el-radio>
+                      <el-radio v-model="form.type" label="Apartment">Apartment</el-radio>
+                      <el-radio v-model="form.type" label="Studio">Studio</el-radio>
                       <el-radio v-model="form.type" label="Unit">Unit</el-radio>
                       <el-radio v-model="form.type" label="House">House</el-radio>
                     </el-form-item>
@@ -146,8 +143,8 @@
         </el-tab-pane>
 
         <el-tab-pane label="Keywords" name="2">
-          <el-row type="flex" justify="center">
-            <el-col :span="20">
+          <el-row type="flex" justify="space-between" style="margin:0 5%">
+            <el-col :span="15">
               <el-form
                       class="form"
                       ref="form"
@@ -156,32 +153,43 @@
                       label-width="150px"
                       label-position="left"
               >
-                <el-row :gutter="50">
-                  <el-col :span="24">
-              <el-form-item label="Keywords:">
+                <el-row >
+                  <el-col>
             <el-checkbox-group v-model="form.keywords">
-              <el-row type="flex" justify="space-between" class="keywords-criteria">
-              </el-row>
-
-              <el-row type="flex" justify="space-between"class="keywords-criteria2">
                 <el-col>
-                  <el-checkbox label="School"></el-checkbox>
-                  <el-checkbox label="Shopping Center"></el-checkbox>
-                  <el-checkbox label="Bus Station"></el-checkbox>
-                  <el-checkbox label="Train Station"></el-checkbox>
-                </el-col>
-              </el-row>
+              <el-form-item label="Location:">
+                  <el-checkbox label="Close To Schools"></el-checkbox>
+                  <el-checkbox label="Close To Shops"></el-checkbox>
+                  <el-checkbox label="Close To Bus Stop"></el-checkbox>
+                  <el-checkbox label="Close To Train Station"></el-checkbox>
+                  <el-checkbox label="Close To Medical"></el-checkbox>
+              </el-form-item>
+                  </el-col>
 
-              <el-row type="flex" justify="space-between" class="keywords-criteria2">
-                <el-col>
-                  <el-checkbox label="Light Rail Station"></el-checkbox>
-                  <el-checkbox label="Quiet Atmosphere"></el-checkbox>
-                  <el-checkbox label="Gym"></el-checkbox>
-                  <el-checkbox label="Beach"></el-checkbox>
-                </el-col>
-              </el-row>
+              <el-form-item>
+                  <el-checkbox label="Close To Airport"></el-checkbox>
+                  <el-checkbox label="Close To Library"></el-checkbox>
+                  <el-checkbox label="Close To Park"></el-checkbox>
+
+              </el-form-item>
+              <el-col>
+              <el-form-item label="Details:">
+                <el-checkbox label="BBQ"></el-checkbox>
+                <el-checkbox label="Built-In Wardrobes"></el-checkbox>
+                <el-checkbox label="Gym"></el-checkbox>
+                <el-checkbox label="Swimming Pool"></el-checkbox>
+                <el-checkbox label="Built-In Wardrobes"></el-checkbox>
+              </el-form-item>
+              </el-col>
+              <el-form-item>
+                <el-checkbox label="Floor Covers"></el-checkbox>
+                <el-checkbox label="Extractor Fan"></el-checkbox>
+                <el-checkbox label="Drapes"></el-checkbox>
+                <el-checkbox label="Dishwasher"></el-checkbox>
+                <el-checkbox label="Burglar Alarm"></el-checkbox>
+              </el-form-item>
             </el-checkbox-group>
-          </el-form-item>
+
                   </el-col>
                 </el-row>
               </el-form>
@@ -189,8 +197,14 @@
           </el-row>
 
         </el-tab-pane>
+
         <el-tab-pane label="Photos" name="3">
           <el-row type="flex" justify="center">
+            <el-col :span="15" style="align-items: center">
+            <label class="submit-label">Please upload your property photos here, no more than 5 photos.</label>
+            </el-col>
+          </el-row>
+            <el-row type="flex" justify="center">
             <el-col :span="20">
               <el-form
                       class="form"
@@ -201,8 +215,8 @@
                       label-position="left"
               >
                 <el-row :gutter="50">
-                  <el-col :span="24">
-                    <el-form-item label="Photos:" prop="photo">
+                  <el-col style="align-items: center">
+<!--                    <el-form-item label="Photos:" prop="photo">-->
                       <el-upload
                               multiple
                               class="avatar-uploader"
@@ -217,13 +231,14 @@
                       >
                         <i class="el-icon-plus"></i>
                       </el-upload>
-                    </el-form-item>
+<!--                    </el-form-item>-->
                   </el-col>
                 </el-row>
               </el-form>
             </el-col>
           </el-row>
         </el-tab-pane>
+
         <el-tab-pane label="Auction" name="4">
           <el-row type="flex" justify="center">
             <el-col :span="20">
@@ -237,14 +252,14 @@
               >
                 <el-row :gutter="50">
                   <el-col :span="24">
-                    <el-form-item label="If Auction:" prop="ifAuction">
+                    <el-form-item label="Register for Auction:" prop="ifAuction">
                     <el-switch
                             v-model="form.isAuction"
                             active-color="#13ce66"
                             inactive-color="#ff4949">
                     </el-switch>
                     </el-form-item>
-          <el-form-item v-if="form.isAuction" label="Auction Time Range:" prop="daterange">
+          <el-form-item v-if="form.isAuction" label="Time Range:" prop="daterange">
             <el-date-picker style="width:80%"
                     v-model="form.daterange"
                     type="daterange"
@@ -262,17 +277,23 @@
               </el-form>
             </el-col>
           </el-row>
-          <div class="btns">
+        </el-tab-pane>
+
+        <el-tab-pane label="Submit" name="5">
+          <el-form :model="form"  label-width="80px" label-position="left">
+          <el-row type="flex" justify="center">
+          <label style="font-size:20px;margin: 80px 0;font-weight: bold;">Congratulations! You have finished a property registration.</label>
+          </el-row>
+            <el-row type="flex" justify="center">
             <el-button round type="primary" @click="submit">Submit</el-button>
-          </div>
+          </el-row>
+          </el-form>
         </el-tab-pane>
       </el-tabs>
     </el-form>
 
 
   </div>
-
-
 
 </template>
 
@@ -305,7 +326,7 @@ export default {
       activateIndex: '0',
       form: {
         country:'',
-        isAuction:false,
+        isAuction:true,
         bathroomNum: '',
         bedroomNum: '',
         garageNum: '',
@@ -361,18 +382,19 @@ export default {
         case "notification":
           break;
         case "logout":
-          this.$axios.post("/user/logout").then((response) => {
-            if (response.status >= 200 && response.status < 300) {
-              if (response.data.code === 200) {
-                this.logout();
-                location.reload();
-              } else {
-                console.log(response.msg);
-              }
-            } else {
-              console.log(response.msg);
-            }
-          });
+          this.$axios.post('/user/logout')
+                  .then((response) => {
+                    if (response.status >= 200 && response.status < 300){
+                      if (response.data.code === 200){
+                        this.logout();
+                        location.reload()
+                      }else{
+                        console.log(response.msg)
+                      }
+                    }else{
+                      console.log(response.msg)
+                    }
+                  })
           break;
         default:
           break;
@@ -396,7 +418,7 @@ export default {
       this.form.imageUrl.push(URL.createObjectURL(file.raw));
     },
     exceedTips: function () {
-      this.$message.error("最多只能上传五张图片");
+      this.$message.error("Maximum 5 photos.");
     },
 
     submit() {
@@ -523,10 +545,7 @@ export default {
   padding: 30px;
   border-radius: 15px;
 }
-.btns {
-  margin-bottom: 50px;
-  text-align: right;
-}
+
 .avatar-uploader .el-upload {
   cursor: pointer;
   position: relative;
@@ -554,18 +573,6 @@ export default {
 .number-criteria {
   .el-col {
     margin: 0 10px;
-    display: flex;
-    align-items: center;
-  }
-  img {
-    width: 24px;
-    height: 16px;
-    margin-right: 10px;
-  }
-}
-.keywords-criteria {
-  .el-col {
-    margin: 0 10px 0 10px;
     display: flex;
     align-items: center;
   }
@@ -630,6 +637,11 @@ li {
   font-size: 20px;
 }
 
+.submit-label{
+  font-size: 18px;
+  margin:15px 0;
+}
+
 .address-info{
   margin-top:10px;
   margin-bottom:0px;
@@ -647,6 +659,11 @@ li {
 
 span {
   border: 1px solid rgba(138, 138, 138, 0.4);
+}
+
+
+.el-checkbox {
+  display: block;
 }
 
 </style>
