@@ -28,6 +28,7 @@
                         <div style="text-align:right">
                             <el-button type="primary" round @click="goto('propreg')">Register new Property</el-button>
                         </div>
+                        <template v-if="!isEmpty">
                         <el-card class="card" v-for="item in propList" :key="item.id">
                             <el-row>
                                 <el-col :span="6">
@@ -54,6 +55,20 @@
                                 </el-col>
                             </el-row>
                         </el-card>
+                        </template>
+                        <template v-else>
+                            <div class="empty-label" >
+<!--                            <label>You haven't post any property.</label>-->
+                                <el-alert
+                                        title="You haven't post any property."
+                                        type="info"
+                                        center
+                                        show-icon
+                                        :closable="false">
+                                </el-alert>
+                            </div>
+                        </template>
+
                     </el-tab-pane>
                     <el-tab-pane label="As a Bidder">
                         <p>This area is under construction... ...</p>
@@ -96,6 +111,7 @@
         },
         data() {
             return {
+                isEmpty:true,
                 hasLogin:false,
                 propList: [],
             };
@@ -152,13 +168,21 @@
 }
 .card {
     margin: 20px 3%;
+
     &:hover {
         cursor: pointer;
         transform: scale(1.02);
     }
+
     h3,
     p {
         line-height: 2.5;
     }
 }
+.empty-label{
+    /*font-size: 18px;*/
+    text-align: center;
+    margin: 10px;
+}
+
 </style>
