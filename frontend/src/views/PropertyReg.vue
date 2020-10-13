@@ -24,168 +24,267 @@
     </Header>
 
     <h1 class="title">Property Registration</h1>
-
-    <div>
-          <google-places-autocomplete
-            @resultChanged="(placeDetail) => (place = placeDetail)"
-            @resultCleared="() => (place = null)"
-          >
-            <div slot="input" slot-scope="{ context, events, actions }">
-              <label for="locationInput" class="middle address-label">Address Search</label><br/>
-              <input
-                v-model="context.input"
-                @focus="events.inputHasReceivedFocus"
-                @input="events.inputHasChanged"
-                @keydown.enter.prevent="actions.selectItemFromList"
-                @keydown.down.prevent="actions.shiftResultsSelection"
-                @keydown.up.prevent="actions.unshiftResultsSelection"
-                type="search"
-                id="locationInput"
-                class="middle form-control"
-                placeholder="Please type in your property's address here for validation. The input boxes will be enabled after validation."
-                autocomplete="off"
-              />
-            </div>
-
-
-            <span slot="item" slot-scope="{ place }" class="btn btn-default middle search-span">
-                {{ place.description }}
-            </span>
-            <span
-                slot="activeItem"
-                slot-scope="{ place }"
-                class="btn btn-default middle search-span">
-                {{ place.description }}
-            </span>
-          </google-places-autocomplete>
+    <div style="height: 100px;margin:0 20%;">
+      <el-steps  :active="activateIndex - 0" align-center finish-status="success" >
+        <el-step title="Basic"></el-step>
+        <el-step title="Interior"></el-step>
+        <el-step title="Keywords"></el-step>
+        <el-step title="Photos"></el-step>
+        <el-step title="Auction"></el-step>
+      </el-steps>
     </div>
 
-    <el-row type="flex" justify="center">
-      <el-col :span="12">
-        <el-form
-          class="form"
-          ref="form"
-          :model="form"
-          :rules="rules"
-          label-width="150px"
-          label-position="left"
-        >
-          <el-row :gutter="50">
-            <el-col :span="24">
-              <el-form-item label="Address:" prop="address">
-                <el-input v-model="form.address" :disabled="inputDisable" ></el-input>
-              </el-form-item>
-              <el-form-item label="Suburb:" prop="suburb">
-                <el-input v-model="form.suburb" :disabled="inputDisable"></el-input>
-              </el-form-item>
-              <el-form-item label="State:" prop="state">
-                <el-input v-model="form.state" :disabled="inputDisable"></el-input>
-              </el-form-item>
-              <el-form-item label="Postcode:" prop="postcode">
-                <el-input v-model="form.postcode" :disabled="inputDisable"></el-input>
-              </el-form-item>
-              <el-form-item label="Area:" prop="area">
-                <el-input v-model="form.area"></el-input>
-              </el-form-item>
 
-              <el-form-item label="Bathroom Number:" prop="bathNum">
-                <el-input v-model="form.bathNum"></el-input>
-              </el-form-item>
-              <el-form-item label="Bedroom Number:" prop="bedroomNum">
-                <el-input v-model="form.bedroomNum"></el-input>
-              </el-form-item>
-              <el-form-item label="Garage Number:" prop="carNum">
-                <el-input v-model="form.carNum"></el-input>
-              </el-form-item>
-
-              <el-form-item label="Auction Start Date:" prop="startDate">
-                <el-date-picker v-model="form.startDate" type="date">
-                </el-date-picker>
-              </el-form-item>
-              <el-form-item label="Auction End Date:" prop="endDate">
-                <el-date-picker v-model="form.endDate" type="date">
-                </el-date-picker>
-              </el-form-item>
-              <el-form-item label="Reserved Price:" prop="price">
-                <el-input v-model="form.price"></el-input>
-              </el-form-item>
-
-              <el-form-item label="Keywords:">
-                <el-checkbox-group v-model="form.keywords">
-                  <el-row
-                          type="flex"
-                          justify="space-between"
-                          class="keywords-criteria"
-                  >
-                    <el-col>
-                      <el-checkbox label="House"></el-checkbox>
-                      <el-checkbox label="Apartment"></el-checkbox>
-                      <el-checkbox label="Townhouse"></el-checkbox>
-                      <el-checkbox label="Retirement Village"></el-checkbox>
-                    </el-col>
-                  </el-row>
-
-                  <el-row
-                          type="flex"
-                          justify="space-between"
-                          class="keywords-criteria2"
-                  >
-                    <el-col>
-                      <el-checkbox label="School"></el-checkbox>
-                      <el-checkbox label="Shopping Center"></el-checkbox>
-                      <el-checkbox label="Bus Station"></el-checkbox>
-                      <el-checkbox label="Train Station"></el-checkbox>
-                    </el-col>
-
-                  </el-row>
-
-                  <el-row
-                          type="flex"
-                          justify="space-between"
-                          class="keywords-criteria2"
-                  >
-                    <el-col>
-                      <el-checkbox label="Light Rail Station"></el-checkbox>
-                      <el-checkbox label="Quiet Atmosphere"></el-checkbox>
-                      <el-checkbox label="Gym"></el-checkbox>
-                      <el-checkbox label="Beach"></el-checkbox>
-                    </el-col>
-
-                  </el-row>
-
-
-
-                </el-checkbox-group>
-              </el-form-item>
-
-
-              <el-form-item label="Photos:" prop="photo">
-
-                <el-upload
-                  :multiple="true"
-                  class="avatar-uploader"
-                  action="upload"
-                  accept="image/*"
-                  :auto-upload="false"
-                  list-type="picture-card"
-                  :limit="5"
-                  :on-exceed="exceedTips"
-                  :on-change="imgBroadcastChange"
-                  :before-upload="beforeAvatarUpload"
-                >
-                  <i class="el-icon-plus"></i>
-                </el-upload>
-              </el-form-item>
-
-              <div class="btns">
-                <el-button round type="primary" @click="submit">Submit</el-button>
+    <el-form :model="form"  label-width="80px" label-position="left">
+      <el-tabs v-model="activateIndex" :tab-position="'left'" style="margin:0 20%" >
+        <el-tab-pane label="Basic" name="0">
+          <div>
+            <google-places-autocomplete
+                    @resultChanged="(placeDetail) => (place = placeDetail)"
+                    @resultCleared="() => (place = null)"
+            >
+              <div slot="input" slot-scope="{ context, events, actions }">
+<!--                <label for="locationInput" class="middle address-label">Address Search</label><br/>-->
+                <input
+                        v-model="context.input"
+                        @focus="events.inputHasReceivedFocus"
+                        @input="events.inputHasChanged"
+                        @keydown.enter.prevent="actions.selectItemFromList"
+                        @keydown.down.prevent="actions.shiftResultsSelection"
+                        @keydown.up.prevent="actions.unshiftResultsSelection"
+                        type="search"
+                        id="locationInput"
+                        class="middle form-control"
+                        placeholder="Please type in your property's address here for validation."
+                        autocomplete="off"
+                />
               </div>
+              <span slot="item" slot-scope="{ place }" class="btn btn-default middle search-span">
+                {{ place.description }}
+            </span>
+              <span
+                      slot="activeItem"
+                      slot-scope="{ place }"
+                      class="btn btn-default middle search-span">
+                {{ place.description }}
+            </span>
+            </google-places-autocomplete>
+          </div>
+
+          <el-row type="flex" justify="center">
+            <el-col :span="20">
+              <el-form
+                      class="form"
+                      ref="form"
+                      :model="form"
+                      :rules="rules"
+                      label-width="150px"
+                      label-position="left"
+              >
+                <el-row :gutter="50">
+                  <el-col :span="24">
+                    <el-form-item label="Address:" prop="address">
+                      <el-input v-model="form.address"  ></el-input>
+                    </el-form-item>
+                    <el-form-item label="Suburb:" prop="suburb">
+                      <el-input v-model="form.suburb" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="State:" prop="state">
+                      <el-input v-model="form.state" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="Postcode:" prop="postcode">
+                      <el-input v-model="form.postcode"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
             </el-col>
           </el-row>
-        </el-form>
-      </el-col>
-    </el-row>
+
+        </el-tab-pane>
+
+        <el-tab-pane label="Interior" name="1">
+          <el-row type="flex" justify="center">
+            <el-col :span="20">
+              <el-form
+                      class="form"
+                      ref="form"
+                      :model="form"
+                      :rules="rules"
+                      label-width="150px"
+                      label-position="left"
+              >
+                <el-row :gutter="50">
+                  <el-col :span="24">
+                    <el-form-item label="Type:" v-model="form.type" prop="area">
+                    <el-radio label="Apartment">Apartment</el-radio>
+                    <el-radio label="Studio">Studio</el-radio>
+                      <el-radio label="Unit">Unit</el-radio>
+                      <el-radio label="House">House</el-radio>
+                    </el-form-item>
+                    <el-form-item label="Area:" prop="area">
+                      <el-input v-model="form.area"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Bathroom Number:" prop="bathNum">
+                      <el-input v-model="form.bathNum"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Bedroom Number:" prop="bedroomNum">
+                      <el-input v-model="form.bedroomNum"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Garage Number:" prop="carNum">
+                      <el-input v-model="form.carNum"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </el-col>
+          </el-row>
+
+        </el-tab-pane>
+
+        <el-tab-pane label="Keywords" name="2">
+          <el-row type="flex" justify="center">
+            <el-col :span="20">
+              <el-form
+                      class="form"
+                      ref="form"
+                      :model="form"
+                      :rules="rules"
+                      label-width="150px"
+                      label-position="left"
+              >
+                <el-row :gutter="50">
+                  <el-col :span="24">
+              <el-form-item label="Keywords:">
+            <el-checkbox-group v-model="form.keywords">
+              <el-row
+                      type="flex"
+                      justify="space-between"
+                      class="keywords-criteria"
+              >
+
+              </el-row>
+
+              <el-row
+                      type="flex"
+                      justify="space-between"
+                      class="keywords-criteria2"
+              >
+                <el-col>
+                  <el-checkbox label="School"></el-checkbox>
+                  <el-checkbox label="Shopping Center"></el-checkbox>
+                  <el-checkbox label="Bus Station"></el-checkbox>
+                  <el-checkbox label="Train Station"></el-checkbox>
+                </el-col>
+              </el-row>
+
+              <el-row
+                      type="flex"
+                      justify="space-between"
+                      class="keywords-criteria2"
+              >
+                <el-col>
+                  <el-checkbox label="Light Rail Station"></el-checkbox>
+                  <el-checkbox label="Quiet Atmosphere"></el-checkbox>
+                  <el-checkbox label="Gym"></el-checkbox>
+                  <el-checkbox label="Beach"></el-checkbox>
+                </el-col>
+              </el-row>
+            </el-checkbox-group>
+          </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </el-col>
+          </el-row>
+
+        </el-tab-pane>
+        <el-tab-pane label="Photos" name="3">
+          <el-row type="flex" justify="center">
+            <el-col :span="12">
+              <el-form
+                      class="form"
+                      ref="form"
+                      :model="form"
+                      :rules="rules"
+                      label-width="150px"
+                      label-position="left"
+              >
+                <el-row :gutter="50">
+                  <el-col :span="24">
+                    <el-form-item label="Photos:" prop="photo">
+
+                      <el-upload
+                              :multiple="true"
+                              class="avatar-uploader"
+                              action="upload"
+                              accept="image/*"
+                              :auto-upload="false"
+                              list-type="picture-card"
+                              :limit="5"
+                              :on-exceed="exceedTips"
+                              :on-change="imgBroadcastChange"
+                              :before-upload="beforeAvatarUpload"
+                      >
+                        <i class="el-icon-plus"></i>
+                      </el-upload>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="Auction" name="4">
+          <el-row type="flex" justify="center">
+            <el-col :span="20">
+              <el-form
+                      class="form"
+                      ref="form"
+                      :model="form"
+                      :rules="rules"
+                      label-width="150px"
+                      label-position="left"
+              >
+                <el-row :gutter="50">
+                  <el-col :span="24">
+                    <el-form-item label="If Auction:" prop="ifAuction">
+                    <el-switch
+                            v-model="ifAuction"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949">
+                    </el-switch>
+                    </el-form-item>
+          <el-form-item v-if="ifAuction" label="Auction Time Range:" prop="daterange">
+            <el-date-picker style="width:80%"
+                    v-model="form.daterange"
+                    type="daterange"
+                    range-separator="To"
+                    start-placeholder="Auction Start Time"
+                    end-placeholder="Auction Start Time">
+            </el-date-picker>
+          </el-form-item>
+
+          <el-form-item v-if="ifAuction" label="Reserved Price:" prop="price">
+            <el-input v-model="form.price"></el-input>
+          </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </el-col>
+          </el-row>
+          <div class="btns">
+            <el-button round type="primary" @click="submit">Submit</el-button>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </el-form>
+
+
   </div>
+
+
+
 </template>
 
 <script>
@@ -209,15 +308,17 @@ export default {
       }
     };
     return {
+      ifAuction:false,
       place: null,
       inputDisable:true,
       dialogImageUrl: "",
       dialogVisible: false,
       hasLogin: false,
-      bathNum: '',
-      bedroomNum: '',
-      carNum: '',
+      activateIndex: '0',
       form: {
+        bathNum: '',
+        bedroomNum: '',
+        carNum: '',
         address: "",
         suburb: "",
         state: "",
@@ -226,8 +327,9 @@ export default {
         imageUrl: [],
         imageRaw: [],
         keywords: [],
-        startDate: "",
-        endDate: "",
+        // startDate: "",
+        // endDate: "",
+        daterange:'',
         price: "",
       },
       rules: {
@@ -297,7 +399,8 @@ export default {
       return isImage && isLt2M;
     },
     imgBroadcastChange(file) {
-      this.form.imageRaw.push(file.raw);
+      this.form.imageRaw = file.raw;
+      // this.form.imageUrl = URL.createObjectURL(file.raw);
       this.form.imageUrl.push(URL.createObjectURL(file.raw));
     },
     exceedTips: function () {
@@ -308,9 +411,9 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           let data = new FormData();
-          data.append('bathNum', this.bathNum);
-          data.append('bedroomNum', this.bedroomNum);
-          data.append('carNum', this.carNum);
+          data.append('bathNum', this.form.bathNum);
+          data.append('bedroomNum', this.form.bedroomNum);
+          data.append('carNum', this.form.carNum);
 
           data.append('address', this.form.address);
           data.append('suburb', this.form.suburb);
@@ -378,7 +481,7 @@ export default {
       if(country!="Australia"){
         this.$message.error("Propery for registration must locate in Australia!!");
         setTimeout(function(){
-          location.reload();
+          // location.reload();
         },2000);
         return;
       }
@@ -386,7 +489,7 @@ export default {
       if (place_info.length<3){
         this.$message.error("On Google Map, this is not a residential area!");
         setTimeout(function(){
-          location.reload();
+          // location.reload();
         },2000);
         return;
       }
@@ -424,7 +527,7 @@ export default {
   border-radius: 15px;
 }
 .btns {
-  margin-top: 50px;
+  margin-bottom: 50px;
   text-align: right;
 }
 .avatar-uploader .el-upload {
@@ -537,11 +640,11 @@ li {
 }
 
 #locationInput{
-    width: 50%;
+    width: 80%;
 }
 
 .search-span{
-    width:47%;
+    width:78%;
     background-color: rgba(200, 213, 249, 0.4);
 }
 

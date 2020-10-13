@@ -141,7 +141,7 @@
                           this.$router.push({name: 'home'});
                           console.log(response.data);
                         }else if(response.data.code === 400){
-                          this.$message.error('Password Incorrect!');
+                          this.$message.error(response.data.msg);
                           }else{
                             console.log(response.data.msg);
                           }
