@@ -117,10 +117,10 @@
                 <el-row :gutter="50">
                   <el-col :span="24">
                     <el-form-item label="Type:" v-model="form.type" prop="area">
-                    <el-radio label="Apartment">Apartment</el-radio>
-                    <el-radio label="Studio">Studio</el-radio>
-                      <el-radio label="Unit">Unit</el-radio>
-                      <el-radio label="House">House</el-radio>
+                      <el-radio v-model="form.type"  label="Apartment">Apartment</el-radio>
+                      <el-radio v-model="form.type"  label="Studio">Studio</el-radio>
+                      <el-radio v-model="form.type"  label="Unit">Unit</el-radio>
+                      <el-radio v-model="form.type"  label="House">House</el-radio>
                     </el-form-item>
                     <el-form-item label="Area:" prop="area">
                       <el-input v-model="form.area"></el-input>
@@ -328,8 +328,6 @@ export default {
         imageRaw: [],
         daterange:[],
         keywords: [],
-        // startDate: "",
-        // endDate: "",
         daterange:'',
         price: "",
       },
