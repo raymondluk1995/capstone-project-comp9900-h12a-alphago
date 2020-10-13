@@ -120,10 +120,10 @@
                 <el-row :gutter="50">
                   <el-col :span="24">
                     <el-form-item label="Type:" v-model="form.type" prop="area">
-                    <el-radio label="Apartment">Apartment</el-radio>
-                    <el-radio label="Studio">Studio</el-radio>
-                      <el-radio label="Unit">Unit</el-radio>
-                      <el-radio label="House">House</el-radio>
+                    <el-radio v-model="form.type" label="Apartment">Apartment</el-radio>
+                    <el-radio v-model="form.type" label="Studio">Studio</el-radio>
+                      <el-radio v-model="form.type" label="Unit">Unit</el-radio>
+                      <el-radio v-model="form.type" label="House">House</el-radio>
                     </el-form-item>
                     <el-form-item label="Area:" prop="area">
                       <el-input v-model="form.area"></el-input>
@@ -332,6 +332,7 @@ export default {
         imageRaw: [],
         daterange:[],
         keywords: [],
+        type:'',
         // startDate: "",
         // endDate: "",
         daterange:'',
@@ -419,21 +420,18 @@ export default {
           data.append('bathroomNum', this.form.bathNum);
           data.append('bedroomNum', this.form.bedroomNum);
           data.append('garageNum', this.form.carNum);
-
+          data.append('type', this.form.type);
           data.append('address', this.form.address);
           data.append('suburb', this.form.suburb);
           data.append('state', this.form.state);
           data.append('postcode', this.form.postcode);
           data.append('area', this.form.area);
           data.append('country', this.form.country);
-
           data.append('daterange', this.form.daterange);
-          // data.append('endDate', this.form.endDate);
           data.append('price', this.form.price);
           data.append('keywords', this.form.keywords);
           data.append('imageRaw', this.form.imageRaw);
           data.append('isAuction', this.form.isAuction);
-
           this.$axios.post('/property/registration', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
