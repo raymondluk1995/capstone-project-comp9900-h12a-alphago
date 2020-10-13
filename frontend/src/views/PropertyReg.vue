@@ -204,7 +204,7 @@
                   <el-col :span="24">
                     <el-form-item label="Photos:" prop="photo">
                       <el-upload
-                              :multiple="multiple"
+                              multiple
                               class="avatar-uploader"
                               action="upload"
                               accept="image/*"
@@ -391,7 +391,7 @@ export default {
       return isImage && isLt2M;
     },
     imgBroadcastChange(file) {
-      this.form.imageRaw = file.raw;
+      this.form.imageRaw.push(file.raw);
       // this.form.imageUrl = URL.createObjectURL(file.raw);
       this.form.imageUrl.push(URL.createObjectURL(file.raw));
     },
@@ -416,8 +416,13 @@ export default {
           data.append('daterange', this.form.daterange);
           data.append('price', this.form.price);
           data.append('keywords', this.form.keywords);
-          data.append('imageRaw', this.form.imageRaw);
+          // data.append('imageRaw', this.form.imageRaw);
           data.append('isAuction', this.form.isAuction);
+
+          this.form.imageRaw.forEach(function (file) {
+                    data.append('file', file, file.name);
+                 });
+
           this.$axios.post('/property/registration', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
