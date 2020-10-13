@@ -6,7 +6,7 @@
           wwww.AlphagoAuction.com
         </p>
         <p>
-          Copyright &copy; 2020. All rights reserved(v1.0.0)
+          Copyright &copy; 2020. All rights reserved.
         </p>
       </div>
     </el-row>
