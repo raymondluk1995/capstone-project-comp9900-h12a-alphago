@@ -95,6 +95,9 @@
                     <el-form-item label="Postcode:" prop="postcode">
                       <el-input v-model="form.postcode"></el-input>
                     </el-form-item>
+                    <el-form-item label="Country:" prop="country">
+                      <el-input v-model="form.country"></el-input>
+                    </el-form-item>
                   </el-col>
                 </el-row>
               </el-form>
@@ -315,6 +318,7 @@ export default {
       hasLogin: false,
       activateIndex: '0',
       form: {
+        country:'',
         isAuction:false,
         bathroomNum: '',
         bedroomNum: '',
@@ -343,7 +347,7 @@ export default {
         postcode: [{required: true, message: " Please enter postcode", trigger: "blur",},],
         area: [{ required: true, message: " Please enter area", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
         daterange: [{required: true, message: " Please enter start date", trigger: "blur",},],
-        // endDate: [{required: true, message: " Please enter end date", trigger: "blur",},],
+        country: [{required: true, message: " Please enter end date", trigger: "blur",},],
         price: [{required: true, message: " Please enter price", trigger: "blur"}, {validator: checkInt,trigger: "blur" },],
       },
     };
@@ -421,6 +425,7 @@ export default {
           data.append('state', this.form.state);
           data.append('postcode', this.form.postcode);
           data.append('area', this.form.area);
+          data.append('country', this.form.country);
 
           data.append('daterange', this.form.daterange);
           // data.append('endDate', this.form.endDate);
