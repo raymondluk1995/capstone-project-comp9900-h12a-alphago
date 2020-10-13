@@ -250,12 +250,12 @@
                   <el-col :span="24">
                     <el-form-item label="If Auction:" prop="ifAuction">
                     <el-switch
-                            v-model="ifAuction"
+                            v-model="form.isAuction"
                             active-color="#13ce66"
                             inactive-color="#ff4949">
                     </el-switch>
                     </el-form-item>
-          <el-form-item v-if="ifAuction" label="Auction Time Range:" prop="daterange">
+          <el-form-item v-if="form.isAuction" label="Auction Time Range:" prop="daterange">
             <el-date-picker style="width:80%"
                     v-model="form.daterange"
                     type="daterange"
@@ -265,7 +265,7 @@
             </el-date-picker>
           </el-form-item>
 
-          <el-form-item v-if="ifAuction" label="Reserved Price:" prop="price">
+          <el-form-item v-if="form.isAuction" label="Reserved Price:" prop="price">
             <el-input v-model="form.price"></el-input>
           </el-form-item>
                   </el-col>
@@ -308,7 +308,6 @@ export default {
       }
     };
     return {
-      ifAuction:false,
       place: null,
       inputDisable:true,
       dialogImageUrl: "",
@@ -316,9 +315,10 @@ export default {
       hasLogin: false,
       activateIndex: '0',
       form: {
-        bathNum: '',
+        isAuction:false,
+        bathroomNum: '',
         bedroomNum: '',
-        carNum: '',
+        garageNum: '',
         address: "",
         suburb: "",
         state: "",
@@ -326,6 +326,7 @@ export default {
         area: '',
         imageUrl: [],
         imageRaw: [],
+        daterange:[],
         keywords: [],
         // startDate: "",
         // endDate: "",
@@ -341,8 +342,8 @@ export default {
         state: [{ required: true, message: "Please enter state", trigger: "blur" },],
         postcode: [{required: true, message: " Please enter postcode", trigger: "blur",},],
         area: [{ required: true, message: " Please enter area", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
-        startDate: [{required: true, message: " Please enter start date", trigger: "blur",},],
-        endDate: [{required: true, message: " Please enter end date", trigger: "blur",},],
+        daterange: [{required: true, message: " Please enter start date", trigger: "blur",},],
+        // endDate: [{required: true, message: " Please enter end date", trigger: "blur",},],
         price: [{required: true, message: " Please enter price", trigger: "blur"}, {validator: checkInt,trigger: "blur" },],
       },
     };
@@ -411,9 +412,9 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           let data = new FormData();
-          data.append('bathNum', this.form.bathNum);
+          data.append('bathroomNum', this.form.bathNum);
           data.append('bedroomNum', this.form.bedroomNum);
-          data.append('carNum', this.form.carNum);
+          data.append('garageNum', this.form.carNum);
 
           data.append('address', this.form.address);
           data.append('suburb', this.form.suburb);
@@ -421,11 +422,12 @@ export default {
           data.append('postcode', this.form.postcode);
           data.append('area', this.form.area);
 
-          data.append('startDate', this.form.startDate);
-          data.append('endDate', this.form.endDate);
+          data.append('daterange', this.form.daterange);
+          // data.append('endDate', this.form.endDate);
           data.append('price', this.form.price);
           data.append('keywords', this.form.keywords);
           data.append('imageRaw', this.form.imageRaw);
+          data.append('isAuction', this.form.isAuction);
 
           this.$axios.post('/property/registration', data)
                   .then((response) => {
