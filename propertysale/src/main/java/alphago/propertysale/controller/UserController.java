@@ -1,8 +1,8 @@
 package alphago.propertysale.controller;
 
 import alphago.propertysale.entity.AvatarPorter;
-import alphago.propertysale.entity.InformationVO;
-import alphago.propertysale.entity.LoginVO;
+import alphago.propertysale.entity.returnVO.InformationVO;
+import alphago.propertysale.entity.returnVO.LoginVO;
 import alphago.propertysale.entity.User;
 import alphago.propertysale.rabbit.MessageProducer;
 import alphago.propertysale.service.UserService;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
@@ -47,6 +46,7 @@ public class UserController {
 
     @Autowired
     MessageProducer messageProducer;
+
     @Value("${remote.url}")
     private String remote;
     /**
@@ -71,10 +71,10 @@ public class UserController {
         // get User Id
         resUser = userService.getOne(new QueryWrapper<User>().eq("username", user.getUsername()));
         // upload avatar
-        if(resUser.getAvatarType() != null || !resUser.getAvatarType().equals("")) {
+        if(resUser.getAvatarType() != null) {
             AvatarPorter porter = new AvatarPorter()
                     .setAvatar(avatar.getBytes())
-                    .setType(resUser.getAvatarType())
+                    .setName(avatar.getOriginalFilename())
                     .setUid(resUser.getUid());
             messageProducer.sendMsg(porter, CheckCode.AVATAR);
         }
@@ -83,7 +83,7 @@ public class UserController {
 
     @RequestMapping("/login")
     @CrossOrigin
-    Result login(User user , HttpServletResponse response , HttpServletRequest request){
+    Result login(User user , HttpServletResponse response){
         User logUser = userService.getOne(new QueryWrapper<User>().eq("username", user.getUsername()));
         if(logUser == null) return Result.fail("User is not exist!");
         if(!logUser.getPassword().equals(user.getPassword())) return Result.fail("Wrong password!");
@@ -98,6 +98,25 @@ public class UserController {
                         .setUsername(logUser.getUsername())
                         .setFirstname(logUser.getFirstname())
                         .setAvatar(remote + FileUtil.getUserAvatar(logUser));
+        return Result.success(ret);
+    }
+
+    @RequestMapping("/emailLogin")
+    Result login(String email , String password , HttpServletResponse response){
+        User logUser = userService.getOne(new QueryWrapper<User>().eq("email", email));
+        if(logUser == null) return Result.fail("Email is not exist!");
+        if(!logUser.getPassword().equals(password)) return Result.fail("Wrong password!");
+        HashMap<String, String> map = new HashMap<>();
+        map.put("username" , logUser.getUsername());
+        map.put("uid" , logUser.getUid().toString());
+        String jwt = JWTutil.getJwtToken(map);
+        response.setHeader("jwt" , jwt);
+        response.setHeader("Access-Control-Expose-Headers", "jwt");
+        // get return POJO
+        LoginVO ret = new LoginVO()
+                .setUsername(logUser.getUsername())
+                .setFirstname(logUser.getFirstname())
+                .setAvatar(remote + FileUtil.getUserAvatar(logUser));
         return Result.success(ret);
     }
 
@@ -201,7 +220,7 @@ public class UserController {
         userService.update(new User().setAvatarType(avatarType) , new QueryWrapper<User>().eq("username" , username));
         AvatarPorter porter = new AvatarPorter()
                 .setAvatar(avatar.getBytes())
-                .setType(avatarType)
+                .setName(avatarName)
                 .setUid(uid);
         messageProducer.sendMsg(porter, CheckCode.AVATAR);
         return Result.success(remote + uid + "/avatar/avatar" + avatarType);

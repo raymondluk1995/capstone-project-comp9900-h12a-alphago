@@ -1,14 +1,13 @@
 package alphago.propertysale.utils;
 
 import alphago.propertysale.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ClassUtils;
-import org.springframework.web.multipart.MultipartFile;
+import org.apache.shiro.util.Assert;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 /**
  * @program: propertysale
@@ -17,30 +16,7 @@ import java.util.Arrays;
  * @create: 2020-10-08 00:04
  **/
 public class FileUtil {
-    private static final String PATH = ClassUtils.getDefaultClassLoader().getResource("static").getPath() + "/";
-    private static final String IMG = PATH + "/img/";
-
-    /**
-    * @Description: Upload User's Avatar
-    * @Author: Xiaohan
-    * @Date: 8/10/20
-    */
-    @Deprecated
-    public static void uploadAvatar(MultipartFile file , String uid) throws IOException {
-        String path = IMG  +uid + "/";
-        if(!isDirectoryExist(path)) new File(path).mkdir();
-        path += "avatar/";
-        if(!isDirectoryExist(path)) new File(path).mkdir();
-        File parent = new File(path);
-        // delete exist old file
-        File[] files = parent.listFiles();
-        assert files != null;
-        Arrays.stream(files).forEach(File::delete);
-        //save avatar
-        String name = file.getOriginalFilename();
-        path += "avatar" + name.substring(name.lastIndexOf("."));
-        file.transferTo(Paths.get(path));
-    }
+    private static String remote = "http://localhost:8060/img/";
 
     /**
     * @Description: Check if the directory exist
@@ -65,5 +41,21 @@ public class FileUtil {
     */
     public static String getType(String fileName){
         return fileName.substring(fileName.lastIndexOf('.'));
+    }
+
+    /**
+    * @Description: Get property cover from image server.
+    * @Author: Xiaohan
+    * @Date: 14/10/20
+    */
+    public static List<String> getImages(long uid, long pid){
+        RestTemplate restTemplate = new RestTemplate();
+        String[] names = restTemplate.getForObject(remote + "cover" + "/" + uid + "/" + pid, String[].class);
+        List<String> paths = new ArrayList<>();
+        Assert.notNull(names);
+        for(String name : names){
+            paths.add(remote  + uid + "/" + pid + "/" + name);
+        }
+        return paths;
     }
 }

@@ -4,6 +4,7 @@ import alphago.propertysale.utils.Result;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -39,6 +40,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JWTDecodeException.class)
     public Result handler(JWTDecodeException e){
 //        log.error("解码错误",e);
+        return Result.fail(e.getMessage());
+    }
+
+    @ExceptionHandler(FileSizeLimitExceededException.class)
+    public Result handler(FileSizeLimitExceededException e){
+        log.error("文件过大",e);
         return Result.fail(e.getMessage());
     }
 }

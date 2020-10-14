@@ -1,6 +1,6 @@
 package alphago.propertysale.rabbit;
 
-import alphago.propertysale.Utils.ImageUtil;
+import alphago.propertysale.utils.ImageUtil;
 import alphago.propertysale.entity.AvatarPorter;
 import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.messaging.handler.annotation.Payload;

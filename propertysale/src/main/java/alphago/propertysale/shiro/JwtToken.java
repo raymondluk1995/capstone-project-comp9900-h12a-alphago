@@ -1,7 +1,5 @@
 package alphago.propertysale.shiro;
 
-import alphago.propertysale.entity.LoginVO;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import org.apache.shiro.authc.AuthenticationToken;
 
 /**

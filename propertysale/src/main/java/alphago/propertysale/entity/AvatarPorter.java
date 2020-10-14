@@ -16,6 +16,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AvatarPorter {
     private byte[] avatar;
-    private String type;
+    private String name;
     private long uid;
 }

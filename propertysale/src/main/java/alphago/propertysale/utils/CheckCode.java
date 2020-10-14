@@ -20,6 +20,7 @@ public class CheckCode {
     public static final String REGISTER = "register";
     public static final String RESET = "reset";
     public static final String AVATAR = "avatar";
+    public static final String IMAGE = "image";
 
     public static void sendCode(JavaMailSender mailSender , String email , String usage){
         RedisTemplate valueRedis = RedisUtil.valueRedis();

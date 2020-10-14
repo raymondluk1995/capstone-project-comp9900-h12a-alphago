@@ -47,6 +47,8 @@ mybatis-plus:
   mapper-locations:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: true
+
 
 remote:
   url: http://localhost:8060/img/
