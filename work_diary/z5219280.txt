@@ -18,3 +18,11 @@ Week3
 Working on our proposal and learning some new features about Sprint Boot. It is a powerful tool and has a lot of 
 micro-services. So I spent some time and dive into it. Hopefully we can start to code our backend and then we can 
 test some init functionalities like log in, log out or expire a user.
+
+Week 4
+
+Finished a route reset password and debug it. Discuss some details about our demo in Week5. 
+
+Week 5
+
+In this week, I am also focusing on learning Spring Boot. It's feature are a little bit complex and complicated. Also, I expect how is the demo goes.
