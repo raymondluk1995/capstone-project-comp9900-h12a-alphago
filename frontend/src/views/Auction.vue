@@ -38,7 +38,7 @@
                                     </el-carousel-item>
                                 </el-carousel>
                                 <div style="padding: 14px;">
-                                    <h3>{{ item.address }}</h3>
+                                    <h6>{{ item.address }}</h6>
                                     <el-row type="flex" justify="left" style="margin:10px 5%;">
                                         <el-col :span="5">
                                         <i class="el-icon-toilet-paper"> Bathrooms: {{ item.bathroomNum}}</i>
@@ -49,22 +49,27 @@
                                             <el-col :span="5">
                                         <i class="el-icon-truck"> Garages: {{ item.garageNum }}</i>
                                             </el-col>
+                                        <el-col :span="5">
+                                            <i class="el-icon-info"> Type: {{ item.type }}</i>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>
+                                        </el-col>
                                     </el-row>
-                                    <el-row type="flex" justify="left" style="margin:10px 5%;">
-                                    <el-col :span="5">
-                                        <i class="el-icon-info"> Type: {{ item.type }}</i>
-                                    </el-col>
-                                    <el-col :span="5">
-                                        <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>
-                                    </el-col>
-                                    </el-row>
+<!--                                    <el-row type="flex" justify="left" style="margin:10px 5%;">-->
+<!--                                    <el-col :span="5">-->
+<!--                                        <i class="el-icon-info"> Type: {{ item.type }}</i>-->
+<!--                                    </el-col>-->
+<!--                                    <el-col :span="5">-->
+<!--                                        <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>-->
+<!--                                    </el-col>-->
+<!--                                    </el-row>-->
                                 </div>
                             </el-card>
                         </el-card>
                         </template>
                         <template v-else>
                             <div class="empty-label" >
-<!--                            <label>You haven't post any property.</label>-->
                                 <el-alert
                                         title="You haven't post any property."
                                         type="info"
@@ -199,7 +204,7 @@
         transform: scale(1.02);
     }
 
-    h3{
+    h6{
         margin:5px 5%;
     }
     p {
