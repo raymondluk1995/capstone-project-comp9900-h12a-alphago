@@ -140,15 +140,15 @@
             this.$axios
                 .get('/property/information')
                 .then(response => {
-                    this.propList = response.data.result;
+                    if (response.data.code === 200) {
+                        this.isEmpty=false;
+                        this.propList = response.data.result;
+                    }
                 })
                 .catch(function (error) {
                     console.log(error)
                 })
 
-            if(this.propList===[]){
-                this.isEmpty=false;
-            }
         },
         data() {
             return {
