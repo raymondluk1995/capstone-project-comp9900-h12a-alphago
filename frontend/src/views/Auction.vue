@@ -29,7 +29,7 @@
                         </div>
                         <template v-if="!isEmpty">
                         <el-card class="card" v-for="item in propList" :key="item.id">
-                            <el-card :body-style="{ padding: '0px' }" style="height: 550px">
+                            <el-card :body-style="{ padding: '0px' }" style="height: 600px">
                                 <el-carousel :interval="5000" arrow="always" :height="cheight">
                                     <el-carousel-item v-for="pic in item.photos" :key="item.id">
 <!--                                        <h3>{{ pic }}</h3>-->
@@ -39,30 +39,23 @@
                                 <div style="padding: 14px;">
                                     <h6>{{ item.address }}</h6>
                                     <el-row type="flex" justify="left" style="margin:10px 5%;">
-                                        <el-col :span="5">
+                                        <el-col :span="6">
                                         <i class="el-icon-toilet-paper"> Bathrooms: {{ item.bathroomNum}}</i>
                                         </el-col>
-                                        <el-col :span="5">
+                                        <el-col :span="6">
                                         <i class="el-icon-house"> Bedrooms: {{ item.bedroomNum }}</i>
                                         </el-col>
-                                            <el-col :span="5">
+                                            <el-col :span="6">
                                         <i class="el-icon-truck"> Garages: {{ item.garageNum }}</i>
                                             </el-col>
-                                        <el-col :span="5">
-                                            <i class="el-icon-info"> Type: {{ item.type }}</i>
-                                        </el-col>
-                                        <el-col :span="5">
+                                        <el-col :span="6">
                                             <i class="el-icon-full-screen"> Area: {{ item.area }}</i>
                                         </el-col>
+                                        <el-col :span="8">
+                                            <i class="el-icon-info"> Type: {{ item.type }}</i>
+                                        </el-col>
+
                                     </el-row>
-<!--                                    <el-row type="flex" justify="left" style="margin:10px 5%;">-->
-<!--                                    <el-col :span="5">-->
-<!--                                        <i class="el-icon-info"> Type: {{ item.type }}</i>-->
-<!--                                    </el-col>-->
-<!--                                    <el-col :span="5">-->
-<!--                                        <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>-->
-<!--                                    </el-col>-->
-<!--                                    </el-row>-->
                                 </div>
                             </el-card>
                         </el-card>
@@ -103,7 +96,7 @@
         props: {
             cheight: {
                 type: String,
-                default: '450px'
+                default: '500px'
             }
         },
         components: {
@@ -195,8 +188,8 @@
     }
 }
 .card {
-    margin: 20px 25%;
-    height: 600px;
+    margin: 20px 20%;
+    height: 650px;
 
     &:hover {
         cursor: pointer;
@@ -216,11 +209,6 @@
     text-align: center;
     margin: 10px;
 }
-/*.image {*/
-/*    width: 200px;*/
-/*    height: 200px;*/
-/*    display: block;*/
-/*}*/
 
 .img{
     width: auto;

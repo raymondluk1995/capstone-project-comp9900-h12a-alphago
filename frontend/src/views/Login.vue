@@ -55,6 +55,13 @@
     components: {
       Header,
     },
+    created () {
+      this.username = localStorage.getItem('username');
+      if (this.username !== null) {
+        this.$message.error("You have already signed in!");
+        this.$router.push("/");
+      }
+    },
     data() {
       const validateUsername = (rule, value, callback) => {
         const usernameReg = /^[A-Za-z0-9]+$/;
