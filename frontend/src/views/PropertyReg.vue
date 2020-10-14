@@ -144,7 +144,7 @@
 
         <el-tab-pane label="Keywords" name="2">
           <el-row type="flex" justify="space-between" style="margin:0 5%">
-            <el-col :span="15">
+            <el-col :span="24">
               <el-form
                       class="form"
                       ref="form"
@@ -154,43 +154,53 @@
                       label-position="left"
               >
                 <el-row >
-                  <el-col>
+
             <el-checkbox-group v-model="form.keywords">
-                <el-col>
               <el-form-item label="Location:">
+                  <el-col :span="8">
                   <el-checkbox label="Close To Schools"></el-checkbox>
                   <el-checkbox label="Close To Shops"></el-checkbox>
                   <el-checkbox label="Close To Bus Stop"></el-checkbox>
-                  <el-checkbox label="Close To Train Station"></el-checkbox>
-                  <el-checkbox label="Close To Medical"></el-checkbox>
-              </el-form-item>
                   </el-col>
-
-              <el-form-item>
-                  <el-checkbox label="Close To Airport"></el-checkbox>
-                  <el-checkbox label="Close To Library"></el-checkbox>
-                  <el-checkbox label="Close To Park"></el-checkbox>
-
+                <el-col :span="8">
+                    <el-checkbox label="Close To Airport"></el-checkbox>
+                      <el-checkbox label="Close To Library"></el-checkbox>
+                      <el-checkbox label="Close To Park"></el-checkbox>
+                </el-col>
+                  <el-col :span="8">
+                      <el-checkbox label="Close To Train Station"></el-checkbox>
+                      <el-checkbox label="Close To Medical"></el-checkbox>
+                  </el-col>
               </el-form-item>
-              <el-col>
+
               <el-form-item label="Details:">
+                  <el-col :span="8">
                 <el-checkbox label="BBQ"></el-checkbox>
                 <el-checkbox label="Built-In Wardrobes"></el-checkbox>
                 <el-checkbox label="Gym"></el-checkbox>
                 <el-checkbox label="Swimming Pool"></el-checkbox>
-                <el-checkbox label="Built-In Wardrobes"></el-checkbox>
-              </el-form-item>
-              </el-col>
-              <el-form-item>
+                  </el-col>
+                  <el-col :span="8">
                 <el-checkbox label="Floor Covers"></el-checkbox>
                 <el-checkbox label="Extractor Fan"></el-checkbox>
                 <el-checkbox label="Drapes"></el-checkbox>
                 <el-checkbox label="Dishwasher"></el-checkbox>
-                <el-checkbox label="Burglar Alarm"></el-checkbox>
+                  </el-col>
+                  <el-col :span="8">
+                      <el-checkbox label="Burglar Alarm"></el-checkbox>
+                  </el-col>
               </el-form-item>
+
+                <el-form-item label="Custom:">
+                    <el-input
+                            placeholder="Input your custom tags here."
+                            prefix-icon="el-icon-edit"
+                            v-model="form.keywords">
+                    </el-input>
+                    <el-button></el-button>
+                </el-form-item>
             </el-checkbox-group>
 
-                  </el-col>
                 </el-row>
               </el-form>
             </el-col>
@@ -201,7 +211,7 @@
         <el-tab-pane label="Photos" name="3">
           <el-row type="flex" justify="center">
             <el-col :span="15" style="align-items: center">
-            <label class="submit-label">Please upload your property photos here, no more than 5 photos.</label>
+            <label class="submit-label">Please upload your property photos here, no more than 5 detail photos.</label>
             </el-col>
           </el-row>
             <el-row type="flex" justify="center">
@@ -215,8 +225,31 @@
                       label-position="left"
               >
                 <el-row :gutter="50">
-                  <el-col style="align-items: center">
+                  <el-col :span="6">
 <!--                    <el-form-item label="Photos:" prop="photo">-->
+
+                      <div class="user-avatar-container">
+                          <div class="user-avatar">
+                              <el-upload
+                                      class="avatar-uploader"
+                                      action="upload"
+                                      accept="image/*"
+                                      :auto-upload="false"
+                                      :on-change="coverChange"
+                                      :before-upload="beforeAvatarUpload"
+                              >
+                                  <img v-if="form.coverUrl" :src="form.coverUrl" class="avatar" />
+                                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                              </el-upload>
+                          </div>
+                          <div style="margin-top: 10px;">
+                              <el-row type="flex" justify="space-around" style="align-items: center;">
+                                  <label>Cover Photo</label>
+                              </el-row>
+                          </div>
+                      </div>
+                  </el-col>
+                    <el-col :span="15">
                       <el-upload
                               multiple
                               class="avatar-uploader"
@@ -231,8 +264,13 @@
                       >
                         <i class="el-icon-plus"></i>
                       </el-upload>
+                        <div style="margin-top: 10px;">
+                            <el-row type="flex" justify="space-around" style="align-items: center;">
+                                <label>Detail Photos</label>
+                            </el-row>
+                        </div>
+                    </el-col>
 <!--                    </el-form-item>-->
-                  </el-col>
                 </el-row>
               </el-form>
             </el-col>
@@ -335,7 +373,9 @@ export default {
         state: "",
         postcode: "",
         area: '',
-        imageUrl: [],
+          coverUrl:'',
+          coverRaw:'',
+          imageUrl: [],
         imageRaw: [],
         daterange:[],
         keywords: [],
@@ -351,6 +391,7 @@ export default {
         bathNum:[{ required: true, message: " Please enter bathroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
         address: [{ required: true, message: " Please enter address", trigger: "blur" },],
         suburb: [{ required: true, message: " Please enter suburb", trigger: "blur" },],
+          imageUrl: [{ required: true, message: " Please upload cover photo", trigger: "blur" },],
         state: [{ required: true, message: "Please enter state", trigger: "blur" },],
         postcode: [{required: true, message: " Please enter postcode", trigger: "blur",},],
         area: [{ required: true, message: " Please enter area", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
@@ -412,9 +453,12 @@ export default {
       }
       return isImage && isLt2M;
     },
+      coverChange(file){
+          this.form.imageRaw = file.raw;
+          this.form.imageUrl = URL.createObjectURL(file.raw);
+      },
     imgBroadcastChange(file) {
       this.form.imageRaw.push(file.raw);
-      // this.form.imageUrl = URL.createObjectURL(file.raw);
       this.form.imageUrl.push(URL.createObjectURL(file.raw));
     },
     exceedTips: function () {
@@ -438,11 +482,11 @@ export default {
           data.append('daterange', this.form.daterange);
           data.append('price', this.form.price);
           data.append('keywords', this.form.keywords);
-          // data.append('imageRaw', this.form.imageRaw);
+          data.append('cover', this.form.coverRaw);
           data.append('isAuction', this.form.isAuction);
 
           this.form.imageRaw.forEach(function (file) {
-                    data.append('file', file, file.name);
+                    data.append('photos', file, file.name);
                  });
 
           this.$axios.post('/property/registration', data)
@@ -451,7 +495,7 @@ export default {
                       if(response.data.code === 200){
                         console.log(response.data);
                         this.$message.success("Property register successful");
-                        // this.$router.replace("/login");
+                        this.$router.replace("/auction");
                       }
                     } else if(response.data.code === 400){
                       console.log(response.data);
@@ -545,7 +589,10 @@ export default {
   padding: 30px;
   border-radius: 15px;
 }
-
+.user-avatar{
+    /*margin-top: 20px;*/
+    text-align: center;
+}
 .avatar-uploader .el-upload {
   cursor: pointer;
   position: relative;
@@ -559,16 +606,17 @@ export default {
   border-radius: 6px;
   font-size: 28px;
   color: #8c939d;
-  width: 120px;
-  height: 120px;
-  line-height: 120px;
+  width: 150px;
+  height: 150px;
+  line-height: 150px;
   text-align: center;
 }
 .avatar {
   margin: 5px;
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   display: block;
+
 }
 .number-criteria {
   .el-col {
