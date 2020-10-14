@@ -129,28 +129,29 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="Area:" prop="area">
-                      <el-input v-model="form.area"></el-input>
+                      <el-input v-model="form.area" suffix="m^2"></el-input>
+
                     </el-form-item>
                       <el-form-item label="Rooms:" prop="room">
                           <el-row type="flex" justify="center">
                           <el-col :span="24">
                               <el-col :span="8">
                                   <el-input
-                                          placeholder="Bathroom Number"
+                                          placeholder="Bathroom Num"
                                           suffix-icon="el-icon-toilet-paper"
                                           v-model="form.bathroomNum">
                                   </el-input>
                               </el-col>
                               <el-col :span="8">
                                   <el-input
-                                          placeholder="Bedroom Number"
+                                          placeholder="Bedroom Num"
                                           suffix-icon="el-icon-house"
                                           v-model="form.bedroomNum">
                                   </el-input>
                               </el-col>
                               <el-col :span="8">
                                   <el-input
-                                          placeholder="Garage Number"
+                                          placeholder="Garage Num"
                                           suffix-icon="el-icon-truck"
                                           v-model="form.garageNum">
                                   </el-input>
@@ -263,7 +264,6 @@
                               list-type="picture-card"
                               :limit="5"
                               :on-exceed="exceedTips"
-                              :on-remove="handleRemove"
                               :on-change="imgBroadcastChange"
                               :before-upload="beforeAvatarUpload"
                       >
@@ -542,14 +542,11 @@ export default {
           this.form.imageRaw=[];
           this.form.imageUrl=[];
           fileList.forEach(function (f) {
-              // data.append('photos', f, f.name);
               if(f!==file){
                   this.form.imageRaw.push(f.raw);
                   this.form.imageUrl.push(URL.createObjectURL(f.raw));
               }
           });
-          // this.form.imageRaw.push(file.raw);
-          // this.form.imageUrl.push(URL.createObjectURL(file.raw));
           console.log(file, fileList);
       },
     goto(name) {

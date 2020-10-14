@@ -8,7 +8,9 @@ import axios from 'axios'
 import qs from 'qs'
 
 import VuePageTitle from 'vue-page-title'
+import locale from 'element-ui/lib/locale/lang/en'
 
+Vue.use(ElementUI,{locale});
 
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
