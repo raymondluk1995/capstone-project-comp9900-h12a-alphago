@@ -86,6 +86,7 @@ import { mapMutations } from "vuex";
 import $ from 'jquery'
 
 export default {
+  title: "User Registration",
   components: {
     Header,
   },
@@ -318,6 +319,6 @@ export default {
     /*user-select:none;*/
     /*text-align: center;*/
     /*padding:0px;*/
-    margin-top: 135px;
+    margin-top: 100%;
   }
 </style>

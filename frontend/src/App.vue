@@ -1,12 +1,10 @@
 <template>
-  <div id="app" class="wrapper">
+  <div id="app">
     <!--    <Header>-->
     <!--      <el-button round type="primary" @click="back">Back</el-button>-->
     <!--    </Header>-->
-    <div class="main-content">
-      <router-view />
-    </div>
-    
+<!--    <router-view />-->
+    <div id="v-content" v-bind:style="{minHeight: Height+'px'}"><router-view /></div>
     <Footer></Footer>
   </div>
 </template>
@@ -18,8 +16,18 @@
     components: {
       Footer,
     },
+    mounted(){
+      //动态设置内容高度 让footer始终居底   header+footer的高度是100
+      // this.Height = document.documentElement.clientHeight - 100;
+      this.Height = document.documentElement.clientHeight - 45;
+      //监听浏览器窗口变化　
+      // window.onresize = ()=> {this.Height = document.documentElement.clientHeight -100}
+      window.onresize = ()=> {this.Height = document.documentElement.clientHeight -45}
+    },
     data() {
-      return {};
+      return {
+        Height: 0
+      };
     },
   };
 </script>
@@ -31,29 +39,5 @@
   }
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
-  }
-
-  .wrapper{
-    position: relative;  
-    height: auto;   
-    min-height: 100%;
-  }
-
-  .main-content{  
-   padding-bottom: 60px;  
-  }  
-
-  html{
-    height:100%;
-  }
-
-  body{
-    height:100%;
-  }
-
-  Footer{
-   position: absolute;  
-   bottom: 0; /* 关键 */  
-   left:0; /* IE下一定要记得 */  
   }
 </style>

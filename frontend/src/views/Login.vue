@@ -15,15 +15,15 @@
                 label-position="left"
         >
           <el-row type="flex" justify="center" style="margin-bottom: 20px">
-            <el-button type="primary" icon="el-icon-user-solid" circle @click="byuser"></el-button>
-            <el-button type="info" icon="el-icon-message" circle @click="byemail"></el-button>
+            <el-button :type="byuserType" icon="el-icon-user-solid" circle @click="byuser"></el-button>
+            <el-button :type="byemailType" icon="el-icon-message" circle @click="byemail"></el-button>
           </el-row>
 
           <el-form-item v-if="loginByuser"  label="Username:" prop="username">
           <el-input v-model="form.username"></el-input>
         </el-form-item>
 
-          <el-form-item v-else label="Email:" prop="username">
+          <el-form-item v-else label="Email:" prop="email">
             <el-input v-model="form.email"></el-input>
           </el-form-item>
 
@@ -37,9 +37,9 @@
         </el-form>
         <div class="btns">
           <el-button round @click="goto('register')">Sign Up</el-button>
-          <!--          <el-button round type="info" plane @click="goto('reset')">Forget Password?</el-button>-->
           <el-button round type="info" plane @click="forgetpwd">Forget Password?</el-button>
-          <el-button round type="primary" @click="signIn" style="float: right;">Sign in</el-button>
+          <el-button v-if="loginByuser" round type="primary" @click="signInUser" style="float: right;">Sign in</el-button>
+          <el-button v-else round type="primary" @click="signInEmail" style="float: right;">Sign in</el-button>
         </div>
       </el-col>
     </el-row>
@@ -51,6 +51,7 @@
   import { mapMutations } from "vuex";
 
   export default {
+    title: 'Login',
     components: {
       Header,
     },
@@ -74,6 +75,8 @@
 
       return {
         loginByuser:true,
+        byuserType :"primary",
+        byemailType : "info",
         form: {
           email:'',
           username: '',
@@ -90,12 +93,47 @@
       ...mapMutations(['setJwt','setUserName','setFirstName','setAvatar']),
       byuser(){
           this.loginByuser = true;
+          this.byuserType = "primary";
+          this.byemailType = "info";
       },
       byemail(){
         this.loginByuser = false;
+        this.byuserType = "info"
+        this.byemailType = "primary";
       },
-
-      signIn() {
+      signInEmail() {
+        this.$refs["form"].validate((valid) => {
+          if (valid) {
+            let data = this.$qs.stringify(this.form);
+            this.$axios.post('/user/emailLogin', data)
+                    .then((response) => {
+                      if (response.status >= 200 && response.status < 300) {
+                        if(response.data.code === 200){
+                          this.$store.commit('setJwt', response.headers.jwt);
+                          this.$store.commit('setUserName', this.form.username);
+                          this.$store.commit('setAvatar', response.data.result.avatar);
+                          this.$store.commit('setFirstName', response.data.result.firstname);
+                          this.$router.push({name: 'home'});
+                          console.log(response.data);
+                        }else if(response.data.code === 400){
+                          this.$message.error('Password Incorrect!');
+                        }else{
+                          console.log(response.data.msg);
+                        }
+                      } else {
+                        console.log(response.data.msg);
+                      }
+                    })
+                    .catch((res) => {
+                      console.log('error ', res);
+                      this.$message.error('Login failed!');
+                    })
+          } else {
+            return false;
+          }
+        });
+      },
+      signInUser() {
         this.$refs["form"].validate((valid) => {
           if (valid) {
             let data = this.$qs.stringify(this.form);
@@ -109,9 +147,11 @@
                           this.$store.commit('setFirstName', response.data.result.firstname);
                           this.$router.push({name: 'home'});
                           console.log(response.data);
-                        }else{
-                          console.log(response.data.msg);
-                        }
+                        }else if(response.data.code === 400){
+                          this.$message.error(response.data.msg);
+                          }else{
+                            console.log(response.data.msg);
+                          }
                       } else {
                         console.log(response.data.msg);
                       }
@@ -120,7 +160,6 @@
                       console.log('error ', res);
                       this.$message.error('Login failed!');
                     })
-
           } else {
             return false;
           }
