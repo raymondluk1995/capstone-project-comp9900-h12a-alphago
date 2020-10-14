@@ -191,13 +191,14 @@
                   </el-col>
               </el-form-item>
 
-                <el-form-item label="Custom:">
+                <el-form-item label="Description:">
                     <el-input
-                            placeholder="Input your custom tags here."
+                            placeholder="Enter the description for your property."
                             prefix-icon="el-icon-edit"
-                            v-model="form.keywords">
+                            v-model="form.description"
+                            type="textarea"
+                            maxlength="200">
                     </el-input>
-                    <el-button></el-button>
                 </el-form-item>
             </el-checkbox-group>
 
@@ -226,8 +227,6 @@
               >
                 <el-row :gutter="50">
                   <el-col :span="6">
-<!--                    <el-form-item label="Photos:" prop="photo">-->
-
                       <div class="user-avatar-container">
                           <div class="user-avatar">
                               <el-upload
@@ -364,6 +363,7 @@ export default {
       activateIndex: '0',
       form: {
         country:'',
+          description:'',
         isAuction:true,
         bathroomNum: '',
         bedroomNum: '',
@@ -484,6 +484,7 @@ export default {
           data.append('keywords', this.form.keywords);
           data.append('cover', this.form.coverRaw);
           data.append('isAuction', this.form.isAuction);
+          data.append('description', this.form.description);
 
           this.form.imageRaw.forEach(function (file) {
                     data.append('photos', file, file.name);
