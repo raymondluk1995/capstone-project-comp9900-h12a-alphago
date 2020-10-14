@@ -320,5 +320,6 @@ export default {
     /*text-align: center;*/
     /*padding:0px;*/
     margin-top: 100%;
+    
   }
 </style>

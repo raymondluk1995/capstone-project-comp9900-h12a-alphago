@@ -7,6 +7,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 import qs from 'qs'
 
+import locale from 'element-ui/lib/locale/lang/en'
+
 import VuePageTitle from 'vue-page-title'
 
 
@@ -17,7 +19,7 @@ Vue.use(VuePageTitle);
 
 Vue.use(VueAwesomeSwiper);
 
-Vue.use(ElementUI);
+Vue.use(ElementUI,{locale});
 
 Vue.prototype.$axios = axios;
 
