@@ -120,6 +120,7 @@ export default {
       show: true,
       count: 60,
       timer: null,
+      timerstart:false,
       form: {
         username:'',
         firstname: '',
@@ -158,7 +159,8 @@ export default {
                     if (response.data.code ===400) {
                       this.$message.error('Email already exist!');
                       this.form.email = '';
-                      return false;
+                    }else if((response.data.code ===200)){
+                      this.timerstart = true;
                     }
                   })
                   .catch((res) => {
@@ -166,7 +168,7 @@ export default {
                     this.$message.error('Validate Error');
                   });
         }
-        if (!this.timer) {
+        if (!this.timer && this.timerstart) {
           this.count = 60;
           this.show = false;
           $(".validate").addClass("huise")
