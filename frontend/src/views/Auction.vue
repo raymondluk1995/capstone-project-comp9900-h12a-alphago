@@ -31,12 +31,10 @@
                         <template v-if="!isEmpty">
                         <el-card class="card" v-for="item in propList" :key="item.id">
                             <el-card :body-style="{ padding: '0px' }">
-<!--                                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"-->
-<!--                                     height="400" width="45%"-->
-<!--                                    >-->
                                 <el-carousel :interval="5000" arrow="always">
-                                    <el-carousel-item v-for="pic in item.photo" :key="item.id">
-                                        <h3>{{ pic }}</h3>
+                                    <el-carousel-item v-for="pic in item.photos" :key="item.id">
+<!--                                        <h3>{{ pic }}</h3>-->
+                                        <img :src="pic"   alt=""/>
                                     </el-carousel-item>
                                 </el-carousel>
                                 <div style="padding: 14px;">

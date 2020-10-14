@@ -35,7 +35,7 @@
 
     <el-form :model="form"  label-width="80px" label-position="left">
       <el-tabs v-model="activateIndex" :tab-position="'left'" style="margin:0 20%" >
-        <el-tab-pane label="Basic" name="0">
+        <el-tab-pane label="Basic" name="0" >
           <div>
             <google-places-autocomplete
                     @resultChanged="(placeDetail) => (place = placeDetail)"
@@ -96,14 +96,16 @@
                     <el-form-item label="Country:" prop="country">
                       <el-input v-model="form.country"></el-input>
                     </el-form-item>
+<!--                      <el-button type="primary" icon="el-icon-edit" circle ></el-button>-->
                   </el-col>
                 </el-row>
               </el-form>
             </el-col>
           </el-row>
+
         </el-tab-pane>
 
-        <el-tab-pane label="Interior" name="1">
+        <el-tab-pane label="Interior" name="1" :disabled="dis1">
           <el-row type="flex" justify="center">
             <el-col :span="20">
               <el-form
@@ -162,14 +164,11 @@
             </el-col>
           </el-row>
             <el-row type="flex" justify="center">
-
-
-
             </el-row>
 
         </el-tab-pane>
 
-        <el-tab-pane label="Keywords" name="2">
+        <el-tab-pane label="Keywords"  :disabled="dis2" name="2">
           <el-row type="flex" justify="space-between" style="margin:0 5%">
             <el-col :span="24">
               <el-form
@@ -237,7 +236,7 @@
 
         </el-tab-pane>
 
-        <el-tab-pane label="Photos" name="3">
+        <el-tab-pane label="Photos" :disabled="dis3" name="3">
           <el-row type="flex" justify="center">
             <el-col :span="15" style="align-items: center">
             <label class="submit-label">Please upload your property photos here, no more than 5 photos.</label>
@@ -264,6 +263,7 @@
                               list-type="picture-card"
                               :limit="5"
                               :on-exceed="exceedTips"
+                              :on-remove="handleRemove"
                               :on-change="imgBroadcastChange"
                               :before-upload="beforeAvatarUpload"
                       >
@@ -278,7 +278,7 @@
           </el-row>
         </el-tab-pane>
 
-        <el-tab-pane label="Auction" name="4">
+        <el-tab-pane label="Auction" :disabled="dis4"name="4">
           <el-row type="flex" justify="center">
             <el-col :span="20">
               <el-form
@@ -301,11 +301,12 @@
           <el-form-item v-if="form.isAuction" label="Time Range:" prop="daterange">
             <el-date-picker style="width:80%"
                     v-model="form.daterange"
-                    type="daterange"
+                    type="datetimerange"
                     range-separator="To"
                     start-placeholder="Auction Start Time"
                     end-placeholder="Auction Start Time">
             </el-date-picker>
+
           </el-form-item>
 
           <el-form-item v-if="form.isAuction" label="Reserved Price:" prop="price">
@@ -318,7 +319,7 @@
           </el-row>
         </el-tab-pane>
 
-        <el-tab-pane label="Submit" name="5">
+        <el-tab-pane label="Submit" :disabled="dis5" name="5">
           <el-form :model="form"  label-width="80px" label-position="left">
           <el-row type="flex" justify="center">
           <label style="font-size:20px;margin: 80px 0;font-weight: bold;">Congratulations! You have finished a property registration.</label>
@@ -357,6 +358,12 @@ export default {
       }
     };
     return {
+        dis1:false,
+        dis2:false,
+        dis3:false,
+        dis4:false,
+        dis5:false,
+
       place: null,
       inputDisable:true,
       dialogImageUrl: "",
@@ -389,27 +396,25 @@ export default {
         postcode: "",
         area: '',
           room:'',
-          // coverUrl:'',
-          // coverRaw:'',
+
           imageUrl: [],
         imageRaw: [],
         daterange:[],
         keywords: [],
         type:'',
-        // startDate: "",
-        // endDate: "",
+
         price: "",
       },
       rules: {
         bedroomNum:[{ required: true, message: " Please enter bedroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
-        carNum:[{ required: true, message: " Please enter garage number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
-        bathNum:[{ required: true, message: " Please enter bathroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
+        garageNum:[{ required: true, message: " Please enter garage number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
+        bathroomNum:[{ required: true, message: " Please enter bathroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
         address: [{ required: true, message: " Please enter address", trigger: "blur" },],
         suburb: [{ required: true, message: " Please enter suburb", trigger: "blur" },],
           type: [{ required: true, message: " Please select property type!", trigger: "blur" },],
           // imageUrl: [{ required: true, message: " Please upload cover photo", trigger: "blur" },],
         state: [{ required: true, message: "Please enter state", trigger: "blur" },],
-          room: [{ required: true, message: "Please input room numbers", trigger: "blur" },],
+          // room: [{ required: true, message: "Please input room numbers", trigger: "blur" },],
         postcode: [{required: true, message: " Please enter postcode", trigger: "blur",},],
         area: [{ required: true, message: " Please enter area", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
         daterange: [{required: true, message: " Please enter start date", trigger: "blur",},],
@@ -458,6 +463,7 @@ export default {
           break;
       }
     },
+
     beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 2;
       let types = ["image/jpeg", "image/jpg", "image/png"];
@@ -528,10 +534,24 @@ export default {
             this.$message.error('Property Register Error');
           });
         } else {
-          return false;
+            this.$message.error('Property Register Failure, please check your property information!');
         }
       });
     },
+      handleRemove(file, fileList) {
+          this.form.imageRaw=[];
+          this.form.imageUrl=[];
+          fileList.forEach(function (f) {
+              // data.append('photos', f, f.name);
+              if(f!==file){
+                  this.form.imageRaw.push(f.raw);
+                  this.form.imageUrl.push(URL.createObjectURL(f.raw));
+              }
+          });
+          // this.form.imageRaw.push(file.raw);
+          // this.form.imageUrl.push(URL.createObjectURL(file.raw));
+          console.log(file, fileList);
+      },
     goto(name) {
       console.log(name);
       this.$router.push({ name: name });

@@ -20,11 +20,11 @@
                             </el-form-item>
 
                             <el-form-item v-if="!canEditEmail" label="Email:" prop="email">
-                                <el-input style="width:70%;float:left;" v-model="form.email" :disabled="!canEditEmail"></el-input>
+                                <el-input style="width:70%;float:left;" v-model="form.oldemail" :disabled="!canEditEmail"></el-input>
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editE">Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="Email:" prop="email">
-                                <el-input style="width:70%;float:left;" v-model="form.email"></el-input>
+                                <el-input style="width:70%;float:left;" placeholder="Input your new email" v-model="form.email"></el-input>
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelE">Cancel</el-button>
                                 <el-input
                                         style="width:70%;float:left;margin-top:10px;"
@@ -38,21 +38,21 @@
                             </el-form-item>
 
                             <el-form-item v-if="!canEditFirstname" label="First Name:" prop="firstname">
-                                <el-input style="width:70%;float:left;" v-model="form.firstname" :disabled="!canEditFirstname"></el-input>
+                                <el-input style="width:70%;float:left;" v-model="form.ofirstname" :disabled="!canEditFirstname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editF">Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="First Name:" prop="firstname">
-                                <el-input style="width:70%;float:left;" v-model="form.firstname"></el-input>
+                                <el-input style="width:70%;float:left;" placeholder="Change your first name" v-model="form.firstname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelF">Cancel</el-button>
                                 <el-button round style="width:25%;float:right;margin-top:10px;" type="success" @click="submitF">Submit</el-button>
                             </el-form-item>
 
                             <el-form-item v-if="!canEditLastname" label="Last Name:" prop="lastname">
-                                <el-input style="width:70%;float:left;" v-model="form.lastname" :disabled="!canEditLastname"></el-input>
+                                <el-input style="width:70%;float:left;" v-model="form.olastname" :disabled="!canEditLastname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editL">Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="Last Name:" prop="lastname">
-                                <el-input style="width:70%;float:left;" v-model="form.lastname"></el-input>
+                                <el-input style="width:70%;float:left;" placeholder="Change your last name" v-model="form.lastname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelL">Cancel</el-button>
                                 <el-button round style="width:25%;float:right;margin-top:10px;" type="success" @click="submitL">Submit</el-button>
                             </el-form-item>
@@ -73,12 +73,14 @@
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                             </div>
+                                <template v-if="changeA">
                                 <div class="user-avatar-button">
-                            <el-row type="flex" justify="space-around" style="align-items: center;">
-                                <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>
-                                <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>
-                            </el-row>
+                                    <el-row type="flex" justify="space-around" style="align-items: center;">
+                                        <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>
+                                        <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>
+                                    </el-row>
                             </div>
+                                </template>
                             </div>
                         </el-col>
                     </el-row>
@@ -107,6 +109,7 @@
                 }
             };
             return {
+                changeA:false,
                 show: true,
                 count: 60,
                 timer: null,
@@ -118,7 +121,10 @@
                     username: "",
                     firstname: "",
                     lastname: "",
+                    ofirstname:'',
+                    olastname:'',
                     email: "",
+                    oldemail:'',
                     imageRaw:'',
                     imageUrl:'',
                     validate:'',
@@ -137,9 +143,9 @@
                 .get('/user/information')
                 .then(response => {
                         this.form.username = response.data.result.username,
-                        this.form.email = response.data.result.email,
-                        this.form.lastname = response.data.result.lastname,
-                        this.form.firstname = response.data.result.firstname
+                        this.form.oldemail = response.data.result.email,
+                        this.form.olastname = response.data.result.lastname,
+                        this.form.ofirstname = response.data.result.firstname
                         this.form.imageUrl = response.data.result.avatar
                 })
                 .catch(function (error) {
@@ -159,6 +165,7 @@
             },
             cancelA(){
                 this.form.imageUrl = localStorage.getItem('avatar')
+                this.changeA=false;
             },
             cancelE(){
                 this.canEditEmail = false;
@@ -306,6 +313,7 @@
             imgBroadcastChange(file) {
                 this.form.imageRaw = file.raw;
                 this.form.imageUrl = URL.createObjectURL(file.raw);
+                this.changeA=true;
             },
             validate() {
                     if (this.timer == null) {
