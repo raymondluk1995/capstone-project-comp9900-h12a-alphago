@@ -457,17 +457,17 @@ export default {
     };
   },
   created() {
-    // this.username = localStorage.getItem("username");
-    // // this.username = this.$store.state.username;
-    // if (this.username !== null) {
-    //   this.hasLogin = true;
-    //   this.avatar = localStorage.getItem("avatar");
-    //   this.firstname = localStorage.getItem("firstname");
-    // }
-    // else{
-    //     this.$message.error("You should login first!");
-    //     this.$router.push("/login");
-    // }
+    this.username = localStorage.getItem("username");
+    // this.username = this.$store.state.username;
+    if (this.username !== null) {
+      this.hasLogin = true;
+      this.avatar = localStorage.getItem("avatar");
+      this.firstname = localStorage.getItem("firstname");
+    }
+    else{
+        this.$message.error("You should login first!");
+        this.$router.push("/login");
+    }
   },
   methods: {
     ...mapActions(["logout"]),
