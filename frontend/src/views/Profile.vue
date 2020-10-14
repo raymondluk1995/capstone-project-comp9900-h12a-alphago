@@ -139,6 +139,18 @@
             };
         },
         created(){
+                this.username = localStorage.getItem("username");
+                // this.username = this.$store.state.username;
+                if (this.username !== null) {
+                    this.hasLogin = true;
+                    this.avatar = localStorage.getItem("avatar");
+                    this.firstname = localStorage.getItem("firstname");
+                }
+                else{
+                    this.$message.error("You should login first!");
+                    this.$router.push("/login");
+                }
+
             this.form.imageUrl = localStorage.getItem('avatar');
             this.$axios
                 .get('/user/information')

@@ -110,8 +110,11 @@
             if(this.username!==null){
                 this.hasLogin = true;
                 this.avatar = localStorage.getItem('avatar');
+                this.firstname=  localStorage.getItem('firstname');
+            }else{
+                this.$message.error("You should login first!");
+                this.$router.push("/login");
             }
-            this.firstname=  localStorage.getItem('firstname');
 
             this.$axios
                 .get('/property/information')

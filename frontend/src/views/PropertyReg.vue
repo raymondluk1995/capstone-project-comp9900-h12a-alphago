@@ -430,8 +430,12 @@ export default {
     if (this.username !== null) {
       this.hasLogin = true;
       this.avatar = localStorage.getItem("avatar");
+      this.firstname = localStorage.getItem("firstname");
     }
-    this.firstname = localStorage.getItem("firstname");
+    else{
+        this.$message.error("You should login first!");
+        this.$router.push("/login");
+    }
   },
   methods: {
     ...mapActions(["logout"]),
@@ -538,7 +542,7 @@ export default {
     },
       handleRemove(file, fileList) {
           const IMG = file.raw;
-          const INDEX = this.imageRaw.indexOf(IMG);
+          const INDEX = this.form.imageRaw.indexOf(IMG);
           this.form.imageRaw.splice(INDEX, 1);
           this.form.imageUrl.splice(INDEX, 1);
           console.log(file, fileList);
