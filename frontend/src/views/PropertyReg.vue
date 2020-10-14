@@ -115,30 +115,57 @@
                       label-position="left"
               >
                 <el-row :gutter="50">
-                  <el-col :span="24">
-                    <el-form-item label="Type:" v-model="form.type" prop="area">
-                      <el-radio v-model="form.type" label="Apartment">Apartment</el-radio>
-                      <el-radio v-model="form.type" label="Studio">Studio</el-radio>
-                      <el-radio v-model="form.type" label="Unit">Unit</el-radio>
-                      <el-radio v-model="form.type" label="House">House</el-radio>
+                  <el-col :span="20">
+                    <el-form-item label="Type:" prop="type">
+                        <el-select v-model="form.type" placeholder="Property Type">
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="Area:" prop="area">
                       <el-input v-model="form.area"></el-input>
                     </el-form-item>
-                    <el-form-item label="Bathroom Number:" prop="bathNum">
-                      <el-input v-model="form.bathNum"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Bedroom Number:" prop="bedroomNum">
-                      <el-input v-model="form.bedroomNum"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Garage Number:" prop="carNum">
-                      <el-input v-model="form.carNum"></el-input>
-                    </el-form-item>
+                      <el-form-item label="Rooms:" prop="room">
+                          <el-row type="flex" justify="center">
+                          <el-col :span="24">
+                              <el-col :span="8">
+                                  <el-input
+                                          placeholder="Bathroom Number"
+                                          suffix-icon="el-icon-toilet-paper"
+                                          v-model="form.bathroomNum">
+                                  </el-input>
+                              </el-col>
+                              <el-col :span="8">
+                                  <el-input
+                                          placeholder="Bedroom Number"
+                                          suffix-icon="el-icon-house"
+                                          v-model="form.bedroomNum">
+                                  </el-input>
+                              </el-col>
+                              <el-col :span="8">
+                                  <el-input
+                                          placeholder="Garage Number"
+                                          suffix-icon="el-icon-truck"
+                                          v-model="form.garageNum">
+                                  </el-input>
+                              </el-col>
+                          </el-col>
+                </el-row>
+                      </el-form-item>
                   </el-col>
                 </el-row>
               </el-form>
             </el-col>
           </el-row>
+            <el-row type="flex" justify="center">
+
+
+
+            </el-row>
 
         </el-tab-pane>
 
@@ -197,6 +224,7 @@
                             prefix-icon="el-icon-edit"
                             v-model="form.description"
                             type="textarea"
+                            :rows="5"
                             maxlength="500">
                     </el-input>
                 </el-form-item>
@@ -212,7 +240,7 @@
         <el-tab-pane label="Photos" name="3">
           <el-row type="flex" justify="center">
             <el-col :span="15" style="align-items: center">
-            <label class="submit-label">Please upload your property photos here, no more than 5 detail photos.</label>
+            <label class="submit-label">Please upload your property photos here, no more than 5 photos.</label>
             </el-col>
           </el-row>
             <el-row type="flex" justify="center">
@@ -226,29 +254,7 @@
                       label-position="left"
               >
                 <el-row :gutter="50">
-                  <el-col :span="6">
-                      <div class="user-avatar-container">
-                          <div class="user-avatar">
-                              <el-upload
-                                      class="avatar-uploader"
-                                      action="upload"
-                                      accept="image/*"
-                                      :auto-upload="false"
-                                      :on-change="coverChange"
-                                      :before-upload="beforeAvatarUpload"
-                              >
-                                  <img v-if="form.coverUrl" :src="form.coverUrl" class="avatar" />
-                                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                              </el-upload>
-                          </div>
-                          <div style="margin-top: 10px;">
-                              <el-row type="flex" justify="space-around" style="align-items: center;">
-                                  <label>Cover Photo</label>
-                              </el-row>
-                          </div>
-                      </div>
-                  </el-col>
-                    <el-col :span="15">
+                    <el-col :span="24">
                       <el-upload
                               multiple
                               class="avatar-uploader"
@@ -264,12 +270,8 @@
                         <i class="el-icon-plus"></i>
                       </el-upload>
                         <div style="margin-top: 10px;">
-                            <el-row type="flex" justify="space-around" style="align-items: center;">
-                                <label>Detail Photos</label>
-                            </el-row>
                         </div>
                     </el-col>
-<!--                    </el-form-item>-->
                 </el-row>
               </el-form>
             </el-col>
@@ -361,6 +363,19 @@ export default {
       dialogVisible: false,
       hasLogin: false,
       activateIndex: '0',
+        options: [{
+            value: 'Apartment',
+            label: 'Apartment'
+        }, {
+            value: 'Unit',
+            label: 'Unit'
+        }, {
+            value: 'House',
+            label: 'House'
+        }, {
+            value: 'Studio',
+            label: 'Studio'
+        }],
       form: {
         country:'',
           description:'',
@@ -373,8 +388,9 @@ export default {
         state: "",
         postcode: "",
         area: '',
-          coverUrl:'',
-          coverRaw:'',
+          room:'',
+          // coverUrl:'',
+          // coverRaw:'',
           imageUrl: [],
         imageRaw: [],
         daterange:[],
@@ -382,7 +398,6 @@ export default {
         type:'',
         // startDate: "",
         // endDate: "",
-        daterange:'',
         price: "",
       },
       rules: {
@@ -391,8 +406,10 @@ export default {
         bathNum:[{ required: true, message: " Please enter bathroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
         address: [{ required: true, message: " Please enter address", trigger: "blur" },],
         suburb: [{ required: true, message: " Please enter suburb", trigger: "blur" },],
-          imageUrl: [{ required: true, message: " Please upload cover photo", trigger: "blur" },],
+          type: [{ required: true, message: " Please select property type!", trigger: "blur" },],
+          // imageUrl: [{ required: true, message: " Please upload cover photo", trigger: "blur" },],
         state: [{ required: true, message: "Please enter state", trigger: "blur" },],
+          room: [{ required: true, message: "Please input room numbers", trigger: "blur" },],
         postcode: [{required: true, message: " Please enter postcode", trigger: "blur",},],
         area: [{ required: true, message: " Please enter area", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
         daterange: [{required: true, message: " Please enter start date", trigger: "blur",},],
@@ -453,10 +470,10 @@ export default {
       }
       return isImage && isLt2M;
     },
-      coverChange(file){
-          this.form.imageRaw = file.raw;
-          this.form.imageUrl = URL.createObjectURL(file.raw);
-      },
+      // coverChange(file){
+      //     this.form.imageRaw = file.raw;
+      //     this.form.imageUrl = URL.createObjectURL(file.raw);
+      // },
     imgBroadcastChange(file) {
       this.form.imageRaw.push(file.raw);
       this.form.imageUrl.push(URL.createObjectURL(file.raw));
@@ -469,9 +486,9 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           let data = new FormData();
-          data.append('bathroomNum', this.form.bathNum);
+          data.append('bathroomNum', this.form.bathroomNum);
           data.append('bedroomNum', this.form.bedroomNum);
-          data.append('garageNum', this.form.carNum);
+          data.append('garageNum', this.form.garageNum);
           data.append('type', this.form.type);
           data.append('address', this.form.address);
           data.append('suburb', this.form.suburb);
@@ -482,7 +499,7 @@ export default {
           data.append('daterange', this.form.daterange);
           data.append('price', this.form.price);
           data.append('keywords', this.form.keywords);
-          data.append('cover', this.form.coverRaw);
+          // data.append('cover', this.form.coverRaw);
           data.append('isAuction', this.form.isAuction);
           data.append('description', this.form.description);
 
