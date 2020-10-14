@@ -32,25 +32,31 @@
                         <el-card class="card" v-for="item in propList" :key="item.id">
                             <el-row>
                                 <el-col :span="6">
-                                    <img :src="item.image" @click="goto('property')" alt="" />
+                                    <img height="200" width="300"  :src="item.image" @click="goto('property')" alt="" />
                                 </el-col>
-                                <el-col :span="14" :offset="1">
+                                <el-col :span="10" :offset="1">
                                     <div @click="goto('property')">
                                         <h3>{{ item.address }}</h3>
                                         <el-row type="flex" justify="center" style="margin: 40px 0">
                                             <el-col>
-                                                Bathrooms: {{ item.bathroomNum}}
+                                                <i class="el-icon-toilet-paper"> Bathrooms: {{ item.bathroomNum}}</i>
                                             </el-col>
                                             <el-col>
-                                                Bedrooms: {{ item.bedroomNum }}
+                                                <i class="el-icon-house"> Bedrooms: {{ item.bedroomNum }}</i>
                                             </el-col>
                                             <el-col>
-                                                Garages: {{ item.garageNum }}
-                                            </el-col>
-                                            <el-col>
-                                                Type: {{ item.type }}
+                                                <i class="el-icon-truck"> Garages: {{ item.garageNum }}</i>
                                             </el-col>
                                         </el-row>
+                                        <el-row type="flex" justify="center" style="margin: 20px 0">
+                                        <el-col>
+                                            <i class="el-icon-info"> Type: {{ item.type }}</i>
+                                        </el-col>
+                                        <el-col>
+                                            <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>
+                                        </el-col>
+                                        </el-row>
+
                                     </div>
                                 </el-col>
                             </el-row>
@@ -117,7 +123,7 @@
             return {
                 isEmpty:true,
                 hasLogin:false,
-                propList: [],
+                propList: [{photo:''}],
             };
         },
         methods: {
@@ -182,6 +188,7 @@
     p {
         line-height: 2.5;
     }
+    border-left: 15px solid #bcc8e6;
 }
 .empty-label{
     /*font-size: 18px;*/

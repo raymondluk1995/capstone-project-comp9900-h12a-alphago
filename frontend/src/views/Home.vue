@@ -21,10 +21,9 @@
       </template>
     </Header>
 
-    <el-carousel :interval="5000" arrow="always" :height="bannerHeight + 'px'">
+    <el-carousel :interval="5000" type="card" height="1000">
       <el-carousel-item v-for="item in bigScreen.images"
                         :key="item.name" :name="item.name">
-<!--      <h3>{{ item }}</h3>-->
         <img style="width:100%;height:100%;" :src="item.url"/>
       </el-carousel-item>
     </el-carousel>
