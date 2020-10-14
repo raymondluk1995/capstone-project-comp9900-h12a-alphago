@@ -263,6 +263,7 @@
                               :auto-upload="false"
                               list-type="picture-card"
                               :limit="5"
+                              :on-remove="handleRemove"
                               :on-exceed="exceedTips"
                               :on-change="imgBroadcastChange"
                               :before-upload="beforeAvatarUpload"
@@ -476,10 +477,7 @@ export default {
       }
       return isImage && isLt2M;
     },
-      // coverChange(file){
-      //     this.form.imageRaw = file.raw;
-      //     this.form.imageUrl = URL.createObjectURL(file.raw);
-      // },
+
     imgBroadcastChange(file) {
       this.form.imageRaw.push(file.raw);
       this.form.imageUrl.push(URL.createObjectURL(file.raw));
@@ -539,14 +537,10 @@ export default {
       });
     },
       handleRemove(file, fileList) {
-          this.form.imageRaw=[];
-          this.form.imageUrl=[];
-          fileList.forEach(function (f) {
-              if(f!==file){
-                  this.form.imageRaw.push(f.raw);
-                  this.form.imageUrl.push(URL.createObjectURL(f.raw));
-              }
-          });
+          const IMG = file.raw;
+          const INDEX = this.imageRaw.indexOf(IMG);
+          this.form.imageRaw.splice(INDEX, 1);
+          this.form.imageUrl.splice(INDEX, 1);
           console.log(file, fileList);
       },
     goto(name) {

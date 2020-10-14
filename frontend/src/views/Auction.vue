@@ -30,11 +30,11 @@
                         </div>
                         <template v-if="!isEmpty">
                         <el-card class="card" v-for="item in propList" :key="item.id">
-                            <el-card :body-style="{ padding: '0px' }">
-                                <el-carousel :interval="5000" arrow="always">
+                            <el-card :body-style="{ padding: '0px' }" style="height: 550px">
+                                <el-carousel :interval="5000" arrow="always" :height="cheight">
                                     <el-carousel-item v-for="pic in item.photos" :key="item.id">
 <!--                                        <h3>{{ pic }}</h3>-->
-                                        <img :src="pic"   alt=""/>
+                                        <img :src="pic"  width="100%" height="100%" alt=""/>
                                     </el-carousel-item>
                                 </el-carousel>
                                 <div style="padding: 14px;">
@@ -60,36 +60,6 @@
                                     </el-row>
                                 </div>
                             </el-card>
-<!--                            <el-row>-->
-<!--                                <el-col :span="6">-->
-<!--                                    <img height="200" width="300"  :src="item.image" @click="goto('property')" alt="" />-->
-<!--                                </el-col>-->
-<!--                                <el-col :span="10" :offset="1">-->
-<!--                                    <div @click="goto('property')">-->
-<!--                                        <h3>{{ item.address }}</h3>-->
-<!--                                        <el-row type="flex" justify="center" style="margin: 40px 0">-->
-<!--                                            <el-col>-->
-<!--                                                <i class="el-icon-toilet-paper"> Bathrooms: {{ item.bathroomNum}}</i>-->
-<!--                                            </el-col>-->
-<!--                                            <el-col>-->
-<!--                                                <i class="el-icon-house"> Bedrooms: {{ item.bedroomNum }}</i>-->
-<!--                                            </el-col>-->
-<!--                                            <el-col>-->
-<!--                                                <i class="el-icon-truck"> Garages: {{ item.garageNum }}</i>-->
-<!--                                            </el-col>-->
-<!--                                        </el-row>-->
-<!--                                        <el-row type="flex" justify="center" style="margin: 20px 0">-->
-<!--                                        <el-col>-->
-<!--                                            <i class="el-icon-info"> Type: {{ item.type }}</i>-->
-<!--                                        </el-col>-->
-<!--                                        <el-col>-->
-<!--                                            <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>-->
-<!--                                        </el-col>-->
-<!--                                        </el-row>-->
-
-<!--                                    </div>-->
-<!--                                </el-col>-->
-<!--                            </el-row>-->
                         </el-card>
                         </template>
                         <template v-else>
@@ -126,6 +96,12 @@
     import { mapActions } from "vuex";
     export default {
         name: "Auction",
+        props: {
+            cheight: {
+                type: String,
+                default: '450px'
+            }
+        },
         components: {
             Header,
         },
@@ -144,6 +120,10 @@
                         this.isEmpty=false;
                         this.propList = response.data.result;
                     }
+                    if (response.data.code === 401){
+                        this.$message.error('You should login first!');
+                        this.$router.replace("/login");
+                    }
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -152,9 +132,10 @@
         },
         data() {
             return {
-                isEmpty: true,
+                isEmpty: false,
                 hasLogin: false,
-                propList: [],
+                propList: [{photos:['https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+                    'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png']}],
             }
         },
         methods: {
@@ -208,7 +189,8 @@
     }
 }
 .card {
-    margin: 20px 20%;
+    margin: 20px 25%;
+    height: 600px;
 
     &:hover {
         cursor: pointer;
@@ -233,5 +215,13 @@
 /*    height: 200px;*/
 /*    display: block;*/
 /*}*/
+
+.img{
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
 
 </style>
