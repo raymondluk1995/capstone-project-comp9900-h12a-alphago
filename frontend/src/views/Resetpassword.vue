@@ -42,6 +42,7 @@ import Header from "@/components/Header.vue";
 import $ from 'jquery'
 
 export default {
+  title: "Reset Password",
   components: {
     Header,
   },
@@ -122,7 +123,7 @@ export default {
         if (!this.timer) {
           this.count = 60;
           this.show = false;
-          $(".validate").addClass("huise")
+          $(".validate").addClass("validate-disabled")
 
           // document.getElementById('validate').style.cursor = 'not-allowed'
           this.timer = setInterval(() => {
@@ -142,7 +143,7 @@ export default {
     timer: function(val){
       console.log(val)
       if(val == null){
-        $(".validate").removeClass("huise")
+        $(".validate").removeClass("validate-disabled")
         // document.getElementById('validate').style.cursor = 'pointer'
       }
     }
@@ -165,7 +166,7 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
-.huise{
+.validate-disabled{
   /*background-color: #dcdcdc !important;*/
   color: black;
 }

@@ -96,6 +96,7 @@
     import $ from 'jquery'
 
     export default {
+        title: 'My Profile',
         components: {
             Header,
         },

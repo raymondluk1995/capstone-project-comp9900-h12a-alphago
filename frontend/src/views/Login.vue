@@ -51,6 +51,7 @@
   import { mapMutations } from "vuex";
 
   export default {
+    title: 'Login',
     components: {
       Header,
     },
