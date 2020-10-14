@@ -15,8 +15,8 @@
                 label-position="left"
         >
           <el-row type="flex" justify="center" style="margin-bottom: 20px">
-            <el-button type="primary" icon="el-icon-user-solid" circle @click="byuser"></el-button>
-            <el-button type="info" icon="el-icon-message" circle @click="byemail"></el-button>
+            <el-button :type="byuserType" icon="el-icon-user-solid" circle @click="byuser"></el-button>
+            <el-button :type="byemailType" icon="el-icon-message" circle @click="byemail"></el-button>
           </el-row>
 
           <el-form-item v-if="loginByuser"  label="Username:" prop="username">
@@ -74,6 +74,8 @@
 
       return {
         loginByuser:true,
+        byuserType :"primary",
+        byemailType : "info",
         form: {
           email:'',
           username: '',
@@ -90,9 +92,13 @@
       ...mapMutations(['setJwt','setUserName','setFirstName','setAvatar']),
       byuser(){
           this.loginByuser = true;
+          this.byuserType = "primary";
+          this.byemailType = "info";
       },
       byemail(){
         this.loginByuser = false;
+        this.byuserType = "info"
+        this.byemailType = "primary";
       },
       signInEmail() {
         this.$refs["form"].validate((valid) => {
