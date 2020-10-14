@@ -146,7 +146,7 @@
                     console.log(error)
                 })
 
-            if(this.propList.length){
+            if(this.propList===[]){
                 this.isEmpty=false;
             }
         },
