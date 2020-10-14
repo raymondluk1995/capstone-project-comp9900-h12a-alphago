@@ -23,3 +23,6 @@ the proposal. During this week, I kept on learning the JavaScript, CSS and VueJS
 
 Week 4
 In this week, I keep on learning JavaScript and VueJS. I helped in improving CSS in project and finding bugs. Also, I spent some time on researching how to use Google Map API in this project for address validation.
+
+Week 5 
+In this week, I finished the Google Map address validation part and the address autofilling. Also, some CSS modifications are done. Further learning on VueJS is still ongoing.
