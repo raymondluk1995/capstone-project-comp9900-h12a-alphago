@@ -5,7 +5,7 @@
                 <el-dropdown trigger="click" @command="handleCommand">
                     <div class="user">
                         <el-avatar :size="50" :src="avatar"></el-avatar>
-                        <p>welcome {{ firstname }}</p>
+<!--                        <p>welcome {{ firstname }}</p>-->
                     </div>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="profile">My profile</el-dropdown-item>

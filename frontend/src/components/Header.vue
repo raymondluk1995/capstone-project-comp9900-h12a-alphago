@@ -24,9 +24,10 @@
             </el-col>
             <el-col :span="6">
                 <el-row type="flex" justify="center">
-                    <h3>
-                        AlphaGo Auction
-                    </h3>
+                    <h1 style="font-family:Monospace;color: #222222;margin-left: 20px">ALPHAGO AUCTION</h1>
+<!--                    <h3 style="font-family:Georgia;">-->
+<!--                        AlphaGo Auction-->
+<!--                    </h3>-->
                 </el-row>
             </el-col>
             <el-col :span="6">
