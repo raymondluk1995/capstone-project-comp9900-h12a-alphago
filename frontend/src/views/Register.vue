@@ -153,7 +153,18 @@ export default {
         if (this.timer == null) {
           let data = new FormData();
           data.append('email', this.form.email);
-          this.$axios.post('/verify/register', data);
+          this.$axios.post('/verify/register', data)
+                  .then((response) => {
+                    if (response.data.code ===400) {
+                      this.$message.error('Email already exist!');
+                      this.form.email = '';
+                      return false;
+                    }
+                  })
+                  .catch((res) => {
+                    console.log('error', res);
+                    this.$message.error('Validate Error');
+                  });
         }
         if (!this.timer) {
           this.count = 60;
