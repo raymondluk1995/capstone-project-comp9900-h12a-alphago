@@ -4,7 +4,7 @@
             <template v-if="this.hasLogin">
                 <el-dropdown trigger="click" @command="handleCommand">
                     <div class="user">
-                        <el-avatar :size="50" :src="avatar"></el-avatar>
+                        <el-avatar :size="60" :src="avatar"></el-avatar>
 <!--                        <p>welcome {{ firstname }}</p>-->
                     </div>
                     <el-dropdown-menu slot="dropdown">
