@@ -1,20 +1,19 @@
 <template>
   <div class="propreg">
     <Header>
-      <template v-if="this.hasLogin">
-        <el-dropdown trigger="click" @command="handleCommand">
-          <div class="user">
-            <el-avatar :size="60" :src="avatar"></el-avatar>
-<!--            <p>Welcome! {{ firstname }}</p>-->
-          </div>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="profile">My profile</el-dropdown-item>
-            <el-dropdown-item command="auction">My Auctions</el-dropdown-item>
-            <el-dropdown-item command="notification">Notifications</el-dropdown-item>
-            <el-dropdown-item command="logout">Log out</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template>
+        <template v-if="this.hasLogin">
+            <el-dropdown trigger="click" @command="handleCommand" style="align-items: center" placement="bottom">
+                <div class="user">
+                    <el-avatar :size="70" :src="avatar"></el-avatar>
+                </div>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                    <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
+                    <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
+                    <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </template>
       <template v-else>
         <el-button round @click="goto('login')">Sign In</el-button>
         <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
@@ -33,7 +32,7 @@
     </div>
 
 
-    <el-form :model="form"  label-width="80px" label-position="left">
+    <el-form  label-width="80px" label-position="left">
       <el-tabs v-model="activateIndex" :tab-position="'left'" style="margin:0 20%" >
         <el-tab-pane label="Basic" name="0" >
           <div>
@@ -73,8 +72,8 @@
             <el-col :span="20">
               <el-form
                       class="form"
-                      ref="form"
-                      :model="form"
+                      ref="form1"
+                      :model="form1"
                       :rules="rules"
                       label-width="150px"
                       label-position="left"
@@ -82,19 +81,19 @@
                 <el-row :gutter="50">
                   <el-col :span="24">
                     <el-form-item label="Address:" prop="address">
-                      <el-input v-model="form.address"  ></el-input>
+                      <el-input v-model="form1.address"  ></el-input>
                     </el-form-item>
                     <el-form-item label="Suburb:" prop="suburb">
-                      <el-input v-model="form.suburb" ></el-input>
+                      <el-input v-model="form1.suburb" ></el-input>
                     </el-form-item>
                     <el-form-item label="State:" prop="state">
-                      <el-input v-model="form.state" ></el-input>
+                      <el-input v-model="form1.state" ></el-input>
                     </el-form-item>
                     <el-form-item label="Postcode:" prop="postcode">
-                      <el-input v-model="form.postcode"></el-input>
+                      <el-input v-model="form1.postcode"></el-input>
                     </el-form-item>
                     <el-form-item label="Country:" prop="country">
-                      <el-input v-model="form.country"></el-input>
+                      <el-input v-model="form1.country"></el-input>
                     </el-form-item>
 <!--                      <el-button type="primary" icon="el-icon-edit" circle ></el-button>-->
                   </el-col>
@@ -102,7 +101,9 @@
               </el-form>
             </el-col>
           </el-row>
-
+            <div class="next-btn">
+            <el-button type="success" icon="el-icon-right" round @click="checktable1">Next</el-button>
+            </div>
         </el-tab-pane>
 
         <el-tab-pane label="Interior" name="1" :disabled="dis1">
@@ -110,8 +111,8 @@
             <el-col :span="20">
               <el-form
                       class="form"
-                      ref="form"
-                      :model="form"
+                      ref="form2"
+                      :model="form2"
                       :rules="rules"
                       label-width="150px"
                       label-position="left"
@@ -119,7 +120,7 @@
                 <el-row :gutter="50">
                   <el-col :span="20">
                     <el-form-item label="Type:" prop="type">
-                        <el-select v-model="form.type" placeholder="Property Type">
+                        <el-select v-model="form2.type" placeholder="Property Type" value="">
                             <el-option
                                     v-for="item in options"
                                     :key="item.value"
@@ -129,7 +130,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="Area:" prop="area">
-                      <el-input v-model="form.area" suffix="m^2"></el-input>
+                      <el-input v-model="form2.area" suffix="m^2"></el-input>
 
                     </el-form-item>
                       <el-form-item label="Rooms:" prop="room">
@@ -139,21 +140,21 @@
                                   <el-input
                                           placeholder="Bathroom Num"
                                           suffix-icon="el-icon-toilet-paper"
-                                          v-model="form.bathroomNum">
+                                          v-model="form2.bathroomNum">
                                   </el-input>
                               </el-col>
                               <el-col :span="8">
                                   <el-input
                                           placeholder="Bedroom Num"
                                           suffix-icon="el-icon-house"
-                                          v-model="form.bedroomNum">
+                                          v-model="form2.bedroomNum">
                                   </el-input>
                               </el-col>
                               <el-col :span="8">
                                   <el-input
                                           placeholder="Garage Num"
                                           suffix-icon="el-icon-truck"
-                                          v-model="form.garageNum">
+                                          v-model="form2.garageNum">
                                   </el-input>
                               </el-col>
                           </el-col>
@@ -166,7 +167,9 @@
           </el-row>
             <el-row type="flex" justify="center">
             </el-row>
-
+            <div class="next-btn">
+            <el-button type="success" icon="el-icon-right" round @click="checktable2">Next</el-button>
+            </div>
         </el-tab-pane>
 
         <el-tab-pane label="Keywords"  :disabled="dis2" name="2">
@@ -174,15 +177,15 @@
             <el-col :span="24">
               <el-form
                       class="form"
-                      ref="form"
-                      :model="form"
+                      ref="form3"
+                      :model="form3"
                       :rules="rules"
                       label-width="150px"
                       label-position="left"
               >
                 <el-row >
 
-            <el-checkbox-group v-model="form.keywords">
+            <el-checkbox-group v-model="form3.keywords">
               <el-form-item label="Location:">
                   <el-col :span="8">
                   <el-checkbox label="Close To Schools"></el-checkbox>
@@ -222,7 +225,7 @@
                     <el-input
                             placeholder="Enter the description for your property. No more than 500 words."
                             prefix-icon="el-icon-edit"
-                            v-model="form.description"
+                            v-model="form3.description"
                             type="textarea"
                             :rows="5"
                             maxlength="500">
@@ -234,7 +237,9 @@
               </el-form>
             </el-col>
           </el-row>
-
+            <div class="next-btn">
+                <el-button type="success" icon="el-icon-right" round @click="checktable3">Next</el-button>
+            </div>
         </el-tab-pane>
 
         <el-tab-pane label="Photos" :disabled="dis3" name="3">
@@ -247,11 +252,12 @@
             <el-col :span="20">
               <el-form
                       class="form"
-                      ref="form"
-                      :model="form"
+                      ref="form4"
+                      :model="form4"
                       :rules="rules"
                       label-width="150px"
                       label-position="left"
+                      prop="photos"
               >
                 <el-row :gutter="50">
                     <el-col :span="24">
@@ -277,6 +283,9 @@
               </el-form>
             </el-col>
           </el-row>
+            <div class="next-btn">
+                <el-button type="success" icon="el-icon-right" round @click="checktable4">Next</el-button>
+            </div>
         </el-tab-pane>
 
         <el-tab-pane label="Auction" :disabled="dis4"name="4">
@@ -284,8 +293,8 @@
             <el-col :span="20">
               <el-form
                       class="form"
-                      ref="form"
-                      :model="form"
+                      ref="form5"
+                      :model="form5"
                       :rules="rules"
                       label-width="150px"
                       label-position="left"
@@ -294,14 +303,14 @@
                   <el-col :span="24">
                     <el-form-item label="Register for Auction:" prop="ifAuction">
                     <el-switch
-                            v-model="form.isAuction"
+                            v-model="form5.isAuction"
                             active-color="#13ce66"
                             inactive-color="#ff4949">
                     </el-switch>
                     </el-form-item>
-          <el-form-item v-if="form.isAuction" label="Time Range:" prop="daterange">
+          <el-form-item v-if="form5.isAuction" label="Time Range:" prop="daterange">
             <el-date-picker style="width:80%"
-                    v-model="form.daterange"
+                    v-model="form5.daterange"
                     type="datetimerange"
                     range-separator="To"
                     start-placeholder="Auction Start Time"
@@ -310,14 +319,17 @@
 
           </el-form-item>
 
-          <el-form-item v-if="form.isAuction" label="Reserved Price:" prop="price">
-            <el-input v-model="form.price"></el-input>
+          <el-form-item v-if="form5.isAuction" label="Reserved Price:" prop="price">
+            <el-input v-model="form5.price"></el-input>
           </el-form-item>
                   </el-col>
                 </el-row>
               </el-form>
             </el-col>
           </el-row>
+            <div class="next-btn">
+                <el-button type="success" icon="el-icon-right" round @click="checktable5">Next</el-button>
+            </div>
         </el-tab-pane>
 
         <el-tab-pane label="Submit" :disabled="dis5" name="5">
@@ -359,11 +371,11 @@ export default {
       }
     };
     return {
-        dis1:false,
-        dis2:false,
-        dis3:false,
-        dis4:false,
-        dis5:false,
+        dis1:true,
+        dis2:true,
+        dis3:true,
+        dis4:true,
+        dis5:true,
 
       place: null,
       inputDisable:true,
@@ -384,27 +396,34 @@ export default {
             value: 'Studio',
             label: 'Studio'
         }],
-      form: {
-        country:'',
-          description:'',
-        isAuction:true,
-        bathroomNum: '',
-        bedroomNum: '',
-        garageNum: '',
-        address: "",
-        suburb: "",
-        state: "",
-        postcode: "",
-        area: '',
-          room:'',
-
-          imageUrl: [],
-        imageRaw: [],
-        daterange:[],
-        keywords: [],
-        type:'',
-
-        price: "",
+        form1:{
+            country:'',
+            address: "",
+            suburb: "",
+            state: "",
+            postcode: "",
+        },
+        form2: {
+            type:'',
+            bathroomNum: '',
+            bedroomNum: '',
+            garageNum: '',
+            area: '',
+        }
+      ,
+        form3:{
+            keywords: [],
+            description:'',
+        },
+        form4:{
+            hasupload: 0,
+            imageUrl: [],
+            imageRaw: [],
+        },
+        form5: {
+            isAuction:true,
+            daterange:[],
+            price: "",
       },
       rules: {
         bedroomNum:[{ required: true, message: " Please enter bedroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
@@ -419,23 +438,23 @@ export default {
         postcode: [{required: true, message: " Please enter postcode", trigger: "blur",},],
         area: [{ required: true, message: " Please enter area", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
         daterange: [{required: true, message: " Please enter start date", trigger: "blur",},],
-        country: [{required: true, message: " Please enter end date", trigger: "blur",},],
+        country: [{required: true, message: " Please enter country", trigger: "blur",},],
         price: [{required: true, message: " Please enter price", trigger: "blur"}, {validator: checkInt,trigger: "blur" },],
       },
     };
   },
   created() {
-    this.username = localStorage.getItem("username");
-    // this.username = this.$store.state.username;
-    if (this.username !== null) {
-      this.hasLogin = true;
-      this.avatar = localStorage.getItem("avatar");
-      this.firstname = localStorage.getItem("firstname");
-    }
-    else{
-        this.$message.error("You should login first!");
-        this.$router.push("/login");
-    }
+    // this.username = localStorage.getItem("username");
+    // // this.username = this.$store.state.username;
+    // if (this.username !== null) {
+    //   this.hasLogin = true;
+    //   this.avatar = localStorage.getItem("avatar");
+    //   this.firstname = localStorage.getItem("firstname");
+    // }
+    // else{
+    //     this.$message.error("You should login first!");
+    //     this.$router.push("/login");
+    // }
   },
   methods: {
     ...mapActions(["logout"]),
@@ -483,35 +502,90 @@ export default {
     },
 
     imgBroadcastChange(file) {
-      this.form.imageRaw.push(file.raw);
-      this.form.imageUrl.push(URL.createObjectURL(file.raw));
+        this.form4.hasupload = this.form4.hasupload + 1;
+      this.form4.imageRaw.push(file.raw);
+      this.form4.imageUrl.push(URL.createObjectURL(file.raw));
     },
     exceedTips: function () {
       this.$message.error("Maximum 5 photos.");
     },
+      checktable1(){
+          this.$refs["form1"].validate((valid) =>{
+              if (valid) {
+                  this.dis1 = false;
+                  this.activateIndex = '1';
+              }
+          else{
+              this.$message.error("Please complete the form.");
+          }
+      })
+      },
+      checktable2(){
+          this.$refs["form2"].validate((valid) =>{
+              if (valid) {
+                  this.dis2 = false;
+                  this.activateIndex = '2';
+              }
+              else{
+                  this.$message.error("Please complete the form.");
+              }
+          })
+      },
+      checktable3(){
+          this.$refs["form3"].validate((valid) =>{
+              if (valid) {
+                  this.dis3 = false;
+                  this.activateIndex = '3';
+              }
+              else{
+                  this.$message.error("Please complete the form.");
+              }
+          })
+      },
+      checktable4(){
+          if (this.form4.hasupload !== 0) {
+                  this.dis4 = false;
+                  this.activateIndex = '4';
+              }
+              else{
+                  this.$message.error("Please upload the photos.");
+              }
+          },
+      checktable5(){
+          this.$refs["form5"].validate((valid) =>{
+              if (valid) {
+                  this.dis5 = false;
+                  this.activateIndex = '5';
+              }
+              else{
+                  this.$message.error("Please complete the form.");
+              }
+          })
+      },
 
     submit() {
-      this.$refs["form"].validate((valid) => {
-        if (valid) {
           let data = new FormData();
-          data.append('bathroomNum', this.form.bathroomNum);
-          data.append('bedroomNum', this.form.bedroomNum);
-          data.append('garageNum', this.form.garageNum);
-          data.append('type', this.form.type);
-          data.append('address', this.form.address);
-          data.append('suburb', this.form.suburb);
-          data.append('state', this.form.state);
-          data.append('postcode', this.form.postcode);
-          data.append('area', this.form.area);
-          data.append('country', this.form.country);
-          data.append('daterange', this.form.daterange);
-          data.append('price', this.form.price);
-          data.append('keywords', this.form.keywords);
-          // data.append('cover', this.form.coverRaw);
-          data.append('isAuction', this.form.isAuction);
-          data.append('description', this.form.description);
+            data.append('address', this.form1.address);
+            data.append('suburb', this.form1.suburb);
+            data.append('state', this.form1.state);
+            data.append('postcode', this.form1.postcode);
+            data.append('country', this.form1.country);
 
-          this.form.imageRaw.forEach(function (file) {
+          data.append('bathroomNum', this.form2.bathroomNum);
+          data.append('bedroomNum', this.form2.bedroomNum);
+          data.append('garageNum', this.form2.garageNum);
+          data.append('type', this.form2.type);
+          data.append('area', this.form2.area);
+
+            data.append('keywords', this.form3.keywords);
+            data.append('description', this.form3.description);
+
+          data.append('daterange', this.form5.daterange);
+          data.append('price', this.form5.price);
+          data.append('isAuction', this.form5.isAuction);
+
+
+          this.form4.imageRaw.forEach(function (file) {
                     data.append('photos', file, file.name);
                  });
 
@@ -535,16 +609,14 @@ export default {
             console.log('error', res);
             this.$message.error('Property Register Error');
           });
-        } else {
-            this.$message.error('Property Register Failure, please check your property information!');
-        }
-      });
+
     },
       handleRemove(file, fileList) {
           const IMG = file.raw;
-          const INDEX = this.form.imageRaw.indexOf(IMG);
-          this.form.imageRaw.splice(INDEX, 1);
-          this.form.imageUrl.splice(INDEX, 1);
+          const INDEX = this.form4.imageRaw.indexOf(IMG);
+          this.form4.imageRaw.splice(INDEX, 1);
+          this.form4.imageUrl.splice(INDEX, 1);
+          this.form4.hasupload = this.form4.hasupload - 1;
           console.log(file, fileList);
       },
     goto(name) {
@@ -558,10 +630,10 @@ export default {
   watch:{
     place: function(newPlace,oldPlace){
       if(this.place==null){
-        this.$set(this.form,'address',"");
-        this.$set(this.form,'postcode',"");
-        this.$set(this.form,'suburb',"");
-        this.$set(this.form,'state',"");
+        this.$set(this.form1,'address',"");
+        this.$set(this.form1,'postcode',"");
+        this.$set(this.form1,'suburb',"");
+        this.$set(this.form1,'state',"");
         this.inputDisable = true;
         return ;
       }
@@ -595,11 +667,11 @@ export default {
       postcode = mid_info[mid_info.length-1];
       state = mid_info[mid_info.length-2];
       street = place_info.slice(0,place_info.length-2).join(" ");
-      this.$set(this.form,'address',street.trim());
-      this.$set(this.form,'postcode',postcode.trim());
-      this.$set(this.form,'suburb',suburb.trim());
-      this.$set(this.form,'state',state.trim());
-      this.$set(this.form,'country',country.trim());
+      this.$set(this.form1,'address',street.trim());
+      this.$set(this.form1,'postcode',postcode.trim());
+      this.$set(this.form1,'suburb',suburb.trim());
+      this.$set(this.form1,'state',state.trim());
+      this.$set(this.form1,'country',country.trim());
       return;
     }
   },
@@ -607,6 +679,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.next-btn{
+    float:right;
+}
 .user {
   display: flex;
   align-items: center;

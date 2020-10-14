@@ -2,16 +2,15 @@
     <div class="auction">
         <Header>
             <template v-if="this.hasLogin">
-                <el-dropdown trigger="click" @command="handleCommand">
+                <el-dropdown trigger="click" @command="handleCommand" style="align-items: center" placement="bottom">
                     <div class="user">
-                        <el-avatar :size="60" :src="avatar"></el-avatar>
-<!--                        <p>welcome {{ firstname }}</p>-->
+                        <el-avatar :size="70" :src="avatar"></el-avatar>
                     </div>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="profile">My profile</el-dropdown-item>
-                        <el-dropdown-item command="auction">My Auctions</el-dropdown-item>
-                        <el-dropdown-item command="notification">Notifications</el-dropdown-item>
-                        <el-dropdown-item command="logout">Log out</el-dropdown-item>
+                        <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                        <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
+                        <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
+                        <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </template>
@@ -53,7 +52,7 @@
                                             <i class="el-icon-info"> Type: {{ item.type }}</i>
                                         </el-col>
                                         <el-col :span="5">
-                                            <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>
+                                            <i class="el-icon-full-screen"> Area: {{ item.area }}</i>
                                         </el-col>
                                     </el-row>
 <!--                                    <el-row type="flex" justify="left" style="margin:10px 5%;">-->
