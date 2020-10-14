@@ -129,8 +129,13 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="Area:" prop="area">
-                      <el-input v-model="form2.area" suffix="m^2"></el-input>
+                    <el-form-item label="Area:" prop="area" >
+                      <el-input v-model="form2.area">
+                          <i slot="suffix" class="input-slot">㎡</i>
+                      </el-input>
+<!--                        <template>-->
+<!--                        <slot slot="suffix" class="input-slot">0/25</slot>-->
+<!--                        </template>-->
 
                     </el-form-item>
                       <el-form-item label="Rooms:" prop="room">
@@ -320,7 +325,9 @@
           </el-form-item>
 
           <el-form-item v-if="form5.isAuction" label="Reserved Price:" prop="price">
-            <el-input v-model="form5.price"></el-input>
+            <el-input v-model="form5.price">
+                <i slot="suffix" class="input-slot">A$</i>
+            </el-input>
           </el-form-item>
                   </el-col>
                 </el-row>
@@ -357,6 +364,12 @@ import { GooglePlacesAutocomplete } from "vue-better-google-places-autocomplete"
 import { mapActions } from "vuex";
 export default {
   name: "PropertyRegistration",
+    props: {
+        areat: {
+            type: String,
+            default: 'm2'
+        }
+    },
   components: {
     Header,
     GooglePlacesAutocomplete,
