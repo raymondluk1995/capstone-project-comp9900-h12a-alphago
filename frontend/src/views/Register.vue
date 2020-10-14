@@ -86,6 +86,7 @@ import { mapMutations } from "vuex";
 import $ from 'jquery'
 
 export default {
+  title: "User Registration",
   components: {
     Header,
   },

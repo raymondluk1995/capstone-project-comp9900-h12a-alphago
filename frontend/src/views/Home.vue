@@ -106,6 +106,7 @@ import { mapActions } from "vuex";
 
 export default {
   name: 'Home',
+  title: 'AlphaGo Home',
   components: {
     Header
   },

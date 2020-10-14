@@ -30,68 +30,36 @@
                         </div>
                         <template v-if="!isEmpty">
                         <el-card class="card" v-for="item in propList" :key="item.id">
-                            <el-card :body-style="{ padding: '0px' }">
-<!--                                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"-->
-<!--                                     height="400" width="45%"-->
-<!--                                    >-->
-                                <el-carousel :interval="5000" arrow="always">
-                                    <el-carousel-item v-for="pic in item.photo" :key="item.id">
-                                        <h3>{{ pic }}</h3>
-                                    </el-carousel-item>
-                                </el-carousel>
-                                <div style="padding: 14px;">
-                                    <h3>{{ item.address }}</h3>
-                                    <el-row type="flex" justify="left" style="margin:10px 5%;">
-                                        <el-col :span="5">
-                                        <i class="el-icon-toilet-paper"> Bathrooms: {{ item.bathroomNum}}</i>
-                                        </el-col>
-                                        <el-col :span="5">
-                                        <i class="el-icon-house"> Bedrooms: {{ item.bedroomNum }}</i>
-                                        </el-col>
-                                            <el-col :span="5">
-                                        <i class="el-icon-truck"> Garages: {{ item.garageNum }}</i>
+                            <el-row>
+                                <el-col :span="6">
+                                    <img height="200" width="300"  :src="item.image" @click="goto('property')" alt="" />
+                                </el-col>
+                                <el-col :span="10" :offset="1">
+                                    <div @click="goto('property')">
+                                        <h3>{{ item.address }}</h3>
+                                        <el-row type="flex" justify="center" style="margin: 40px 0">
+                                            <el-col>
+                                                <i class="el-icon-toilet-paper"> Bathrooms: {{ item.bathroomNum}}</i>
                                             </el-col>
-                                    </el-row>
-                                    <el-row type="flex" justify="left" style="margin:10px 5%;">
-                                    <el-col :span="5">
-                                        <i class="el-icon-info"> Type: {{ item.type }}</i>
-                                    </el-col>
-                                    <el-col :span="5">
-                                        <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>
-                                    </el-col>
-                                    </el-row>
-                                </div>
-                            </el-card>
-<!--                            <el-row>-->
-<!--                                <el-col :span="6">-->
-<!--                                    <img height="200" width="300"  :src="item.image" @click="goto('property')" alt="" />-->
-<!--                                </el-col>-->
-<!--                                <el-col :span="10" :offset="1">-->
-<!--                                    <div @click="goto('property')">-->
-<!--                                        <h3>{{ item.address }}</h3>-->
-<!--                                        <el-row type="flex" justify="center" style="margin: 40px 0">-->
-<!--                                            <el-col>-->
-<!--                                                <i class="el-icon-toilet-paper"> Bathrooms: {{ item.bathroomNum}}</i>-->
-<!--                                            </el-col>-->
-<!--                                            <el-col>-->
-<!--                                                <i class="el-icon-house"> Bedrooms: {{ item.bedroomNum }}</i>-->
-<!--                                            </el-col>-->
-<!--                                            <el-col>-->
-<!--                                                <i class="el-icon-truck"> Garages: {{ item.garageNum }}</i>-->
-<!--                                            </el-col>-->
-<!--                                        </el-row>-->
-<!--                                        <el-row type="flex" justify="center" style="margin: 20px 0">-->
-<!--                                        <el-col>-->
-<!--                                            <i class="el-icon-info"> Type: {{ item.type }}</i>-->
-<!--                                        </el-col>-->
-<!--                                        <el-col>-->
-<!--                                            <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>-->
-<!--                                        </el-col>-->
-<!--                                        </el-row>-->
+                                            <el-col>
+                                                <i class="el-icon-house"> Bedrooms: {{ item.bedroomNum }}</i>
+                                            </el-col>
+                                            <el-col>
+                                                <i class="el-icon-truck"> Garages: {{ item.garageNum }}</i>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row type="flex" justify="center" style="margin: 20px 0">
+                                        <el-col>
+                                            <i class="el-icon-info"> Type: {{ item.type }}</i>
+                                        </el-col>
+                                        <el-col>
+                                            <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>
+                                        </el-col>
+                                        </el-row>
 
-<!--                                    </div>-->
-<!--                                </el-col>-->
-<!--                            </el-row>-->
+                                    </div>
+                                </el-col>
+                            </el-row>
                         </el-card>
                         </template>
                         <template v-else>
@@ -106,6 +74,7 @@
                                 </el-alert>
                             </div>
                         </template>
+
                     </el-tab-pane>
                     <el-tab-pane label="As a Bidder">
                         <p>This area is under construction... ...</p>
@@ -116,8 +85,6 @@
                         <p>Please come back later!</p>
                     </el-tab-pane>
                 </el-tabs>
-
-
             </el-col>
         </el-row>
     </div>
@@ -127,6 +94,7 @@
     import Header from "@/components/Header.vue";
     import { mapActions } from "vuex";
     export default {
+        title: "My Admin",
         name: "Auction",
         components: {
             Header,
@@ -154,10 +122,10 @@
         },
         data() {
             return {
-                isEmpty: true,
-                hasLogin: false,
-                propList: [],
-            }
+                isEmpty:true,
+                hasLogin:false,
+                propList: [{photo:''}],
+            };
         },
         methods: {
             ...mapActions(["logout"]),
@@ -177,7 +145,7 @@
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
                                         this.logout();
-                                        this.$router.replace("/");
+                                        location.reload()
                                     }else{
                                         console.log(response.msg)
                                     }
@@ -210,30 +178,23 @@
     }
 }
 .card {
-    margin: 20px 20%;
+    margin: 20px 3%;
 
     &:hover {
         cursor: pointer;
         transform: scale(1.02);
     }
 
-    h3{
-        margin:5px 5%;
-    }
+    h3,
     p {
         line-height: 2.5;
     }
-    border-top: 15px solid #bcc8e6;
+    border-left: 15px solid #bcc8e6;
 }
 .empty-label{
     /*font-size: 18px;*/
     text-align: center;
     margin: 10px;
 }
-/*.image {*/
-/*    width: 200px;*/
-/*    height: 200px;*/
-/*    display: block;*/
-/*}*/
 
 </style>
