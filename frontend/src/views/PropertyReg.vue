@@ -193,11 +193,11 @@
 
                 <el-form-item label="Description:">
                     <el-input
-                            placeholder="Enter the description for your property."
+                            placeholder="Enter the description for your property. No more than 500 words."
                             prefix-icon="el-icon-edit"
                             v-model="form.description"
                             type="textarea"
-                            maxlength="200">
+                            maxlength="500">
                     </el-input>
                 </el-form-item>
             </el-checkbox-group>
@@ -428,7 +428,7 @@ export default {
                     if (response.status >= 200 && response.status < 300){
                       if (response.data.code === 200){
                         this.logout();
-                        location.reload()
+                          this.$router.replace("/");
                       }else{
                         console.log(response.msg)
                       }
