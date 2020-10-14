@@ -103,11 +103,15 @@
             this.$axios
                 .get('/property/information')
                 .then(response => {
-                    this.propList = response.data.result.propList;
+                    this.propList = response.data.result;
                 })
                 .catch(function (error) {
                     console.log(error)
                 })
+
+            if(this.propList.length){
+                this.isEmpty=false;
+            }
         },
         data() {
             return {
