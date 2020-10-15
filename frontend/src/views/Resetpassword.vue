@@ -93,7 +93,6 @@ export default {
                         this.$router.replace("/login");
                       }
                     } else if(response.data.code === 400){
-                        console.log(response.data);
                         this.$message.error("Validate code incorrect");
                         location.reload()
                     }else{
