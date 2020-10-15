@@ -245,9 +245,9 @@ export default {
     },
   },
   watch:{
-    timer: function(val){
+    timerstart: function(val){
       console.log(val)
-      if(val == null){
+      if(val === true){
         $(".validate").removeClass("huise")
         document.getElementById('validate').style.cursor = 'pointer'
       }
