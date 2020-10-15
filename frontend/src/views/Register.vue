@@ -154,21 +154,21 @@ export default {
         if (this.timer == null) {
           let data = new FormData();
           data.append('email', this.form.email);
-          this.$axios.post('/verify/register', data)
-                  .then((response) => {
-                    if (response.data.code === 400) {
-                      this.$message.error('Email already exist!');
-                      this.form.email = '';
-                    }else if(response.data.code ===200){
-                      this.timerstart = true;
-                    }
-                  })
-                  .catch((res) => {
-                    console.log('error', res);
-                    this.$message.error('Validate Error');
-                  });
+          this.$axios.post('/verify/register', data);
+                  // .then((response) => {
+                  //   if (response.data.code === 400) {
+                  //     this.$message.error('Email already exist!');
+                  //     this.form.email = '';
+                  //   }else if(response.data.code ===200){
+                  //     this.timerstart = true;
+                  //   }
+                  // })
+                  // .catch((res) => {
+                  //   console.log('error', res);
+                  //   this.$message.error('Validate Error');
+                  // });
         }
-        if (this.timerstart) {
+        if (!this.timer) {
           this.count = 60;
           this.show = false;
           $(".validate").addClass("huise")
@@ -245,9 +245,9 @@ export default {
     },
   },
   watch:{
-    timerstart: function(val){
+    timer: function(val){
       console.log(val)
-      if(val === true){
+      if(val == null){
         $(".validate").removeClass("huise")
         document.getElementById('validate').style.cursor = 'pointer'
       }
