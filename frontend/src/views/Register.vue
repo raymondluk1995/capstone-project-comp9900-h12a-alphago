@@ -202,7 +202,7 @@ export default {
           console.log(data);
           this.$axios.post('/user/register', data)
                   .then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
+                    if (response.data.code === 200) {
                       this.$store.commit('setAvatar', this.form.imageUrl);
                       this.$message('Registration Successful!');
                       this.$router.replace("/login");
