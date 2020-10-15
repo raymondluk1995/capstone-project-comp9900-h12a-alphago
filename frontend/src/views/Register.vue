@@ -156,10 +156,10 @@ export default {
           data.append('email', this.form.email);
           this.$axios.post('/verify/register', data)
                   .then((response) => {
-                    if (response.data.code ===400) {
+                    if (response.data.code === 400) {
                       this.$message.error('Email already exist!');
                       this.form.email = '';
-                    }else if((response.data.code ===200)){
+                    }else if(response.data.code ===200){
                       this.timerstart = true;
                     }
                   })
@@ -168,7 +168,7 @@ export default {
                     this.$message.error('Validate Error');
                   });
         }
-        if (!this.timer && this.timerstart) {
+        if (this.timerstart) {
           this.count = 60;
           this.show = false;
           $(".validate").addClass("huise")
