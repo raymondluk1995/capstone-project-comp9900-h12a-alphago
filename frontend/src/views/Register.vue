@@ -161,6 +161,20 @@ export default {
                       this.form.email = '';
                     }else if(response.data.code ===200){
                       this.timerstart = true;
+                      this.count = 60;
+                        this.show = false;
+                        $(".validate").addClass("huise")
+
+                        // document.getElementById('validate').style.cursor = 'not-allowed'
+                        this.timer = setInterval(() => {
+                          if (this.count > 0 && this.count <= 60) {
+                            this.count--
+                          } else {
+                            this.show = true
+                            clearInterval(this.timer)
+                            this.timerstart = false
+                          }
+                        }, 1000)
                     }
                   })
                   .catch((res) => {
@@ -168,22 +182,22 @@ export default {
                     this.$message.error('Validate Error');
                   });
         }
-        if (this.timerstart) {
-          this.count = 60;
-          this.show = false;
-          $(".validate").addClass("huise")
-
-          // document.getElementById('validate').style.cursor = 'not-allowed'
-          this.timer = setInterval(() => {
-            if (this.count > 0 && this.count <= 60) {
-              this.count--
-            } else {
-              this.show = true
-              clearInterval(this.timer)
-              this.timerstart = false
-            }
-          }, 1000)
-        }
+        // if (this.timerstart) {
+        //   this.count = 60;
+        //   this.show = false;
+        //   $(".validate").addClass("huise")
+        //
+        //   // document.getElementById('validate').style.cursor = 'not-allowed'
+        //   this.timer = setInterval(() => {
+        //     if (this.count > 0 && this.count <= 60) {
+        //       this.count--
+        //     } else {
+        //       this.show = true
+        //       clearInterval(this.timer)
+        //       this.timerstart = false
+        //     }
+        //   }, 1000)
+        // }
       }
     },
     // Here, register wont sign in, push to login if registered
