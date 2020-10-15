@@ -24,7 +24,7 @@
             </el-col>
             <el-col :span="8">
                 <el-row type="flex" justify="center">
-                    <h1 style="font-family:Monospace;color: #222222;margin-left: 20px">ALPHAGO AUCTION</h1>
+                    <h1 style="font-family:giveny;color: #222222;margin-left: 20px">ALPHAGO AUCTION</h1>
 <!--                    <h3 style="font-family:Georgia;">-->
 <!--                        AlphaGo Auction-->
 <!--                    </h3>-->
@@ -62,4 +62,6 @@ export default {
   padding: 15px;
   border-bottom: 2px solid #f2f2f2;
 }
+
+
 </style>
