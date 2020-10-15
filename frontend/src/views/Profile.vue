@@ -204,7 +204,11 @@
                                         this.$message('Email Reset Successful!');
                                         this.form.email = response.data.result;
                                         location.reload()
-                                    }else{
+                                    }else if(response.data.code === 400){
+                                        this.$message.error("Validate code incorrect");
+                                        this.form.validate = '';
+                                    }
+                                    else{
                                         console.log(response.msg);
                                     }
                                 } else {
