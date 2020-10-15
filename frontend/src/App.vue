@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <!--    <Header>-->
-    <!--      <el-button round type="primary" @click="back">Back</el-button>-->
-    <!--    </Header>-->
-<!--    <router-view />-->
     <div id="v-content" v-bind:style="{minHeight: Height+'px'}"><router-view /></div>
     <Footer></Footer>
   </div>

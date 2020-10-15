@@ -55,6 +55,13 @@
     components: {
       Header,
     },
+    created () {
+      this.username = localStorage.getItem('username');
+      if (this.username !== null) {
+        this.$message.error("You have already signed in!");
+        this.$router.push("/");
+      }
+    },
     data() {
       const validateUsername = (rule, value, callback) => {
         const usernameReg = /^[A-Za-z0-9]+$/;
@@ -116,7 +123,7 @@
                           this.$router.push({name: 'home'});
                           console.log(response.data);
                         }else if(response.data.code === 400){
-                          this.$message.error('Password Incorrect!');
+                          this.$message.error(response.data.msg);
                         }else{
                           console.log(response.data.msg);
                         }

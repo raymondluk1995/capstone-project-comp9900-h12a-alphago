@@ -2,16 +2,15 @@
   <div class="home">
     <Header>
       <template v-if="this.hasLogin">
-        <el-dropdown trigger="click" @command="handleCommand">
+        <el-dropdown trigger="click" @command="handleCommand" style="align-items: center" placement="bottom">
           <div class="user">
-            <el-avatar :size="50" :src="avatar"></el-avatar>
-              <p>Welcome!  {{ firstname }} </p>
+            <el-avatar :size="70" :src="avatar"></el-avatar>
           </div>
             <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="profile">My profile</el-dropdown-item>
-                <el-dropdown-item command="auction">My Auctions</el-dropdown-item>
-                <el-dropdown-item command="notification">Notifications</el-dropdown-item>
-                <el-dropdown-item command="logout">Log out</el-dropdown-item>
+                <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
+                <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
+                <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
       </template>
@@ -237,10 +236,8 @@ export default {
 .user {
   display: flex;
   align-items: center;
-  p {
-    margin-left: 10px;
-  }
 }
+
 .el-input--prefix .el-input__inner {
   border-radius: 20px !important;
 }

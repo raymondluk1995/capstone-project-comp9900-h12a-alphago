@@ -60,6 +60,7 @@ export default {
       show: true,
       count: 60,
       timer: null,
+      timerstart:false,
       form: {
         username:'',
         password: '',
@@ -86,17 +87,16 @@ export default {
           this.$axios.post('/user/reset', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
-                      if(response.data.code === 200){
+                      if (response.data.code === 200) {
                         console.log(response.data);
                         this.$message.success("Reset password successful");
                         this.$router.replace("/login");
-                      }
-                    } else if(response.data.code === 400){
-                        console.log(response.data);
+                      } else if (response.data.code === 400) {
                         this.$message.error("Validate code incorrect");
-                        location.reload()
-                    }else{
-                      console.log(response.msg);
+                        this.form.validate = '';
+                      } else {
+                        console.log(response.msg);
+                      }
                     }
                   })
                   .catch((res) => {
@@ -115,34 +115,61 @@ export default {
       if (this.form.username === '') {
         alert('Username cannot be empty')
       } else {
-        if (this.timer == null) {
+        if (this.timerstart === false) {
           let data = new FormData();
           data.append('username', this.form.username);
-          this.$axios.post('/verify/reset', data);
-        }
-        if (!this.timer) {
-          this.count = 60;
-          this.show = false;
-          $(".validate").addClass("validate-disabled")
+          this.$axios.post('/verify/reset', data)
+                  .then((response) => {
+                    if (response.data.code === 400) {
+                      this.$message.error('Username does not exist!');
+                      this.form.username = '';
+                    }else if(response.data.code ===200){
+                      this.timerstart = true;
+                      this.count = 60;
+                      this.show = false;
+                      $(".validate").addClass("validate-disabled")
 
-          // document.getElementById('validate').style.cursor = 'not-allowed'
-          this.timer = setInterval(() => {
-            if (this.count > 0 && this.count <= 60) {
-              this.count--
-            } else {
-              this.show = true
-              clearInterval(this.timer)
-              this.timer = null
-            }
-          }, 1000)
+                      // document.getElementById('validate').style.cursor = 'not-allowed'
+                      this.timer = setInterval(() => {
+                        if (this.count > 0 && this.count <= 60) {
+                          this.count--
+                        } else {
+                          this.show = true
+                          clearInterval(this.timer)
+                          this.timerstart = false
+                          this.timer = null
+                        }
+                      }, 1000)
+                    }
+                  })
+                  .catch((res) => {
+                    console.log('error', res);
+                    this.$message.error('Reset Error');
+                  });
+          ;
         }
+        // if (!this.timer) {
+        //   this.count = 60;
+        //   this.show = false;
+        //   $(".validate").addClass("validate-disabled")
+        //
+        //   // document.getElementById('validate').style.cursor = 'not-allowed'
+        //   this.timer = setInterval(() => {
+        //     if (this.count > 0 && this.count <= 60) {
+        //       this.count--
+        //     } else {
+        //       this.show = true
+        //       clearInterval(this.timer)
+        //       this.timer = null
+        //     }
+        //   }, 1000)
+        // }
       }
     },
   },
   watch:{
-    timer: function(val){
-      console.log(val)
-      if(val == null){
+    timerstart: function(val){
+      if(val === false){
         $(".validate").removeClass("validate-disabled")
         // document.getElementById('validate').style.cursor = 'pointer'
       }
