@@ -118,6 +118,7 @@
                 canEditFirstname: false,
                 canEditLastname: false,
                 avatarOriginal:'',
+                timerstart:false,
                 form: {
                     username: "",
                     firstname: "",
@@ -287,6 +288,7 @@
                                         this.$store.commit('setAvatar', response.data.result);
                                         this.$message('Avatar Reset Successful!');
                                         this.form.avatar = response.data.result;
+
                                     }else{
                                         console.log(response.msg);
                                     }
@@ -329,27 +331,55 @@
                 this.changeA=true;
             },
             validate() {
-                    if (this.timer == null) {
+                    if ( this.timerstart === false) {
                         let data = new FormData();
                         data.append('email', this.form.email);
-                        this.$axios.post('/verify/register',data);
-                    }
-                    if (!this.timer) {
-                        this.count = 60;
-                        this.show = false;
-                        $(".validate").addClass("huise")
+                        this.$axios.post('/verify/register',data)
+                            .then((response) => {
+                                if (response.data.code === 400) {
+                                    this.$message.error('Email already exist!');
+                                    this.form.email = '';
+                                }else if(response.data.code ===200){
+                                    this.timerstart = true;
+                                    this.count = 60;
+                                    this.show = false;
+                                    $(".validate").addClass("huise")
 
-                        // document.getElementById('validate').style.cursor = 'not-allowed'
-                        this.timer = setInterval(() => {
-                            if (this.count > 0 && this.count <= 60) {
-                                this.count--
-                            } else {
-                                this.show = true
-                                clearInterval(this.timer)
-                                this.timer = null
-                            }
-                        }, 1000)
+                                    // document.getElementById('validate').style.cursor = 'not-allowed'
+                                    this.timer = setInterval(() => {
+                                        if (this.count > 0 && this.count <= 60) {
+                                            this.count--
+                                        } else {
+                                            this.show = true
+                                            this.timer = null
+                                            clearInterval(this.timer)
+                                            this.timerstart = false
+                                        }
+                                    }, 1000)
+                                }
+                            })
+                            .catch((res) => {
+                                console.log('error', res);
+                                this.$message.error('Validate Error');
+                            });
+                        ;
                     }
+                    // if (!this.timer) {
+                    //     this.count = 60;
+                    //     this.show = false;
+                    //     $(".validate").addClass("huise")
+                    //
+                    //     // document.getElementById('validate').style.cursor = 'not-allowed'
+                    //     this.timer = setInterval(() => {
+                    //         if (this.count > 0 && this.count <= 60) {
+                    //             this.count--
+                    //         } else {
+                    //             this.show = true
+                    //             clearInterval(this.timer)
+                    //             this.timer = null
+                    //         }
+                    //     }, 1000)
+                    // }
                 }
             },
         watch:{
