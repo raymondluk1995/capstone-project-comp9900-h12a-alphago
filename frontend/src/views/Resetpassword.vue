@@ -116,7 +116,7 @@ export default {
       if (this.form.username === '') {
         alert('Username cannot be empty')
       } else {
-        if (this.timer == null) {
+        if (this.timerstart === false) {
           let data = new FormData();
           data.append('username', this.form.username);
           this.$axios.post('/verify/reset', data)
@@ -138,6 +138,7 @@ export default {
                           this.show = true
                           clearInterval(this.timer)
                           this.timerstart = false
+                          this.timer = null
                         }
                       }, 1000)
                     }

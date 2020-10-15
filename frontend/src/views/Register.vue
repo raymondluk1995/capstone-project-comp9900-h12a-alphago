@@ -151,7 +151,7 @@ export default {
       if (this.form.email === '') {
         alert('Email cannot be empty')
       } else {
-        if (this.timer == null) {
+        if ( this.timerstart === false) {
           let data = new FormData();
           data.append('email', this.form.email);
           this.$axios.post('/verify/register', data)
@@ -171,6 +171,7 @@ export default {
                             this.count--
                           } else {
                             this.show = true
+                            this.timer = null
                             clearInterval(this.timer)
                             this.timerstart = false
                           }
