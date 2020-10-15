@@ -155,20 +155,20 @@ export default {
           let data = new FormData();
           data.append('email', this.form.email);
           this.$axios.post('/verify/register', data);
-                  // .then((response) => {
-                  //   if (response.data.code === 400) {
-                  //     this.$message.error('Email already exist!');
-                  //     this.form.email = '';
-                  //   }else if(response.data.code ===200){
-                  //     this.timerstart = true;
-                  //   }
-                  // })
-                  // .catch((res) => {
-                  //   console.log('error', res);
-                  //   this.$message.error('Validate Error');
-                  // });
+                  .then((response) => {
+                    if (response.data.code === 400) {
+                      this.$message.error('Email already exist!');
+                      this.form.email = '';
+                    }else if(response.data.code ===200){
+                      this.timerstart = true;
+                    }
+                  })
+                  .catch((res) => {
+                    console.log('error', res);
+                    this.$message.error('Validate Error');
+                  });
         }
-        if (!this.timer) {
+        if (this.timerstart) {
           this.count = 60;
           this.show = false;
           $(".validate").addClass("huise")
@@ -180,7 +180,7 @@ export default {
             } else {
               this.show = true
               clearInterval(this.timer)
-              this.timer = null
+              this.timerstart = false
             }
           }, 1000)
         }
@@ -245,9 +245,8 @@ export default {
     },
   },
   watch:{
-    timer: function(val){
-      console.log(val)
-      if(val == null){
+    timerstart: function(val){
+      if(val === false){
         $(".validate").removeClass("huise")
         // document.getElementById('validate').style.cursor = 'pointer'
       }
