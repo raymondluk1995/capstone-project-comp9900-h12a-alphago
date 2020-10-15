@@ -206,8 +206,11 @@ export default {
                       this.$store.commit('setAvatar', this.form.imageUrl);
                       this.$message('Registration Successful!');
                       this.$router.replace("/login");
-                    } else {
-                      console.log(response.msg);
+                    } else if(response.data.code === 400){
+                      this.$message.error(response.data.msg);
+                    }
+                    else {
+                      console.log(response.data.msg);
                     }
                   })
                   .catch((res) => {
