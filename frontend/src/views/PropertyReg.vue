@@ -694,6 +694,7 @@ export default {
 <style scoped lang="scss">
 .next-btn{
     float:right;
+    margin-bottom:10px;
 }
 .user {
   display: flex;
