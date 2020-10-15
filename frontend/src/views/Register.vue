@@ -173,7 +173,7 @@ export default {
           this.show = false;
           $(".validate").addClass("huise")
 
-          document.getElementById('validate').style.cursor = 'not-allowed'
+          // document.getElementById('validate').style.cursor = 'not-allowed'
           this.timer = setInterval(() => {
             if (this.count > 0 && this.count <= 60) {
               this.count--
@@ -249,7 +249,7 @@ export default {
       console.log(val)
       if(val == null){
         $(".validate").removeClass("huise")
-        document.getElementById('validate').style.cursor = 'pointer'
+        // document.getElementById('validate').style.cursor = 'pointer'
       }
     }
   }
