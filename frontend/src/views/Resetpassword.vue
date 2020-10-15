@@ -60,6 +60,7 @@ export default {
       show: true,
       count: 60,
       timer: null,
+      timerstart:false,
       form: {
         username:'',
         password: '',
@@ -118,31 +119,57 @@ export default {
         if (this.timer == null) {
           let data = new FormData();
           data.append('username', this.form.username);
-          this.$axios.post('/verify/reset', data);
-        }
-        if (!this.timer) {
-          this.count = 60;
-          this.show = false;
-          $(".validate").addClass("validate-disabled")
+          this.$axios.post('/verify/reset', data)
+                  .then((response) => {
+                    if (response.data.code === 400) {
+                      this.$message.error('Username does not exist!');
+                      this.form.username = '';
+                    }else if(response.data.code ===200){
+                      this.timerstart = true;
+                      this.count = 60;
+                      this.show = false;
+                      $(".validate").addClass("validate-disabled")
 
-          // document.getElementById('validate').style.cursor = 'not-allowed'
-          this.timer = setInterval(() => {
-            if (this.count > 0 && this.count <= 60) {
-              this.count--
-            } else {
-              this.show = true
-              clearInterval(this.timer)
-              this.timer = null
-            }
-          }, 1000)
+                      // document.getElementById('validate').style.cursor = 'not-allowed'
+                      this.timer = setInterval(() => {
+                        if (this.count > 0 && this.count <= 60) {
+                          this.count--
+                        } else {
+                          this.show = true
+                          clearInterval(this.timer)
+                          this.timerstart = false
+                        }
+                      }, 1000)
+                    }
+                  })
+                  .catch((res) => {
+                    console.log('error', res);
+                    this.$message.error('Reset Error');
+                  });
+          ;
         }
+        // if (!this.timer) {
+        //   this.count = 60;
+        //   this.show = false;
+        //   $(".validate").addClass("validate-disabled")
+        //
+        //   // document.getElementById('validate').style.cursor = 'not-allowed'
+        //   this.timer = setInterval(() => {
+        //     if (this.count > 0 && this.count <= 60) {
+        //       this.count--
+        //     } else {
+        //       this.show = true
+        //       clearInterval(this.timer)
+        //       this.timer = null
+        //     }
+        //   }, 1000)
+        // }
       }
     },
   },
   watch:{
-    timer: function(val){
-      console.log(val)
-      if(val == null){
+    timerstart: function(val){
+      if(val === false){
         $(".validate").removeClass("validate-disabled")
         // document.getElementById('validate').style.cursor = 'pointer'
       }
