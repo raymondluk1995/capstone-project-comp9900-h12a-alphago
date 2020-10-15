@@ -87,16 +87,16 @@ export default {
           this.$axios.post('/user/reset', data)
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
-                      if(response.data.code === 200){
+                      if (response.data.code === 200) {
                         console.log(response.data);
                         this.$message.success("Reset password successful");
                         this.$router.replace("/login");
-                      }
-                    } else if(response.data.code === 400){
+                      } else if (response.data.code === 400) {
                         this.$message.error("Validate code incorrect");
                         location.reload()
-                    }else{
-                      console.log(response.msg);
+                      } else {
+                        console.log(response.msg);
+                      }
                     }
                   })
                   .catch((res) => {
