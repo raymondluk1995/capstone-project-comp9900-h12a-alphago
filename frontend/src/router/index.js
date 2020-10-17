@@ -53,6 +53,11 @@ const routes = [
     path: '/auction',
     name: 'auction',
     component: Auction,
+  },
+  {
+    path: '/property',
+    name: 'property',
+    component: Auction,
   }
 ];
 

@@ -208,7 +208,7 @@
                   </el-col>
               </el-form-item>
 
-              <el-form-item label="Details:" v-model="form.kw_details">
+              <el-form-item label="Details:" v-model="form3.kw_details">
                   <el-col :span="8">
                 <el-checkbox label="BBQ"></el-checkbox>
                 <el-checkbox label="Built-In Wardrobes"></el-checkbox>
