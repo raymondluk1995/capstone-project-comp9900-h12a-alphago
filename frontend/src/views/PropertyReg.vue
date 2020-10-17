@@ -190,8 +190,8 @@
               >
                 <el-row >
 
-            <el-checkbox-group v-model="form3.keywords">
-              <el-form-item label="Location:">
+            <el-checkbox-group>
+              <el-form-item label="Location:" v-model="form3.kw_position">
                   <el-col :span="8">
                   <el-checkbox label="Close To Schools"></el-checkbox>
                   <el-checkbox label="Close To Shops"></el-checkbox>
@@ -208,7 +208,7 @@
                   </el-col>
               </el-form-item>
 
-              <el-form-item label="Details:">
+              <el-form-item label="Details:" v-model="form.kw_details">
                   <el-col :span="8">
                 <el-checkbox label="BBQ"></el-checkbox>
                 <el-checkbox label="Built-In Wardrobes"></el-checkbox>
@@ -425,7 +425,8 @@ export default {
         }
       ,
         form3:{
-            keywords: [],
+            kw_position: [],
+            kw_details:[],
             description:'',
         },
         form4:{
@@ -590,10 +591,12 @@ export default {
           data.append('type', this.form2.type);
           data.append('area', this.form2.area);
 
-            data.append('keywords', this.form3.keywords);
-            data.append('description', this.form3.description);
+          data.append('position', this.form3.kw_position);
+          data.append('detail', this.form3.kw_details);
+          data.append('description', this.form3.description);
 
-          data.append('daterange', this.form5.daterange);
+          data.append('startdate', this.form5.daterange[0]);
+        data.append('enddate', this.form5.daterange[1]);
           data.append('price', this.form5.price);
           data.append('isAuction', this.form5.isAuction);
 
