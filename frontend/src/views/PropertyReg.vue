@@ -190,8 +190,8 @@
               >
                 <el-row >
 
-            <el-checkbox-group>
-              <el-form-item label="Location:" v-model="form3.kw_position">
+            <el-checkbox-group v-model="form3.kw_position">
+              <el-form-item label="Location:" >
                   <el-col :span="8">
                   <el-checkbox label="Close To Schools"></el-checkbox>
                   <el-checkbox label="Close To Shops"></el-checkbox>
@@ -207,8 +207,10 @@
                       <el-checkbox label="Close To Medical"></el-checkbox>
                   </el-col>
               </el-form-item>
+            </el-checkbox-group>
 
-              <el-form-item label="Details:" v-model="form3.kw_details">
+                    <el-checkbox-group v-model="form3.kw_details">
+              <el-form-item label="Details:" >
                   <el-col :span="8">
                 <el-checkbox label="BBQ"></el-checkbox>
                 <el-checkbox label="Built-In Wardrobes"></el-checkbox>
@@ -225,6 +227,7 @@
                       <el-checkbox label="Burglar Alarm"></el-checkbox>
                   </el-col>
               </el-form-item>
+                    </el-checkbox-group>
 
                 <el-form-item label="Description:">
                     <el-input
@@ -236,7 +239,7 @@
                             maxlength="500">
                     </el-input>
                 </el-form-item>
-            </el-checkbox-group>
+
 
                 </el-row>
               </el-form>
@@ -409,6 +412,7 @@ export default {
             value: 'Studio',
             label: 'Studio'
         }],
+        form:{},
         form1:{
             country:'',
             address: "",
@@ -458,17 +462,17 @@ export default {
     };
   },
   created() {
-    this.username = localStorage.getItem("username");
-    // this.username = this.$store.state.username;
-    if (this.username !== null) {
-      this.hasLogin = true;
-      this.avatar = localStorage.getItem("avatar");
-      this.firstname = localStorage.getItem("firstname");
-    }
-    else{
-        this.$message.error("You should login first!");
-        this.$router.push("/login");
-    }
+    // this.username = localStorage.getItem("username");
+    // // this.username = this.$store.state.username;
+    // if (this.username !== null) {
+    //   this.hasLogin = true;
+    //   this.avatar = localStorage.getItem("avatar");
+    //   this.firstname = localStorage.getItem("firstname");
+    // }
+    // else{
+    //     this.$message.error("You should login first!");
+    //     this.$router.push("/login");
+    // }
   },
   methods: {
     ...mapActions(["logout"]),
