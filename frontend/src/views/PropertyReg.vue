@@ -322,7 +322,8 @@
                     type="datetimerange"
                     range-separator="To"
                     start-placeholder="Auction Start Time"
-                    end-placeholder="Auction Start Time">
+                    end-placeholder="Auction Start Time"
+                            :picker-options="pickerOptions">
             </el-date-picker>
 
           </el-form-item>
@@ -412,6 +413,11 @@ export default {
             value: 'Studio',
             label: 'Studio'
         }],
+        pickerOptions: {
+            disabledDate(time) {
+                return parseInt(time.getTime()) < Date.now()
+            }
+        },
         form:{},
         form1:{
             country:'',
@@ -461,6 +467,7 @@ export default {
       },
     };
   },
+
   created() {
     // this.username = localStorage.getItem("username");
     // // this.username = this.$store.state.username;
