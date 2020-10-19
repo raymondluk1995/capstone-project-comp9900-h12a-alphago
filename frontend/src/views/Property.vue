@@ -31,31 +31,6 @@
                     </el-carousel>
                 </section>
 
-<<<<<<< HEAD
-                <el-row>
-                    <el-col :span="12">
-                        <h3>Current Bid</h3>
-                        <div class="bid"> ${{ propInfo.currentBid}}</div>
-                    </el-col>
-                    <el-col :span="10" :offset="2">
-                        <div v-if="hasBidder">
-                            <h3>Place new bid</h3>
-                            <div class="new-bid-wrap">
-                                <el-input v-model="newBid" :disabled="timeFlag"></el-input>
-                                <i class="el-icon-circle-plus-outline" @click="addNewBid"></i>
-                            </div>
-                        </div>
-
-                        <div v-else style="text-align:right;margin-top: 70px">
-                            <el-button type="primary"
-                                       style="font-size: 20px;"
-                                       round
-                                       :disabled="timeFlag"
-                                       @click="Bidreg"
-                                      icon="el-icon-right"
-                            >Register to Bid</el-button>
-                        </div>
-=======
 
                 <el-row>
                     <el-col :span="12">
@@ -66,7 +41,6 @@
                     <el-col :span="5" :offset="7">
                         <h3  >Time left</h3>
                         <h4  >{{ time }}</h4>
->>>>>>> frontend
                     </el-col>
                 </el-row>
 
@@ -83,11 +57,7 @@
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                         <el-form-item label="Card Number:" prop="cardNumber">
-<<<<<<< HEAD
-                            <el-input v-model="form.cardNumber"></el-input>
-=======
                             <el-input v-model="form.cardNumber" @change="validateNum" maxlength="23"></el-input>
->>>>>>> frontend
                         </el-form-item>
                         <el-form-item label="Expired Date:" prop="expiredDate">
                             <el-date-picker v-model="form.expiredDate" type="date">
@@ -99,28 +69,14 @@
                     </el-form>
 
                     <div slot="footer" class="dialog-footer">
-<<<<<<< HEAD
-                        <el-button @click="this.bidderFlag = false">Cancel</el-button>
-=======
                         <el-button @click="bidderFlag = false">Cancel</el-button>
->>>>>>> frontend
                         <el-button type="primary" @click="submit">Submit</el-button>
                     </div>
                 </el-dialog>
 
-<<<<<<< HEAD
-                <section>
-                    <h3>Time left</h3>
-                    <h2>{{ time }}</h2>
-                </section>
-
-                <section>
-                    <el-row gutter="50">
-=======
 
                 <section style="margin-top:50px">
                     <el-row :gutter="50">
->>>>>>> frontend
                     <el-col :span="12">
                     <h3>Details</h3>
                     <el-row type="flex" style="margin-bottom: 10px;">
@@ -134,13 +90,6 @@
                     <el-row type="flex" style="margin-bottom: 10px;">
                             <i class="el-icon-truck"> Garage Number: <span> {{ propInfo.garageNum}} </span></i>
                     </el-row>
-<<<<<<< HEAD
-                    <p>{{ propInfo.description }}</p>
-                    </el-col>
-
-                    <el-col :span="12">
-                        <h3>Map</h3>
-=======
 
                         <el-row type="flex" style="margin-bottom: 10px;">
                     <p>{{ propInfo.description }}</p>
@@ -159,16 +108,10 @@
 
                     <el-col :span="12">
 <!--                        <h3>Map</h3>-->
->>>>>>> frontend
                         <div class="map">
                             <h3>...</h3>
                         </div>
                     </el-col>
-<<<<<<< HEAD
-
-                    </el-row>
-                </section>
-=======
                     </el-row>
                 </section>
 
@@ -201,7 +144,6 @@
                 <section style="margin-top:50px">
                 </section>
 
->>>>>>> frontend
             </el-col>
         </el-row>
     </div>
@@ -210,13 +152,10 @@
 <script>
     import Header from "@/components/Header.vue";
     import { mapActions } from "vuex";
-<<<<<<< HEAD
-=======
     import dayjs from "dayjs";
 
     var customParseFormat = require("dayjs/plugin/customParseFormat");
     dayjs.extend(customParseFormat);
->>>>>>> frontend
 
     export default {
         name: "Home",
@@ -230,36 +169,6 @@
             Header,
         },
         data() {
-<<<<<<< HEAD
-            return {
-                endDate: new Date(2021, 10, 10, 10, 10),
-                propInfo: {
-                    id: 1,
-                    title: "256 Gearin Alley,Mascot,Nsw",
-                    info: "info",
-                    currentBid:'123,000',
-                    latestBid: "145,000",
-                    newBid: "",
-                    photos: [
-                        '','',''
-                        ],
-                    description: 'This is a software project capstone course. Students work in teams of ideally five (5) members to define, implement ' +
-                        'and evaluate a real-world software system. Most of the work in this course is team-based project work, although there are some ' +
-                        'introductory lectures on software project management and teamwork strategies. Project teams meet weekly starting from Week 1 with' +
-                        ' project mentors to report on the progress of the project. Assessment is based on a project proposal, two progressive demonstrations ' +
-                        'and retrospectives, a final project demonstration and report, and on the quality of the software system itself. Students are also ' +
-                        'required to reflect on their work and to provide peer assessment of their team-mates contributions to the project.',
-                },
-                hasBidder: false,
-                bidderFlag: false,
-                timeFlag: false,
-
-                form: {
-                    name: "",
-                    cardNumber: "",
-                    expiredDate: "",
-                    cvc: "",
-=======
             const validateCVC = (rule, value, callback) => {
                 const cvcReg = /^\d{3}$/;
                 if (!cvcReg.test(value)) {
@@ -298,27 +207,16 @@
                     cardNumber: '',
                     expiredDate: '',
                     cvc: '',
->>>>>>> frontend
                 },
                 rules: {
                     name: [{required: true, message: " Please enter name", trigger: "blur",},],
                     cardNumber: [{required: true, message: " Please enter cardNumber", trigger: "blur",},],
                     expiredDate: [{required: true, message: " Please enter expired date", trigger: "blur",},],
-<<<<<<< HEAD
-                    cvc: [{required: true, message: " Please enter cvc", trigger: "blur",}],
-                },
-                newBid: "",
-                tipError: false,
-                time: "23:00:00",
-            };
-        },
-=======
                     cvc: [{required: true, message: " Please enter cvc", trigger: "blur",}, { validator: validateCVC, trigger: "blur" },],
                 },
             };
         },
 
->>>>>>> frontend
         created() {
             // this.username = localStorage.getItem("username");
             // // this.username = this.$store.state.username;
@@ -331,12 +229,6 @@
             //     this.$message.error("You should login first!");
             //     this.$router.push("/login");
             // }
-<<<<<<< HEAD
-            this.$axios
-                .get('/property/information?pid=' + this.id)
-                .then(response => {
-                    this.form.propInfo = response.data.result
-=======
 
             this.$axios
                 .get('/property/information?pid=' + this.id)
@@ -344,17 +236,10 @@
                     this.form.propInfo = response.data.result.propInfo,
                     this.isBidder = response.data.result.isBidder,
                     this.currentBid = response.data.result.currentBid
->>>>>>> frontend
                 })
                 .catch(function (error) {
                     console.log(error)
                 })
-<<<<<<< HEAD
-
-
-        },
-        computed: {
-=======
         },
 
         computed: {
@@ -372,7 +257,6 @@
                 }
                 return tip;
             },
->>>>>>> frontend
         },
 
         mounted() {
@@ -380,10 +264,7 @@
                 if (this.timeFlag === true) {
                     clearInterval(timer);
                 }
-<<<<<<< HEAD
-=======
                 this.countDown(this.propInfo.endDate);
->>>>>>> frontend
             }, 1000);
         },
 
@@ -418,9 +299,6 @@
                         break;
                 }
             },
-<<<<<<< HEAD
-
-=======
             validateNum () {
                 let card = this.form.cardNumber.replace(/\s/g, '').replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
                 this.$set(this.form, 'cardNumber', card)
@@ -495,7 +373,6 @@
                         });
                     });
             },
->>>>>>> frontend
             Bidreg() {
                 this.bidderFlag = true;
             },
@@ -503,11 +380,6 @@
             submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
-<<<<<<< HEAD
-                        this.hasBidder = true;
-                        this.bidderFlag = false;
-                        this.$message.success("Submit successful");
-=======
                         let data = this.$qs.stringify(this.form);
                         this.$axios.post('/bid/registration', data)
                             .then((response) => {
@@ -528,17 +400,12 @@
                                 console.log('error', res);
                                 this.$message.error('Bid Register Error');
                             });
->>>>>>> frontend
                     } else {
                         return false;
                     }
                 });
             },
 
-<<<<<<< HEAD
-
-=======
->>>>>>> frontend
             goto(name) {
                 console.log(name);
                 this.$router.push({ name: name });
@@ -569,12 +436,8 @@
         width: 100%;
     }
     .bid {
-<<<<<<< HEAD
-        padding: 10px;
-=======
         width :80%;
         padding: 5px;
->>>>>>> frontend
         text-align: center;
         font-size: 20px;
         font-weight: bold;
@@ -587,14 +450,6 @@
         margin-right: 20px;
     }
     .map {
-<<<<<<< HEAD
-        margin:10px;
-
-        height:570px;
-        width:570px;
-        border: #4d5861 1px solid;
-    }
-=======
         margin-top:50px;
         height: 90%;
         width: 90%;
@@ -609,6 +464,5 @@
             margin-left: 10px;
         }
     }
->>>>>>> frontend
 
 </style>
