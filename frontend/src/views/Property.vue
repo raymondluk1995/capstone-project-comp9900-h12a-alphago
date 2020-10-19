@@ -8,6 +8,7 @@
                     </div>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                        <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                         <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
                         <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
                         <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
@@ -274,6 +275,9 @@
                 switch (command) {
                     case "profile":
                         this.$router.push("/profile");
+                        break;
+                    case "property":
+                        this.$router.push("/propmag");
                         break;
                     case "auction":
                         this.$router.push("/auction");

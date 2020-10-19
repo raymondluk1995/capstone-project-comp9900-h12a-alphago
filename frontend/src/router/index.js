@@ -9,6 +9,7 @@ import PropertyReg from "../views/PropertyReg";
 import Profile from "../views/Profile";
 import Auction from "../views/Auction";
 import Property from "../views/Property";
+import PropertyMag from "../views/PropertyMag";
 
 Vue.use(VueRouter);
 
@@ -59,6 +60,12 @@ const routes = [
     path: '/property',
     name: 'property',
     component: Property,
+  },
+  {
+    path: '/propmag',
+    name: 'propmag',
+    component: PropertyMag
+    ,
   }
 ];
 
