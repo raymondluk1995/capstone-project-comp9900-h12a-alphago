@@ -86,6 +86,7 @@ import { mapMutations } from "vuex";
 import $ from 'jquery'
 
 export default {
+  title: "User Registration",
   components: {
     Header,
   },
@@ -119,6 +120,7 @@ export default {
       show: true,
       count: 60,
       timer: null,
+      timerstart:false,
       form: {
         username:'',
         firstname: '',
@@ -149,26 +151,37 @@ export default {
       if (this.form.email === '') {
         alert('Email cannot be empty')
       } else {
-        if (this.timer == null) {
+        if ( this.timerstart === false) {
           let data = new FormData();
           data.append('email', this.form.email);
-          this.$axios.post('/verify/register', data);
-        }
-        if (!this.timer) {
-          this.count = 60;
-          this.show = false;
-          $(".validate").addClass("huise")
+          this.$axios.post('/verify/register', data)
+                  .then((response) => {
+                    if (response.data.code === 400) {
+                      this.$message.error('Email already exist!');
+                      this.form.email = '';
+                    }else if(response.data.code ===200){
+                      this.timerstart = true;
+                      this.count = 60;
+                        this.show = false;
+                        $(".validate").addClass("huise")
 
-          document.getElementById('validate').style.cursor = 'not-allowed'
-          this.timer = setInterval(() => {
-            if (this.count > 0 && this.count <= 60) {
-              this.count--
-            } else {
-              this.show = true
-              clearInterval(this.timer)
-              this.timer = null
-            }
-          }, 1000)
+                        // document.getElementById('validate').style.cursor = 'not-allowed'
+                        this.timer = setInterval(() => {
+                          if (this.count > 0 && this.count <= 60) {
+                            this.count--
+                          } else {
+                            this.show = true
+                            this.timer = null
+                            clearInterval(this.timer)
+                            this.timerstart = false
+                          }
+                        }, 1000)
+                    }
+                  })
+                  .catch((res) => {
+                    console.log('error', res);
+                    this.$message.error('Validate Error');
+                  });
         }
       }
     },
@@ -189,12 +202,15 @@ export default {
           console.log(data);
           this.$axios.post('/user/register', data)
                   .then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
+                    if (response.data.code === 200) {
                       this.$store.commit('setAvatar', this.form.imageUrl);
                       this.$message('Registration Successful!');
                       this.$router.replace("/login");
-                    } else {
-                      console.log(response.msg);
+                    } else if(response.data.code === 400){
+                      this.$message.error(response.data.msg);
+                    }
+                    else {
+                      console.log(response.data.msg);
                     }
                   })
                   .catch((res) => {
@@ -231,11 +247,10 @@ export default {
     },
   },
   watch:{
-    timer: function(val){
-      console.log(val)
-      if(val == null){
+    timerstart: function(val){
+      if(val === false){
         $(".validate").removeClass("huise")
-        document.getElementById('validate').style.cursor = 'pointer'
+        // document.getElementById('validate').style.cursor = 'pointer'
       }
     }
   }

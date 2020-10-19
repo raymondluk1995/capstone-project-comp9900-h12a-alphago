@@ -1,20 +1,19 @@
 <template>
   <div class="propreg">
     <Header>
-      <template v-if="this.hasLogin">
-        <el-dropdown trigger="click" @command="handleCommand">
-          <div class="user">
-            <el-avatar :size="50" :src="avatar"></el-avatar>
-            <p>Welcome! {{ firstname }}</p>
-          </div>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="profile">My profile</el-dropdown-item>
-            <el-dropdown-item command="auction">My Auctions</el-dropdown-item>
-            <el-dropdown-item command="notification">Notifications</el-dropdown-item>
-            <el-dropdown-item command="logout">Log out</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template>
+        <template v-if="this.hasLogin">
+            <el-dropdown trigger="click" @command="handleCommand" style="align-items: center" placement="bottom">
+                <div class="user">
+                    <el-avatar :size="70" :src="avatar"></el-avatar>
+                </div>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                    <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
+                    <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
+                    <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </template>
       <template v-else>
         <el-button round @click="goto('login')">Sign In</el-button>
         <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
@@ -33,9 +32,9 @@
     </div>
 
 
-    <el-form :model="form"  label-width="80px" label-position="left">
+    <el-form  label-width="80px" label-position="left">
       <el-tabs v-model="activateIndex" :tab-position="'left'" style="margin:0 20%" >
-        <el-tab-pane label="Basic" name="0">
+        <el-tab-pane label="Basic" name="0" >
           <div>
             <google-places-autocomplete
                     @resultChanged="(placeDetail) => (place = placeDetail)"
@@ -73,8 +72,8 @@
             <el-col :span="20">
               <el-form
                       class="form"
-                      ref="form"
-                      :model="form"
+                      ref="form1"
+                      :model="form1"
                       :rules="rules"
                       label-width="150px"
                       label-position="left"
@@ -82,81 +81,117 @@
                 <el-row :gutter="50">
                   <el-col :span="24">
                     <el-form-item label="Address:" prop="address">
-                      <el-input v-model="form.address"  ></el-input>
+                      <el-input v-model="form1.address"  ></el-input>
                     </el-form-item>
                     <el-form-item label="Suburb:" prop="suburb">
-                      <el-input v-model="form.suburb" ></el-input>
+                      <el-input v-model="form1.suburb" ></el-input>
                     </el-form-item>
                     <el-form-item label="State:" prop="state">
-                      <el-input v-model="form.state" ></el-input>
+                      <el-input v-model="form1.state" ></el-input>
                     </el-form-item>
                     <el-form-item label="Postcode:" prop="postcode">
-                      <el-input v-model="form.postcode"></el-input>
+                      <el-input v-model="form1.postcode"></el-input>
                     </el-form-item>
                     <el-form-item label="Country:" prop="country">
-                      <el-input v-model="form.country"></el-input>
+                      <el-input v-model="form1.country"></el-input>
                     </el-form-item>
+<!--                      <el-button type="primary" icon="el-icon-edit" circle ></el-button>-->
                   </el-col>
                 </el-row>
               </el-form>
             </el-col>
           </el-row>
+            <div class="next-btn">
+            <el-button type="success" icon="el-icon-right" round @click="checktable1">Next</el-button>
+            </div>
         </el-tab-pane>
 
-        <el-tab-pane label="Interior" name="1">
+        <el-tab-pane label="Interior" name="1" :disabled="dis1">
           <el-row type="flex" justify="center">
             <el-col :span="20">
               <el-form
                       class="form"
-                      ref="form"
-                      :model="form"
+                      ref="form2"
+                      :model="form2"
                       :rules="rules"
                       label-width="150px"
                       label-position="left"
               >
                 <el-row :gutter="50">
-                  <el-col :span="24">
-                    <el-form-item label="Type:" v-model="form.type" prop="area">
-                      <el-radio v-model="form.type" label="Apartment">Apartment</el-radio>
-                      <el-radio v-model="form.type" label="Studio">Studio</el-radio>
-                      <el-radio v-model="form.type" label="Unit">Unit</el-radio>
-                      <el-radio v-model="form.type" label="House">House</el-radio>
+                  <el-col :span="20">
+                    <el-form-item label="Type:" prop="type">
+                        <el-select v-model="form2.type" placeholder="Property Type" value="">
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="Area:" prop="area">
-                      <el-input v-model="form.area"></el-input>
+                    <el-form-item label="Area:" prop="area" >
+                      <el-input v-model="form2.area">
+                          <i slot="suffix" class="input-slot">㎡</i>
+                      </el-input>
+<!--                        <template>-->
+<!--                        <slot slot="suffix" class="input-slot">0/25</slot>-->
+<!--                        </template>-->
+
                     </el-form-item>
-                    <el-form-item label="Bathroom Number:" prop="bathNum">
-                      <el-input v-model="form.bathNum"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Bedroom Number:" prop="bedroomNum">
-                      <el-input v-model="form.bedroomNum"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Garage Number:" prop="carNum">
-                      <el-input v-model="form.carNum"></el-input>
-                    </el-form-item>
+                      <el-form-item label="Rooms:" prop="room">
+                          <el-row type="flex" justify="center">
+                          <el-col :span="24">
+                              <el-col :span="8">
+                                  <el-input
+                                          placeholder="Bathroom Num"
+                                          suffix-icon="el-icon-toilet-paper"
+                                          v-model="form2.bathroomNum">
+                                  </el-input>
+                              </el-col>
+                              <el-col :span="8">
+                                  <el-input
+                                          placeholder="Bedroom Num"
+                                          suffix-icon="el-icon-house"
+                                          v-model="form2.bedroomNum">
+                                  </el-input>
+                              </el-col>
+                              <el-col :span="8">
+                                  <el-input
+                                          placeholder="Garage Num"
+                                          suffix-icon="el-icon-truck"
+                                          v-model="form2.garageNum">
+                                  </el-input>
+                              </el-col>
+                          </el-col>
+                </el-row>
+                      </el-form-item>
                   </el-col>
                 </el-row>
               </el-form>
             </el-col>
           </el-row>
-
+            <el-row type="flex" justify="center">
+            </el-row>
+            <div class="next-btn">
+            <el-button type="success" icon="el-icon-right" round @click="checktable2">Next</el-button>
+            </div>
         </el-tab-pane>
 
-        <el-tab-pane label="Keywords" name="2">
+        <el-tab-pane label="Keywords"  :disabled="dis2" name="2">
           <el-row type="flex" justify="space-between" style="margin:0 5%">
             <el-col :span="24">
               <el-form
                       class="form"
-                      ref="form"
-                      :model="form"
+                      ref="form3"
+                      :model="form3"
                       :rules="rules"
                       label-width="150px"
                       label-position="left"
               >
                 <el-row >
 
-            <el-checkbox-group v-model="form.keywords">
-              <el-form-item label="Location:">
+            <el-checkbox-group v-model="form3.kw_position">
+              <el-form-item label="Location:" >
                   <el-col :span="8">
                   <el-checkbox label="Close To Schools"></el-checkbox>
                   <el-checkbox label="Close To Shops"></el-checkbox>
@@ -172,8 +207,10 @@
                       <el-checkbox label="Close To Medical"></el-checkbox>
                   </el-col>
               </el-form-item>
+            </el-checkbox-group>
 
-              <el-form-item label="Details:">
+                    <el-checkbox-group v-model="form3.kw_details">
+              <el-form-item label="Details:" >
                   <el-col :span="8">
                 <el-checkbox label="BBQ"></el-checkbox>
                 <el-checkbox label="Built-In Wardrobes"></el-checkbox>
@@ -190,66 +227,48 @@
                       <el-checkbox label="Burglar Alarm"></el-checkbox>
                   </el-col>
               </el-form-item>
+                    </el-checkbox-group>
 
-                <el-form-item label="Custom:">
+                <el-form-item label="Description:">
                     <el-input
-                            placeholder="Input your custom tags here."
+                            placeholder="Enter the description for your property. No more than 500 words."
                             prefix-icon="el-icon-edit"
-                            v-model="form.keywords">
+                            v-model="form3.description"
+                            type="textarea"
+                            :rows="5"
+                            maxlength="500">
                     </el-input>
-                    <el-button></el-button>
                 </el-form-item>
-            </el-checkbox-group>
+
 
                 </el-row>
               </el-form>
             </el-col>
           </el-row>
-
+            <div class="next-btn">
+                <el-button type="success" icon="el-icon-right" round @click="checktable3">Next</el-button>
+            </div>
         </el-tab-pane>
 
-        <el-tab-pane label="Photos" name="3">
+        <el-tab-pane label="Photos" :disabled="dis3" name="3">
           <el-row type="flex" justify="center">
             <el-col :span="15" style="align-items: center">
-            <label class="submit-label">Please upload your property photos here, no more than 5 detail photos.</label>
+            <label class="submit-label">Please upload your property photos here, no more than 5 photos.</label>
             </el-col>
           </el-row>
             <el-row type="flex" justify="center">
             <el-col :span="20">
               <el-form
                       class="form"
-                      ref="form"
-                      :model="form"
+                      ref="form4"
+                      :model="form4"
                       :rules="rules"
                       label-width="150px"
                       label-position="left"
+                      prop="photos"
               >
                 <el-row :gutter="50">
-                  <el-col :span="6">
-<!--                    <el-form-item label="Photos:" prop="photo">-->
-
-                      <div class="user-avatar-container">
-                          <div class="user-avatar">
-                              <el-upload
-                                      class="avatar-uploader"
-                                      action="upload"
-                                      accept="image/*"
-                                      :auto-upload="false"
-                                      :on-change="coverChange"
-                                      :before-upload="beforeAvatarUpload"
-                              >
-                                  <img v-if="form.coverUrl" :src="form.coverUrl" class="avatar" />
-                                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                              </el-upload>
-                          </div>
-                          <div style="margin-top: 10px;">
-                              <el-row type="flex" justify="space-around" style="align-items: center;">
-                                  <label>Cover Photo</label>
-                              </el-row>
-                          </div>
-                      </div>
-                  </el-col>
-                    <el-col :span="15">
+                    <el-col :span="24">
                       <el-upload
                               multiple
                               class="avatar-uploader"
@@ -258,6 +277,7 @@
                               :auto-upload="false"
                               list-type="picture-card"
                               :limit="5"
+                              :on-remove="handleRemove"
                               :on-exceed="exceedTips"
                               :on-change="imgBroadcastChange"
                               :before-upload="beforeAvatarUpload"
@@ -265,25 +285,24 @@
                         <i class="el-icon-plus"></i>
                       </el-upload>
                         <div style="margin-top: 10px;">
-                            <el-row type="flex" justify="space-around" style="align-items: center;">
-                                <label>Detail Photos</label>
-                            </el-row>
                         </div>
                     </el-col>
-<!--                    </el-form-item>-->
                 </el-row>
               </el-form>
             </el-col>
           </el-row>
+            <div class="next-btn">
+                <el-button type="success" icon="el-icon-right" round @click="checktable4">Next</el-button>
+            </div>
         </el-tab-pane>
 
-        <el-tab-pane label="Auction" name="4">
+        <el-tab-pane label="Auction" :disabled="dis4"name="4">
           <el-row type="flex" justify="center">
             <el-col :span="20">
               <el-form
                       class="form"
-                      ref="form"
-                      :model="form"
+                      ref="form5"
+                      :model="form5"
                       :rules="rules"
                       label-width="150px"
                       label-position="left"
@@ -292,32 +311,39 @@
                   <el-col :span="24">
                     <el-form-item label="Register for Auction:" prop="ifAuction">
                     <el-switch
-                            v-model="form.isAuction"
+                            v-model="form5.isAuction"
                             active-color="#13ce66"
                             inactive-color="#ff4949">
                     </el-switch>
                     </el-form-item>
-          <el-form-item v-if="form.isAuction" label="Time Range:" prop="daterange">
+          <el-form-item v-if="form5.isAuction" label="Time Range:" prop="daterange">
             <el-date-picker style="width:80%"
-                    v-model="form.daterange"
-                    type="daterange"
+                    v-model="form5.daterange"
+                    type="datetimerange"
                     range-separator="To"
                     start-placeholder="Auction Start Time"
-                    end-placeholder="Auction Start Time">
+                    end-placeholder="Auction Start Time"
+                            :picker-options="pickerOptions">
             </el-date-picker>
+
           </el-form-item>
 
-          <el-form-item v-if="form.isAuction" label="Reserved Price:" prop="price">
-            <el-input v-model="form.price"></el-input>
+          <el-form-item v-if="form5.isAuction" label="Reserved Price:" prop="price">
+            <el-input v-model="form5.price">
+                <i slot="suffix" class="input-slot">A$</i>
+            </el-input>
           </el-form-item>
                   </el-col>
                 </el-row>
               </el-form>
             </el-col>
           </el-row>
+            <div class="next-btn">
+                <el-button type="success" icon="el-icon-right" round @click="checktable5">Next</el-button>
+            </div>
         </el-tab-pane>
 
-        <el-tab-pane label="Submit" name="5">
+        <el-tab-pane label="Submit" :disabled="dis5" name="5">
           <el-form :model="form"  label-width="80px" label-position="left">
           <el-row type="flex" justify="center">
           <label style="font-size:20px;margin: 80px 0;font-weight: bold;">Congratulations! You have finished a property registration.</label>
@@ -342,6 +368,12 @@ import { GooglePlacesAutocomplete } from "vue-better-google-places-autocomplete"
 import { mapActions } from "vuex";
 export default {
   name: "PropertyRegistration",
+    props: {
+        areat: {
+            type: String,
+            default: 'm2'
+        }
+    },
   components: {
     Header,
     GooglePlacesAutocomplete,
@@ -356,59 +388,98 @@ export default {
       }
     };
     return {
+        dis1:true,
+        dis2:true,
+        dis3:true,
+        dis4:true,
+        dis5:true,
+
       place: null,
       inputDisable:true,
       dialogImageUrl: "",
       dialogVisible: false,
       hasLogin: false,
       activateIndex: '0',
-      form: {
-        country:'',
-        isAuction:true,
-        bathroomNum: '',
-        bedroomNum: '',
-        garageNum: '',
-        address: "",
-        suburb: "",
-        state: "",
-        postcode: "",
-        area: '',
-          coverUrl:'',
-          coverRaw:'',
-          imageUrl: [],
-        imageRaw: [],
-        daterange:[],
-        keywords: [],
-        type:'',
-        // startDate: "",
-        // endDate: "",
-        daterange:'',
-        price: "",
+        options: [{
+            value: 'Apartment',
+            label: 'Apartment'
+        }, {
+            value: 'Unit',
+            label: 'Unit'
+        }, {
+            value: 'House',
+            label: 'House'
+        }, {
+            value: 'Studio',
+            label: 'Studio'
+        }],
+        pickerOptions: {
+            disabledDate(time) {
+                return parseInt(time.getTime()) < Date.now()
+            }
+        },
+        form:{},
+        form1:{
+            country:'',
+            address: "",
+            suburb: "",
+            state: "",
+            postcode: "",
+        },
+        form2: {
+            type:'',
+            bathroomNum: '',
+            bedroomNum: '',
+            garageNum: '',
+            area: '',
+        }
+      ,
+        form3:{
+            kw_position: [],
+            kw_details:[],
+            description:'',
+        },
+        form4:{
+            hasupload: 0,
+            imageUrl: [],
+            imageRaw: [],
+        },
+        form5: {
+            isAuction:true,
+            daterange:[],
+            price: "",
       },
       rules: {
         bedroomNum:[{ required: true, message: " Please enter bedroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
-        carNum:[{ required: true, message: " Please enter garage number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
-        bathNum:[{ required: true, message: " Please enter bathroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
+        garageNum:[{ required: true, message: " Please enter garage number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
+        bathroomNum:[{ required: true, message: " Please enter bathroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
         address: [{ required: true, message: " Please enter address", trigger: "blur" },],
         suburb: [{ required: true, message: " Please enter suburb", trigger: "blur" },],
-          imageUrl: [{ required: true, message: " Please upload cover photo", trigger: "blur" },],
+          type: [{ required: true, message: " Please select property type!", trigger: "blur" },],
+          // imageUrl: [{ required: true, message: " Please upload cover photo", trigger: "blur" },],
         state: [{ required: true, message: "Please enter state", trigger: "blur" },],
+          // room: [{ required: true, message: "Please input room numbers", trigger: "blur" },],
         postcode: [{required: true, message: " Please enter postcode", trigger: "blur",},],
         area: [{ required: true, message: " Please enter area", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
         daterange: [{required: true, message: " Please enter start date", trigger: "blur",},],
-        country: [{required: true, message: " Please enter end date", trigger: "blur",},],
+        country: [{required: true, message: " Please enter country", trigger: "blur",},],
         price: [{required: true, message: " Please enter price", trigger: "blur"}, {validator: checkInt,trigger: "blur" },],
       },
     };
   },
+
   created() {
     this.username = localStorage.getItem("username");
     // this.username = this.$store.state.username;
     if (this.username !== null) {
       this.hasLogin = true;
       this.avatar = localStorage.getItem("avatar");
+      this.firstname = localStorage.getItem("firstname");
     }
-    this.firstname = localStorage.getItem("firstname");
+    else{
+        this.$message.error("You should login first!");
+        this.$router.push("/login");
+    }
   },
   methods: {
     ...mapActions(["logout"]),
@@ -428,7 +499,7 @@ export default {
                     if (response.status >= 200 && response.status < 300){
                       if (response.data.code === 200){
                         this.logout();
-                        location.reload()
+                          this.$router.replace("/");
                       }else{
                         console.log(response.msg)
                       }
@@ -441,6 +512,7 @@ export default {
           break;
       }
     },
+
     beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 2;
       let types = ["image/jpeg", "image/jpg", "image/png"];
@@ -453,39 +525,94 @@ export default {
       }
       return isImage && isLt2M;
     },
-      coverChange(file){
-          this.form.imageRaw = file.raw;
-          this.form.imageUrl = URL.createObjectURL(file.raw);
-      },
+
     imgBroadcastChange(file) {
-      this.form.imageRaw.push(file.raw);
-      this.form.imageUrl.push(URL.createObjectURL(file.raw));
+        this.form4.hasupload = this.form4.hasupload + 1;
+      this.form4.imageRaw.push(file.raw);
+      this.form4.imageUrl.push(URL.createObjectURL(file.raw));
     },
     exceedTips: function () {
       this.$message.error("Maximum 5 photos.");
     },
+      checktable1(){
+          this.$refs["form1"].validate((valid) =>{
+              if (valid) {
+                  this.dis1 = false;
+                  this.activateIndex = '1';
+              }
+          else{
+              this.$message.error("Please complete the form.");
+          }
+      })
+      },
+      checktable2(){
+          this.$refs["form2"].validate((valid) =>{
+              if (valid) {
+                  this.dis2 = false;
+                  this.activateIndex = '2';
+              }
+              else{
+                  this.$message.error("Please complete the form.");
+              }
+          })
+      },
+      checktable3(){
+          this.$refs["form3"].validate((valid) =>{
+              if (valid) {
+                  this.dis3 = false;
+                  this.activateIndex = '3';
+              }
+              else{
+                  this.$message.error("Please complete the form.");
+              }
+          })
+      },
+      checktable4(){
+          if (this.form4.hasupload !== 0) {
+                  this.dis4 = false;
+                  this.activateIndex = '4';
+              }
+              else{
+                  this.$message.error("Please upload the photos.");
+              }
+          },
+      checktable5(){
+          this.$refs["form5"].validate((valid) =>{
+              if (valid) {
+                  this.dis5 = false;
+                  this.activateIndex = '5';
+              }
+              else{
+                  this.$message.error("Please complete the form.");
+              }
+          })
+      },
 
     submit() {
-      this.$refs["form"].validate((valid) => {
-        if (valid) {
           let data = new FormData();
-          data.append('bathroomNum', this.form.bathNum);
-          data.append('bedroomNum', this.form.bedroomNum);
-          data.append('garageNum', this.form.carNum);
-          data.append('type', this.form.type);
-          data.append('address', this.form.address);
-          data.append('suburb', this.form.suburb);
-          data.append('state', this.form.state);
-          data.append('postcode', this.form.postcode);
-          data.append('area', this.form.area);
-          data.append('country', this.form.country);
-          data.append('daterange', this.form.daterange);
-          data.append('price', this.form.price);
-          data.append('keywords', this.form.keywords);
-          data.append('cover', this.form.coverRaw);
-          data.append('isAuction', this.form.isAuction);
+            data.append('address', this.form1.address);
+            data.append('suburb', this.form1.suburb);
+            data.append('state', this.form1.state);
+            data.append('postcode', this.form1.postcode);
+            data.append('country', this.form1.country);
 
-          this.form.imageRaw.forEach(function (file) {
+          data.append('bathroomNum', this.form2.bathroomNum);
+          data.append('bedroomNum', this.form2.bedroomNum);
+          data.append('garageNum', this.form2.garageNum);
+          data.append('type', this.form2.type);
+          data.append('area', this.form2.area);
+
+          data.append('position', this.form3.kw_position);
+          data.append('detail', this.form3.kw_details);
+          data.append('description', this.form3.description);
+
+          data.append('startdate', this.form5.daterange[0]);
+        data.append('enddate', this.form5.daterange[1]);
+          data.append('price', this.form5.price);
+          data.append('isAuction', this.form5.isAuction);
+
+
+          this.form4.imageRaw.forEach(function (file) {
                     data.append('photos', file, file.name);
                  });
 
@@ -509,11 +636,16 @@ export default {
             console.log('error', res);
             this.$message.error('Property Register Error');
           });
-        } else {
-          return false;
-        }
-      });
+
     },
+      handleRemove(file, fileList) {
+          const IMG = file.raw;
+          const INDEX = this.form4.imageRaw.indexOf(IMG);
+          this.form4.imageRaw.splice(INDEX, 1);
+          this.form4.imageUrl.splice(INDEX, 1);
+          this.form4.hasupload = this.form4.hasupload - 1;
+          console.log(file, fileList);
+      },
     goto(name) {
       console.log(name);
       this.$router.push({ name: name });
@@ -525,10 +657,10 @@ export default {
   watch:{
     place: function(newPlace,oldPlace){
       if(this.place==null){
-        this.$set(this.form,'address',"");
-        this.$set(this.form,'postcode',"");
-        this.$set(this.form,'suburb',"");
-        this.$set(this.form,'state',"");
+        this.$set(this.form1,'address',"");
+        this.$set(this.form1,'postcode',"");
+        this.$set(this.form1,'suburb',"");
+        this.$set(this.form1,'state',"");
         this.inputDisable = true;
         return ;
       }
@@ -562,11 +694,11 @@ export default {
       postcode = mid_info[mid_info.length-1];
       state = mid_info[mid_info.length-2];
       street = place_info.slice(0,place_info.length-2).join(" ");
-      this.$set(this.form,'address',street.trim());
-      this.$set(this.form,'postcode',postcode.trim());
-      this.$set(this.form,'suburb',suburb.trim());
-      this.$set(this.form,'state',state.trim());
-      this.$set(this.form,'country',country.trim());
+      this.$set(this.form1,'address',street.trim());
+      this.$set(this.form1,'postcode',postcode.trim());
+      this.$set(this.form1,'suburb',suburb.trim());
+      this.$set(this.form1,'state',state.trim());
+      this.$set(this.form1,'country',country.trim());
       return;
     }
   },
@@ -574,6 +706,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.next-btn{
+    float:right;
+    margin-bottom:10px;
+}
 .user {
   display: flex;
   align-items: center;

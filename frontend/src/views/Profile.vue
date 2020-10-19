@@ -20,11 +20,11 @@
                             </el-form-item>
 
                             <el-form-item v-if="!canEditEmail" label="Email:" prop="email">
-                                <el-input style="width:70%;float:left;" v-model="form.email" :disabled="!canEditEmail"></el-input>
+                                <el-input style="width:70%;float:left;" v-model="form.oldemail" :disabled="!canEditEmail"></el-input>
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editE">Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="Email:" prop="email">
-                                <el-input style="width:70%;float:left;" v-model="form.email"></el-input>
+                                <el-input style="width:70%;float:left;" placeholder="Input your new email" v-model="form.email"></el-input>
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelE">Cancel</el-button>
                                 <el-input
                                         style="width:70%;float:left;margin-top:10px;"
@@ -38,21 +38,21 @@
                             </el-form-item>
 
                             <el-form-item v-if="!canEditFirstname" label="First Name:" prop="firstname">
-                                <el-input style="width:70%;float:left;" v-model="form.firstname" :disabled="!canEditFirstname"></el-input>
+                                <el-input style="width:70%;float:left;" v-model="form.ofirstname" :disabled="!canEditFirstname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editF">Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="First Name:" prop="firstname">
-                                <el-input style="width:70%;float:left;" v-model="form.firstname"></el-input>
+                                <el-input style="width:70%;float:left;" placeholder="Change your first name" v-model="form.firstname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelF">Cancel</el-button>
                                 <el-button round style="width:25%;float:right;margin-top:10px;" type="success" @click="submitF">Submit</el-button>
                             </el-form-item>
 
                             <el-form-item v-if="!canEditLastname" label="Last Name:" prop="lastname">
-                                <el-input style="width:70%;float:left;" v-model="form.lastname" :disabled="!canEditLastname"></el-input>
+                                <el-input style="width:70%;float:left;" v-model="form.olastname" :disabled="!canEditLastname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editL">Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="Last Name:" prop="lastname">
-                                <el-input style="width:70%;float:left;" v-model="form.lastname"></el-input>
+                                <el-input style="width:70%;float:left;" placeholder="Change your last name" v-model="form.lastname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelL">Cancel</el-button>
                                 <el-button round style="width:25%;float:right;margin-top:10px;" type="success" @click="submitL">Submit</el-button>
                             </el-form-item>
@@ -73,12 +73,14 @@
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                             </div>
+                                <template v-if="changeA">
                                 <div class="user-avatar-button">
-                            <el-row type="flex" justify="space-around" style="align-items: center;">
-                                <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>
-                                <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>
-                            </el-row>
+                                    <el-row type="flex" justify="space-around" style="align-items: center;">
+                                        <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>
+                                        <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>
+                                    </el-row>
                             </div>
+                                </template>
                             </div>
                         </el-col>
                     </el-row>
@@ -94,6 +96,7 @@
     import $ from 'jquery'
 
     export default {
+        title: 'My Profile',
         components: {
             Header,
         },
@@ -107,6 +110,7 @@
                 }
             };
             return {
+                changeA:false,
                 show: true,
                 count: 60,
                 timer: null,
@@ -114,11 +118,15 @@
                 canEditFirstname: false,
                 canEditLastname: false,
                 avatarOriginal:'',
+                timerstart:false,
                 form: {
                     username: "",
                     firstname: "",
                     lastname: "",
+                    ofirstname:'',
+                    olastname:'',
                     email: "",
+                    oldemail:'',
                     imageRaw:'',
                     imageUrl:'',
                     validate:'',
@@ -132,14 +140,26 @@
             };
         },
         created(){
+                this.username = localStorage.getItem("username");
+                // this.username = this.$store.state.username;
+                if (this.username !== null) {
+                    this.hasLogin = true;
+                    this.avatar = localStorage.getItem("avatar");
+                    this.firstname = localStorage.getItem("firstname");
+                }
+                else{
+                    this.$message.error("You should login first!");
+                    this.$router.push("/login");
+                }
+
             this.form.imageUrl = localStorage.getItem('avatar');
             this.$axios
                 .get('/user/information')
                 .then(response => {
                         this.form.username = response.data.result.username,
-                        this.form.email = response.data.result.email,
-                        this.form.lastname = response.data.result.lastname,
-                        this.form.firstname = response.data.result.firstname
+                        this.form.oldemail = response.data.result.email,
+                        this.form.olastname = response.data.result.lastname,
+                        this.form.ofirstname = response.data.result.firstname
                         this.form.imageUrl = response.data.result.avatar
                 })
                 .catch(function (error) {
@@ -159,6 +179,7 @@
             },
             cancelA(){
                 this.form.imageUrl = localStorage.getItem('avatar')
+                this.changeA=false;
             },
             cancelE(){
                 this.canEditEmail = false;
@@ -182,7 +203,12 @@
                                     if(response.data.code === 200){
                                         this.$message('Email Reset Successful!');
                                         this.form.email = response.data.result;
-                                    }else{
+                                        location.reload()
+                                    }else if(response.data.code === 400){
+                                        this.$message.error("Validate code incorrect");
+                                        this.form.validate = '';
+                                    }
+                                    else{
                                         console.log(response.msg);
                                     }
                                 } else {
@@ -210,6 +236,7 @@
                                     if(response.data.code === 200){
                                         this.$message('Last Name Reset Successful!');
                                         this.form.lastname = response.data.result;
+                                        location.reload()
                                     }else{
                                         console.log(response.msg);
                                     }
@@ -239,6 +266,7 @@
                                         this.$store.commit('setFirstName', response.data.result);
                                         this.$message('First Name Reset Successful!');
                                         this.form.firstname = response.data.result;
+                                        location.reload()
                                     }else{
                                         console.log(response.msg);
                                     }
@@ -267,6 +295,8 @@
                                         this.$store.commit('setAvatar', response.data.result);
                                         this.$message('Avatar Reset Successful!');
                                         this.form.avatar = response.data.result;
+                                        location.reload()
+
                                     }else{
                                         console.log(response.msg);
                                     }
@@ -306,28 +336,40 @@
             imgBroadcastChange(file) {
                 this.form.imageRaw = file.raw;
                 this.form.imageUrl = URL.createObjectURL(file.raw);
+                this.changeA=true;
             },
             validate() {
-                    if (this.timer == null) {
+                    if ( this.timerstart === false) {
                         let data = new FormData();
                         data.append('email', this.form.email);
-                        this.$axios.post('/verify/register',data);
-                    }
-                    if (!this.timer) {
-                        this.count = 60;
-                        this.show = false;
-                        $(".validate").addClass("huise")
+                        this.$axios.post('/verify/register',data)
+                            .then((response) => {
+                                if (response.data.code === 400) {
+                                    this.$message.error('Email already exist!');
+                                    this.form.email = '';
+                                }else if(response.data.code ===200){
+                                    this.timerstart = true;
+                                    this.count = 60;
+                                    this.show = false;
+                                    $(".validate").addClass("huise")
 
-                        // document.getElementById('validate').style.cursor = 'not-allowed'
-                        this.timer = setInterval(() => {
-                            if (this.count > 0 && this.count <= 60) {
-                                this.count--
-                            } else {
-                                this.show = true
-                                clearInterval(this.timer)
-                                this.timer = null
-                            }
-                        }, 1000)
+                                    // document.getElementById('validate').style.cursor = 'not-allowed'
+                                    this.timer = setInterval(() => {
+                                        if (this.count > 0 && this.count <= 60) {
+                                            this.count--
+                                        } else {
+                                            this.show = true
+                                            this.timer = null
+                                            clearInterval(this.timer)
+                                            this.timerstart = false
+                                        }
+                                    }, 1000)
+                                }
+                            })
+                            .catch((res) => {
+                                console.log('error', res);
+                                this.$message.error('Validate Error');
+                            });
                     }
                 }
             },

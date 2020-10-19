@@ -15,8 +15,8 @@
                 label-position="left"
         >
           <el-row type="flex" justify="center" style="margin-bottom: 20px">
-            <el-button type="primary" icon="el-icon-user-solid" circle @click="byuser"></el-button>
-            <el-button type="info" icon="el-icon-message" circle @click="byemail"></el-button>
+            <el-button :type="byuserType" icon="el-icon-user-solid" circle @click="byuser"></el-button>
+            <el-button :type="byemailType" icon="el-icon-message" circle @click="byemail"></el-button>
           </el-row>
 
           <el-form-item v-if="loginByuser"  label="Username:" prop="username">
@@ -51,8 +51,16 @@
   import { mapMutations } from "vuex";
 
   export default {
+    title: 'Login',
     components: {
       Header,
+    },
+    created () {
+      this.username = localStorage.getItem('username');
+      if (this.username !== null) {
+        this.$message.error("You have already signed in!");
+        this.$router.push("/");
+      }
     },
     data() {
       const validateUsername = (rule, value, callback) => {
@@ -74,6 +82,8 @@
 
       return {
         loginByuser:true,
+        byuserType :"primary",
+        byemailType : "info",
         form: {
           email:'',
           username: '',
@@ -90,9 +100,13 @@
       ...mapMutations(['setJwt','setUserName','setFirstName','setAvatar']),
       byuser(){
           this.loginByuser = true;
+          this.byuserType = "primary";
+          this.byemailType = "info";
       },
       byemail(){
         this.loginByuser = false;
+        this.byuserType = "info"
+        this.byemailType = "primary";
       },
       signInEmail() {
         this.$refs["form"].validate((valid) => {
@@ -109,7 +123,7 @@
                           this.$router.push({name: 'home'});
                           console.log(response.data);
                         }else if(response.data.code === 400){
-                          this.$message.error('Password Incorrect!');
+                          this.$message.error(response.data.msg);
                         }else{
                           console.log(response.data.msg);
                         }

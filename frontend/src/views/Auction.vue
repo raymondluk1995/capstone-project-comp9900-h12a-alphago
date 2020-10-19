@@ -2,16 +2,15 @@
     <div class="auction">
         <Header>
             <template v-if="this.hasLogin">
-                <el-dropdown trigger="click" @command="handleCommand">
+                <el-dropdown trigger="click" @command="handleCommand" style="align-items: center" placement="bottom">
                     <div class="user">
-                        <el-avatar :size="50" :src="avatar"></el-avatar>
-                        <p>welcome {{ firstname }}</p>
+                        <el-avatar :size="70" :src="avatar"></el-avatar>
                     </div>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="profile">My profile</el-dropdown-item>
-                        <el-dropdown-item command="auction">My Auctions</el-dropdown-item>
-                        <el-dropdown-item command="notification">Notifications</el-dropdown-item>
-                        <el-dropdown-item command="logout">Log out</el-dropdown-item>
+                        <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                        <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
+                        <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
+                        <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </template>
@@ -29,42 +28,39 @@
                             <el-button type="primary" round @click="goto('propreg')">Register new Property</el-button>
                         </div>
                         <template v-if="!isEmpty">
-                        <el-card class="card" v-for="item in propList" :key="item.id">
-                            <el-row>
-                                <el-col :span="6">
-                                    <img height="200" width="300"  :src="item.image" @click="goto('property')" alt="" />
-                                </el-col>
-                                <el-col :span="10" :offset="1">
-                                    <div @click="goto('property')">
-                                        <h3>{{ item.address }}</h3>
-                                        <el-row type="flex" justify="center" style="margin: 40px 0">
-                                            <el-col>
-                                                <i class="el-icon-toilet-paper"> Bathrooms: {{ item.bathroomNum}}</i>
+                        <el-card class="card" v-for="item in propList" :key="item.id" @click.native="goDetails(item)">
+                            <el-card :body-style="{ padding: '0px' }" style="height: 600px">
+                                <el-carousel :interval="5000" arrow="always" :height="cheight">
+                                    <el-carousel-item v-for="pic in item.photos" :key="pic.id">
+<!--                                        <h3>{{ pic }}</h3>-->
+                                        <img :src="pic"  width="100%" height="100%" alt=""/>
+                                    </el-carousel-item>
+                                </el-carousel>
+                                <div style="padding: 14px;">
+                                    <h6>{{ item.address }}</h6>
+                                    <el-row type="flex" justify="left" style="margin:10px 5%;">
+                                        <el-col :span="6">
+                                        <i class="el-icon-toilet-paper"> Bathrooms: {{ item.bathroomNum}}</i>
+                                        </el-col>
+                                        <el-col :span="6">
+                                        <i class="el-icon-house"> Bedrooms: {{ item.bedroomNum }}</i>
+                                        </el-col>
+                                            <el-col :span="6">
+                                        <i class="el-icon-truck"> Garages: {{ item.garageNum }}</i>
                                             </el-col>
-                                            <el-col>
-                                                <i class="el-icon-house"> Bedrooms: {{ item.bedroomNum }}</i>
-                                            </el-col>
-                                            <el-col>
-                                                <i class="el-icon-truck"> Garages: {{ item.garageNum }}</i>
-                                            </el-col>
-                                        </el-row>
-                                        <el-row type="flex" justify="center" style="margin: 20px 0">
-                                        <el-col>
+                                        <el-col :span="6">
+                                            <i class="el-icon-full-screen"> Area: {{ item.area }}</i>
+                                        </el-col>
+                                        <el-col :span="8">
                                             <i class="el-icon-info"> Type: {{ item.type }}</i>
                                         </el-col>
-                                        <el-col>
-                                            <i class="el-icon-zoom-in"> Area: {{ item.area }}</i>
-                                        </el-col>
-                                        </el-row>
-
-                                    </div>
-                                </el-col>
-                            </el-row>
+                                    </el-row>
+                                </div>
+                            </el-card>
                         </el-card>
                         </template>
                         <template v-else>
                             <div class="empty-label" >
-<!--                            <label>You haven't post any property.</label>-->
                                 <el-alert
                                         title="You haven't post any property."
                                         type="info"
@@ -74,7 +70,6 @@
                                 </el-alert>
                             </div>
                         </template>
-
                     </el-tab-pane>
                     <el-tab-pane label="As a Bidder">
                         <p>This area is under construction... ...</p>
@@ -85,6 +80,8 @@
                         <p>Please come back later!</p>
                     </el-tab-pane>
                 </el-tabs>
+
+
             </el-col>
         </el-row>
     </div>
@@ -95,6 +92,12 @@
     import { mapActions } from "vuex";
     export default {
         name: "Auction",
+        props: {
+            cheight: {
+                type: String,
+                default: '500px'
+            }
+        },
         components: {
             Header,
         },
@@ -103,28 +106,35 @@
             if(this.username!==null){
                 this.hasLogin = true;
                 this.avatar = localStorage.getItem('avatar');
+                this.firstname=  localStorage.getItem('firstname');
+            }else{
+                this.$message.error("You should login first!");
+                this.$router.push("/login");
             }
-            this.firstname=  localStorage.getItem('firstname');
 
             this.$axios
                 .get('/property/information')
                 .then(response => {
-                    this.propList = response.data.result;
+                    if (response.data.code === 200) {
+                        this.isEmpty=false;
+                        this.propList = response.data.result;
+                    }
+                    if (response.data.code === 401){
+                        this.$message.error('You should login first!');
+                        this.$router.replace("/login");
+                    }
                 })
                 .catch(function (error) {
                     console.log(error)
                 })
 
-            if(this.propList.length){
-                this.isEmpty=false;
-            }
         },
         data() {
             return {
-                isEmpty:true,
-                hasLogin:false,
-                propList: [{photo:''}],
-            };
+                isEmpty: true,
+                hasLogin: false,
+                propList: [],
+            }
         },
         methods: {
             ...mapActions(["logout"]),
@@ -144,7 +154,7 @@
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
                                         this.logout();
-                                        location.reload()
+                                        this.$router.replace("/");
                                     }else{
                                         console.log(response.msg)
                                     }
@@ -164,6 +174,17 @@
             back() {
                 this.$router.go(-1);
             },
+            goDetails (item) {
+                this.$router.push(
+                    {
+                        path: '/property',
+                        query:
+                            {
+                                id: item.id,
+                            }
+                    }
+                )
+            },
         },
     };
 </script>
@@ -177,23 +198,34 @@
     }
 }
 .card {
-    margin: 20px 3%;
+    margin: 20px 20%;
+    height: 650px;
 
     &:hover {
         cursor: pointer;
         transform: scale(1.02);
     }
 
-    h3,
+    h6{
+        margin:5px 5%;
+    }
     p {
         line-height: 2.5;
     }
-    border-left: 15px solid #bcc8e6;
+    border-top: 15px solid #bcc8e6;
 }
 .empty-label{
     /*font-size: 18px;*/
     text-align: center;
     margin: 10px;
 }
+
+.img{
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
 
 </style>
