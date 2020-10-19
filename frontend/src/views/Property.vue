@@ -35,14 +35,15 @@
 
                 <el-row>
                     <el-col :span="12">
-                        <h3>Current Bid</h3>
+                        <h3>Latest Bid</h3>
                         <div class="bid"> ${{ propInfo.latestBid}}</div>
+                        <h4  class="countdownTime">{{ time }}</h4>
                     </el-col>
 
-                    <el-col :span="5" :offset="7">
-                        <h3  >Time left</h3>
-                        <h4  >{{ time }}</h4>
-                    </el-col>
+<!--                    <el-col :span="5" :offset="7">-->
+<!--                        <h3  >Time left</h3>-->
+<!--                        <h4  >{{ time }}</h4>-->
+<!--                    </el-col>-->
                 </el-row>
 
                 <el-dialog title="Select Your Card" :visible.sync="bidderFlag">
@@ -91,8 +92,8 @@
 
 
                 <section style="margin-top:50px">
-                    <el-row :gutter="50">
-                    <el-col :span="12">
+                    <el-row>
+                    <el-col >
                     <h3>Details</h3>
                     <el-row type="flex" style="margin-bottom: 10px;">
                             <i class="el-icon-toilet-paper"> Bathroom Number: <span> {{ propInfo.bathroomNum}} </span></i>
@@ -113,13 +114,16 @@
                         <el-row type="flex" style="margin-bottom: 10px;">
                         <el-tag v-for="tag in propInfo.position" effect="plain">{{ tag }}</el-tag>
                         </el-row>
-                            <el-row type="flex" style="margin-bottom: 10px;">
-                            <el-tag v-for="tag in propInfo.detail">{{ tag }}</el-tag>
+
+                        <el-row type="flex" style="margin-bottom: 10px;">
+                        <el-tag v-for="tag in propInfo.detail">{{ tag }}</el-tag>
                         </el-row>
                     </el-col>
+                    </el-row>
 
-
-                        <el-col :span="12">
+                        <el-row>
+                        <el-col >
+                            <h3>Map</h3>
                             <div class="map" id="map">
                                 <GmapMap
                                         :center="center"
@@ -153,20 +157,27 @@
                             <p>{{ newBidTip }}</p>
                         </div>
 
-                        <div v-else style="text-align:right;margin-top: 70px">
+                        <div v-else style="margin-top: 70px">
+                            <h3>Register as a Bidder</h3>
                             <el-button type="primary"
                                        style="font-size: 20px;"
                                        round
                                        :disabled="timeFlag"
                                        @click="Bidreg"
                                        icon="el-icon-right"
+                                       plain
                             >Register to Bid</el-button>
                         </div>
                     </el-col>
                     </el-row>
                 </section>
 
-                <section style="margin-top:50px">
+                <section style="margin-top:50px;">
+                    <h3>Bid History</h3>
+                </section>
+
+                <section style="margin-top:50px; margin-bottom:200px">
+                    <h3>Documents</h3>
                 </section>
 
             </el-col>
@@ -217,11 +228,18 @@
                 time: '',
                 cards:['111','222','333'],
                 defaultCard:'',
-
+                center:{lat:-33.9175679,lng:151.2255712},
+                markers:[
+                    {
+                        position:{lat:-33.9175679,lng:151.2255712}
+                    }
+                ],
                 propInfo: {
                     id: '',
-                    endDate: '',
+                    // endDate: new Date(2000, 10, 10, 10, 10),
                     title: '',
+                    endDate:'',
+                    startDate:'',
                     info: '',
                     position: [],
                     detail: [],
@@ -292,7 +310,7 @@
                 if (this.timeFlag === true) {
                     clearInterval(timer);
                 }
-                this.countDown(this.propInfo.endDate);
+                this.countDown(this.propInfo.endDate,this.propInfo.startDate);
             }, 1000);
         },
 
@@ -336,20 +354,26 @@
                 this.$set(this.form, 'cardNumber', card)
             },
 
-            countDown(time) {
+            countDown(time,startime) {
                 let expiredTime = dayjs(time);
+                let startTime = dayjs(startime);
                 // let expiredTime = dayjs(new Date(2022, 10, 10, 10, 10));
                 let nowTime = dayjs();
+
                 let diff = expiredTime.diff(nowTime) / 1000;
+                let diff2 = startTime.diff(nowTime) / 1000;
+
                 let day = parseInt(diff / 3600 / 24);
                 let hour = parseInt((diff / 3600) % 24);
                 let minute = parseInt((diff / 60) % 60);
                 let second = parseInt(diff % 60);
-                if (diff <= 0) {
+
+                if (diff2 >= 0) {
                     this.timeFlag = true;
-                    this.time = `00 :00 :00 :00 `;
-                }else{
-                    this.time = `${day} :${hour} :${minute} :${second} `;
+                    this.time = 'This auction has not started yet!';
+                }
+                else{
+                    this.time = ` ${day} : ${hour} : ${minute} : ${second} `;
                 }
             },
 
@@ -523,24 +547,32 @@
     }
     .bid {
         width :80%;
-        padding: 5px;
+        padding: 10px;
         text-align: center;
-        font-size: 20px;
+        font-size: 25px;
         font-weight: bold;
         color: #fff;
         background-color: #133264;
+        border-radius: 0;
+    }
+    .countdownTime{
+        width :80%;
+        padding: 10px;
+        text-align: center;
+        background-color: #c8dbf9;
         border-radius: 5px;
+        font-size: 15px;
+
     }
 
     .el-tag {
         margin-right: 20px;
     }
     .map {
-        margin-top:50px;
-        height: 90%;
-        width: 90%;
-        float:right;
-        border: #4d5861 1px solid;
+        /*margin-top:50px;*/
+        height: 100%;
+        width: 100%;
+        /*border: #4d5861 1px solid;*/
     }
     .new-bid-wrap {
         display: flex;

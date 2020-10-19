@@ -61,6 +61,7 @@ export default {
   margin-right: 50px;
   padding: 15px;
   border-bottom: 2px solid #f2f2f2;
+    /*height:120px;*/
 }
 
 
