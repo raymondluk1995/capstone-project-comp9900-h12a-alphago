@@ -179,6 +179,7 @@
             };
 
             return {
+                id:'',
                 hasLogin: false,
                 isBidder: true,
                 bidderFlag: false,
@@ -228,7 +229,7 @@
             //     this.$message.error("You should login first!");
             //     this.$router.push("/login");
             // }
-
+            this.id = this.$route.query.id;
             this.$axios
                 .get('/property/information?pid=' + this.id)
                 .then(response => {
