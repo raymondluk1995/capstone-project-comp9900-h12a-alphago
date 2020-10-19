@@ -17,7 +17,6 @@
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
     "vue-better-google-places-autocomplete": "^1.1.0",
-    "vue-google-maps": "^0.1.21",
     "vue-page-title": "^1.2.3",
     "vue-place-autocomplete": "^0.5.3",
     "vue-router": "^3.2.0",

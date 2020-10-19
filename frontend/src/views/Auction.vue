@@ -28,10 +28,10 @@
                             <el-button type="primary" round @click="goto('propreg')">Register new Property</el-button>
                         </div>
                         <template v-if="!isEmpty">
-                        <el-card class="card" v-for="item in propList" :key="item.id">
+                        <el-card class="card" v-for="item in propList" :key="item.id" @click.native="goDetails(item)">
                             <el-card :body-style="{ padding: '0px' }" style="height: 600px">
                                 <el-carousel :interval="5000" arrow="always" :height="cheight">
-                                    <el-carousel-item v-for="pic in item.photos" :key="item.id">
+                                    <el-carousel-item v-for="pic in item.photos" :key="pic.id">
 <!--                                        <h3>{{ pic }}</h3>-->
                                         <img :src="pic"  width="100%" height="100%" alt=""/>
                                     </el-carousel-item>
@@ -54,7 +54,6 @@
                                         <el-col :span="8">
                                             <i class="el-icon-info"> Type: {{ item.type }}</i>
                                         </el-col>
-
                                     </el-row>
                                 </div>
                             </el-card>
@@ -103,15 +102,15 @@
             Header,
         },
         created () {
-            this.username = localStorage.getItem('username');
-            if(this.username!==null){
-                this.hasLogin = true;
-                this.avatar = localStorage.getItem('avatar');
-                this.firstname=  localStorage.getItem('firstname');
-            }else{
-                this.$message.error("You should login first!");
-                this.$router.push("/login");
-            }
+            // this.username = localStorage.getItem('username');
+            // if(this.username!==null){
+            //     this.hasLogin = true;
+            //     this.avatar = localStorage.getItem('avatar');
+            //     this.firstname=  localStorage.getItem('firstname');
+            // }else{
+            //     this.$message.error("You should login first!");
+            //     this.$router.push("/login");
+            // }
 
             this.$axios
                 .get('/property/information')
@@ -174,6 +173,17 @@
             },
             back() {
                 this.$router.go(-1);
+            },
+            goDetails (item) {
+                this.$router.push(
+                    {
+                        path: '/property',
+                        query:
+                            {
+                                id: item.id,
+                            }
+                    }
+                )
             },
         },
     };

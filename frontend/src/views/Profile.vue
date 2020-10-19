@@ -370,24 +370,7 @@
                                 console.log('error', res);
                                 this.$message.error('Validate Error');
                             });
-                        ;
                     }
-                    // if (!this.timer) {
-                    //     this.count = 60;
-                    //     this.show = false;
-                    //     $(".validate").addClass("huise")
-                    //
-                    //     // document.getElementById('validate').style.cursor = 'not-allowed'
-                    //     this.timer = setInterval(() => {
-                    //         if (this.count > 0 && this.count <= 60) {
-                    //             this.count--
-                    //         } else {
-                    //             this.show = true
-                    //             clearInterval(this.timer)
-                    //             this.timer = null
-                    //         }
-                    //     }, 1000)
-                    // }
                 }
             },
         watch:{

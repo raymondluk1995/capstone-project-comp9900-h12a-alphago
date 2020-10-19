@@ -8,6 +8,7 @@ import Resetpassword from "../views/Resetpassword";
 import PropertyReg from "../views/PropertyReg";
 import Profile from "../views/Profile";
 import Auction from "../views/Auction";
+import Property from "../views/Property";
 
 Vue.use(VueRouter);
 
@@ -53,6 +54,11 @@ const routes = [
     path: '/auction',
     name: 'auction',
     component: Auction,
+  },
+  {
+    path: '/property',
+    name: 'property',
+    component: Property,
   }
 ];
 

@@ -234,7 +234,7 @@
                 label-position="left"
               >
                 <el-row>
-                  <el-checkbox-group v-model="form3.keywords">
+                  <el-checkbox-group v-model="form3.kw_position">
                     <el-form-item label="Location:">
                       <el-col :span="8">
                         <el-checkbox label="Close To Schools"></el-checkbox>
@@ -253,7 +253,9 @@
                         <el-checkbox label="Close To Medical"></el-checkbox>
                       </el-col>
                     </el-form-item>
+                  </el-checkbox-group>
 
+                  <el-checkbox-group v-model="form3.kw_details">
                     <el-form-item label="Details:">
                       <el-col :span="8">
                         <el-checkbox label="BBQ"></el-checkbox>
@@ -271,19 +273,19 @@
                         <el-checkbox label="Burglar Alarm"></el-checkbox>
                       </el-col>
                     </el-form-item>
-
-                    <el-form-item label="Description:">
-                      <el-input
-                        placeholder="Enter the description for your property. No more than 500 words."
-                        prefix-icon="el-icon-edit"
-                        v-model="form3.description"
-                        type="textarea"
-                        :rows="5"
-                        maxlength="500"
-                      >
-                      </el-input>
-                    </el-form-item>
                   </el-checkbox-group>
+
+                  <el-form-item label="Description:">
+                    <el-input
+                      placeholder="Enter the description for your property. No more than 500 words."
+                      prefix-icon="el-icon-edit"
+                      v-model="form3.description"
+                      type="textarea"
+                      :rows="5"
+                      maxlength="500"
+                    >
+                    </el-input>
+                  </el-form-item>
                 </el-row>
               </el-form>
             </el-col>
@@ -389,6 +391,7 @@
                         range-separator="To"
                         start-placeholder="Auction Start Time"
                         end-placeholder="Auction Start Time"
+                        :picker-options="pickerOptions"
                       >
                       </el-date-picker>
                     </el-form-item>
@@ -493,6 +496,12 @@ export default {
           label: "Studio",
         },
       ],
+      pickerOptions: {
+        disabledDate(time) {
+          return parseInt(time.getTime()) < Date.now();
+        },
+      },
+      form: {},
       form1: {
         country: "",
         address: "",
@@ -508,7 +517,8 @@ export default {
         area: "",
       },
       form3: {
-        keywords: [],
+        kw_position: [],
+        kw_details: [],
         description: "",
       },
       form4: {
@@ -592,6 +602,7 @@ export default {
       },
     };
   },
+
   created() {
     this.username = localStorage.getItem("username");
     // this.username = this.$store.state.username;
@@ -719,17 +730,18 @@ export default {
       data.append("type", this.form2.type);
       data.append("area", this.form2.area);
 
-      data.append("keywords", this.form3.keywords);
+      data.append("position", this.form3.kw_position);
+      data.append("detail", this.form3.kw_details);
       data.append("description", this.form3.description);
 
-      data.append("daterange", this.form5.daterange);
+      data.append("startdate", this.form5.daterange[0]);
+      data.append("enddate", this.form5.daterange[1]);
       data.append("price", this.form5.price);
       data.append("isAuction", this.form5.isAuction);
 
-
       // added by Raymond
-      data.append("latitude",this.place.geometry.location.lat);
-      data.append("longitude",this.place.geometry.location.lng)
+      data.append("latitude", this.place.geometry.location.lat);
+      data.append("longitude", this.place.geometry.location.lng);
 
       this.form4.imageRaw.forEach(function (file) {
         data.append("photos", file, file.name);
