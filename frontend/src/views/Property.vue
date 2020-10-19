@@ -45,7 +45,20 @@
                     </el-col>
                 </el-row>
 
-                <el-dialog title="Register as a bidder" :visible.sync="bidderFlag">
+                <el-dialog title="Select Your Card" :visible.sync="bidderFlag">
+                    <template v-if="!addNewCard">
+                        <el-radio-group v-model="defaultCard">
+                            <el-radio :label="item" :key="item" v-for="item in cards" style="display:block; margin:20px 50px;">{{item}}</el-radio>
+                        </el-radio-group>
+
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="addCard">Add</el-button>
+                            <el-button @click="reloadCard">Reload</el-button>
+                            <el-button type="primary" @click="submit">Submit</el-button>
+                        </div>
+                    </template>
+
+                    <template v-else>
                     <el-form
                             class="form"
                             ref="form"
@@ -58,10 +71,10 @@
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                         <el-form-item label="Card Number:" prop="cardNumber">
-                            <el-input v-model="form.cardNumber" @change="validateNum" maxlength="23"></el-input>
+                            <el-input v-model="form.cardNumber" @change="validateNum" maxlength="20"></el-input>
                         </el-form-item>
                         <el-form-item label="Expired Date:" prop="expiredDate">
-                            <el-date-picker v-model="form.expiredDate" type="date">
+                            <el-date-picker v-model="form.expiredDate" type="month">
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item label="CVC:" prop="cvc">
@@ -70,9 +83,10 @@
                     </el-form>
 
                     <div slot="footer" class="dialog-footer">
-                        <el-button @click="bidderFlag = false">Cancel</el-button>
-                        <el-button type="primary" @click="submit">Submit</el-button>
+                        <el-button @click="backCard">Back</el-button>
+                        <el-button type="primary" @click="submitCard">Add</el-button>
                     </div>
+                    </template>
                 </el-dialog>
 
 
@@ -105,14 +119,24 @@
                     </el-col>
 
 
-
-
-                    <el-col :span="12">
-<!--                        <h3>Map</h3>-->
-                        <div class="map">
-                            <h3>...</h3>
-                        </div>
-                    </el-col>
+                        <el-col :span="12">
+                            <div class="map" id="map">
+                                <GmapMap
+                                        :center="center"
+                                        :zoom="15"
+                                        map-type-id="roadmap"
+                                        style="height: 300px"
+                                >
+                                    <GmapMarker
+                                            :key="index"
+                                            v-for="(m, index) in markers"
+                                            :position="m.position"
+                                            :clickable="true"
+                                            :draggable="true"
+                                    />
+                                </GmapMap>
+                            </div>
+                        </el-col>
                     </el-row>
                 </section>
 
@@ -182,14 +206,17 @@
             return {
                 id:'',
                 hasLogin: false,
-                isBidder: true,
+                isBidder: false,
                 bidderFlag: false,
                 timeFlag: false,
+                addNewCard:false,
                 currentBid:'',
                 newBid: '',
                 newPlacedBid:'',
                 tipError: false,
                 time: '',
+                cards:['111','222','333'],
+                defaultCard:'',
 
                 propInfo: {
                     id: '',
@@ -303,6 +330,7 @@
                         break;
                 }
             },
+
             validateNum () {
                 let card = this.form.cardNumber.replace(/\s/g, '').replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
                 this.$set(this.form, 'cardNumber', card)
@@ -380,11 +408,65 @@
             Bidreg() {
                 this.bidderFlag = true;
             },
+            addCard() {
+                this.addNewCard = true;
+            },
+            backCard() {
+                this.addNewCard = false;
+            },
+            submitCard(){
+                this.$refs["form"].validate((valid) => {
+                    if (valid) {
+                        let data = this.$qs.stringify(this.form);
+                        this.$axios.post('/addcard', data)
+                            .then((response) => {
+                                if (response.status >= 200 && response.status < 300) {
+                                    if(response.data.code === 200){
+                                        this.$message.success("Add New Card successful!");
+                                        this.addNewCard = false;
+                                    }
+                                } else if(response.data.code === 400){
+                                    this.$message.error(response.msg);
+                                    this.addNewCard = false;
+                                }else{
+                                    console.log(response.msg);
+                                }
+                            })
+                            .catch((res) => {
+                                console.log('error', res);
+                                this.$message.error('Add Card Error');
+                            });
+                    } else {
+                        return false;
+                    }
+                });
+
+                this.$axios
+                    .get('/card/information')
+                    .then(response => {
+                            this.cards = response.data.result
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+            },
+            reloadCard(){
+                this.$axios
+                    .get('/card/information')
+                    .then(response => {
+                        this.cards = response.data.result
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+            },
 
             submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
-                        let data = this.$qs.stringify(this.form);
+                        let data = new FormData();
+                        data.append('defaultcard', this.defaultCard);
                         this.$axios.post('/bid/registration', data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {

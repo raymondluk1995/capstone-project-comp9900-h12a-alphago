@@ -132,9 +132,9 @@
         },
         data() {
             return {
-                isEmpty: true,
+                isEmpty: false,
                 hasLogin: false,
-                propList: [],
+                propList: [{}],
             }
         },
         methods: {
