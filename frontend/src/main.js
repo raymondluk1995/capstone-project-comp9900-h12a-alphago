@@ -13,6 +13,15 @@ import 'swiper/swiper-bundle.css'
 import locale from 'element-ui/lib/locale/lang/en'
 
 
+import * as VueGoogleMaps from 'vue2-google-maps'
+ 
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyBOOkfr6xVD0KVdKuf4_XjGq9HMiTZuKts',
+    libraries: 'places',
+  },
+})
+
 Vue.use(ElementUI,{locale});
 
 
