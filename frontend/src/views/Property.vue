@@ -197,7 +197,6 @@
                     position: [],
                     detail: [],
                     latestBid: '',
-                    newBid: '',
                     photos: [],
                     description: '',
                     bidHistory:[],
