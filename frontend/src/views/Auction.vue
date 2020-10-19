@@ -131,9 +131,9 @@
         },
         data() {
             return {
-                isEmpty: false,
+                isEmpty: true,
                 hasLogin: false,
-                propList: [{id:123},],
+                propList: [],
             }
         },
         methods: {
