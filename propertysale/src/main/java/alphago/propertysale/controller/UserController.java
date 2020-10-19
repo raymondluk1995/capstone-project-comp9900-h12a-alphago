@@ -56,26 +56,24 @@ public class UserController {
      * @Date: 6/10/20
      */
     @RequestMapping("/register")
-    Result save(User user , String validate , MultipartFile avatar) throws IOException, ServletException {
+    Result save(User user , String validate , MultipartFile avatar) throws IOException {
         // Check verify code
         if(!CheckCode.checkCode(validate, user.getEmail() , "register"))
             return Result.fail("Verification code is wrong or outdated");
 
         // Check username
-        User resUser = userService.getOne(new QueryWrapper<User>().eq("username", user.getUsername()));
-        if(resUser != null) return Result.fail("Username is exist!");
+        if(userService.getOne(new QueryWrapper<User>().eq("username", user.getUsername())) != null)
+            return Result.fail("Username is exist!");
         // Register
         if(avatar != null)
             user.setAvatarType(FileUtil.getType(avatar.getOriginalFilename()));
         userService.save(user);
-        // get User Id
-        resUser = userService.getOne(new QueryWrapper<User>().eq("username", user.getUsername()));
         // upload avatar
-        if(resUser.getAvatarType() != null) {
+        if(user.getAvatarType() != null) {
             AvatarPorter porter = new AvatarPorter()
                     .setAvatar(avatar.getBytes())
                     .setName(avatar.getOriginalFilename())
-                    .setUid(resUser.getUid());
+                    .setUid(user.getUid());
             messageProducer.sendMsg(porter, CheckCode.AVATAR);
         }
         return Result.success("注册成功!");

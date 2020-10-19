@@ -48,13 +48,13 @@ public class FileUtil {
     * @Author: Xiaohan
     * @Date: 14/10/20
     */
-    public static List<String> getImages(long uid, long pid){
+    public static List<String> getImages(long pid){
         RestTemplate restTemplate = new RestTemplate();
-        String[] names = restTemplate.getForObject(remote + "cover" + "/" + uid + "/" + pid, String[].class);
+        String[] names = restTemplate.getForObject(remote + "cover" + "/" + pid, String[].class);
         List<String> paths = new ArrayList<>();
         Assert.notNull(names);
         for(String name : names){
-            paths.add(remote  + uid + "/" + pid + "/" + name);
+            paths.add(remote + "property/"  + pid + "/" + name);
         }
         return paths;
     }

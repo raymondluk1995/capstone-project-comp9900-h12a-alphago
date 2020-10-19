@@ -14,7 +14,7 @@ import java.util.List;
 public class PropertyVO {
     private long id;
     private int area;
-    private List<String> photo;
+    private List<String> photos;
     private String address;
     private int bathroomNum;
     private int bedroomNum;

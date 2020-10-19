@@ -36,10 +36,14 @@ public class Property implements Serializable {
 
     private String type;
 
-    private String keywords;
+    private String position;
+
+    private String detail;
+
+    private String description;
 
     @TableField(value = "auction")
     private boolean isAuction;
 
-    private boolean publicAccess = false;
+    private boolean publicAccess;
 }

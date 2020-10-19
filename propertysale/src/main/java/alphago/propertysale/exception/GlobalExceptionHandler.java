@@ -4,6 +4,7 @@ import alphago.propertysale.utils.Result;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
+import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,10 +24,16 @@ import java.io.IOException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     // 捕捉shiro的异常
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ShiroException.class)
     public Result handle401(ShiroException e) {
-        return Result.fail(e.getMessage());
+        return Result.fail(HttpStatus.BAD_REQUEST.value() , e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthenticatedException.class)
+    public Result unauthorized(UnauthenticatedException e) {
+        return Result.fail(HttpStatus.UNAUTHORIZED.value() , HttpStatus.UNAUTHORIZED.getReasonPhrase());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

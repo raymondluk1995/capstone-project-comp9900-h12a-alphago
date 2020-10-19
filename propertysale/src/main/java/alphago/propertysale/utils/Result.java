@@ -31,4 +31,8 @@ public class Result {
     public static Result fail(String failMsg){
         return new Result(400 , failMsg , null);
     }
+
+    public static Result fail(int code , String failMsg){
+        return new Result(code , failMsg , null);
+    }
 }

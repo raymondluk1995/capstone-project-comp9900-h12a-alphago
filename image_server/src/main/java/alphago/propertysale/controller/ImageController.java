@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 /**
  * @program: image_server
  * @description:
@@ -16,8 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/img")
 public class ImageController {
-    @RequestMapping("/cover/{uid}/{pid}")
-    public String[] cover(@PathVariable int uid, @PathVariable int pid){
-        return ImageUtil.getCover(uid , pid);
+    @RequestMapping("/cover/{pid}")
+    public String[] cover(@PathVariable int pid){
+        return ImageUtil.getCover(pid);
     }
 }
