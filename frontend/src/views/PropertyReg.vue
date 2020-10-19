@@ -8,6 +8,7 @@
                 </div>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                    <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                     <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
                     <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
                     <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
@@ -333,6 +334,14 @@
                 <i slot="suffix" class="input-slot">A$</i>
             </el-input>
           </el-form-item>
+
+          <el-form-item v-if="form5.isAuction" label="Start Price:" prop="startprice">
+              <el-input v-model="form5.startprice">
+                  <i slot="suffix" class="input-slot">A$</i>
+              </el-input>
+          </el-form-item>
+
+
                   </el-col>
                 </el-row>
               </el-form>
@@ -387,6 +396,19 @@ export default {
         callback();
       }
     };
+
+    const checkStart = (rule, value, callback) => {
+        const intReg = /^[0-9]+$/;
+        if (!intReg.test(value)) {
+            callback(new Error("Please input an integer"));
+        } else if(value > parseInt(this.form5.price)) {
+            callback(new Error("Start price should smaller than reserved price!"));
+        }
+        else{
+            callback();
+        }
+    };
+
     return {
         dis1:true,
         dis2:true,
@@ -445,6 +467,7 @@ export default {
             imageRaw: [],
         },
         form5: {
+            startprice:'',
             isAuction:true,
             daterange:[],
             price: "",
@@ -464,22 +487,23 @@ export default {
         daterange: [{required: true, message: " Please enter start date", trigger: "blur",},],
         country: [{required: true, message: " Please enter country", trigger: "blur",},],
         price: [{required: true, message: " Please enter price", trigger: "blur"}, {validator: checkInt,trigger: "blur" },],
+          startprice: [{required: true, message: " Please enter start price", trigger: "blur"}, {validator: checkStart,trigger: "blur" },],
       },
     };
   },
 
   created() {
-    this.username = localStorage.getItem("username");
-    // this.username = this.$store.state.username;
-    if (this.username !== null) {
-      this.hasLogin = true;
-      this.avatar = localStorage.getItem("avatar");
-      this.firstname = localStorage.getItem("firstname");
-    }
-    else{
-        this.$message.error("You should login first!");
-        this.$router.push("/login");
-    }
+    // this.username = localStorage.getItem("username");
+    // // this.username = this.$store.state.username;
+    // if (this.username !== null) {
+    //   this.hasLogin = true;
+    //   this.avatar = localStorage.getItem("avatar");
+    //   this.firstname = localStorage.getItem("firstname");
+    // }
+    // else{
+    //     this.$message.error("You should login first!");
+    //     this.$router.push("/login");
+    // }
   },
   methods: {
     ...mapActions(["logout"]),
@@ -487,6 +511,9 @@ export default {
       switch (command) {
         case "profile":
           this.$router.push("/profile");
+          break;
+      case "property":
+          this.$router.push("/propmag");
           break;
         case "auction":
           this.$router.push("/auction");
@@ -607,8 +634,9 @@ export default {
           data.append('description', this.form3.description);
 
           data.append('startdate', this.form5.daterange[0]);
-        data.append('enddate', this.form5.daterange[1]);
+          data.append('enddate', this.form5.daterange[1]);
           data.append('price', this.form5.price);
+          data.append('startprice', this.form5.startprice);
           data.append('isAuction', this.form5.isAuction);
 
 
