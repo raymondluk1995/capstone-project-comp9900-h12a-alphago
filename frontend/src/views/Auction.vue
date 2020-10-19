@@ -102,15 +102,15 @@
             Header,
         },
         created () {
-            this.username = localStorage.getItem('username');
-            if(this.username!==null){
-                this.hasLogin = true;
-                this.avatar = localStorage.getItem('avatar');
-                this.firstname=  localStorage.getItem('firstname');
-            }else{
-                this.$message.error("You should login first!");
-                this.$router.push("/login");
-            }
+            // this.username = localStorage.getItem('username');
+            // if(this.username!==null){
+            //     this.hasLogin = true;
+            //     this.avatar = localStorage.getItem('avatar');
+            //     this.firstname=  localStorage.getItem('firstname');
+            // }else{
+            //     this.$message.error("You should login first!");
+            //     this.$router.push("/login");
+            // }
 
             this.$axios
                 .get('/property/information')
@@ -131,9 +131,9 @@
         },
         data() {
             return {
-                isEmpty: true,
+                isEmpty: false,
                 hasLogin: false,
-                propList: [],
+                propList: [{id:123},],
             }
         },
         methods: {
