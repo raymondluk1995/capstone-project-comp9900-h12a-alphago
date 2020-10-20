@@ -41,7 +41,7 @@
                 <el-row style="margin: 15px 50px 0 50px">
                     <el-col :span="12">
                         <h3>Latest Bid</h3>
-                        <div class="bid"> ${{ propInfo.latestBid}}</div>
+                        <div class="bid"> ${{ propInfo.latestPrice }}</div>
 <!--                        <h4  class="countdownTime">{{ time }}</h4>-->
                     </el-col>
 
@@ -148,13 +148,6 @@
                     </el-row>
                 </section>
 
-                <section style="margin: 15px 50px 0 50px">
-                    <el-row>
-                    <el-col>
-
-                    </el-col>
-                    </el-row>
-                </section>
 
                 <section style="margin: 15px 50px 0 50px">
                     <h3>Bid History</h3>
@@ -268,10 +261,11 @@
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
-                    endDate:'',
-                    startDate:'',
+                    enddate:'',
+                    startdate:'',
                     avatar:'',
                     bidderNum:'',
+                    latestPrice:'',
                     info: '',
                     phone: '',
                     email:'',
@@ -283,6 +277,8 @@
                     bidHistory:[],
                     firstname:'',
                     lastname:'',
+                    highestPrice:'',
+                    minimumPrice:'',
                 },
                 form: {
                     name: '',
@@ -317,7 +313,6 @@
                 .then(response => {
                     this.propInfo = response.data.result,
                     // this.isBidder = response.data.result.isBidder,
-                    this.currentBid = response.data.result.highestPrice,
                     this.lat =  parseFloat(response.data.result.lat),
                     this.lng =  parseFloat(response.data.result.lng),
                     this.position_tags = response.data.result.position,
@@ -362,7 +357,7 @@
                 if (this.timeFlag === true) {
                     clearInterval(timer);
                 }
-                this.countDown(this.propInfo.endDate,this.propInfo.startDate);
+                this.countDown(this.propInfo.enddate,this.propInfo.startdate);
             }, 1000);
         },
 
