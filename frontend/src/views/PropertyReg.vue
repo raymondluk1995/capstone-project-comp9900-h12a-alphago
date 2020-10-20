@@ -471,6 +471,7 @@ export default {
             Auction:true,
             daterange:[],
             price: "",
+            coord:'',
       },
       rules: {
         bedroomNum:[{ required: true, message: " Please enter bedroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
@@ -639,6 +640,9 @@ export default {
           data.append('startprice', this.form5.startprice);
           data.append('isAuction', this.form5.isAuction);
 
+          // added by Raymond
+          data.append("lat", this.place.geometry.location.lat);
+          data.append("lng", this.place.geometry.location.lng);
 
           this.form4.imageRaw.forEach(function (file) {
                     data.append('photos', file, file.name);

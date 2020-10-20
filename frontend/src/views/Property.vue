@@ -228,12 +228,14 @@
                 time: '',
                 cards:['111','222','333'],
                 defaultCard:'',
-                center:{lat:-33.9175679,lng:151.2255712},
-                markers:[
-                    {
-                        position:{lat:-33.9175679,lng:151.2255712}
-                    }
-                ],
+                // center:{lat:-33.9175679,lng:151.2255712},
+                lat :'',
+                lng:'',
+                center: {},
+                // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
+                markers:[{
+                    position:{},
+                }],
                 propInfo: {
                     id: '',
                     // endDate: new Date(2000, 10, 10, 10, 10),
@@ -279,9 +281,10 @@
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
-                    this.form.propInfo = response.data.result.propInfo,
+                    this.propInfo = response.data.result.propInfo,
                     this.isBidder = response.data.result.isBidder,
-                    this.currentBid = response.data.result.currentBid
+                    this.currentBid = response.data.result.currentBid,
+                    // this.lat = this.propInfo
                 })
                 .catch(function (error) {
                     console.log(error)
