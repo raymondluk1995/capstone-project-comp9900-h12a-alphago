@@ -21,11 +21,11 @@
             </template>
         </Header>
         <el-row  type="flex" justify="center" >
-            <el-col :span="16" style="margin: 0 50px 20px 30px; box-shadow: 2px 1px 5px 4px #e2e2e2;">
+            <el-col :span="16" style="margin: 50px 50px 20px 30px; box-shadow: 2px 1px 5px 4px #d5dbea;">
                 <h1 style="margin: 15px 50px 0 50px">{{ propInfo.address }}</h1>
                 <section style="margin: 15px 50px 0 50px">
 <!--                    <h1>{{ propInfo.address }}</h1>-->
-                    <el-row class="banner">
+                    <el-row class="banner" :class="addStatusColor(propInfo.status)">
                         <h4>{{ time }}</h4>
                     </el-row>
                     <el-carousel :interval="5000" arrow="always" :height="cheight">
@@ -263,6 +263,7 @@
                     username:'',
                     address: '',
                     enddate:'',
+                    status:'S',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
@@ -402,10 +403,29 @@
                 this.$set(this.form, 'cardNumber', card)
             },
 
+            addStatusColor(status) {
+                switch(status) {
+                    case 'A':
+                        return 'status-process';
+                        break;
+                    case 'S':
+                        return 'status-success';
+                        break;
+                    case 'F':
+                        return 'status-failure';
+                        break;
+                    case 'R':
+                        return 'status-out';
+                        break;
+                    default:
+                        break;
+                }
+            },
+
             countDown(time,startime) {
                 let expiredTime = dayjs(time);
                 let startTime = dayjs(startime);
-                // let startTime = dayjs(new Date(2022, 10, 10, 10, 10));
+                // let startTime = dayjs(new Date(2019, 10, 10, 10, 10));
                 // let expiredTime = dayjs(new Date(2023, 10, 10, 10, 10));
                 let nowTime = dayjs();
 
@@ -423,7 +443,7 @@
                     this.time = `This Auction will start at ${ st }`;
                 }
                 else{
-                    this.time = ` ${day} : ${hour} : ${minute} : ${second} `;
+                    this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
                 }
             },
 
@@ -602,7 +622,7 @@
         width:100%;
         height:500px;
         margin-top:50px;
-        box-shadow: 2px 1px 5px 4px #e2e2e2;
+        box-shadow: 2px 1px 5px 4px #d5dbea;
     }
     .bid {
         width :80%;
@@ -612,23 +632,23 @@
         font-weight: bold;
         color: #fff;
         background-color: #133264;
-        border-radius: 0;
+        border-radius: 5px;
     }
     .countdownTime{
         width :80%;
         padding: 10px;
         text-align: center;
-        background-color: #c8dbf9;
+        /*background-color: #c8dbf9;*/
         border-radius: 5px;
         font-size: 15px;
     }
     .banner{
         width :100%;
-        padding-top: 5px;
+        padding-top: 10px;
         align-items: center;
         text-align: center;
         background-color: #becdd6;
-        border-radius: 5px;
+        /*border-radius: 5px;*/
         font-size: 10px;
     }
 
@@ -657,6 +677,15 @@
         /*    cursor: pointer;*/
         /*    transform: scale(1.02);*/
         /*}*/
+    }
+    .status-success {
+        background-color: #89c668;
+    }
+    .status-process {
+        background-color: #e6a23c;
+    }
+    .status-fail {
+        background-color: #f56c6c;
     }
 
 </style>
