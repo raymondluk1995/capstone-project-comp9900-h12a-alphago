@@ -56,11 +56,9 @@ export default {
 
 <style scoped lang="scss">
 .header {
-  /*margin-bottom: 30px;*/
-  margin-left: 30px;
-  margin-right: 50px;
   padding: 15px;
   border-bottom: 2px solid #f2f2f2;
+    box-shadow: 0 2px 10px 4px #d5dbea;
     /*height:120px;*/
 }
 

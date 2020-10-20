@@ -21,11 +21,11 @@
             </template>
         </Header>
         <el-row  type="flex" justify="center" >
-            <el-col :span="16" style="margin: 0 50px 20px 30px; box-shadow: 2px 1px 5px 4px #e2e2e2;">
+            <el-col :span="16" style="margin: 50px 50px 20px 30px; box-shadow: 2px 1px 5px 4px #d5dbea;">
                 <h1 style="margin: 15px 50px 0 50px">{{ propInfo.address }}</h1>
                 <section style="margin: 15px 50px 0 50px">
 <!--                    <h1>{{ propInfo.address }}</h1>-->
-                    <el-row class="banner">
+                    <el-row class="banner" :class="addStatusColor(propInfo.status)">
                         <h4>{{ time }}</h4>
                     </el-row>
                     <el-carousel :interval="5000" arrow="always" :height="cheight">
@@ -41,7 +41,7 @@
                 <el-row style="margin: 15px 50px 0 50px">
                     <el-col :span="12">
                         <h3>Latest Bid</h3>
-                        <div class="bid"> ${{ propInfo.latestBid}}</div>
+                        <div class="bid"> ${{ propInfo.latestPrice }}</div>
 <!--                        <h4  class="countdownTime">{{ time }}</h4>-->
                     </el-col>
 
@@ -116,11 +116,11 @@
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in propInfo.position" effect="plain">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.position.split(',')" effect="plain">{{ tag }}</el-tag>
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in propInfo.detail">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.detail.split(',')">{{ tag }}</el-tag>
                         </el-row>
                     </el-col>
                     </el-row>
@@ -148,13 +148,6 @@
                     </el-row>
                 </section>
 
-                <section style="margin: 15px 50px 0 50px">
-                    <el-row>
-                    <el-col>
-
-                    </el-col>
-                    </el-row>
-                </section>
 
                 <section style="margin: 15px 50px 0 50px">
                     <h3>Bid History</h3>
@@ -167,7 +160,7 @@
                         <h3 style="color:#f3f3f3">Owner</h3>
                     </el-row>
                 <el-row type="flex" justify="center">
-                    <el-avatar :size="70" :src="avatar" style="margin-top:50px"></el-avatar>
+                    <el-avatar :size="70" :src="propInfo.avatar" style="margin-top:50px"></el-avatar>
                 </el-row>
 
                     <el-row type="flex" justify="center" style="margin-top:20px">
@@ -231,6 +224,7 @@
         components: {
             Header,
         },
+
         data() {
             const validateCVC = (rule, value, callback) => {
                 const cvcReg = /^\d{3}$/;
@@ -254,6 +248,8 @@
                 tipError: false,
                 time: '',
                 cards:[],
+                detail_tags:[],
+                position_tags:[],
                 defaultCard:'',
                 // center:{lat:-33.9175679,lng:151.2255712},
                 lat :'',
@@ -266,20 +262,25 @@
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
-                    endDate:'',
-                    startDate:'',
+                    enddate:'',
+                    status:'S',
+                    startdate:'',
+                    avatar:'',
                     bidderNum:'',
+                    latestPrice:'',
                     info: '',
                     phone: '',
                     email:'',
-                    position: [],
-                    detail: [],
+                    position: '',
+                    detail: '',
                     latestBid: '',
                     photos: ['','',''],
                     description: '',
                     bidHistory:[],
                     firstname:'',
                     lastname:'',
+                    highestPrice:'',
+                    minimumPrice:'',
                 },
                 form: {
                     name: '',
@@ -312,11 +313,12 @@
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
-                    this.propInfo = response.data.result.propInfo,
-                    this.isBidder = response.data.result.isBidder,
-                    this.currentBid = response.data.result.currentBid,
-                    this.lat =  parseFloat(response.data.result.propInfo.lat),
-                    this.lng =  parseFloat(response.data.result.propInfo.lng),
+                    this.propInfo = response.data.result,
+                    // this.isBidder = response.data.result.isBidder,
+                    this.lat =  parseFloat(response.data.result.lat),
+                    this.lng =  parseFloat(response.data.result.lng),
+                    this.position_tags = response.data.result.position,
+                        this.detail_tags = response.data.result.detail,
                     this.center = {
                         lat:this.lat,
                         lng:this.lng
@@ -331,6 +333,8 @@
                 .catch(function (error) {
                     console.log(error)
                 })
+            this.position_tags = this.position_tags.split(',');
+            this.detail_tags = this.detail_tags.split(',')
         },
 
         computed: {
@@ -355,7 +359,7 @@
                 if (this.timeFlag === true) {
                     clearInterval(timer);
                 }
-                this.countDown(this.propInfo.endDate,this.propInfo.startDate);
+                this.countDown(this.propInfo.enddate,this.propInfo.startdate);
             }, 1000);
         },
 
@@ -399,11 +403,30 @@
                 this.$set(this.form, 'cardNumber', card)
             },
 
+            addStatusColor(status) {
+                switch(status) {
+                    case 'A':
+                        return 'status-process';
+                        break;
+                    case 'S':
+                        return 'status-success';
+                        break;
+                    case 'F':
+                        return 'status-failure';
+                        break;
+                    case 'R':
+                        return 'status-out';
+                        break;
+                    default:
+                        break;
+                }
+            },
+
             countDown(time,startime) {
                 let expiredTime = dayjs(time);
                 let startTime = dayjs(startime);
-                // let startTime = dayjs(new Date(2022, 10, 10, 10, 10));
-                // let expiredTime = dayjs(new Date(2022, 10, 10, 10, 10));
+                // let startTime = dayjs(new Date(2019, 10, 10, 10, 10));
+                // let expiredTime = dayjs(new Date(2023, 10, 10, 10, 10));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
@@ -416,10 +439,11 @@
 
                 if (diff2 >= 0) {
                     this.timeFlag = true;
-                    this.time = 'This auction has not started yet!';
+                    let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
+                    this.time = `This Auction will start at ${ st }`;
                 }
                 else{
-                    this.time = ` ${day} : ${hour} : ${minute} : ${second} `;
+                    this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
                 }
             },
 
@@ -598,7 +622,7 @@
         width:100%;
         height:500px;
         margin-top:50px;
-        box-shadow: 2px 1px 5px 4px #e2e2e2;
+        box-shadow: 2px 1px 5px 4px #d5dbea;
     }
     .bid {
         width :80%;
@@ -608,23 +632,23 @@
         font-weight: bold;
         color: #fff;
         background-color: #133264;
-        border-radius: 0;
+        border-radius: 5px;
     }
     .countdownTime{
         width :80%;
         padding: 10px;
         text-align: center;
-        background-color: #c8dbf9;
+        /*background-color: #c8dbf9;*/
         border-radius: 5px;
         font-size: 15px;
     }
     .banner{
         width :100%;
-        padding-top: 5px;
+        padding-top: 10px;
         align-items: center;
         text-align: center;
         background-color: #becdd6;
-        border-radius: 5px;
+        /*border-radius: 5px;*/
         font-size: 10px;
     }
 
@@ -653,6 +677,15 @@
         /*    cursor: pointer;*/
         /*    transform: scale(1.02);*/
         /*}*/
+    }
+    .status-success {
+        background-color: #89c668;
+    }
+    .status-process {
+        background-color: #e6a23c;
+    }
+    .status-fail {
+        background-color: #f56c6c;
     }
 
 </style>
