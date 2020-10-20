@@ -116,11 +116,11 @@
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in position_tags" effect="plain">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.position.split(',')" effect="plain">{{ tag }}</el-tag>
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in detail_tags">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.detail.split(',')">{{ tag }}</el-tag>
                         </el-row>
                     </el-col>
                     </el-row>
@@ -167,7 +167,7 @@
                         <h3 style="color:#f3f3f3">Owner</h3>
                     </el-row>
                 <el-row type="flex" justify="center">
-                    <el-avatar :size="70" :src="propInfo.firstname" style="margin-top:50px"></el-avatar>
+                    <el-avatar :size="70" :src="propInfo.avatar" style="margin-top:50px"></el-avatar>
                 </el-row>
 
                     <el-row type="flex" justify="center" style="margin-top:20px">
