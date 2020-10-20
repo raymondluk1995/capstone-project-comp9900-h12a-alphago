@@ -317,7 +317,7 @@
                             inactive-color="#ff4949">
                     </el-switch>
                     </el-form-item>
-          <el-form-item v-if="form5.isAuction" label="Time Range:" prop="daterange">
+          <el-form-item v-if="form5.Auction" label="Time Range:" prop="daterange">
             <el-date-picker style="width:80%"
                     v-model="form5.daterange"
                     type="datetimerange"
@@ -329,13 +329,13 @@
 
           </el-form-item>
 
-          <el-form-item v-if="form5.isAuction" label="Reserved Price:" prop="price">
+          <el-form-item v-if="form5.Auction" label="Reserved Price:" prop="price">
             <el-input v-model="form5.price">
                 <i slot="suffix" class="input-slot">A$</i>
             </el-input>
           </el-form-item>
 
-          <el-form-item v-if="form5.isAuction" label="Start Price:" prop="startprice">
+          <el-form-item v-if="form5.Auction" label="Start Price:" prop="startprice">
               <el-input v-model="form5.startprice">
                   <i slot="suffix" class="input-slot">A$</i>
               </el-input>
@@ -468,7 +468,7 @@ export default {
         },
         form5: {
             startprice:'',
-            isAuction:true,
+            Auction:true,
             daterange:[],
             price: "",
       },

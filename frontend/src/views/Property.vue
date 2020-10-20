@@ -277,7 +277,7 @@
             // }
             this.id = this.$route.query.id;
             this.$axios
-                .get('/property/information?pid=' + this.id)
+                .get('/auction/information/' + this.id)
                 .then(response => {
                     this.form.propInfo = response.data.result.propInfo,
                     this.isBidder = response.data.result.isBidder,
