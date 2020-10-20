@@ -253,33 +253,33 @@
                 newPlacedBid:'',
                 tipError: false,
                 time: '',
-                cards:['111','222','333'],
+                cards:[],
                 defaultCard:'',
-                center:{lat:-33.9175679,lng:151.2255712},
+                // center:{lat:-33.9175679,lng:151.2255712},
                 lat :'',
                 lng:'',
-                // center: {},
-                markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
-                // markers:[{position:{},}],
+                center: {},
+                // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
+                markers:[{position:{},}],
                 propInfo: {
                     id: '',
                     // endDate: new Date(2000, 10, 10, 10, 10),
-                    username:'ababababa',
-                    address: '2 Gearin Alley, Mascot, NSW',
+                    username:'',
+                    address: '',
                     endDate:'',
                     startDate:'',
-                    bidderNum:'2',
+                    bidderNum:'',
                     info: '',
-                    phone: '041234567',
-                    email:'gmail@gmail.com',
+                    phone: '',
+                    email:'',
                     position: [],
                     detail: [],
                     latestBid: '',
                     photos: ['','',''],
                     description: '',
                     bidHistory:[],
-                    firstname:'Bobbb',
-                    lastname:'bboB',
+                    firstname:'',
+                    lastname:'',
                 },
                 form: {
                     name: '',
@@ -400,10 +400,10 @@
             },
 
             countDown(time,startime) {
-                // let expiredTime = dayjs(time);
-                // let startTime = dayjs(startime);
-                let startTime = dayjs(new Date(2022, 10, 10, 10, 10));
-                let expiredTime = dayjs(new Date(2022, 10, 10, 10, 10));
+                let expiredTime = dayjs(time);
+                let startTime = dayjs(startime);
+                // let startTime = dayjs(new Date(2022, 10, 10, 10, 10));
+                // let expiredTime = dayjs(new Date(2022, 10, 10, 10, 10));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
