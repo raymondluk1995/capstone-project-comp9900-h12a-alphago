@@ -20,24 +20,29 @@
                 <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
             </template>
         </Header>
-
-        <el-row type="flex" justify="center">
-            <el-col :span="16">
-                <section style="margin-top: 15px">
-                    <h1>{{ propInfo.title }}</h1>
+        <el-row  type="flex" justify="center" >
+            <el-col :span="16" style="margin: 0 50px 20px 30px; box-shadow: 2px 1px 5px 4px #e2e2e2;">
+                <h1 style="margin: 15px 50px 0 50px">{{ propInfo.address }}</h1>
+                <section style="margin: 15px 50px 0 50px">
+<!--                    <h1>{{ propInfo.address }}</h1>-->
+                    <el-row class="banner">
+                        <h4>{{ time }}</h4>
+                    </el-row>
                     <el-carousel :interval="5000" arrow="always" :height="cheight">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="propInfo.pid">
                             <img :src="pic"  width="100%" height="100%" alt=""/>
                         </el-carousel-item>
                     </el-carousel>
+<!--                    <el-row class="banner">-->
+<!--                        <h4>{{ time }}</h4>-->
+<!--                    </el-row>-->
                 </section>
 
-
-                <el-row>
+                <el-row style="margin: 15px 50px 0 50px">
                     <el-col :span="12">
                         <h3>Latest Bid</h3>
                         <div class="bid"> ${{ propInfo.latestBid}}</div>
-                        <h4  class="countdownTime">{{ time }}</h4>
+<!--                        <h4  class="countdownTime">{{ time }}</h4>-->
                     </el-col>
 
 <!--                    <el-col :span="5" :offset="7">-->
@@ -90,8 +95,7 @@
                     </template>
                 </el-dialog>
 
-
-                <section style="margin-top:50px">
+                <section style="margin: 15px 50px 0 50px">
                     <el-row>
                     <el-col >
                     <h3>Details</h3>
@@ -144,42 +148,65 @@
                     </el-row>
                 </section>
 
-                <section style="margin-top:50px">
+                <section style="margin: 15px 50px 0 50px">
                     <el-row>
                     <el-col>
-                        <div v-if="this.isBidder">
-                            <h3>Place new bid</h3>
-                            <div class="new-bid-wrap">
-                                <el-input v-model="newBid" :disabled="timeFlag"></el-input>
-                                <el-button class='wrap-button' type="primary" icon="el-icon-plus" circle @click="addNewBid"></el-button>
-                            </div>
 
-                            <p>{{ newBidTip }}</p>
-                        </div>
-
-                        <div v-else style="margin-top: 70px">
-                            <h3>Register as a Bidder</h3>
-                            <el-button type="primary"
-                                       style="font-size: 20px;"
-                                       round
-                                       :disabled="timeFlag"
-                                       @click="Bidreg"
-                                       icon="el-icon-right"
-                                       plain
-                            >Register to Bid</el-button>
-                        </div>
                     </el-col>
                     </el-row>
                 </section>
 
-                <section style="margin-top:50px;">
+                <section style="margin: 15px 50px 0 50px">
                     <h3>Bid History</h3>
                 </section>
 
-                <section style="margin-top:50px; margin-bottom:200px">
-                    <h3>Documents</h3>
-                </section>
+            </el-col>
+            <el-col :span="5" stype="">
+                <div class="info">
+                    <el-row type="flex" justify="center" style="background-color: #133264;">
+                        <h3 style="color:#f3f3f3">Owner</h3>
+                    </el-row>
+                <el-row type="flex" justify="center">
+                    <el-avatar :size="70" :src="avatar" style="margin-top:50px"></el-avatar>
+                </el-row>
 
+                    <el-row type="flex" justify="center" style="margin-top:20px">
+                        <h4> {{ propInfo.firstname}} {{ propInfo.lastname}} </h4>
+                    </el-row>
+
+                    <el-row type="flex" justify="center" style="margin-top:20px">
+                        <i class="el-icon-user-solid"><span> {{ propInfo.username}} </span></i>
+                    </el-row>
+
+                    <el-row type="flex" justify="center" style="margin-top:20px">
+                        <i class="el-icon-phone"><span> {{ propInfo.phone}} </span></i>
+                    </el-row>
+
+                    <el-row type="flex" justify="center" style="margin-top:20px">
+                        <i class="el-icon-message"><span> {{ propInfo.email}} </span></i>
+                    </el-row>
+                </div>
+
+                <el-button type="" :disabled="true" style="margin-top: 10px;color:#173b77;font-size: 20px;background-color:#a0b9df; width:100%"
+                >{{ propInfo.bidderNum }} Bidders</el-button>
+
+                <div v-if="this.isBidder">
+                    <h3>Place new bid</h3>
+                    <div class="new-bid-wrap">
+                        <el-input v-model="newBid" :disabled="timeFlag"></el-input>
+                        <el-button class='wrap-button' type="primary" icon="el-icon-plus" circle @click="addNewBid"></el-button>
+                    </div>
+
+                    <p>{{ newBidTip }}</p>
+                </div>
+
+                <div v-else style="margin-top: 2px">
+                    <el-button type=""
+                               class="btn"
+                               @click="Bidreg"
+                               icon="el-icon-right"
+                    >Register to Bid</el-button>
+                </div>
             </el-col>
         </el-row>
     </div>
@@ -237,16 +264,22 @@
                 propInfo: {
                     id: '',
                     // endDate: new Date(2000, 10, 10, 10, 10),
-                    title: '',
+                    username:'ababababa',
+                    address: '2 Gearin Alley, Mascot, NSW',
                     endDate:'',
                     startDate:'',
+                    bidderNum:'2',
                     info: '',
+                    phone: '041234567',
+                    email:'gmail@gmail.com',
                     position: [],
                     detail: [],
                     latestBid: '',
-                    photos: [],
+                    photos: ['','',''],
                     description: '',
                     bidHistory:[],
+                    firstname:'Bobbb',
+                    lastname:'bboB',
                 },
                 form: {
                     name: '',
@@ -367,9 +400,10 @@
             },
 
             countDown(time,startime) {
-                let expiredTime = dayjs(time);
-                let startTime = dayjs(startime);
-                // let expiredTime = dayjs(new Date(2022, 10, 10, 10, 10));
+                // let expiredTime = dayjs(time);
+                // let startTime = dayjs(startime);
+                let startTime = dayjs(new Date(2022, 10, 10, 10, 10));
+                let expiredTime = dayjs(new Date(2022, 10, 10, 10, 10));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
@@ -537,6 +571,9 @@
 </script>
 
 <style scoped lang="scss">
+    .property{
+        /*background-color: #aaaaaa;*/
+    }
     .user {
         display: flex;
         align-items: center;
@@ -557,6 +594,12 @@
     .el-date-editor.el-input__inner {
         width: 100%;
     }
+    .info{
+        width:100%;
+        height:500px;
+        margin-top:50px;
+        box-shadow: 2px 1px 5px 4px #e2e2e2;
+    }
     .bid {
         width :80%;
         padding: 10px;
@@ -574,7 +617,15 @@
         background-color: #c8dbf9;
         border-radius: 5px;
         font-size: 15px;
-
+    }
+    .banner{
+        width :100%;
+        padding-top: 5px;
+        align-items: center;
+        text-align: center;
+        background-color: #becdd6;
+        border-radius: 5px;
+        font-size: 10px;
     }
 
     .el-tag {
@@ -593,6 +644,15 @@
         .wrap-button{
             margin-left: 10px;
         }
+    }
+    .btn{
+        font-size: 20px;
+        background-color:#173b77;
+        width:100%;color:#f3f3f3;
+        /*&:hover {*/
+        /*    cursor: pointer;*/
+        /*    transform: scale(1.02);*/
+        /*}*/
     }
 
 </style>
