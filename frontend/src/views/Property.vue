@@ -283,7 +283,7 @@
                 .then(response => {
                     this.propInfo = response.data.result.propInfo,
                     this.isBidder = response.data.result.isBidder,
-                    this.currentBid = response.data.result.currentBid,
+                    this.currentBid = response.data.result.currentBid
                     // this.lat = this.propInfo
                 })
                 .catch(function (error) {
