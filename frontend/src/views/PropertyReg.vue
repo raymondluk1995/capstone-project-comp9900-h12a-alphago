@@ -641,8 +641,8 @@ export default {
           data.append('auction', this.form5.Auction);
 
           // added by Raymond
-          data.append("lat", this.place.geometry.location.lat);
-          data.append("lng", this.place.geometry.location.lng);
+          // data.append("lat", this.place.geometry.location.lat);
+          // data.append("lng", this.place.geometry.location.lng);
 
           this.form4.imageRaw.forEach(function (file) {
                     data.append('photos', file, file.name);
