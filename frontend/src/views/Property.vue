@@ -403,10 +403,10 @@
             },
 
             countDown(time,startime) {
-                // let expiredTime = dayjs(time);
-                // let startTime = dayjs(startime);
-                let startTime = dayjs(new Date(2022, 10, 10, 10, 10));
-                let expiredTime = dayjs(new Date(2023, 10, 10, 10, 10));
+                let expiredTime = dayjs(time);
+                let startTime = dayjs(startime);
+                // let startTime = dayjs(new Date(2022, 10, 10, 10, 10));
+                // let expiredTime = dayjs(new Date(2023, 10, 10, 10, 10));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
@@ -417,15 +417,8 @@
                 let minute = parseInt((diff / 60) % 60);
                 let second = parseInt(diff % 60);
 
-                let day2 = parseInt(diff2 / 3600 / 24);
-                let hour2 = parseInt((diff2 / 3600) % 24);
-                let minute2 = parseInt((diff2 / 60) % 60);
-                let second2 = parseInt(diff2 % 60);
-
                 if (diff2 >= 0) {
                     this.timeFlag = true;
-                    // this.time = 'This auction has not started yet!';
-                    // let format = "YYYY-MM-DD HH:mm:ss";
                     let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
                     this.time = `This Auction will start at ${ st }`;
                 }
