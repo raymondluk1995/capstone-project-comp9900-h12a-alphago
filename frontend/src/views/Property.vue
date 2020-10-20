@@ -228,14 +228,12 @@
                 time: '',
                 cards:['111','222','333'],
                 defaultCard:'',
-                // center:{lat:-33.9175679,lng:151.2255712},
+                center:{lat:-33.9175679,lng:151.2255712},
                 lat :'',
                 lng:'',
-                center: {},
-                // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
-                markers:[{
-                    position:{},
-                }],
+                // center: {},
+                markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
+                // markers:[{position:{},}],
                 propInfo: {
                     id: '',
                     // endDate: new Date(2000, 10, 10, 10, 10),

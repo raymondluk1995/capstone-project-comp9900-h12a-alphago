@@ -312,7 +312,7 @@
                   <el-col :span="24">
                     <el-form-item label="Register for Auction:" prop="ifAuction">
                     <el-switch
-                            v-model="form5.isAuction"
+                            v-model="form5.Auction"
                             active-color="#13ce66"
                             inactive-color="#ff4949">
                     </el-switch>
@@ -335,8 +335,8 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item v-if="form5.Auction" label="Start Price:" prop="startprice">
-              <el-input v-model="form5.startprice">
+          <el-form-item v-if="form5.Auction" label="Minimum Price:" prop="startprice">
+              <el-input v-model="form5.minimumprice">
                   <i slot="suffix" class="input-slot">A$</i>
               </el-input>
           </el-form-item>
@@ -467,7 +467,7 @@ export default {
             imageRaw: [],
         },
         form5: {
-            startprice:'',
+            minimumprice:'',
             Auction:true,
             daterange:[],
             price: "",
