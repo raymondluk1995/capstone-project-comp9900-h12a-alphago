@@ -312,11 +312,11 @@
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
-                    this.propInfo = response.data.result.propInfo,
-                    this.isBidder = response.data.result.isBidder,
-                    this.currentBid = response.data.result.currentBid,
-                    this.lat =  parseFloat(response.data.result.propInfo.lat),
-                    this.lng =  parseFloat(response.data.result.propInfo.lng),
+                    this.propInfo = response.data.result,
+                    // this.isBidder = response.data.result.isBidder,
+                    this.currentBid = response.data.result.highestPrice,
+                    this.lat =  parseFloat(response.data.result.lat),
+                    this.lng =  parseFloat(response.data.result.lng),
                     this.center = {
                         lat:this.lat,
                         lng:this.lng
