@@ -116,11 +116,11 @@
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in propInfo.position" effect="plain">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in position_tags" effect="plain">{{ tag }}</el-tag>
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in propInfo.detail">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in detail_tags">{{ tag }}</el-tag>
                         </el-row>
                     </el-col>
                     </el-row>
@@ -167,7 +167,7 @@
                         <h3 style="color:#f3f3f3">Owner</h3>
                     </el-row>
                 <el-row type="flex" justify="center">
-                    <el-avatar :size="70" :src="avatar" style="margin-top:50px"></el-avatar>
+                    <el-avatar :size="70" :src="propInfo.firstname" style="margin-top:50px"></el-avatar>
                 </el-row>
 
                     <el-row type="flex" justify="center" style="margin-top:20px">
@@ -254,6 +254,8 @@
                 tipError: false,
                 time: '',
                 cards:[],
+                detail_tags:[],
+                position_tags:[],
                 defaultCard:'',
                 // center:{lat:-33.9175679,lng:151.2255712},
                 lat :'',
@@ -268,12 +270,13 @@
                     address: '',
                     endDate:'',
                     startDate:'',
+                    avatar:'',
                     bidderNum:'',
                     info: '',
                     phone: '',
                     email:'',
-                    position: [],
-                    detail: [],
+                    position: '',
+                    detail: '',
                     latestBid: '',
                     photos: ['','',''],
                     description: '',
@@ -317,6 +320,8 @@
                     this.currentBid = response.data.result.highestPrice,
                     this.lat =  parseFloat(response.data.result.lat),
                     this.lng =  parseFloat(response.data.result.lng),
+                    this.position_tags = response.data.result.position,
+                        this.detail_tags = response.data.result.detail,
                     this.center = {
                         lat:this.lat,
                         lng:this.lng
@@ -331,6 +336,8 @@
                 .catch(function (error) {
                     console.log(error)
                 })
+            this.position_tags = this.position_tags.split(',');
+            this.detail_tags = this.detail_tags.split(',')
         },
 
         computed: {
