@@ -335,8 +335,8 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item v-if="form5.Auction" label="Minimum Price:" prop="startprice">
-              <el-input v-model="form5.minimumprice">
+          <el-form-item v-if="form5.Auction" label="Minimum Price:" prop="minimumPrice">
+              <el-input v-model="form5.minimumPrice">
                   <i slot="suffix" class="input-slot">A$</i>
               </el-input>
           </el-form-item>
@@ -402,7 +402,7 @@ export default {
         if (!intReg.test(value)) {
             callback(new Error("Please input an integer"));
         } else if(value > parseInt(this.form5.price)) {
-            callback(new Error("Start price should smaller than reserved price!"));
+            callback(new Error("Minimum price should smaller than reserved price!"));
         }
         else{
             callback();
@@ -467,7 +467,7 @@ export default {
             imageRaw: [],
         },
         form5: {
-            minimumprice:'',
+            minimumPrice:'',
             Auction:true,
             daterange:[],
             price: "",
@@ -488,7 +488,7 @@ export default {
         daterange: [{required: true, message: " Please enter start date", trigger: "blur",},],
         country: [{required: true, message: " Please enter country", trigger: "blur",},],
         price: [{required: true, message: " Please enter price", trigger: "blur"}, {validator: checkInt,trigger: "blur" },],
-          startprice: [{required: true, message: " Please enter start price", trigger: "blur"}, {validator: checkStart,trigger: "blur" },],
+          minimumPrice: [{required: true, message: " Please enter start price", trigger: "blur"}, {validator: checkStart,trigger: "blur" },],
       },
     };
   },
@@ -637,8 +637,8 @@ export default {
           data.append('startdate', this.form5.daterange[0]);
           data.append('enddate', this.form5.daterange[1]);
           data.append('price', this.form5.price);
-          data.append('startprice', this.form5.startprice);
-          data.append('isAuction', this.form5.isAuction);
+          data.append('minimumPrice', this.form5.minimumPrice);
+          data.append('auction', this.form5.Auction);
 
           // added by Raymond
           data.append("lat", this.place.geometry.location.lat);
