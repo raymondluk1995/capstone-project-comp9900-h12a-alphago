@@ -277,7 +277,7 @@
                               accept="image/*"
                               :auto-upload="false"
                               list-type="picture-card"
-                              :limit="5"
+                              :limit="10"
                               :on-remove="handleRemove"
                               :on-exceed="exceedTips"
                               :on-change="imgBroadcastChange"
@@ -505,6 +505,7 @@ export default {
     //     this.$message.error("You should login first!");
     //     this.$router.push("/login");
     // }
+
   },
   methods: {
     ...mapActions(["logout"]),
@@ -560,7 +561,7 @@ export default {
       this.form4.imageUrl.push(URL.createObjectURL(file.raw));
     },
     exceedTips: function () {
-      this.$message.error("Maximum 5 photos.");
+      this.$message.error("Maximum 10 photos.");
     },
       checktable1(){
           this.$refs["form1"].validate((valid) =>{
