@@ -116,11 +116,11 @@
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in propInfo.position.split(',')" effect="plain">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.position.split(',')" effect="plain" :key="propInfo.position">{{ tag }}</el-tag>
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in propInfo.detail.split(',')">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="propInfo.detail">{{ tag }}</el-tag>
                         </el-row>
                     </el-col>
                     </el-row>
