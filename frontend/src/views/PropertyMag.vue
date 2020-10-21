@@ -202,8 +202,7 @@
                     },
                 ],
                 urlObjImg:{},
-                originPropertyList: [
-                ],
+                originPropertyList: [],
                 propList: [],
                 propInfo: {},
                 rules: {
@@ -226,15 +225,13 @@
                 .get('/properties')
                 .then(response => {
                     this.originPropertyList = response.data.result
+                    this.propList = response.data.result;
+                    this.propInfo = this.originPropertyList.length !== 0 && this.originPropertyList[0];
                 })
                 .catch(function (error) {
                     console.log(error)
                 })
 
-        },
-        mounted() {
-            this.propList = this.originPropertyList;
-            this.propInfo = this.originPropertyList.length !== 0 && this.originPropertyList[0];
         },
 
         methods: {
