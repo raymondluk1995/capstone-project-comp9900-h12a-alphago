@@ -43,7 +43,8 @@ public class Property implements Serializable {
     private String description;
 
     @TableField(value = "auction")
-    private boolean isAuction;
+    private boolean auction;
 
     private boolean publicAccess;
+
 }

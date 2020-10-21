@@ -12,6 +12,7 @@ import alphago.propertysale.service.PropertyService;
 import alphago.propertysale.shiro.JwtInfo;
 import alphago.propertysale.utils.CheckCode;
 import alphago.propertysale.utils.FileUtil;
+import alphago.propertysale.utils.RedisUtil;
 import alphago.propertysale.utils.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -20,15 +21,16 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @program: propertysale
@@ -79,10 +81,15 @@ public class PropertyController {
         // Register Auction
         if(property.isAuction()){
             auction.setPid(pid);
+            auction.setStatus(Auction.REGISTERED);
             auctionService.save(auction);
+
+            RedisTemplate redisTemplate = RedisUtil.valueRedis();
+            redisTemplate.opsForValue().set("Start:" + auction.getAid() , ""
+                    , auction.getStartdate().getTime() - System.currentTimeMillis() , TimeUnit.MILLISECONDS);
         }
         Thread.sleep(1500);
-        return Result.fail("success");
+        return Result.success("success");
     }
 
     @RequiresAuthentication

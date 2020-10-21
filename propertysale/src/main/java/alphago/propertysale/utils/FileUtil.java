@@ -2,6 +2,7 @@ package alphago.propertysale.utils;
 
 import alphago.propertysale.entity.User;
 import org.apache.shiro.util.Assert;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import java.io.File;
  **/
 public class FileUtil {
     private static String remote = "http://localhost:8060/img/";
-
     /**
     * @Description: Check if the directory exist
     * @Author: Xiaohan
@@ -29,9 +29,15 @@ public class FileUtil {
     }
 
     public static String getUserAvatar(User user){
-        return user.getAvatarType() == null ?
+        String path = user.getAvatarType() == null ?
                 "default/" + Character.toUpperCase(user.getFirstname().charAt(0)) + ".png" :
                 user.getUid() + "/avatar/avatar" + user.getAvatarType();
+        return remote + path;
+    }
+
+    public static String getUserAvatar(long uid, String type){
+        String path = uid + "/avatar/avatar" + type;
+        return remote + path;
     }
 
     /**

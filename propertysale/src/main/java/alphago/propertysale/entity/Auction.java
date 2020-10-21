@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -19,6 +21,11 @@ import java.util.Date;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class Auction {
+    public final static String REGISTERED = "R";
+    public final static String AUCTION = "A";
+    public final static String SUCCESS = "S";
+    public final static String FAIL = "F";
+
     @TableId(type = IdType.AUTO)
     private long aid;
     private long pid;
@@ -29,6 +36,7 @@ public class Auction {
     @TableField(value = "reserve_price")
     private String price;
     private String minimumPrice = "1000000";
-    private long latestBid;
-    private boolean isSuccess = false;
+    private long currentBid;
+    private String status;
+    private long bidderNum = 0;
 }

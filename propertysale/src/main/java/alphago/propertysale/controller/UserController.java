@@ -47,8 +47,6 @@ public class UserController {
     @Autowired
     MessageProducer messageProducer;
 
-    @Value("${remote.url}")
-    private String remote;
     /**
      * @Description:  User Registration
      * @return:
@@ -95,7 +93,7 @@ public class UserController {
         LoginVO ret = new LoginVO()
                         .setUsername(logUser.getUsername())
                         .setFirstname(logUser.getFirstname())
-                        .setAvatar(remote + FileUtil.getUserAvatar(logUser));
+                        .setAvatar(FileUtil.getUserAvatar(logUser));
         return Result.success(ret);
     }
 
@@ -114,7 +112,7 @@ public class UserController {
         LoginVO ret = new LoginVO()
                 .setUsername(logUser.getUsername())
                 .setFirstname(logUser.getFirstname())
-                .setAvatar(remote + FileUtil.getUserAvatar(logUser));
+                .setAvatar(FileUtil.getUserAvatar(logUser));
         return Result.success(ret);
     }
 
@@ -156,7 +154,7 @@ public class UserController {
                 .setLastname(user.getLastname())
                 .setPhone(user.getPhone())
                 .setEmail(user.getEmail())
-                .setAvatar(remote + FileUtil.getUserAvatar(user));
+                .setAvatar(FileUtil.getUserAvatar(user));
         return Result.success(information);
     }
 
@@ -221,6 +219,6 @@ public class UserController {
                 .setName(avatarName)
                 .setUid(uid);
         messageProducer.sendMsg(porter, CheckCode.AVATAR);
-        return Result.success(remote + uid + "/avatar/avatar" + avatarType);
+        return Result.success(FileUtil.getUserAvatar(uid , avatarType));
     }
 }

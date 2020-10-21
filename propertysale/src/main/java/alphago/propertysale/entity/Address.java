@@ -22,6 +22,10 @@ public class Address implements Serializable {
     @TableId(value = "pid")
     private long pid;
 
+    private String lat;
+
+    private String lng;
+
     private String country;
 
     private String address;

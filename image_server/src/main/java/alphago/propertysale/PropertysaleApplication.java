@@ -10,4 +10,5 @@ public class PropertysaleApplication {
         SpringApplication.run(PropertysaleApplication.class, args);
     }
 
+
 }
