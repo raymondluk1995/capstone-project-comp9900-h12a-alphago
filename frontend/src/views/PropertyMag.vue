@@ -50,10 +50,10 @@
                     <el-row>
                         <div>
                             <h4>{{ item.address }}</h4>
-                            <p>{{ item.status_detail }}</p>
+                            <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
-                            <el-button type="" round @click="removeItem(item.id)">Remove</el-button>
+                            <el-button type="" plain circle icon="el-icon-close" @click="removeItem(item.id)"></el-button>
                         </el-row>
                     </el-row>
                 </el-card>
@@ -198,15 +198,15 @@
                         label: "All",
                     },
                     {
-                        value: "NR",
+                        value: "N",
                         label: "Not register",
                     },
                     {
-                        value: "O",
-                        label: "Over",
+                        value: "R",
+                        label: "Not start",
                     },
                     {
-                        value: "P",
+                        value: "A",
                         label: "In process",
                     },
                 ],
@@ -272,12 +272,20 @@
                 }
             },
 
+            getlabel(item){
+                const colors = new Map([
+                    ["N", "Auction not register"],
+                    ["A", "Auction in process"],
+                    ["R", "Auction not start"],
+                ]);
+                return colors.get(item);
+            },
 
             addStatusColor(status) {
                 const colors = new Map([
-                    ["NR", "status-not-register"],
-                    ["P", "status-process"],
-                    ["O", "status-over"],
+                    ["N", "status-not-register"],
+                    ["A", "status-process"],
+                    ["R", "status-not-start"],
                 ]);
                 return colors.get(status);
             },
@@ -428,26 +436,17 @@
             line-height: 2.5;
         }
     }
-    .status-not-register {
+    .status-not-start {
         border-left: 15px solid #e7b993;
     }
     .status-process {
         border-left: 15px solid #aed991;
     }
-    .status-over {
+
+    .status-not-register {
         border-left: 15px solid #8a97a6;
     }
 
-
-    .status-not-register-bg {
-        background-color: #e7b993;
-    }
-    .status-process-bg {
-        background-color: #aed991;
-    }
-    .status-over-bg {
-        background-color: #8a97a6;
-    }
     .swiper-slide {
         height: 500px;
     }
