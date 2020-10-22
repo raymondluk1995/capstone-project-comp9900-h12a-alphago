@@ -234,11 +234,10 @@
             this.$axios
                 .get('/property/propties')
                 .then(response => {
-                    this.originPropertyList = response.data.result;
-                    this.propList = response.data.result;
-                    if(this.originPropertyList.length !== 0 ){
+                    if (response.data.code === 200) {
+                        this.originPropertyList = response.data.result;
                         this.propInfo = this.originPropertyList[0];
-                    }else{
+                    }else if(response.data.code === 400){
                         this.isEmpty = true;
                     }
                 })
