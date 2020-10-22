@@ -22,7 +22,7 @@
         </Header>
 
         <el-row class="win" type="flex" justify="center">
-            <el-col :span="8">
+            <el-col :span="6">
                 <el-row style="background-color: #e4e9f3">
                     <el-select
                             v-model="filter"
@@ -39,16 +39,16 @@
                         </el-option>
                     </el-select>
                 </el-row>
-
                 <el-row class="property-list">
                 <el-card
                         class="card"
                         :class="addStatusColor(item.status)"
                         v-for="item in propList"
+                        @click.native="selectItem(item)"
                         :key="item.id"
                 >
                     <el-row>
-                        <div @click="selectItem(item)">
+                        <div>
                             <h4>{{ item.address }}</h4>
                             <p>{{ item.status_detail }}</p>
                         </div>
@@ -58,40 +58,32 @@
                     </el-row>
                 </el-card>
                 </el-row>
-
-
             </el-col>
-            <el-col :span="18" class="property-item">
-                <section>
-                    <el-row type="flex" justify="space-between" style="margin-bottom: 20px">
-                        <h2>{{ propInfo.title }}</h2>
-                        <el-button type="primary" icon="el-icon-right" round @click="goto('propreg')">Register New Auction</el-button>
+
+
+            <el-col :span="18">
+                <div v-show="isEmpty">
+                    <el-alert
+                            title="You haven't register any property!"
+                            type="info"
+                            center
+                            show-icon
+                            :closable="false">
+                    </el-alert>
+                    <!--                        <el-button type="primary" icon="el-icon-right" round plain @click="goto('propreg')">Register New Auction</el-button>-->
+                </div>
+                    <el-row type="flex" justify="end" >
+                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 30px" @click="goto('propreg')">Register New Auction</el-button>
                     </el-row>
+<!--                    <h3>{{ // propInfo.address }}</h3>-->
+
+                    <el-row v-show='!isEmpty' class="property-item">
+                        <section>
                     <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 50% 0 0">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="propInfo.pid">
                             <img :src="pic"  width="100%" height="100%" alt=""/>
                         </el-carousel-item>
                     </el-carousel>
-<!--                    <el-form >-->
-<!--                        <el-form-item>-->
-<!--                        <el-upload-->
-<!--                            multiple-->
-<!--                            class="avatar-uploader"-->
-<!--                            action="upload"-->
-<!--                            accept="image/*"-->
-<!--                            :auto-upload="false"-->
-<!--                            list-type="picture-card"-->
-<!--                            :limit="10"-->
-<!--                            :file-list="this.propInfo.photos"-->
-<!--                            :on-remove="handleRemove"-->
-<!--                            :on-exceed="exceedTips"-->
-<!--                            :on-change="imgBroadcastChange"-->
-<!--                            :before-upload="beforeAvatarUpload"-->
-<!--                    >-->
-<!--                        <i class="el-icon-plus"></i>-->
-<!--                    </el-upload>-->
-<!--                        </el-form-item>-->
-<!--                    </el-form>-->
 
                 </section>
 
@@ -121,7 +113,7 @@
                     </el-row>
 
                     <el-row type="flex" style="align-items:center">
-                        <span class="mr20">Keywords </span>
+                        <h5>Keywords</h5>
 <!--                        <el-button>Edit</el-button>-->
                     </el-row>
 
@@ -133,18 +125,27 @@
                         <el-tag v-for="tag in (propInfo.detail||'').split(',')" :key="tag">{{ tag }}</el-tag>
                     </el-row>
 
+                    <el-row type="flex" style="margin-bottom: 10px;">
+                        <h5>Description</h5>
+                    </el-row>
+
+                    <el-row style="margin-bottom: 10px;">
+                        <p style="word-wrap:break-word">{{ propInfo.description }}</p>
+                    </el-row>
+
+
                 </section>
 
-                <el-row class="mh20" type="flex" style="align-items:center">
-                    <span class="mr20">Description </span>
-<!--                    <el-button v-if="!canEditDesc" @click="editDesc">Edit</el-button>-->
-<!--                    <el-button v-else @click="saveDesc">Save</el-button>-->
-                </el-row>
+<!--                <el-row class="mh20" type="flex" style="align-items:center">-->
+<!--                    <span class="mr20">Description </span>-->
+<!--&lt;!&ndash;                    <el-button v-if="!canEditDesc" @click="editDesc">Edit</el-button>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <el-button v-else @click="saveDesc">Save</el-button>&ndash;&gt;-->
+<!--                </el-row>-->
 
-                <el-card>
-                    <p>{{ propInfo.description }}</p>
-<!--                    <el-input v-else type="textarea" v-model="desc"></el-input>-->
-                </el-card>
+<!--                <el-card>-->
+<!--                    <p>{{ propInfo.description }}</p>-->
+<!--&lt;!&ndash;                    <el-input v-else type="textarea" v-model="desc"></el-input>&ndash;&gt;-->
+<!--                </el-card>-->
 
                 <section class="mh20" v-if="propInfo.auction">
                     <h5>Auction</h5>
@@ -152,8 +153,14 @@
                     <p>End Date: {{ showdate(propInfo.endDate) }}</p>
                     <p>Reserved Price: ${{ propInfo.price }}</p>
                 </section>
+             </el-row>
             </el-col>
         </el-row>
+
+<!--        <el-row v-else class="win" type="flex" justify="center" >-->
+<!--            -->
+<!--            </el-col>-->
+<!--        </el-row>-->
     </div>
 </template>
 
@@ -180,13 +187,15 @@
 
         data() {
             return {
+                active:'',
+                isEmpty:false,
                 hasLogin:false,
                 filter: "all",
                 photos:[],
                 options: [
                     {
                         value: "all",
-                        label: "all",
+                        label: "All",
                     },
                     {
                         value: "NR",
@@ -202,7 +211,8 @@
                     },
                 ],
                 urlObjImg:{},
-                originPropertyList: [],
+                originPropertyList: [
+                ],
                 propList: [],
                 propInfo: {},
                 rules: {
@@ -222,7 +232,7 @@
             //     this.$router.push("/login");
             // }
             this.$axios
-                .get('/properties')
+                .get('/property/propties')
                 .then(response => {
                     this.originPropertyList = response.data.result
                     this.propList = response.data.result;
@@ -231,8 +241,11 @@
                 .catch(function (error) {
                     console.log(error)
                 })
-
+            if(this.originPropertyList.length === 0){
+                this.isEmpty = true;
+            }
         },
+
 
         methods: {
             ...mapActions(["logout"]),
@@ -257,6 +270,8 @@
                         break;
                 }
             },
+
+
             addStatusColor(status) {
                 const colors = new Map([
                     ["NR", "status-not-register"],
@@ -265,6 +280,9 @@
                 ]);
                 return colors.get(status);
             },
+
+
+
             showdate(t){
                 return dayjs(t).format("YYYY-MM-DD HH:mm:ss")
             },
@@ -303,10 +321,6 @@
                                 }
                             })
                     })
-
-                // this.propList = this.propList.filter((e) => {
-                //     return e.id !== id;
-                // });
             },
             editphoto(){
                 this.propInfo.photos.forEach(val => { // 通过遍历得到数据库中的照片并进行照片回显
@@ -373,6 +387,7 @@
         }
     }
     .win {
+        /*margin-top:10px;*/
         height: calc(100vh - 200px);
         /*margin: 0 20px;*/
 
@@ -386,12 +401,19 @@
         box-shadow: inset 2px 1px 5px 4px #d5dbea;
     }
     .property-item {
-        margin-top: 40px;
+        height: calc(100vh - 300px);
+        /*margin-top: 20px;*/
         padding: 10px;
         overflow-y: scroll;
         margin-right:50px;
         margin-left:50px;
         /*box-shadow: 2px 1px 5px 4px #d5dbea;*/
+    }
+    .click-bg{
+        background-color: #99a9bf;
+    }
+    .empty-bg{
+        background-color:#475669;
     }
     .card {
         margin: 20px 20px;
@@ -413,6 +435,17 @@
     }
     .status-over {
         border-left: 15px solid #8a97a6;
+    }
+
+
+    .status-not-register-bg {
+        background-color: #e7b993;
+    }
+    .status-process-bg {
+        background-color: #aed991;
+    }
+    .status-over-bg {
+        background-color: #8a97a6;
     }
     .swiper-slide {
         height: 500px;
