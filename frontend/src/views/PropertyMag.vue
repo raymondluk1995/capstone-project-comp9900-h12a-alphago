@@ -62,7 +62,7 @@
 
 
             <el-col :span="18">
-                <div v-show="isEmpty">
+                <div v-show="this.isEmpty">
                     <el-alert
                             title="You haven't register any property!"
                             type="info"
@@ -77,7 +77,7 @@
                     </el-row>
 <!--                    <h3>{{ // propInfo.address }}</h3>-->
 
-                    <el-row v-show='!isEmpty' class="property-item">
+                    <el-row v-show='!this.isEmpty' class="property-item">
                         <section>
                     <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 50% 0 0">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="propInfo.pid">
@@ -211,8 +211,7 @@
                     },
                 ],
                 urlObjImg:{},
-                originPropertyList: [
-                ],
+                originPropertyList: [],
                 propList: [],
                 propInfo: {},
                 rules: {
@@ -231,19 +230,21 @@
             //     this.$message.error("You should login first!");
             //     this.$router.push("/login");
             // }
+
             this.$axios
                 .get('/property/propties')
                 .then(response => {
-                    this.originPropertyList = response.data.result
+                    this.originPropertyList = response.data.result;
                     this.propList = response.data.result;
-                    this.propInfo = this.originPropertyList.length !== 0 && this.originPropertyList[0];
+                    if(this.originPropertyList.length !== 0 ){
+                        this.propInfo = this.originPropertyList[0];
+                    }else{
+                        this.isEmpty = true;
+                    }
                 })
                 .catch(function (error) {
                     console.log(error)
                 })
-            if(this.originPropertyList.length === 0){
-                this.isEmpty = true;
-            }
         },
 
 
