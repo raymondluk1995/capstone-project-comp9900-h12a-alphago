@@ -236,6 +236,7 @@
                 .then(response => {
                     if (response.data.code === 200) {
                         this.originPropertyList = response.data.result;
+                        this.propList = response.data.result;
                         this.propInfo = this.originPropertyList[0];
                     }else if(response.data.code === 400){
                         this.isEmpty = true;
