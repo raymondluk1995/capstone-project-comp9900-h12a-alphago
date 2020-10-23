@@ -45,7 +45,7 @@
                         :class="addStatusColor(item.status)"
                         v-for="item in propList"
                         @click.native="selectItem(item)"
-                        :key="item.id"
+                        :key="item.pid"
                 >
                     <el-row>
                         <div>
@@ -53,7 +53,7 @@
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
-                            <el-button type="" plain circle icon="el-icon-close" @click="removeItem(item.id)"></el-button>
+                            <el-button type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
                         </el-row>
                     </el-row>
                 </el-card>
@@ -301,14 +301,14 @@
                 this.propInfo = item;
             },
 
-            removeItem(id) {
-                    console.log(id);
+            removeItem(pid) {
+                    console.log(pid);
                     this.$confirm('Remove this property?', 'Alert', {
                         confirmButtonText: 'Confirm',
                         cancelButtonText: 'Cancel',
                         type: 'warning'
                     }).then(() => {
-                        this.$axios.delete('/property/delete/' + id)
+                        this.$axios.delete('/property/delete/' + pid)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
