@@ -156,11 +156,6 @@
              </el-row>
             </el-col>
         </el-row>
-
-<!--        <el-row v-else class="win" type="flex" justify="center" >-->
-<!--            -->
-<!--            </el-col>-->
-<!--        </el-row>-->
     </div>
 </template>
 
@@ -290,8 +285,6 @@
                 return colors.get(status);
             },
 
-
-
             showdate(t){
                 return dayjs(t).format("YYYY-MM-DD HH:mm:ss")
             },
@@ -307,13 +300,15 @@
             selectItem(item) {
                 this.propInfo = item;
             },
+
             removeItem(id) {
+                    console.log(id);
                     this.$confirm('Remove this property?', 'Alert', {
                         confirmButtonText: 'Confirm',
                         cancelButtonText: 'Cancel',
                         type: 'warning'
                     }).then(() => {
-                        this.$axios.delete('/properties/delete' + id)
+                        this.$axios.delete('/property/delete/pid/' + id)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
@@ -331,6 +326,7 @@
                             })
                     })
             },
+
             editphoto(){
                 this.propInfo.photos.forEach(val => { // 通过遍历得到数据库中的照片并进行照片回显
                     this.photos=[];
@@ -338,7 +334,6 @@
                     this.photos.push(this.urlObjImg) // 把数据库中的照片添加到fileListImg里面
                 })
             },
-
 
             beforeAvatarUpload(file) {
                 const isLt2M = file.size / 1024 / 1024 < 2;
@@ -352,6 +347,7 @@
                 }
                 return isImage && isLt2M;
             },
+
             handleRemove(file, fileList) {
                 const IMG = file.raw;
                 const INDEX = this.form4.imageRaw.indexOf(IMG);
@@ -360,15 +356,16 @@
                 this.form4.hasupload = this.form4.hasupload - 1;
                 console.log(file, fileList);
             },
+
             imgBroadcastChange(file) {
                 this.form4.hasupload = this.form4.hasupload + 1;
                 this.form4.imageRaw.push(file.raw);
                 this.form4.imageUrl.push(URL.createObjectURL(file.raw));
             },
+
             exceedTips: function () {
                 this.$message.error("Maximum 10 photos.");
             },
-
 
             goto(name) {
                 console.log(name);
