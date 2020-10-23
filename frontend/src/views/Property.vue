@@ -358,6 +358,7 @@
             let timer = setInterval(() => {
                 if (this.timeFlag === true) {
                     clearInterval(timer);
+
                 }
                 this.countDown(this.propInfo.enddate,this.propInfo.startdate);
             }, 1000);
