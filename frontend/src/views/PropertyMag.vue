@@ -308,7 +308,7 @@
                         cancelButtonText: 'Cancel',
                         type: 'warning'
                     }).then(() => {
-                        this.$axios.delete('/property/delete/pid/' + id)
+                        this.$axios.delete('/property/delete/' + id)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
