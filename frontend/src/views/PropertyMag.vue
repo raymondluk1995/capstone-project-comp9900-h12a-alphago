@@ -307,13 +307,13 @@
             selectItem(item) {
                 this.propInfo = item;
             },
-            removeItem() {
+            removeItem(id) {
                     this.$confirm('Remove this property?', 'Alert', {
                         confirmButtonText: 'Confirm',
                         cancelButtonText: 'Cancel',
                         type: 'warning'
                     }).then(() => {
-                        this.$axios.delete('/properties/delete' + this.propInfo.id)
+                        this.$axios.delete('/properties/delete' + id)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
