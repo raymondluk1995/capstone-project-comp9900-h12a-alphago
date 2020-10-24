@@ -44,54 +44,59 @@
                         <div class="bid"> ${{ propInfo.latestPrice }}</div>
 <!--                        <h4  class="countdownTime">{{ time }}</h4>-->
                     </el-col>
-
-<!--                    <el-col :span="5" :offset="7">-->
-<!--                        <h3  >Time left</h3>-->
-<!--                        <h4  >{{ time }}</h4>-->
-<!--                    </el-col>-->
                 </el-row>
 
-                <el-dialog title="Select Your Card" :visible.sync="bidderFlag">
-                    <template v-if="!addNewCard">
-                        <el-radio-group v-model="defaultCard">
-                            <el-radio :label="item" :key="item" v-for="item in cards" style="display:block; margin:20px 50px;">{{item}}</el-radio>
+                <el-dialog type="flex" title="Payment" :visible.sync="bidderFlag" style="position:absolute;left:25%; right:25%;">
+                    <template>
+                        <el-row>
+                        <el-radio-group v-model="selectCard">
+                            <el-radio :label="item" :key="item" :disabled="addNewCard" v-for="item in cards" style="display:block; margin:20px 50px;">{{item}}</el-radio>
                         </el-radio-group>
+                        </el-row>
 
+                        <el-row style="margin-left:10%">
+                        <el-link v-show="!addNewCard" icon="el-icon-right" type="primary" @click="addCard">Add New Card</el-link>
+                        </el-row>
                         <div slot="footer" class="dialog-footer">
-                            <el-button @click="addCard">Add</el-button>
-                            <el-button @click="reloadCard">Reload</el-button>
-                            <el-button type="primary" @click="submit">Submit</el-button>
+                            <el-button type="primary" @click="submitCard">Submit</el-button>
                         </div>
                     </template>
 
-                    <template v-else>
+                    <template v-show="addNewCard">
                     <el-form
                             class="form"
                             ref="form"
                             :model="form"
                             :rules="rules"
-                            label-width="120px"
-                            label-position="left"
+                            v-show="addNewCard"
                     >
-                        <el-form-item label="Name:" prop="name">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item prop="name">
+                            <el-input v-model="form.name" placeholder="Name" clearable></el-input>
                         </el-form-item>
-                        <el-form-item label="Card Number:" prop="cardNumber">
-                            <el-input v-model="form.cardNumber" @change="validateNum" maxlength="20"></el-input>
+                        <el-form-item prop="cardNumber">
+                            <el-input v-model="form.cardNumber" @change="validateNum" maxlength="20"  placeholder="Card Number"></el-input>
                         </el-form-item>
-                        <el-form-item label="Expired Date:" prop="expiredDate">
-                            <el-date-picker v-model="form.expiredDate" type="month">
-                            </el-date-picker>
+                        <el-row>
+                        <el-col :span =12>
+                        <el-form-item prop="expiredDate" >
+                            <el-input v-model="form.expiredDate" placeholder="MM/YY"></el-input>
                         </el-form-item>
-                        <el-form-item label="CVC:" prop="cvc">
-                            <el-input v-model="form.cvc"></el-input>
+                        </el-col >
+                            <el-col :span=12>
+                        <el-form-item prop="cvc" >
+                            <el-input v-model="form.cvc" placeholder="CVC"></el-input>
                         </el-form-item>
+                        </el-col>
+                        </el-row>
+                        <el-row>
+                        <el-link  icon="el-icon-top" type="primary" @click="notAdd">Cancel</el-link>
+                        </el-row>
                     </el-form>
 
-                    <div slot="footer" class="dialog-footer">
-                        <el-button @click="backCard">Back</el-button>
-                        <el-button type="primary" @click="submitCard">Add</el-button>
-                    </div>
+<!--                    <div slot="footer" class="dialog-footer">-->
+<!--                        <el-button @click="backCard">Back</el-button>-->
+<!--                        <el-button type="primary" @click="submitCard">Add</el-button>-->
+<!--                    </div>-->
                     </template>
                 </el-dialog>
 
@@ -154,7 +159,7 @@
                 </section>
 
             </el-col>
-            <el-col :span="5" stype="">
+            <el-col :span="5">
                 <div class="info">
                     <el-row type="flex" justify="center" style="background-color: #133264;">
                         <h3 style="color:#f3f3f3">Owner</h3>
@@ -183,14 +188,17 @@
                 <el-button type="" :disabled="true" style="margin-top: 10px;color:#173b77;font-size: 20px;background-color:#a0b9df; width:100%"
                 >{{ propInfo.bidderNum }} Bidders</el-button>
 
+                <template v-if="username !== propInfo.username">
                 <div v-if="this.isBidder">
-                    <h3>Place new bid</h3>
+<!--                    <h3>Place new bid</h3>-->
                     <div class="new-bid-wrap">
-                        <el-input v-model="newBid" :disabled="timeFlag"></el-input>
+                        <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
+                            <i slot="suffix" class="input-slot">{{newBid |numFormat}} A$</i>
+                        </el-input>
                         <el-button class='wrap-button' type="primary" icon="el-icon-plus" circle @click="addNewBid"></el-button>
                     </div>
 
-                    <p>{{ newBidTip }}</p>
+                    <p>Your Current Bid is {{ newBidTip | numFormat}}</p>
                 </div>
 
                 <div v-else style="margin-top: 2px">
@@ -200,6 +208,12 @@
                                icon="el-icon-right"
                     >Register to Bid</el-button>
                 </div>
+                </template>
+                <template v-else>
+                    <div class="new-bid-wrap">
+                    <el-button type="" :disabled="true" style="color:#f1f1f1;font-size: 20px;background-color:#3b4c73; width:100%">You are the Owner!</el-button>
+                    </div>
+                </template>
             </el-col>
         </el-row>
     </div>
@@ -237,20 +251,21 @@
 
             return {
                 id:'',
+                username:'',
                 hasLogin: false,
-                isBidder: false,
+                isBidder: true,
                 bidderFlag: false,
                 timeFlag: false,
                 addNewCard:false,
-                currentBid:'',
+                currentBid:'123455',
                 newBid: '',
                 newPlacedBid:'',
                 tipError: false,
                 time: '',
-                cards:[],
+                cards:['1234','123123'],
                 detail_tags:[],
                 position_tags:[],
-                defaultCard:'',
+                selectCard:'',
                 // center:{lat:-33.9175679,lng:151.2255712},
                 lat :'',
                 lng:'',
@@ -262,9 +277,9 @@
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
-                    enddate:'',
+                    enddate:new Date(2021, 8, 10, 10, 10),
                     status:'S',
-                    startdate:'',
+                    startdate:new Date(2020, 8, 10, 10, 10),
                     avatar:'',
                     bidderNum:'',
                     latestPrice:'',
@@ -298,7 +313,7 @@
         },
 
         created() {
-            // this.username = localStorage.getItem("username");
+            this.username = localStorage.getItem("username");
             // // this.username = this.$store.state.username;
             // if (this.username !== null) {
             //     this.hasLogin = true;
@@ -339,15 +354,15 @@
 
         computed: {
             newBidTip() {
-                let tip = "Your current bid is 000,000";
+                let tip = "";
                 if (!this.newPlacedBid && !this.currentBid) {
-                    tip = "Your current bid is 000,000";
+                    tip = "0";
                     this.tipError = false;
                 } else if(!this.newPlacedBid && this.currentBid){
-                    tip = `Your current bid is ${this.currentBid}`;
+                    tip = this.currentBid;
                     this.tipError = false;
                 }else{
-                    tip = `Your current bid is ${this.newPlacedBid}`;
+                    tip = this.newPlacedBid;
                     this.tipError = false;
                 }
                 return tip;
@@ -404,6 +419,13 @@
                 this.$set(this.form, 'cardNumber', card)
             },
 
+            notAdd(){
+                this.form.name='';
+                this.form.cardNumber= '';
+                this.form.expiredDate= '';
+                this.form.cvc='';
+                this.addNewCard = false;
+            },
             addStatusColor(status) {
                 switch(status) {
                     case 'A':
@@ -426,8 +448,8 @@
             countDown(time,startime) {
                 let expiredTime = dayjs(time);
                 let startTime = dayjs(startime);
-                // let startTime = dayjs(new Date(2019, 10, 10, 10, 10));
-                // let expiredTime = dayjs(new Date(2023, 10, 10, 10, 10));
+                // let startTime = dayjs(new Date(2020, 8, 10, 10, 10));
+                // let expiredTime = dayjs(new Date(2020, 9, 24, 17, 1));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
@@ -438,13 +460,19 @@
                 let minute = parseInt((diff / 60) % 60);
                 let second = parseInt(diff % 60);
 
-                if (diff2 >= 0) {
+                if (diff2 > 0) {
                     this.timeFlag = true;
                     let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
                     this.time = `This Auction will start at ${ st }`;
                 }
                 else{
-                    this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
+                    if(diff>0){
+                        this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
+                    }else{
+                        this.timeFlag = false;
+                        console.log('over');
+                    }
+
                 }
             },
 
@@ -506,85 +534,45 @@
             addCard() {
                 this.addNewCard = true;
             },
-            backCard() {
-                this.addNewCard = false;
-            },
+
             submitCard(){
-                this.$refs["form"].validate((valid) => {
-                    if (valid) {
-                        let data = this.$qs.stringify(this.form);
-                        this.$axios.post('/addcard', data)
-                            .then((response) => {
-                                if (response.status >= 200 && response.status < 300) {
-                                    if(response.data.code === 200){
-                                        this.$message.success("Add New Card successful!");
-                                        this.addNewCard = false;
+                if(this.addNewCard){
+                    this.$refs["form"].validate((valid) => {
+                        if (valid) {
+                            let data = new FormData();
+                            if(this.addNewCard){
+                                data.append('addNewCard', this.addNewCard);
+                                data.append('name',this.form.name);
+                                data.append('cardNumber', this.form.cardNumber);
+                                data.append('expiredDate', this.form.expiredDate);
+                                data.append('cvc', this.form.cvc);
+                            }else{
+                                data.append('addNewCard', this.addNewCard);
+                                data.append('cardNumber', this.selectCard);
+                            }
+
+                            this.$axios.post('/addcard', data)
+                                .then((response) => {
+                                    if (response.status >= 200 && response.status < 300) {
+                                        if(response.data.code === 200){
+                                            this.$message.success("Register successful!");
+                                        }
+                                    } else if(response.data.code === 400){
+                                        this.$message.error(response.msg);
+                                    }else{
+                                        console.log(response.msg);
                                     }
-                                } else if(response.data.code === 400){
-                                    this.$message.error(response.msg);
-                                    this.addNewCard = false;
-                                }else{
-                                    console.log(response.msg);
-                                }
-                            })
-                            .catch((res) => {
-                                console.log('error', res);
-                                this.$message.error('Add Card Error');
-                            });
-                    } else {
-                        return false;
-                    }
-                });
-
-                this.$axios
-                    .get('/card/information')
-                    .then(response => {
-                            this.cards = response.data.result
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
-
-            },
-            reloadCard(){
-                this.$axios
-                    .get('/card/information')
-                    .then(response => {
-                        this.cards = response.data.result
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
-            },
-
-            submit() {
-                this.$refs["form"].validate((valid) => {
-                    if (valid) {
-                        let data = new FormData();
-                        data.append('defaultcard', this.defaultCard);
-                        this.$axios.post('/bid/registration', data)
-                            .then((response) => {
-                                if (response.status >= 200 && response.status < 300) {
-                                    if(response.data.code === 200){
-                                        this.isBidder = true;
-                                        this.bidderFlag = false;
-                                        this.$message.success("Bid register successful!");
-                                    }
-                                } else if(response.data.code === 400){
-                                    this.$message.error(response.msg);
-                                    location.reload()
-                                }else{
-                                    console.log(response.msg);
-                                }
-                            })
-                            .catch((res) => {
-                                console.log('error', res);
-                                this.$message.error('Bid Register Error');
-                            });
-                    } else {
-                        return false;
-                    }
-                });
+                                })
+                                .catch((res) => {
+                                    console.log('error', res);
+                                    this.$message.error('Add Card Error');
+                                });
+                        } else {
+                            return false;
+                        }
+                    });
+                }
+                this.addNewCard = false;
             },
 
             goto(name) {
@@ -596,6 +584,11 @@
 </script>
 
 <style scoped lang="scss">
+    .form{
+        margin-left:10%;
+        margin-top:20px;
+        width:80%;
+    }
     .property{
         /*background-color: #aaaaaa;*/
     }
@@ -664,10 +657,11 @@
     }
     .new-bid-wrap {
         display: flex;
-        align-items: center;
-        width:30%;
+        /*align-items: center;*/
+        width:100%;
+        margin-top:20px;
         .wrap-button{
-            margin-left: 10px;
+            margin-left: 30px;
         }
     }
     .btn{

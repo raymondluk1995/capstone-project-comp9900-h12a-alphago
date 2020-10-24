@@ -59,8 +59,8 @@
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
-                            <el-button v-show="!item.auction" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
-<!--                            <el-button v-show="!item.auction" :disabled="true" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>-->
+                            <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item)">Remove</el-button>
+                            <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>
                         </el-row>
                     </el-row>
                 </el-card>
@@ -79,9 +79,9 @@
                     </el-alert>
                     <!--                        <el-button type="primary" icon="el-icon-right" round plain @click="goto('propreg')">Register New Auction</el-button>-->
                 </div>
-<!--                    <h3>{{ // propInfo.address }}</h3>-->
                     <el-row v-show='!this.isEmpty' class="property-item" style="margin-top:50px">
                         <section>
+                            <h3>{{ propInfo.address }}</h3>
                     <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 25% 0 25%">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="pic">
                             <img :src="pic"  width="100%" height="100%" alt=""/>
@@ -196,9 +196,9 @@
 <!--&lt;!&ndash;                    <el-input v-else type="textarea" v-model="desc"></el-input>&ndash;&gt;-->
 <!--                </el-card>-->
 
-                <section class="mh20" v-if="propInfo.auction">
+                <section class="mh20" v-if="propInfo.status ==='A' || propInfo.status ==='R'">
                     <h5>Auction</h5>
-                    <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo.pid)">Cancel</el-button>
+<!--                    <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo)">Cancel</el-button>-->
                     <p>Start Date: {{ showdate(propInfo.startDate) }}</p>
                     <p>End Date: {{ showdate(propInfo.endDate) }}</p>
                     <p>Reserved Price: ${{ propInfo.price }}</p>
@@ -208,7 +208,7 @@
                     <h5>Auction</h5>
                     <p> This property has not been registered for an Auction. </p>
                     <el-row type="flex" justify="front" >
-                        <el-button v-show="!propInfo.auction && !isEmpty" type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>
+                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>
                     </el-row>
                 </section>
              </el-row>
@@ -269,20 +269,25 @@
                 ],
                 urlObjImg:{},
                 originPropertyList: [
-                    // {
-                    //     pid:1,
-                    //     auction:true,
-                    //     status:'R',
-                    //     address:'afdgdag',
-                    //     photos:['', '']
-                    // }
-                    // ,{
-                    //     pid:2,
-                    //     auction:false,
-                    //     status: 'R',
-                    //     address:'123asd',
-                    //     photos:['','']
-                    // }
+                    {
+                        pid:1,
+                        status:'R',
+                        address:'afdgdag',
+                        photos:['', '']
+                    }
+                    ,{
+                        pid:2,
+                        status: 'N',
+                        address:'123asd',
+                        photos:['','']
+                    },
+                    {
+                        pid:3,
+                        auction:true,
+                        status: 'A',
+                        address:'123asd',
+                        photos:['','']
+                    }
 
                 ],
                 propList: [],
@@ -296,9 +301,9 @@
                     minimumPrice:'',
                 },
                 pickerOptions: {
-                    disabledDate(time) {
-                        return parseInt(time.getTime()) < Date.now()
-                    }
+                    // disabledDate(time) {
+                    //     return parseInt(time.getTime()) < Date.now()
+                    // }
                 },
             };
         },
@@ -316,24 +321,23 @@
             //     this.$router.push("/login");
             // }
 
-            this.$axios
-                .get('/property/propties')
-                .then(response => {
-                    if (response.data.code === 200) {
-                        this.originPropertyList = response.data.result;
-                        this.propList = response.data.result;
-                        this.propInfo = this.originPropertyList[0];
-                    }else if(response.data.code === 400){
-                        this.isEmpty = true;
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-            // this.isEmpty = true;
-            // this.propList = this.originPropertyList;
-            // this.propInfo = this.originPropertyList[0]
-            // ;
+            // this.$axios
+            //     .get('/property/propties')
+            //     .then(response => {
+            //         if (response.data.code === 200) {
+            //             this.originPropertyList = response.data.result;
+            //             this.propList = response.data.result;
+            //             this.propInfo = this.originPropertyList[0];
+            //         }else if(response.data.code === 400){
+            //             this.isEmpty = true;
+            //         }
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     })
+            this.isEmpty = false;
+            this.propList = this.originPropertyList;
+            this.propInfo = this.originPropertyList[0];
         },
 
 
@@ -367,23 +371,26 @@
                 const colors = new Map([
                     ["N", "Auction not register"],
                     ["A", "Auction in process"],
-                    ["R", "Auction not start"],
+                    ["R", `Auction will start at ${item.startdate}`],
                 ]);
                 return colors.get(item);
             },
 
-            cancelAuc(pid){
+            cancelAuc(item){
                 this.$confirm('Cancel this Auction?', 'Alert', {
                     confirmButtonText: 'Confirm',
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
-                this.$axios.post('/property/cancel/', pid)
+                let data = new FormData();
+                data.append('pid', item.pid);
+                data.append('aid', item.aid);
+                this.$axios.post('/property/cancel', data)
                     .then((response) => {
                         if (response.status >= 200 && response.status < 300) {
                             if(response.data.code === 200){
                                 this.$message.success("Cancel successful!");
-                                this.propInfo.auction = false;
+                                location.reload();
                             }
                         } else if(response.data.code === 400){
                             this.$message.error(response.msg);
@@ -413,11 +420,12 @@
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
                                         this.$message.success("Register successful!");
-                                        this.propInfo.auction = true;
+                                        // this.propInfo.auction = true;
                                         this.Aucreg = false;
-                                        // location.reload()
+                                        location.reload()
                                     }
                                 } else if(response.data.code === 400){
+                                    this.Aucreg = false;
                                     this.$message.error(response.msg);
                                 }else{
                                     console.log(response.msg);
@@ -449,17 +457,19 @@
                 this.Aucreg = true;
             },
 
-
-
             showdate(t){
                 return dayjs(t).format("YYYY-MM-DD HH:mm:ss")
             },
 
             changeSearch(value) {
-                console.log(value);
-                let filterPropertyList = this.originPropertyList.filter((e) => {
-                    return e.status === value;
-                });
+                let filterPropertyList = [];
+                if(value === 'all'){
+                    filterPropertyList = this.originPropertyList;
+                }else{
+                    filterPropertyList = this.originPropertyList.filter((e) => {
+                        return e.status === value;
+                    });
+                }
                 this.propList = filterPropertyList;
             },
 
@@ -468,13 +478,16 @@
                 this.isSelected = item.pid;
             },
 
-            removeItem(pid) {
+            removeItem(item) {
                     this.$confirm('Remove this property?', 'Alert', {
                         confirmButtonText: 'Confirm',
                         cancelButtonText: 'Cancel',
                         type: 'warning'
                     }).then(() => {
-                        this.$axios.delete('/property/delete/' + pid)
+                        let data = new FormData();
+                        data.append('pid', item.pid);
+                        data.append('aid', item.aid);
+                        this.$axios.post('/property/delete' + data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
@@ -494,45 +507,6 @@
                     })
             },
 
-            editphoto(){
-                this.propInfo.photos.forEach(val => { // 通过遍历得到数据库中的照片并进行照片回显
-                    this.photos=[];
-                    this.urlObjImg.url = val;
-                    this.photos.push(this.urlObjImg) // 把数据库中的照片添加到fileListImg里面
-                })
-            },
-
-            beforeAvatarUpload(file) {
-                const isLt2M = file.size / 1024 / 1024 < 2;
-                let types = ["image/jpeg", "image/jpg", "image/png"];
-                const isImage = types.includes(file.type);
-                if (!isImage) {
-                    this.$message.error("上传图片只能是 JPG、JPEG、PNG 格式!");
-                }
-                if (!isLt2M) {
-                    this.$message.error("Image size can not larger than 2MB!");
-                }
-                return isImage && isLt2M;
-            },
-
-            handleRemove(file, fileList) {
-                const IMG = file.raw;
-                const INDEX = this.form4.imageRaw.indexOf(IMG);
-                this.form4.imageRaw.splice(INDEX, 1);
-                this.form4.imageUrl.splice(INDEX, 1);
-                this.form4.hasupload = this.form4.hasupload - 1;
-                console.log(file, fileList);
-            },
-
-            imgBroadcastChange(file) {
-                this.form4.hasupload = this.form4.hasupload + 1;
-                this.form4.imageRaw.push(file.raw);
-                this.form4.imageUrl.push(URL.createObjectURL(file.raw));
-            },
-
-            exceedTips: function () {
-                this.$message.error("Maximum 10 photos.");
-            },
 
             goto(name) {
                 console.log(name);
