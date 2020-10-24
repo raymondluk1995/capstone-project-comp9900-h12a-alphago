@@ -72,14 +72,7 @@
                             </div>
                         </template>
                     </el-tab-pane>
-                    <el-tab-pane label="As a Bidder">
-                        <p>This area is under construction... ...</p>
-                        <p>Please come back later!</p>
-                    </el-tab-pane>
-                    <el-tab-pane label="As a Seller">
-                        <p>This area is under construction... ...</p>
-                        <p>Please come back later!</p>
-                    </el-tab-pane>
+
                 </el-tabs>
 
 

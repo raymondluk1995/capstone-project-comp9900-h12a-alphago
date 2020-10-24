@@ -294,12 +294,14 @@
                         this.propInfo = this.originPropertyList[0];
                     }else if(response.data.code === 400){
                         this.isEmpty = true;
+                        this.Aucreg = true;
                     }
                 })
                 .catch(function (error) {
-                    console.log(error)
+                    console.log(error);
                 })
-
+            // this.isEmpty = true;
+            // this.Aucreg = true;
             // this.propList = this.originPropertyList;
             // this.propInfo = this.originPropertyList[0];
         },
@@ -353,6 +355,7 @@
                                     if(response.data.code === 200){
                                         this.$message.success("Register successful!");
                                         this.Aucreg = false;
+                                        location.reload()
                                     }
                                 } else if(response.data.code === 400){
                                     this.$message.error(response.msg);

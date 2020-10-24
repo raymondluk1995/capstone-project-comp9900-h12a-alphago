@@ -656,7 +656,7 @@ export default {
                       if(response.data.code === 200){
                         console.log(response.data);
                         this.$message.success("Property register successful");
-                        this.$router.replace("/auction");
+                        this.$router.replace("/propmag");
                       }
                     } else if(response.data.code === 400){
                       console.log(response.data);
