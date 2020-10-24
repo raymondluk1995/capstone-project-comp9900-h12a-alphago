@@ -59,7 +59,7 @@
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
-                            <el-button v-show="!item.auction" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
+                            <el-button v-show="item.status === 'N'" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
 <!--                            <el-button v-show="!item.auction" :disabled="true" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>-->
                         </el-row>
                     </el-row>
@@ -79,9 +79,9 @@
                     </el-alert>
                     <!--                        <el-button type="primary" icon="el-icon-right" round plain @click="goto('propreg')">Register New Auction</el-button>-->
                 </div>
-                    <h3>{{ propInfo.address }}</h3>
                     <el-row v-show='!this.isEmpty' class="property-item" style="margin-top:50px">
                         <section>
+                            <h3>{{ propInfo.address }}</h3>
                     <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 25% 0 25%">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="pic">
                             <img :src="pic"  width="100%" height="100%" alt=""/>
@@ -196,7 +196,7 @@
 <!--&lt;!&ndash;                    <el-input v-else type="textarea" v-model="desc"></el-input>&ndash;&gt;-->
 <!--                </el-card>-->
 
-                <section class="mh20" v-if="propInfo.auction">
+                <section class="mh20" v-if="propInfo.status ==='A' || propInfo.status ==='R'">
                     <h5>Auction</h5>
                     <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo.pid)">Cancel</el-button>
                     <p>Start Date: {{ showdate(propInfo.startDate) }}</p>
@@ -208,7 +208,7 @@
                     <h5>Auction</h5>
                     <p> This property has not been registered for an Auction. </p>
                     <el-row type="flex" justify="front" >
-                        <el-button v-show="!propInfo.auction && !isEmpty" type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>
+                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>
                     </el-row>
                 </section>
              </el-row>
@@ -269,20 +269,25 @@
                 ],
                 urlObjImg:{},
                 originPropertyList: [
-                    // {
-                    //     pid:1,
-                    //     auction:true,
-                    //     status:'R',
-                    //     address:'afdgdag',
-                    //     photos:['', '']
-                    // }
-                    // ,{
-                    //     pid:2,
-                    //     auction:false,
-                    //     status: 'R',
-                    //     address:'123asd',
-                    //     photos:['','']
-                    // }
+                    {
+                        pid:1,
+                        status:'R',
+                        address:'afdgdag',
+                        photos:['', '']
+                    }
+                    ,{
+                        pid:2,
+                        status: 'N',
+                        address:'123asd',
+                        photos:['','']
+                    },
+                    {
+                        pid:3,
+                        auction:true,
+                        status: 'A',
+                        address:'123asd',
+                        photos:['','']
+                    }
 
                 ],
                 propList: [],
@@ -296,9 +301,9 @@
                     minimumPrice:'',
                 },
                 pickerOptions: {
-                    disabledDate(time) {
-                        return parseInt(time.getTime()) < Date.now()
-                    }
+                    // disabledDate(time) {
+                    //     return parseInt(time.getTime()) < Date.now()
+                    // }
                 },
             };
         },
@@ -330,10 +335,10 @@
                 .catch(function (error) {
                     console.log(error);
                 })
-            // this.isEmpty = true;
+            // this.isEmpty = false;
             // this.propList = this.originPropertyList;
             // this.propInfo = this.originPropertyList[0]
-            // ;
+            ;
         },
 
 
@@ -367,7 +372,7 @@
                 const colors = new Map([
                     ["N", "Auction not register"],
                     ["A", "Auction in process"],
-                    ["R", "Auction not start"],
+                    ["R", `Auction will start at ${item.startdate}`],
                 ]);
                 return colors.get(item);
             },
@@ -383,7 +388,7 @@
                         if (response.status >= 200 && response.status < 300) {
                             if(response.data.code === 200){
                                 this.$message.success("Cancel successful!");
-                                this.propInfo.auction = false;
+                                location.reload();
                             }
                         } else if(response.data.code === 400){
                             this.$message.error(response.msg);

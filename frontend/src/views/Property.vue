@@ -426,8 +426,8 @@
             countDown(time,startime) {
                 let expiredTime = dayjs(time);
                 let startTime = dayjs(startime);
-                // let startTime = dayjs(new Date(2019, 10, 10, 10, 10));
-                // let expiredTime = dayjs(new Date(2023, 10, 10, 10, 10));
+                // let startTime = dayjs(new Date(2020, 8, 10, 10, 10));
+                // let expiredTime = dayjs(new Date(2020, 9, 24, 17, 1));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
@@ -448,7 +448,7 @@
                         this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
                     }else{
                         this.timeFlag = false;
-                        this.time = `This Auction is over.`;
+                        console.log('over');
                     }
 
                 }
