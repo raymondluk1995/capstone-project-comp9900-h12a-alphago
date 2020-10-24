@@ -23,10 +23,11 @@
 
         <el-row class="win" type="flex" justify="center">
             <el-col :span="6">
-                <el-row style="background-color: #e4e9f3">
+                <el-row type="flex" justify="space-around" style="background-color: #e4e9f3">
+                    <el-col>
                     <el-select
                             v-model="filter"
-                            style="float:right;margin:10px 30px"
+                            style="margin:10px 0 10px 30px"
                             placeholder="Select"
                             @change="changeSearch"
                     >
@@ -38,6 +39,10 @@
                         >
                         </el-option>
                     </el-select>
+                    </el-col>
+                    <el-col>
+                    <el-button type="primary" icon="el-icon-plus" circle  plain style="float:right;margin:10px 30px" @click="goto('propreg')"></el-button>
+                    </el-col>
                 </el-row>
                 <el-row class="property-list">
                 <el-card
@@ -46,6 +51,7 @@
                         v-for="item in propList"
                         @click.native="selectItem(item)"
                         :key="item.pid"
+                        :style="{'background-color' : item.pid === isSelected ? 'rgba(154,174,195,0.45)' : ''}"
                 >
                     <el-row>
                         <div>
@@ -53,7 +59,8 @@
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
-                            <el-button type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
+                            <el-button v-show="!item.auction" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
+<!--                            <el-button v-show="!item.auction" :disabled="true" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>-->
                         </el-row>
                     </el-row>
                 </el-card>
@@ -72,16 +79,11 @@
                     </el-alert>
                     <!--                        <el-button type="primary" icon="el-icon-right" round plain @click="goto('propreg')">Register New Auction</el-button>-->
                 </div>
-                    <el-row type="flex" justify="end" >
-                        <el-button v-show="!propInfo.auction" type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>
-                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 30px" @click="goto('propreg')">Register New Property</el-button>
-                    </el-row>
 <!--                    <h3>{{ // propInfo.address }}</h3>-->
-
-                    <el-row v-show='!this.isEmpty' class="property-item">
+                    <el-row v-show='!this.isEmpty' class="property-item" style="margin-top:50px">
                         <section>
-                    <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 50% 0 0">
-                        <el-carousel-item v-for="pic in propInfo.photos" :key="propInfo.pid">
+                    <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 25% 0 25%">
+                        <el-carousel-item v-for="pic in propInfo.photos" :key="pic">
                             <img :src="pic"  width="100%" height="100%" alt=""/>
                         </el-carousel-item>
                     </el-carousel>
@@ -161,13 +163,13 @@
 
                                         <el-form-item label="Reserved Price:" prop="price">
                                             <el-input v-model="form.price">
-                                                <i slot="suffix" class="input-slot">A$</i>
+                                                <i slot="suffix" class="input-slot">{{form.price|numFormat}} A$</i>
                                             </el-input>
                                         </el-form-item>
 
                                         <el-form-item label="Minimum Price:" prop="minimumPrice">
                                             <el-input v-model="form.minimumPrice">
-                                                <i slot="suffix" class="input-slot">A$</i>
+                                                <i slot="suffix" class="input-slot">{{form.minimumPrice|numFormat}} A$</i>
                                             </el-input>
                                         </el-form-item>
 
@@ -196,9 +198,18 @@
 
                 <section class="mh20" v-if="propInfo.auction">
                     <h5>Auction</h5>
+                    <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo.pid)">Cancel</el-button>
                     <p>Start Date: {{ showdate(propInfo.startDate) }}</p>
                     <p>End Date: {{ showdate(propInfo.endDate) }}</p>
                     <p>Reserved Price: ${{ propInfo.price }}</p>
+
+                </section>
+                <section class="mh20" v-else>
+                    <h5>Auction</h5>
+                    <p> This property has not been registered for an Auction. </p>
+                    <el-row type="flex" justify="front" >
+                        <el-button v-show="!propInfo.auction && !isEmpty" type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>
+                    </el-row>
                 </section>
              </el-row>
             </el-col>
@@ -210,6 +221,7 @@
     import Header from "@/components/Header.vue";
     import { mapActions } from "vuex";
     import dayjs from "dayjs";
+
 
     export default {
         name: "Auction",
@@ -226,6 +238,30 @@
                 default: '200px'
             }
         },
+        filters: {
+            money(val)
+            {
+                val = val.toString().replace(/\$|\,/g, "");
+                if (isNaN(val))
+                {
+                    val = '';
+                }
+                let sign = (val == (val = Math.abs(val)));
+                val = Math.floor(val * 100 + 0.50000000001);
+                let cents = val % 100;
+                val = Math.floor(val / 100).toString();
+                if (cents < 10)
+                {
+                    cents = "0" + cents;
+                }
+                for (let i = 0; i < Math.floor((val.length - (1 + i)) / 3); I++)
+                {
+                    val = val.substring(0, val.length - (4 * i + 3)) + "," + val.substring(val.length - (4 * i + 3));
+                }
+
+                return (((sign) ? "" : "-") + val + "." + cents);
+            }
+        },
 
         data() {
             return {
@@ -234,7 +270,9 @@
                 isEmpty:false,
                 hasLogin:false,
                 filter: "all",
+                isSelected: '',
                 photos:[],
+                canCancel :true,
                 options: [
                     {
                         value: "all",
@@ -254,7 +292,23 @@
                     },
                 ],
                 urlObjImg:{},
-                originPropertyList: [],
+                originPropertyList: [
+                    // {
+                    //     pid:1,
+                    //     auction:true,
+                    //     status:'R',
+                    //     address:'afdgdag',
+                    //     photos:['', '']
+                    // }
+                    // ,{
+                    //     pid:2,
+                    //     auction:false,
+                    //     status: 'R',
+                    //     address:'123asd',
+                    //     photos:['','']
+                    // }
+
+                ],
                 propList: [],
                 propInfo: {},
                 rules: {
@@ -272,6 +326,7 @@
                 },
             };
         },
+
         created(){
             // this.username = localStorage.getItem("username");
             // // this.username = this.$store.state.username;
@@ -301,10 +356,12 @@
                     console.log(error);
                 })
             // this.isEmpty = true;
-            // this.Aucreg = true;
             // this.propList = this.originPropertyList;
-            // this.propInfo = this.originPropertyList[0];
+            // this.propInfo = this.originPropertyList[0]
+            // ;
         },
+
+
 
 
         methods: {
@@ -340,6 +397,32 @@
                 return colors.get(item);
             },
 
+            cancelAuc(pid){
+                this.$confirm('Cancel this Auction?', 'Alert', {
+                    confirmButtonText: 'Confirm',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+                this.$axios.post('/property/cancel/', pid)
+                    .then((response) => {
+                        if (response.status >= 200 && response.status < 300) {
+                            if(response.data.code === 200){
+                                this.$message.success("Cancel successful!");
+                                this.propInfo.auction = false;
+                            }
+                        } else if(response.data.code === 400){
+                            this.$message.error(response.msg);
+                        }else{
+                            console.log(response.msg);
+                        }
+                    })
+                    .catch((res) => {
+                        console.log('error', res);
+                        this.$message.error('New Auction Register Error');
+                    });
+                })
+            },
+
             submitReg(pid){
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
@@ -354,8 +437,9 @@
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
                                         this.$message.success("Register successful!");
+                                        this.propInfo.auction = true;
                                         this.Aucreg = false;
-                                        location.reload()
+                                        // location.reload()
                                     }
                                 } else if(response.data.code === 400){
                                     this.$message.error(response.msg);
@@ -389,6 +473,8 @@
                 this.Aucreg = true;
             },
 
+
+
             showdate(t){
                 return dayjs(t).format("YYYY-MM-DD HH:mm:ss")
             },
@@ -403,6 +489,7 @@
 
             selectItem(item) {
                 this.propInfo = item;
+                this.isSelected = item.pid;
             },
 
             removeItem(pid) {
@@ -419,9 +506,10 @@
                                             type: 'success',
                                             message: 'Remove!'
                                         });
-                                        location.reload()
+                                        location.reload();
                                     }else{
-                                        console.log(response.msg)
+                                        console.log(response.msg);
+                                        location.reload()
                                     }
                                 }else{
                                     console.log(response.msg)
@@ -517,12 +605,6 @@
         margin-right:50px;
         margin-left:50px;
         /*box-shadow: 2px 1px 5px 4px #d5dbea;*/
-    }
-    .click-bg{
-        background-color: #99a9bf;
-    }
-    .empty-bg{
-        background-color:#475669;
     }
     .card {
         margin: 20px 20px;

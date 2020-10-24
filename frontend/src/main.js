@@ -14,6 +14,11 @@ import locale from 'element-ui/lib/locale/lang/en'
 
 import * as VueGoogleMaps from 'vue2-google-maps'
 
+import numFormat from '@/utils/numFormat';
+// 注册金额格式化过滤器
+Vue.filter('numFormat', numFormat);
+
+
 Vue.use(VueGoogleMaps, {
     load: {
         key: 'AIzaSyBOOkfr6xVD0KVdKuf4_XjGq9HMiTZuKts',
