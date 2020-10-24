@@ -2,29 +2,49 @@
   <div class="home">
     <Header>
       <template v-if="this.hasLogin">
-        <el-dropdown trigger="click" @command="handleCommand" style="align-items: center" placement="bottom">
+        <el-dropdown
+          trigger="click"
+          @command="handleCommand"
+          style="align-items: center"
+          placement="bottom"
+        >
           <div class="user">
             <el-avatar :size="70" :src="avatar"></el-avatar>
           </div>
-            <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
-                <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
-                <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
-                <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
-                <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
-            </el-dropdown-menu>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="profile" icon="el-icon-user-solid">
+              My profile</el-dropdown-item
+            >
+            <el-dropdown-item command="property" icon="el-icon-house">
+              My Properties</el-dropdown-item
+            >
+            <el-dropdown-item command="auction" icon="el-icon-s-home">
+              My Auctions</el-dropdown-item
+            >
+            <el-dropdown-item command="notification" icon="el-icon-bell">
+              Notifications</el-dropdown-item
+            >
+            <el-dropdown-item command="logout" icon="el-icon-turn-off">
+              Log out</el-dropdown-item
+            >
+          </el-dropdown-menu>
         </el-dropdown>
       </template>
       <template v-else>
         <el-button round @click="goto('login')">Sign In</el-button>
-        <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
+        <el-button round type="primary" @click="goto('register')"
+          >Sign Up</el-button
+        >
       </template>
     </Header>
 
     <el-carousel :interval="5000" type="card" height="1000">
-      <el-carousel-item v-for="item in bigScreen.images"
-                        :key="item.name" :name="item.name">
-        <img style="width:100%;height:100%;" :src="item.url"/>
+      <el-carousel-item
+        v-for="item in bigScreen.images"
+        :key="item.name"
+        :name="item.name"
+      >
+        <img style="width: 100%; height: 100%" :src="item.url" />
       </el-carousel-item>
     </el-carousel>
 
@@ -35,10 +55,11 @@
             <img src="@/assets/bath.png" alt="" />
             <el-select v-model="bathNum" placeholder="Select">
               <el-option
-                      v-for="item in nums"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                v-for="item in nums"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-col>
@@ -47,10 +68,11 @@
             <img src="@/assets/bed.png" alt="" />
             <el-select v-model="bedroomNum" placeholder="Select">
               <el-option
-                      v-for="item in nums"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                v-for="item in nums"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-col>
@@ -59,181 +81,244 @@
             <img src="@/assets/parking.png" alt="" />
             <el-select v-model="carNum" placeholder="Select">
               <el-option
-                      v-for="item in nums"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                v-for="item in nums"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-col>
 
-<!--          <el-col :span="3">-->
-<!--            <el-select v-model="value" placeholder="Select">-->
-<!--              <el-option-->
-<!--                      v-for="item in options"-->
-<!--                      :key="item.value"-->
-<!--                      :label="item.label"-->
-<!--                      :value="item.value">-->
-<!--              </el-option>-->
-<!--            </el-select>-->
-<!--          </el-col>-->
+          <!--          <el-col :span="3">-->
+          <!--            <el-select v-model="value" placeholder="Select">-->
+          <!--              <el-option-->
+          <!--                      v-for="item in options"-->
+          <!--                      :key="item.value"-->
+          <!--                      :label="item.label"-->
+          <!--                      :value="item.value">-->
+          <!--              </el-option>-->
+          <!--            </el-select>-->
+          <!--          </el-col>-->
         </el-row>
       </el-col>
     </el-row>
 
     <el-row type="flex" justify="center" style="margin: 40px 0">
       <el-col :span="15">
-        <el-input
+        <!-- <el-input
                 class="input"
                 placeholder="Search by address/suburb/others"
                 prefix-icon="el-icon-search"
                 v-model="serachKey"
-        >
-          <el-button
-                  slot="append"
-                  icon="el-icon-search"
-                  @click="toSearch"
-          ></el-button>
-        </el-input></el-col>
+        > -->
+        <div style="display: inline-block; width: 93%">
+          <google-places-autocomplete
+            @resultChanged="(placeDetail) => (place = placeDetail)"
+            @resultCleared="() => (place = null)"
+          >
+            <div slot="input" slot-scope="{ context, events, actions }">
+              <!--                <label for="locationInput" class="middle address-label">Address Search</label><br/>-->
+              <input
+                v-model="context.input"
+                @focus="events.inputHasReceivedFocus"
+                @input="events.inputHasChanged"
+                @keyup="checkPostcode"
+                @keydown.enter.prevent="actions.selectItemFromList"
+                @keydown.down.prevent="actions.shiftResultsSelection"
+                @keydown.up.prevent="actions.unshiftResultsSelection"
+                type="search"
+                id="locationInput"
+                class="middle form-control"
+                placeholder="Please type in your property's address here for validation."
+                autocomplete="off"
+              />
+            </div>
+
+            <span
+              v-show="notPostcode"
+              slot="item"
+              slot-scope="{ place }"
+              class="btn btn-default middle search-span"
+            >
+              {{ place.description}}
+            </span>
+            <span
+              v-show="notPostcode"
+              slot="activeItem"
+              slot-scope="{ place }"
+              class="btn btn-default middle search-span"
+            >
+              {{ place.description }}
+            </span>
+          </google-places-autocomplete>
+        </div>
+        <!-- </el-input> -->
+        <el-button
+          style="width:7%;float:right; height:38px"
+          icon="el-icon-search"
+          @click="toSearch"
+        ></el-button>
+      </el-col>
     </el-row>
+
   </div>
 </template>
 
 <script>
+import { GooglePlacesAutocomplete } from "vue-better-google-places-autocomplete";
 // @ is an alias to /src
-import Header from '@/components/Header.vue'
+import Header from "@/components/Header.vue";
 import { mapActions } from "vuex";
 
 export default {
-  name: 'Home',
-  title: 'AlphaGo Home',
+  name: "Home",
+  title: "AlphaGo Home",
   components: {
-    Header
+    Header,
+    GooglePlacesAutocomplete,
   },
-    data() {
-      return {
-          hasLogin: false,
-          bathNum: 1,
-          bedroomNum: 1,
-          carNum: 1,
-          serachKey: "",
-        bigScreen: {
-          images: [
-            {
-              name: 'bigScreen01',
-              url: 'https://www.armourcomms.com/wp-content/uploads/2017/10/company-main-banner.jpg'
-            },
-            {
-              name: 'bigScreen02',
-              url: 'https://www.centurybizsolutions.net/wp-content/uploads/2016/01/Banner-Buildings-1.png'
-            },
-            {
-              name: 'bigScreen03',
-              url: 'http://cdn26.us1.fansshare.com/photo/buildingconstruction/banner-building-construction-1958425491.jpg'
-            }
-          ],},
-        // 图片父容器高度
-        bannerHeight :1000,
-        // 浏览器宽度
-        screenWidth :0,
-
-        nums: [
+  data() {
+    return {
+      place: null,
+      notPostcode: true,
+      hasLogin: false,
+      bathNum: 1,
+      bedroomNum: 1,
+      carNum: 1,
+      serachKey: "",
+      bigScreen: {
+        images: [
           {
-            value: 1,
-            label: 1,
+            name: "bigScreen01",
+            url:
+              "https://www.armourcomms.com/wp-content/uploads/2017/10/company-main-banner.jpg",
           },
           {
-            value: 2,
-            label: 2,
+            name: "bigScreen02",
+            url:
+              "https://www.centurybizsolutions.net/wp-content/uploads/2016/01/Banner-Buildings-1.png",
           },
           {
-            value: 3,
-            label: 3,
+            name: "bigScreen03",
+            url:
+              "http://cdn26.us1.fansshare.com/photo/buildingconstruction/banner-building-construction-1958425491.jpg",
           },
-          {
-            value: 4,
-            label: 4,
-          },
-          {
-            value: 5,
-            label: 5,
-          }
         ],
-        // options: [
-        //   {
-        //     value: 1,
-        //     label: "others",
-        //   },
-        // ]
-      }
-    },
-    created () {
-        this.username = localStorage.getItem('username');
-        // this.username = this.$store.state.username;
-        if(this.username!==null){
-            this.hasLogin = true;
-            this.avatar = localStorage.getItem('avatar');
-        }
-        this.firstname=  localStorage.getItem('firstname');
-    },
-    // computed: {
-    //   ...mapState(["firstname"]),
-    // },
-    methods: {
-      ...mapActions(["logout"]),
-      handleCommand(command) {
-        switch (command) {
-          case "profile":
-            this.$router.push("/profile");
-            break;
-          case "property":
-            this.$router.push("/propmag");
-            break;
-          case "auction":
-            this.$router.push("/auction");
-            break;
-          case "notification":
-            break;
-          case "logout":
-            this.$axios.post('/user/logout')
-                    .then((response) => {
-                      if (response.status >= 200 && response.status < 300){
-                        if (response.data.code === 200){
-                          this.logout();
-                          location.reload()
-                        }else{
-                          console.log(response.msg)
-                        }
-                      }else{
-                        console.log(response.msg)
-                      }
-                    })
-            break;
-          default:
-            break;
-        }
       },
-      toSearch() {
-      },
-      goto(name) {
-        this.$router.push({name: name});
-      },
-      setSize:function () {
-        // 通过浏览器宽度(图片宽度)计算高度
-        this.bannerHeight = 400 / 1920 * this.screenWidth;
-      },
-    },
-    mounted() {
-      // 首次加载时,需要调用一次
-      this.screenWidth =  window.innerWidth;
-      this.setSize();
-      // 窗口大小发生改变时,调用一次
-      window.onresize = () =>{
-        this.screenWidth =  window.innerWidth;
-        this.setSize();
-      }
+      // 图片父容器高度
+      bannerHeight: 1000,
+      // 浏览器宽度
+      screenWidth: 0,
+
+      nums: [
+        {
+          value: 1,
+          label: 1,
+        },
+        {
+          value: 2,
+          label: 2,
+        },
+        {
+          value: 3,
+          label: 3,
+        },
+        {
+          value: 4,
+          label: 4,
+        },
+        {
+          value: 5,
+          label: 5,
+        },
+      ],
+      // options: [
+      //   {
+      //     value: 1,
+      //     label: "others",
+      //   },
+      // ]
+    };
+  },
+  created() {
+    this.username = localStorage.getItem("username");
+    // this.username = this.$store.state.username;
+    if (this.username !== null) {
+      this.hasLogin = true;
+      this.avatar = localStorage.getItem("avatar");
     }
-  }
+    this.firstname = localStorage.getItem("firstname");
+  },
+  // computed: {
+  //   ...mapState(["firstname"]),
+  // },
+  methods: {
+    ...mapActions(["logout"]),
+    handleCommand(command) {
+      switch (command) {
+        case "profile":
+          this.$router.push("/profile");
+          break;
+        case "property":
+          this.$router.push("/propmag");
+          break;
+        case "auction":
+          this.$router.push("/auction");
+          break;
+        case "notification":
+          break;
+        case "logout":
+          this.$axios.post("/user/logout").then((response) => {
+            if (response.status >= 200 && response.status < 300) {
+              if (response.data.code === 200) {
+                this.logout();
+                location.reload();
+              } else {
+                console.log(response.msg);
+              }
+            } else {
+              console.log(response.msg);
+            }
+          });
+          break;
+        default:
+          break;
+      }
+    },
+    toSearch() {},
+    checkPostcode:function(event){
+      let value = document.getElementById("locationInput").value;
+      this.notPostcode = true;
+      if(value.length==4){
+        let num = parseInt(value);
+        if(num.toString().length==4){
+          this.notPostcode = false;
+        }
+      }
+      return ;
+    },
+    goto(name) {
+      this.$router.push({ name: name });
+    },
+    setSize: function () {
+      // 通过浏览器宽度(图片宽度)计算高度
+      this.bannerHeight = (400 / 1920) * this.screenWidth;
+    },
+  },
+  mounted() {
+    // 首次加载时,需要调用一次
+    this.screenWidth = window.innerWidth;
+    this.setSize();
+    // 窗口大小发生改变时,调用一次
+    window.onresize = () => {
+      this.screenWidth = window.innerWidth;
+      this.setSize();
+    };
+  },
+
+
+};
 </script>
 
 <style scoped lang="scss">
@@ -268,8 +353,7 @@ export default {
   background-color: #99a9bf;
 }
 
-.el-carousel__item:nth-child(2n+1) {
+.el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
 }
-
 </style>

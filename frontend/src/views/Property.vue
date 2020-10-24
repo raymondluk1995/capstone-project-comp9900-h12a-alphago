@@ -26,7 +26,7 @@
                 <section style="margin: 15px 50px 0 50px">
 <!--                    <h1>{{ propInfo.address }}</h1>-->
                     <el-row class="banner" :class="addStatusColor(propInfo.status)">
-                        <h4>{{ time }}</h4>
+                        <h4 class="source-sans">{{ time }}</h4>
                     </el-row>
                     <el-carousel :interval="5000" arrow="always" :height="cheight">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="propInfo.pid">
@@ -40,7 +40,7 @@
 
                 <el-row style="margin: 15px 50px 0 50px">
                     <el-col :span="12">
-                        <h3 class="hensa">Latest Bid</h3>
+                        <h3 class="kenfolg-title">Latest Bid</h3>
                         <div class="bid"> ${{ propInfo.latestPrice }}</div>
 <!--                        <h4  class="countdownTime">{{ time }}</h4>-->
                     </el-col>
@@ -98,7 +98,7 @@
                 <section style="margin: 15px 50px 0 50px">
                     <el-row>
                     <el-col >
-                    <h3 class="hensa">Details</h3>
+                    <h3 class="kenfolg-title">Details</h3>
                     <el-row type="flex" style="margin-bottom: 10px;">
                         <i class="el-icon-toilet-paper label-1"> <span class="comfortaa left-10">Bathroom Number:</span> <span> {{ propInfo.bathroomNum}} </span></i>
 
@@ -128,7 +128,7 @@
 
                         <el-row>
                         <el-col >
-                            <h3 class="hensa">Map</h3>
+                            <h3 class="kenfolg-title">Map</h3>
                             <div class="map" id="map">
                                 <GmapMap
                                         :center="center"
@@ -151,7 +151,7 @@
 
 
                 <section style="margin: 15px 50px 0 50px">
-                    <h3 class="hensa">Bid History</h3>
+                    <h3 class="kenfolg-title">Bid History</h3>
                 </section>
 
             </el-col>
@@ -762,7 +762,21 @@
       src: url('../assets/fonts/Cathena-vmKE7-2.otf') format('OpenType');
     }
 
+
+
     @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Chivo&family=Source+Sans+Pro:wght@400&display=swap');
+    
+
+    .source-sans{
+        font-family: Source Sans Pro;
+    }
+    
+    
+    .chivo{
+        font-family: Chivo;
+    }
+
 
     .current-font{
         font-family: current;
@@ -781,9 +795,10 @@
         font-style:bold;
     }
 
-    .hensa{
-        font-family: hensa;
-        font-size: 50px;
+    .kenfolg-title{
+        // font-family: hensa;
+        font-family:kenfolg;
+        font-size: 30px;
         color: rgb(23, 120, 190)
     }
 
