@@ -20,24 +20,29 @@
                 <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
             </template>
         </Header>
-
-        <el-row type="flex" justify="center">
-            <el-col :span="16">
-                <section style="margin-top: 15px">
-                    <h1>{{ propInfo.title }}</h1>
+        <el-row  type="flex" justify="center" >
+            <el-col :span="16" style="margin: 50px 50px 20px 30px; box-shadow: 2px 1px 5px 4px #d5dbea;">
+                <h1 style="margin: 15px 50px 0 50px">{{ propInfo.address }}</h1>
+                <section style="margin: 15px 50px 0 50px">
+<!--                    <h1>{{ propInfo.address }}</h1>-->
+                    <el-row class="banner" :class="addStatusColor(propInfo.status)">
+                        <h4>{{ time }}</h4>
+                    </el-row>
                     <el-carousel :interval="5000" arrow="always" :height="cheight">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="propInfo.pid">
                             <img :src="pic"  width="100%" height="100%" alt=""/>
                         </el-carousel-item>
                     </el-carousel>
+<!--                    <el-row class="banner">-->
+<!--                        <h4>{{ time }}</h4>-->
+<!--                    </el-row>-->
                 </section>
 
-
-                <el-row>
+                <el-row style="margin: 15px 50px 0 50px">
                     <el-col :span="12">
-                        <h3>Latest Bid</h3>
-                        <div class="bid"> ${{ propInfo.latestBid}}</div>
-                        <h4  class="countdownTime">{{ time }}</h4>
+                        <h3 class="hensa">Latest Bid</h3>
+                        <div class="bid"> ${{ propInfo.latestPrice }}</div>
+<!--                        <h4  class="countdownTime">{{ time }}</h4>-->
                     </el-col>
 
 <!--                    <el-col :span="5" :offset="7">-->
@@ -90,21 +95,21 @@
                     </template>
                 </el-dialog>
 
-
-                <section style="margin-top:50px">
+                <section style="margin: 15px 50px 0 50px">
                     <el-row>
                     <el-col >
-                    <h3>Details</h3>
+                    <h3 class="hensa">Details</h3>
                     <el-row type="flex" style="margin-bottom: 10px;">
-                            <i class="el-icon-toilet-paper"> Bathroom Number: <span> {{ propInfo.bathroomNum}} </span></i>
+                        <i class="el-icon-toilet-paper label-1"> <span class="comfortaa left-10">Bathroom Number:</span> <span> {{ propInfo.bathroomNum}} </span></i>
+
                     </el-row>
 
                     <el-row type="flex" style="margin-bottom: 10px;">
-                            <i class="el-icon-house"> Bedroom Number: <span> {{ propInfo.bedroomNum}} </span></i>
+                            <i class="el-icon-house label-2"> <span class="comfortaa left-10">Bedroom Number:</span> <span> {{ propInfo.bedroomNum}} </span></i>
                     </el-row>
 
                     <el-row type="flex" style="margin-bottom: 10px;">
-                            <i class="el-icon-truck"> Garage Number: <span> {{ propInfo.garageNum}} </span></i>
+                            <i class="el-icon-truck label-1"> <span class="comfortaa left-10">Garage Number:</span> <span> {{ propInfo.garageNum}} </span></i>
                     </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
@@ -112,18 +117,18 @@
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in propInfo.position" effect="plain">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.position.split(',')" effect="plain" :key="propInfo.position">{{ tag }}</el-tag>
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in propInfo.detail">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="propInfo.detail">{{ tag }}</el-tag>
                         </el-row>
                     </el-col>
                     </el-row>
 
                         <el-row>
                         <el-col >
-                            <h3>Map</h3>
+                            <h3 class="hensa">Map</h3>
                             <div class="map" id="map">
                                 <GmapMap
                                         :center="center"
@@ -144,42 +149,58 @@
                     </el-row>
                 </section>
 
-                <section style="margin-top:50px">
-                    <el-row>
-                    <el-col>
-                        <div v-if="this.isBidder">
-                            <h3>Place new bid</h3>
-                            <div class="new-bid-wrap">
-                                <el-input v-model="newBid" :disabled="timeFlag"></el-input>
-                                <el-button class='wrap-button' type="primary" icon="el-icon-plus" circle @click="addNewBid"></el-button>
-                            </div>
 
-                            <p>{{ newBidTip }}</p>
-                        </div>
+                <section style="margin: 15px 50px 0 50px">
+                    <h3 class="hensa">Bid History</h3>
+                </section>
 
-                        <div v-else style="margin-top: 70px">
-                            <h3>Register as a Bidder</h3>
-                            <el-button type="primary"
-                                       style="font-size: 20px;"
-                                       round
-                                       :disabled="timeFlag"
-                                       @click="Bidreg"
-                                       icon="el-icon-right"
-                                       plain
-                            >Register to Bid</el-button>
-                        </div>
-                    </el-col>
+            </el-col>
+            <el-col :span="5" stype="">
+                <div class="info">
+                    <el-row type="flex" justify="center" style="background-color: #133264;">
+                        <h3 style="color:#f3f3f3">Owner</h3>
                     </el-row>
-                </section>
+                <el-row type="flex" justify="center">
+                    <el-avatar :size="70" :src="propInfo.avatar" style="margin-top:50px"></el-avatar>
+                </el-row>
 
-                <section style="margin-top:50px;">
-                    <h3>Bid History</h3>
-                </section>
+                    <el-row type="flex" justify="center" style="margin-top:20px">
+                        <h4> {{ propInfo.firstname}} {{ propInfo.lastname}} </h4>
+                    </el-row>
 
-                <section style="margin-top:50px; margin-bottom:200px">
-                    <h3>Documents</h3>
-                </section>
+                    <el-row type="flex" justify="center" style="margin-top:20px">
+                        <i class="el-icon-user-solid"><span> {{ propInfo.username}} </span></i>
+                    </el-row>
 
+                    <el-row type="flex" justify="center" style="margin-top:20px">
+                        <i class="el-icon-phone"><span> {{ propInfo.phone}} </span></i>
+                    </el-row>
+
+                    <el-row type="flex" justify="center" style="margin-top:20px">
+                        <i class="el-icon-message"><span> {{ propInfo.email}} </span></i>
+                    </el-row>
+                </div>
+
+                <el-button type="" :disabled="true" style="margin-top: 10px;color:#173b77;font-size: 20px;background-color:#a0b9df; width:100%"
+                >{{ propInfo.bidderNum }} Bidders</el-button>
+
+                <div v-if="this.isBidder">
+                    <h3>Place new bid</h3>
+                    <div class="new-bid-wrap">
+                        <el-input v-model="newBid" :disabled="timeFlag"></el-input>
+                        <el-button class='wrap-button' type="primary" icon="el-icon-plus" circle @click="addNewBid"></el-button>
+                    </div>
+
+                    <p>{{ newBidTip }}</p>
+                </div>
+
+                <div v-else style="margin-top: 2px">
+                    <el-button type=""
+                               class="btn"
+                               @click="Bidreg"
+                               icon="el-icon-right"
+                    >Register to Bid</el-button>
+                </div>
             </el-col>
         </el-row>
     </div>
@@ -204,6 +225,7 @@
         components: {
             Header,
         },
+
         data() {
             const validateCVC = (rule, value, callback) => {
                 const cvcReg = /^\d{3}$/;
@@ -226,27 +248,40 @@
                 newPlacedBid:'',
                 tipError: false,
                 time: '',
-                cards:['111','222','333'],
+                cards:[],
+                detail_tags:[],
+                position_tags:[],
                 defaultCard:'',
-                center:{lat:-33.9175679,lng:151.2255712},
+                // center:{lat:-33.9175679,lng:151.2255712},
                 lat :'',
                 lng:'',
-                // center: {},
-                markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
-                // markers:[{position:{},}],
+                center: {},
+                // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
+                markers:[{position:{},}],
                 propInfo: {
                     id: '',
                     // endDate: new Date(2000, 10, 10, 10, 10),
-                    title: '',
-                    endDate:'',
-                    startDate:'',
+                    username:'',
+                    address: '',
+                    enddate:'',
+                    status:'S',
+                    startdate:'',
+                    avatar:'',
+                    bidderNum:'',
+                    latestPrice:'',
                     info: '',
-                    position: [],
-                    detail: [],
+                    phone: '',
+                    email:'',
+                    position: '',
+                    detail: '',
                     latestBid: '',
-                    photos: [],
+                    photos: ['','',''],
                     description: '',
                     bidHistory:[],
+                    firstname:'',
+                    lastname:'',
+                    highestPrice:'',
+                    minimumPrice:'',
                 },
                 form: {
                     name: '',
@@ -279,11 +314,12 @@
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
-                    this.propInfo = response.data.result.propInfo,
-                    this.isBidder = response.data.result.isBidder,
-                    this.currentBid = response.data.result.currentBid,
-                    this.lat =  parseFloat(response.data.result.propInfo.lat),
-                    this.lng =  parseFloat(response.data.result.propInfo.lng),
+                    this.propInfo = response.data.result,
+                    // this.isBidder = response.data.result.isBidder,
+                    this.lat =  parseFloat(response.data.result.lat),
+                    this.lng =  parseFloat(response.data.result.lng),
+                    this.position_tags = response.data.result.position,
+                        this.detail_tags = response.data.result.detail,
                     this.center = {
                         lat:this.lat,
                         lng:this.lng
@@ -298,6 +334,8 @@
                 .catch(function (error) {
                     console.log(error)
                 })
+            this.position_tags = this.position_tags.split(',');
+            this.detail_tags = this.detail_tags.split(',')
         },
 
         computed: {
@@ -321,8 +359,9 @@
             let timer = setInterval(() => {
                 if (this.timeFlag === true) {
                     clearInterval(timer);
+
                 }
-                this.countDown(this.propInfo.endDate,this.propInfo.startDate);
+                this.countDown(this.propInfo.enddate,this.propInfo.startdate);
             }, 1000);
         },
 
@@ -366,10 +405,30 @@
                 this.$set(this.form, 'cardNumber', card)
             },
 
+            addStatusColor(status) {
+                switch(status) {
+                    case 'A':
+                        return 'status-process';
+                        break;
+                    case 'S':
+                        return 'status-success';
+                        break;
+                    case 'F':
+                        return 'status-failure';
+                        break;
+                    case 'R':
+                        return 'status-out';
+                        break;
+                    default:
+                        break;
+                }
+            },
+
             countDown(time,startime) {
                 let expiredTime = dayjs(time);
                 let startTime = dayjs(startime);
-                // let expiredTime = dayjs(new Date(2022, 10, 10, 10, 10));
+                // let startTime = dayjs(new Date(2019, 10, 10, 10, 10));
+                // let expiredTime = dayjs(new Date(2023, 10, 10, 10, 10));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
@@ -382,10 +441,11 @@
 
                 if (diff2 >= 0) {
                     this.timeFlag = true;
-                    this.time = 'This auction has not started yet!';
+                    let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
+                    this.time = `This Auction will start at ${ st }`;
                 }
                 else{
-                    this.time = ` ${day} : ${hour} : ${minute} : ${second} `;
+                    this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
                 }
             },
 
@@ -537,6 +597,9 @@
 </script>
 
 <style scoped lang="scss">
+    .property{
+        /*background-color: #aaaaaa;*/
+    }
     .user {
         display: flex;
         align-items: center;
@@ -557,6 +620,12 @@
     .el-date-editor.el-input__inner {
         width: 100%;
     }
+    .info{
+        width:100%;
+        height:500px;
+        margin-top:50px;
+        box-shadow: 2px 1px 5px 4px #d5dbea;
+    }
     .bid {
         width :80%;
         padding: 10px;
@@ -565,16 +634,24 @@
         font-weight: bold;
         color: #fff;
         background-color: #133264;
-        border-radius: 0;
+        border-radius: 5px;
     }
     .countdownTime{
         width :80%;
         padding: 10px;
         text-align: center;
-        background-color: #c8dbf9;
+        /*background-color: #c8dbf9;*/
         border-radius: 5px;
         font-size: 15px;
-
+    }
+    .banner{
+        width :100%;
+        padding-top: 10px;
+        align-items: center;
+        text-align: center;
+        background-color: #becdd6;
+        /*border-radius: 5px;*/
+        font-size: 10px;
     }
 
     .el-tag {
@@ -594,5 +671,98 @@
             margin-left: 10px;
         }
     }
+    .btn{
+        font-size: 20px;
+        background-color:#173b77;
+        width:100%;color:#f3f3f3;
+        /*&:hover {*/
+        /*    cursor: pointer;*/
+        /*    transform: scale(1.02);*/
+        /*}*/
+    }
+    .status-success {
+        background-color: #89c668;
+    }
+    .status-process {
+        background-color: #e6a23c;
+    }
+    .status-fail {
+        background-color: #f56c6c;
+    }
+
+    .left-10{
+        margin-left:10px;
+    }
+
+
+    .label-1{
+        display: inline-block;
+        width:230px;
+        background-color:#133264;
+        border: none;
+        border-radius:15px;
+        color: #fff;
+        padding: 10px 16px;
+        font-size: 16px;
+        text-align: center;
+        text-decoration: none;
+        overflow: hidden;
+        -webkit-transition: 0.4s;
+        -moz-transition:0.4s;
+        -ms-transition:0.4s;
+        transition: 0.4s;
+        outline: 0;
+        margin: 4px 0;
+    }
+
+    .label-2{
+        display: inline-block;
+        width:230px;
+        background-color:rgb(63,158,255);
+        border: none;
+        border-radius:15px;
+        color: #fff;
+        padding: 10px 16px;
+        font-size: 16px;
+        text-align: center;
+        text-decoration: none;
+        overflow: hidden;
+        -webkit-transition: 0.4s;
+        -moz-transition:0.4s;
+        -ms-transition:0.4s;
+        transition: 0.4s;
+        outline: 0;
+        margin: 4px 0;
+    }
+    
+
+
+
+
+
+
+    @font-face {
+      font-family: hensa;
+      src: url('../assets/fonts/Hensa.otf') format('OpenType');
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
+
+
+
+    .comfortaa{
+        font-family: Comfortaa;
+        font-style:bold;
+    }
+
+    .hensa{
+        font-family: hensa;
+        font-size: 50px;
+        color: rgb(23, 120, 190)
+    }
+
+    
+
+
 
 </style>
