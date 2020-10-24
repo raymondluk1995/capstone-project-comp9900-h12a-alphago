@@ -254,17 +254,7 @@
                     },
                 ],
                 urlObjImg:{},
-                originPropertyList: [{
-                    address:'2134dfsg234',
-                    auction: true,
-
-                },
-            {
-                address:'123sdf',
-                auction:false,
-            }
-
-        ],
+                originPropertyList: [],
                 propList: [],
                 propInfo: {},
                 rules: {
@@ -295,23 +285,23 @@
             //     this.$router.push("/login");
             // }
 
-            // this.$axios
-            //     .get('/property/propties')
-            //     .then(response => {
-            //         if (response.data.code === 200) {
-            //             this.originPropertyList = response.data.result;
-            //             this.propList = response.data.result;
-            //             this.propInfo = this.originPropertyList[0];
-            //         }else if(response.data.code === 400){
-            //             this.isEmpty = true;
-            //         }
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error)
-            //     })
+            this.$axios
+                .get('/property/propties')
+                .then(response => {
+                    if (response.data.code === 200) {
+                        this.originPropertyList = response.data.result;
+                        this.propList = response.data.result;
+                        this.propInfo = this.originPropertyList[0];
+                    }else if(response.data.code === 400){
+                        this.isEmpty = true;
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
 
-            this.propList = this.originPropertyList;
-            this.propInfo = this.originPropertyList[0];
+            // this.propList = this.originPropertyList;
+            // this.propInfo = this.originPropertyList[0];
         },
 
 
