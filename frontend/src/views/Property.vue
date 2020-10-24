@@ -158,7 +158,7 @@
             <el-col :span="5" stype="">
                 <div class="info">
                     <el-row type="flex" justify="center" style="background-color: #133264;">
-                        <h3 style="color:#f3f3f3">Owner</h3>
+                        <h3 class="cathena" style="color:#f3f3f3">Owner</h3>
                     </el-row>
                 <el-row type="flex" justify="center">
                     <el-avatar :size="70" :src="propInfo.avatar" style="margin-top:50px"></el-avatar>
@@ -746,9 +746,35 @@
       src: url('../assets/fonts/Hensa.otf') format('OpenType');
     }
 
+    @font-face {
+      font-family: current;
+      src: url('../assets/fonts/Current-Regular-2.otf') format('OpenType');
+    }
+
+
+    @font-face {
+      font-family: kenfolg;
+      src: url('../assets/fonts/MADE-Kenfolg-PERSONAL-USE-2.otf') format('OpenType');
+    }
+
+    @font-face {
+      font-family: cathena;
+      src: url('../assets/fonts/Cathena-vmKE7-2.otf') format('OpenType');
+    }
+
     @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
 
+    .current-font{
+        font-family: current;
+    }
 
+    .kenfolg{
+        font-family: kenfolg;
+    }
+
+    .cathena{
+        font-family: cathena;
+    }
 
     .comfortaa{
         font-family: Comfortaa;
