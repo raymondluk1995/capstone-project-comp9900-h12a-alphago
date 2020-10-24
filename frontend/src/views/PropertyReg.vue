@@ -323,7 +323,7 @@
                     type="datetimerange"
                     range-separator="To"
                     start-placeholder="Auction Start Time"
-                    end-placeholder="Auction Start Time"
+                    end-placeholder="Auction End Time"
                             :picker-options="pickerOptions">
             </el-date-picker>
 

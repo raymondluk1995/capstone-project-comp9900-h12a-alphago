@@ -45,7 +45,7 @@
                         :class="addStatusColor(item.status)"
                         v-for="item in propList"
                         @click.native="selectItem(item)"
-                        :key="item.id"
+                        :key="item.pid"
                 >
                     <el-row>
                         <div>
@@ -53,7 +53,7 @@
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
-                            <el-button type="" plain circle icon="el-icon-close" @click="removeItem(item.id)"></el-button>
+                            <el-button type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
                         </el-row>
                     </el-row>
                 </el-card>
@@ -73,7 +73,8 @@
                     <!--                        <el-button type="primary" icon="el-icon-right" round plain @click="goto('propreg')">Register New Auction</el-button>-->
                 </div>
                     <el-row type="flex" justify="end" >
-                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 30px" @click="goto('propreg')">Register New Auction</el-button>
+                        <el-button v-show="!propInfo.auction" type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>
+                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 30px" @click="goto('propreg')">Register New Property</el-button>
                     </el-row>
 <!--                    <h3>{{ // propInfo.address }}</h3>-->
 
@@ -132,11 +133,57 @@
                     <el-row style="margin-bottom: 10px;">
                         <p style="word-wrap:break-word">{{ propInfo.description }}</p>
                     </el-row>
-
-
                 </section>
 
-<!--                <el-row class="mh20" type="flex" style="align-items:center">-->
+
+                        <el-dialog title="Register New Auction:" :visible.sync="Aucreg">
+                            <el-form
+                                    class="form"
+                                    ref="form"
+                                    :model="form"
+                                    :rules="rules"
+                                    label-width="150px"
+                                    label-position="left"
+                            >
+                                <el-row :gutter="50">
+                                    <el-col :span="24">
+                                        <el-form-item label="Time Range:" prop="daterange">
+                                            <el-date-picker style="width:100%"
+                                                            v-model="form.daterange"
+                                                            type="datetimerange"
+                                                            range-separator="-"
+                                                            start-placeholder="Auction Start Time"
+                                                            end-placeholder="Auction End Time"
+                                                            :picker-options="pickerOptions">
+                                            </el-date-picker>
+
+                                        </el-form-item>
+
+                                        <el-form-item label="Reserved Price:" prop="price">
+                                            <el-input v-model="form.price">
+                                                <i slot="suffix" class="input-slot">A$</i>
+                                            </el-input>
+                                        </el-form-item>
+
+                                        <el-form-item label="Minimum Price:" prop="minimumPrice">
+                                            <el-input v-model="form.minimumPrice">
+                                                <i slot="suffix" class="input-slot">A$</i>
+                                            </el-input>
+                                        </el-form-item>
+
+
+                                    </el-col>
+                                </el-row>
+                            </el-form>
+                                <div slot="footer" class="dialog-footer">
+<!--                                    <el-button @click="backAuc">Back</el-button>-->
+                                    <el-button type="primary" @click="submitReg(propInfo.pid)">Submit</el-button>
+                                </div>
+                        </el-dialog>
+
+
+
+                        <!--                <el-row class="mh20" type="flex" style="align-items:center">-->
 <!--                    <span class="mr20">Description </span>-->
 <!--&lt;!&ndash;                    <el-button v-if="!canEditDesc" @click="editDesc">Edit</el-button>&ndash;&gt;-->
 <!--&lt;!&ndash;                    <el-button v-else @click="saveDesc">Save</el-button>&ndash;&gt;-->
@@ -182,6 +229,7 @@
 
         data() {
             return {
+                Aucreg:false,
                 active:'',
                 isEmpty:false,
                 hasLogin:false,
@@ -206,10 +254,31 @@
                     },
                 ],
                 urlObjImg:{},
-                originPropertyList: [],
+                originPropertyList: [{
+                    address:'2134dfsg234',
+                    auction: true,
+
+                },
+            {
+                address:'123sdf',
+                auction:false,
+            }
+
+        ],
                 propList: [],
                 propInfo: {},
                 rules: {
+                },
+
+                form:{
+                    daterange:'',
+                    price:'',
+                    minimumPrice:'',
+                },
+                pickerOptions: {
+                    disabledDate(time) {
+                        return parseInt(time.getTime()) < Date.now()
+                    }
                 },
             };
         },
@@ -226,20 +295,23 @@
             //     this.$router.push("/login");
             // }
 
-            this.$axios
-                .get('/property/propties')
-                .then(response => {
-                    if (response.data.code === 200) {
-                        this.originPropertyList = response.data.result;
-                        this.propList = response.data.result;
-                        this.propInfo = this.originPropertyList[0];
-                    }else if(response.data.code === 400){
-                        this.isEmpty = true;
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
+            // this.$axios
+            //     .get('/property/propties')
+            //     .then(response => {
+            //         if (response.data.code === 200) {
+            //             this.originPropertyList = response.data.result;
+            //             this.propList = response.data.result;
+            //             this.propInfo = this.originPropertyList[0];
+            //         }else if(response.data.code === 400){
+            //             this.isEmpty = true;
+            //         }
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error)
+            //     })
+
+            this.propList = this.originPropertyList;
+            this.propInfo = this.originPropertyList[0];
         },
 
 
@@ -276,6 +348,38 @@
                 return colors.get(item);
             },
 
+            submitReg(pid){
+                this.$refs["form"].validate((valid) => {
+                    if (valid) {
+                        let data = new FormData();
+                        data.append('pid', pid);
+                        data.append('daterange', this.form.daterange);
+                        data.append('price', this.form.price);
+                        data.append('minimumPrice', this.form.minimumPrice);
+
+                        this.$axios.post('/property/newAuction', data)
+                            .then((response) => {
+                                if (response.status >= 200 && response.status < 300) {
+                                    if(response.data.code === 200){
+                                        this.$message.success("Register successful!");
+                                        this.Aucreg = false;
+                                    }
+                                } else if(response.data.code === 400){
+                                    this.$message.error(response.msg);
+                                }else{
+                                    console.log(response.msg);
+                                }
+                            })
+                            .catch((res) => {
+                                console.log('error', res);
+                                this.$message.error('New Auction Register Error');
+                            });
+                    } else {
+                        return false;
+                    }
+                });
+            },
+
             addStatusColor(status) {
                 const colors = new Map([
                     ["N", "status-not-register"],
@@ -283,6 +387,13 @@
                     ["R", "status-not-start"],
                 ]);
                 return colors.get(status);
+            },
+
+            aucreg(){
+                this.form.minimumPrice = '';
+                this.form.price = '';
+                this.form.daterange = '';
+                this.Aucreg = true;
             },
 
             showdate(t){
@@ -301,14 +412,13 @@
                 this.propInfo = item;
             },
 
-            removeItem(id) {
-                    console.log(id);
+            removeItem(pid) {
                     this.$confirm('Remove this property?', 'Alert', {
                         confirmButtonText: 'Confirm',
                         cancelButtonText: 'Cancel',
                         type: 'warning'
                     }).then(() => {
-                        this.$axios.delete('/property/delete/' + id)
+                        this.$axios.delete('/property/delete/' + pid)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
