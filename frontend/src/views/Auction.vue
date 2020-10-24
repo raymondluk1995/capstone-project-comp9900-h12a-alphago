@@ -24,19 +24,16 @@
         <el-row type="flex" justify="center">
             <el-col :span="20">
                 <el-tabs type="border-card">
-                    <el-tab-pane label="My Properties">
-                        <div style="text-align:right">
-                            <el-button type="primary" round @click="goto('propreg')">Register new Property</el-button>
-                        </div>
+                    <el-tab-pane label="My Auctions">
                         <template v-if="!isEmpty">
                         <el-card class="card" v-for="item in propList" :key="item.id" @click.native="goDetails(item)">
-                            <el-card :body-style="{ padding: '0px' }" style="height: 600px">
-                                <el-carousel :interval="5000" arrow="always" :height="cheight">
+<!--                            <el-card :body-style="{ padding: '0px' }" style="height: 500px">-->
+                                <el-carousel :interval="5000" arrow="always" :height="cheight" style="margin: 0 30% 0 0">
                                     <el-carousel-item v-for="pic in item.photos" :key="pic.id">
-<!--                                        <h3>{{ pic }}</h3>-->
                                         <img :src="pic"  width="100%" height="100%" alt=""/>
                                     </el-carousel-item>
                                 </el-carousel>
+
                                 <div style="padding: 14px;">
                                     <h6>{{ item.address }}</h6>
                                     <el-row type="flex" justify="left" style="margin:10px 5%;">
@@ -57,13 +54,13 @@
                                         </el-col>
                                     </el-row>
                                 </div>
-                            </el-card>
+<!--                            </el-card>-->
                         </el-card>
                         </template>
                         <template v-else>
                             <div class="empty-label" >
                                 <el-alert
-                                        title="You haven't post any property."
+                                        title="You do not have any auction."
                                         type="info"
                                         center
                                         show-icon
@@ -89,7 +86,7 @@
         props: {
             cheight: {
                 type: String,
-                default: '500px'
+                default: '200px'
             }
         },
         components: {
@@ -127,7 +124,36 @@
             return {
                 isEmpty: false,
                 hasLogin: false,
-                propList: [{}],
+                options: [
+                    {
+                        value: "all",
+                        label: "All",
+                    },
+                    {
+                        value: "R",
+                        label: "Not start",
+                    },
+                    {
+                        value: "A",
+                        label: "In process",
+                    },
+                    {
+                        value: "S",
+                        label: "Success",
+                    },
+                    {
+                        value: "F",
+                        label: "Failed",
+                    },
+                ],
+                propList: [{
+                    status:'',
+                    address:'sdf13',
+                    bathroomNum:1,
+                    bedroomNum:2,
+                    garageNum:2,
+                    photos:['',''],
+                }],
             }
         },
         methods: {
@@ -196,7 +222,7 @@
 }
 .card {
     margin: 20px 20%;
-    height: 650px;
+    height: 400px;
 
     &:hover {
         cursor: pointer;

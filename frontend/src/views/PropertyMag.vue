@@ -59,7 +59,7 @@
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
-                            <el-button v-show="item.status === 'N'" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
+                            <el-button v-show="item.status === 'N'" type="" plain circle icon="el-icon-close" @click="removeItem(item)"></el-button>
 <!--                            <el-button v-show="!item.auction" :disabled="true" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>-->
                         </el-row>
                     </el-row>
@@ -198,7 +198,7 @@
 
                 <section class="mh20" v-if="propInfo.status ==='A' || propInfo.status ==='R'">
                     <h5>Auction</h5>
-                    <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo.pid)">Cancel</el-button>
+                    <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo)">Cancel</el-button>
                     <p>Start Date: {{ showdate(propInfo.startDate) }}</p>
                     <p>End Date: {{ showdate(propInfo.endDate) }}</p>
                     <p>Reserved Price: ${{ propInfo.price }}</p>
@@ -377,13 +377,16 @@
                 return colors.get(item);
             },
 
-            cancelAuc(pid){
+            cancelAuc(item){
                 this.$confirm('Cancel this Auction?', 'Alert', {
                     confirmButtonText: 'Confirm',
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
-                this.$axios.post('/property/cancel/', pid)
+                let data = new FormData();
+                data.append('pid', item.pid);
+                data.append('aid', item.aid);
+                this.$axios.post('/property/cancel', data)
                     .then((response) => {
                         if (response.status >= 200 && response.status < 300) {
                             if(response.data.code === 200){
@@ -472,13 +475,16 @@
                 this.isSelected = item.pid;
             },
 
-            removeItem(pid) {
+            removeItem(item) {
                     this.$confirm('Remove this property?', 'Alert', {
                         confirmButtonText: 'Confirm',
                         cancelButtonText: 'Cancel',
                         type: 'warning'
                     }).then(() => {
-                        this.$axios.delete('/property/delete/' + pid)
+                        let data = new FormData();
+                        data.append('pid', item.pid);
+                        data.append('aid', item.aid);
+                        this.$axios.post('/property/delete' + data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){

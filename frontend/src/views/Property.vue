@@ -44,54 +44,62 @@
                         <div class="bid"> ${{ propInfo.latestPrice }}</div>
 <!--                        <h4  class="countdownTime">{{ time }}</h4>-->
                     </el-col>
-
-<!--                    <el-col :span="5" :offset="7">-->
-<!--                        <h3  >Time left</h3>-->
-<!--                        <h4  >{{ time }}</h4>-->
-<!--                    </el-col>-->
                 </el-row>
 
-                <el-dialog title="Select Your Card" :visible.sync="bidderFlag">
-                    <template v-if="!addNewCard">
+                <el-dialog type="flex" title="Payment" :visible.sync="bidderFlag" style="position:absolute;left:25%; right:25%;">
+                    <template>
+                        <el-row>
                         <el-radio-group v-model="defaultCard">
                             <el-radio :label="item" :key="item" v-for="item in cards" style="display:block; margin:20px 50px;">{{item}}</el-radio>
                         </el-radio-group>
-
+                        </el-row>
+                        <el-row style="margin-left:10%">
+                        <el-link v-show="!addNewCard" icon="el-icon-right" type="primary" @click="addCard">Add New Card</el-link>
+                        </el-row>
                         <div slot="footer" class="dialog-footer">
-                            <el-button @click="addCard">Add</el-button>
-                            <el-button @click="reloadCard">Reload</el-button>
+<!--                            <el-button type="primary" icon="el-icon-plus" @click="addCard" circle></el-button>-->
+<!--                            <el-button @click="addCard">Add</el-button>-->
+<!--                            <el-button @click="reloadCard">Reload</el-button>-->
                             <el-button type="primary" @click="submit">Submit</el-button>
                         </div>
                     </template>
 
-                    <template v-else>
+                    <template v-show="addNewCard">
                     <el-form
                             class="form"
                             ref="form"
                             :model="form"
                             :rules="rules"
-                            label-width="120px"
-                            label-position="left"
+                            v-show="addNewCard"
                     >
-                        <el-form-item label="Name:" prop="name">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item prop="name">
+                            <el-input v-model="form.name" placeholder="Name" clearable></el-input>
                         </el-form-item>
-                        <el-form-item label="Card Number:" prop="cardNumber">
-                            <el-input v-model="form.cardNumber" @change="validateNum" maxlength="20"></el-input>
+                        <el-form-item prop="cardNumber">
+                            <el-input v-model="form.cardNumber" @change="validateNum" maxlength="20"  placeholder="Card Number"></el-input>
                         </el-form-item>
-                        <el-form-item label="Expired Date:" prop="expiredDate">
-                            <el-date-picker v-model="form.expiredDate" type="month">
+                        <el-row>
+                        <el-col :span =12>
+                        <el-form-item prop="expiredDate" >
+                            <el-date-picker v-model="form.expiredDate" type="month" placeholder="Expire Date">
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item label="CVC:" prop="cvc">
-                            <el-input v-model="form.cvc"></el-input>
+                        </el-col >
+                            <el-col :span=12>
+                        <el-form-item prop="cvc" >
+                            <el-input v-model="form.cvc" placeholder="CVC"></el-input>
                         </el-form-item>
+                        </el-col>
+                        </el-row>
+                        <el-row>
+                        <el-link  icon="el-icon-top" type="primary" @click="notAdd">Cancel</el-link>
+                        </el-row>
                     </el-form>
 
-                    <div slot="footer" class="dialog-footer">
-                        <el-button @click="backCard">Back</el-button>
-                        <el-button type="primary" @click="submitCard">Add</el-button>
-                    </div>
+<!--                    <div slot="footer" class="dialog-footer">-->
+<!--                        <el-button @click="backCard">Back</el-button>-->
+<!--                        <el-button type="primary" @click="submitCard">Add</el-button>-->
+<!--                    </div>-->
                     </template>
                 </el-dialog>
 
@@ -154,7 +162,7 @@
                 </section>
 
             </el-col>
-            <el-col :span="5" stype="">
+            <el-col :span="5">
                 <div class="info">
                     <el-row type="flex" justify="center" style="background-color: #133264;">
                         <h3 style="color:#f3f3f3">Owner</h3>
@@ -247,7 +255,7 @@
                 newPlacedBid:'',
                 tipError: false,
                 time: '',
-                cards:[],
+                cards:['1234','123123'],
                 detail_tags:[],
                 position_tags:[],
                 defaultCard:'',
@@ -404,6 +412,13 @@
                 this.$set(this.form, 'cardNumber', card)
             },
 
+            notAdd(){
+                this.form.name='';
+                this.form.cardNumber= '';
+                this.form.expiredDate= '';
+                this.form.cvc='';
+                this.addNewCard = false;
+            },
             addStatusColor(status) {
                 switch(status) {
                     case 'A':
@@ -602,6 +617,11 @@
 </script>
 
 <style scoped lang="scss">
+    .form{
+        margin-left:10%;
+        margin-top:20px;
+        width:80%;
+    }
     .property{
         /*background-color: #aaaaaa;*/
     }
