@@ -59,8 +59,8 @@
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
-                            <el-button v-show="item.status === 'N'" type="" plain circle icon="el-icon-close" @click="removeItem(item)"></el-button>
-<!--                            <el-button v-show="!item.auction" :disabled="true" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>-->
+                            <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item)">Remove</el-button>
+                            <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>
                         </el-row>
                     </el-row>
                 </el-card>
@@ -198,7 +198,7 @@
 
                 <section class="mh20" v-if="propInfo.status ==='A' || propInfo.status ==='R'">
                     <h5>Auction</h5>
-                    <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo)">Cancel</el-button>
+<!--                    <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo)">Cancel</el-button>-->
                     <p>Start Date: {{ showdate(propInfo.startDate) }}</p>
                     <p>End Date: {{ showdate(propInfo.endDate) }}</p>
                     <p>Reserved Price: ${{ propInfo.price }}</p>
@@ -321,24 +321,23 @@
             //     this.$router.push("/login");
             // }
 
-            this.$axios
-                .get('/property/propties')
-                .then(response => {
-                    if (response.data.code === 200) {
-                        this.originPropertyList = response.data.result;
-                        this.propList = response.data.result;
-                        this.propInfo = this.originPropertyList[0];
-                    }else if(response.data.code === 400){
-                        this.isEmpty = true;
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-            // this.isEmpty = false;
-            // this.propList = this.originPropertyList;
-            // this.propInfo = this.originPropertyList[0]
-            ;
+            // this.$axios
+            //     .get('/property/propties')
+            //     .then(response => {
+            //         if (response.data.code === 200) {
+            //             this.originPropertyList = response.data.result;
+            //             this.propList = response.data.result;
+            //             this.propInfo = this.originPropertyList[0];
+            //         }else if(response.data.code === 400){
+            //             this.isEmpty = true;
+            //         }
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     })
+            this.isEmpty = false;
+            this.propList = this.originPropertyList;
+            this.propInfo = this.originPropertyList[0];
         },
 
 
@@ -463,10 +462,14 @@
             },
 
             changeSearch(value) {
-                console.log(value);
-                let filterPropertyList = this.originPropertyList.filter((e) => {
-                    return e.status === value;
-                });
+                let filterPropertyList = [];
+                if(value === 'all'){
+                    filterPropertyList = this.originPropertyList;
+                }else{
+                    filterPropertyList = this.originPropertyList.filter((e) => {
+                        return e.status === value;
+                    });
+                }
                 this.propList = filterPropertyList;
             },
 
