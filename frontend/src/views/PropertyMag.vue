@@ -238,30 +238,6 @@
                 default: '200px'
             }
         },
-        filters: {
-            money(val)
-            {
-                val = val.toString().replace(/\$|\,/g, "");
-                if (isNaN(val))
-                {
-                    val = '';
-                }
-                let sign = (val == (val = Math.abs(val)));
-                val = Math.floor(val * 100 + 0.50000000001);
-                let cents = val % 100;
-                val = Math.floor(val / 100).toString();
-                if (cents < 10)
-                {
-                    cents = "0" + cents;
-                }
-                for (let i = 0; i < Math.floor((val.length - (1 + i)) / 3); I++)
-                {
-                    val = val.substring(0, val.length - (4 * i + 3)) + "," + val.substring(val.length - (4 * i + 3));
-                }
-
-                return (((sign) ? "" : "-") + val + "." + cents);
-            }
-        },
 
         data() {
             return {
@@ -349,7 +325,6 @@
                         this.propInfo = this.originPropertyList[0];
                     }else if(response.data.code === 400){
                         this.isEmpty = true;
-                        this.Aucreg = true;
                     }
                 })
                 .catch(function (error) {
@@ -428,7 +403,8 @@
                     if (valid) {
                         let data = new FormData();
                         data.append('pid', pid);
-                        data.append('daterange', this.form.daterange);
+                        data.append('startdate', this.form.daterange[0]);
+                        data.append('enddate', this.form.daterange[1]);
                         data.append('price', this.form.price);
                         data.append('minimumPrice', this.form.minimumPrice);
 
