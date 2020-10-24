@@ -79,7 +79,7 @@
                     </el-alert>
                     <!--                        <el-button type="primary" icon="el-icon-right" round plain @click="goto('propreg')">Register New Auction</el-button>-->
                 </div>
-<!--                    <h3>{{ // propInfo.address }}</h3>-->
+                    <h3>{{ propInfo.address }}</h3>
                     <el-row v-show='!this.isEmpty' class="property-item" style="margin-top:50px">
                         <section>
                     <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 25% 0 25%">
@@ -413,11 +413,12 @@
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
                                         this.$message.success("Register successful!");
-                                        this.propInfo.auction = true;
+                                        // this.propInfo.auction = true;
                                         this.Aucreg = false;
-                                        // location.reload()
+                                        location.reload()
                                     }
                                 } else if(response.data.code === 400){
+                                    this.Aucreg = false;
                                     this.$message.error(response.msg);
                                 }else{
                                     console.log(response.msg);
@@ -448,8 +449,6 @@
                 this.form.daterange = '';
                 this.Aucreg = true;
             },
-
-
 
             showdate(t){
                 return dayjs(t).format("YYYY-MM-DD HH:mm:ss")
@@ -494,45 +493,6 @@
                     })
             },
 
-            editphoto(){
-                this.propInfo.photos.forEach(val => { // 通过遍历得到数据库中的照片并进行照片回显
-                    this.photos=[];
-                    this.urlObjImg.url = val;
-                    this.photos.push(this.urlObjImg) // 把数据库中的照片添加到fileListImg里面
-                })
-            },
-
-            beforeAvatarUpload(file) {
-                const isLt2M = file.size / 1024 / 1024 < 2;
-                let types = ["image/jpeg", "image/jpg", "image/png"];
-                const isImage = types.includes(file.type);
-                if (!isImage) {
-                    this.$message.error("上传图片只能是 JPG、JPEG、PNG 格式!");
-                }
-                if (!isLt2M) {
-                    this.$message.error("Image size can not larger than 2MB!");
-                }
-                return isImage && isLt2M;
-            },
-
-            handleRemove(file, fileList) {
-                const IMG = file.raw;
-                const INDEX = this.form4.imageRaw.indexOf(IMG);
-                this.form4.imageRaw.splice(INDEX, 1);
-                this.form4.imageUrl.splice(INDEX, 1);
-                this.form4.hasupload = this.form4.hasupload - 1;
-                console.log(file, fileList);
-            },
-
-            imgBroadcastChange(file) {
-                this.form4.hasupload = this.form4.hasupload + 1;
-                this.form4.imageRaw.push(file.raw);
-                this.form4.imageUrl.push(URL.createObjectURL(file.raw));
-            },
-
-            exceedTips: function () {
-                this.$message.error("Maximum 10 photos.");
-            },
 
             goto(name) {
                 console.log(name);

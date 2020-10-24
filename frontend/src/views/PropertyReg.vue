@@ -436,9 +436,9 @@ export default {
             label: 'Studio'
         }],
         pickerOptions: {
-            disabledDate(time) {
-                return parseInt(time.getTime()) < Date.now()
-            }
+            // disabledDate(time) {
+            //     return parseInt(time.getTime()) < Date.now()
+            // }
         },
         form:{},
         form1:{

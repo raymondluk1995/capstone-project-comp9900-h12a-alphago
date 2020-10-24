@@ -438,13 +438,19 @@
                 let minute = parseInt((diff / 60) % 60);
                 let second = parseInt(diff % 60);
 
-                if (diff2 >= 0) {
+                if (diff2 > 0) {
                     this.timeFlag = true;
                     let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
                     this.time = `This Auction will start at ${ st }`;
                 }
                 else{
-                    this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
+                    if(diff>0){
+                        this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
+                    }else{
+                        this.timeFlag = false;
+                        this.time = `This Auction is over.`;
+                    }
+
                 }
             },
 
