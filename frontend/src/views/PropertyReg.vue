@@ -638,11 +638,8 @@ export default {
           data.append('detail', this.form3.kw_details);
           data.append('description', this.form3.description);
 
-          let startT = (this.form5.daterange[0]/1000).toString();
-          let endT = (this.form5.daterange[1]/1000).toString();
-          // console.log(startT);
-          data.append('startdate', startT);
-          data.append('enddate', endT);
+          data.append('startdate', this.form5.daterange[0]);
+          data.append('enddate', this.form5.daterange[1]);
           data.append('price', this.form5.price);
           data.append('minimumPrice', this.form5.minimumPrice);
           data.append('auction', this.form5.Auction);
@@ -712,7 +709,7 @@ export default {
 
       let country = place_info[place_info.length-1].trim();
 
-      if(country!="Australia"){
+      if(country!=="Australia"){
         this.$message.error("Propery for registration must locate in Australia!!");
         setTimeout(function(){
           // location.reload();

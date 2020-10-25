@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="v-content" v-bind:style="{minHeight: Height+'px'}"><router-view /></div>
-    <Footer></Footer>
+<!--    <Footer></Footer>-->
   </div>
 </template>
 
