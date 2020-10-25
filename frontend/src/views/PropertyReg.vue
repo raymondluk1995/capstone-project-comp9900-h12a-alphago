@@ -324,8 +324,8 @@
                     range-separator="To"
                     start-placeholder="Auction Start Time"
                     end-placeholder="Auction End Time"
-                            value-format="timestamp"
-                            :picker-options="pickerOptions">
+                    value-format="timestamp"
+                    :picker-options="pickerOptions">
             </el-date-picker>
 
           </el-form-item>
@@ -619,6 +619,8 @@ export default {
       },
 
     submit() {
+        // console.log(this.form5.daterange[0]);
+        // console.log(this.form5.daterange[0]/1000);
           let data = new FormData();
             data.append('address', this.form1.address);
             data.append('suburb', this.form1.suburb);
@@ -636,12 +638,15 @@ export default {
           data.append('detail', this.form3.kw_details);
           data.append('description', this.form3.description);
 
-          data.append('startdate', this.form5.daterange[0]);
-          data.append('enddate', this.form5.daterange[1]);
+          let startT = (this.form5.daterange[0]/1000).toString();
+          let endT = (this.form5.daterange[1]/1000).toString();
+          // console.log(startT);
+          data.append('startdate', startT);
+          data.append('enddate', endT);
           data.append('price', this.form5.price);
           data.append('minimumPrice', this.form5.minimumPrice);
           data.append('auction', this.form5.Auction);
-
+            // console.log(data);
             // added by Raymond
             data.append("lat", this.place.geometry.location.lat(this.place));
             data.append("lng", this.place.geometry.location.lng(this.place));
