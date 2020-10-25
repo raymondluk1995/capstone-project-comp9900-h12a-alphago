@@ -46,15 +46,24 @@
                     <el-row type="flex" justify="space-around">
                     <div class="items">
                         <ul>
-                            <li  v-for="item in propList" :key="item.pid ">
+                            <li  v-for="item in propList" :key="item.aid ">
                                 <div class="item" @click.native="goDetails(item)">
+                                    <el-row  v-if="item.status === 'R'" style="height:40px;background-color: rgba(191,71,47,0.63);margin: 10px 2% 0 2%;padding:10px;">
+                                        <h5 >Auction: {{ showTime(item.startdate) }}</h5>
+                                    </el-row>
+
+                                    <el-row v-else style="height:40px;background-color: #93d67f;margin: 10px 2% 0 2%;padding:10px;">
+                                        <h5 >Stop At: {{ showTime(item.enddate) }}</h5>
+                                    </el-row>
+
+
                                     <el-carousel :interval="5000" arrow="always" :height="cheight" style="margin: 0 2%">
                                         <el-carousel-item v-for="pic in item.photos" :key="pic.id">
                                             <img :src="pic"  width="100%" height="100%" alt=""/>
                                         </el-carousel-item>
                                     </el-carousel>
                                     <div style="padding: 10px;">
-                                    <h4>{{ item.address }}</h4>
+                                    <h5>{{ item.address }}</h5>
                                     <el-row type="flex" justify="left" style="margin:10px 5%;">
                                         <el-col :span="4">
                                         <i class="el-icon-toilet-paper"> Baths: {{ item.bathroomNum}}</i>
@@ -75,13 +84,19 @@
                                         <el-row type="flex" justify="space-around">
                                             <div class="bid" v-if="item.status==='R'"> Guide ${{ getBidStatus(item)|numFormat }}</div>
                                             <div class="bid" v-else> ${{ getBidStatus(item)|numFormat }}</div>
+                                        </el-row>
+                                        <el-row type="flex" justify="space-around">
                                             <template v-if="item.status==='A'">
-                                            <div v-if="item.userBidPrice !==''" class="bid" :class="userBid(item.latestPrice, item.userBidPrice)"> ${{ getStatus(item)|numFormat }}</div>
-                                            <div v-else class="bid" :class="userBid(item.latestPrice, item.userBidPrice)">$0</div>
+                                                <div v-if="parseInt(item.currentBid) === parseInt(item.highestPrice)"
+                                                     class="bid2"
+                                                     :class="userBid(item.highestPrice, item.currentBid)"> Winning! </div>
+                                                <div v-else
+                                                     class="bid2"
+                                                     :class="userBid(item.highestPrice, item.currentBid)"> ${{ getStatus(item) |numFormat }} </div>
 
                                             </template>
                                             <template v-else>
-                                            <div class="bid" :class="addStatusColor(item.status)"> {{ getStatus(item) }}</div>
+                                                <div class="bid2" :class="addStatusColor(item.status)"> {{ getStatus(item) }}</div>
                                             </template>
                                         </el-row>
                                 </div>
@@ -113,13 +128,15 @@
 <script>
     import Header from "@/components/Header.vue";
     import { mapActions } from "vuex";
+    import dayjs from "dayjs";
     import numFormat from "../utils/numFormat";
+
     export default {
         name: "Auction",
         props: {
             cheight: {
                 type: String,
-                default: '350px'
+                default: '320px'
             }
         },
         components: {
@@ -155,97 +172,81 @@
         },
         data() {
             return {
+                id:'',
                 filter:'all',
                 isEmpty: false,
                 hasLogin: false,
                 filterPropertyList:[],
                 originPropertyList:[
-                    // {
-                    //     pid:1,
-                    //     status:'A',
-                    //     bathroomNum:2,
-                    //     bedroomNum:1,
-                    //     garageNum:2,
-                    //     type:'Apartment',
-                    //     area:123,
-                    //     address:'2 Gearin Alley, Mascot, NSW',
-                    //     photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
-                    //     latestPrice: 123123,
-                    //     userBidPrice:123124,
-                    //     reservedPrice: 10000,
-                    // }
-                    // ,{
-                    //     pid:2,
-                    //     status: 'A',
-                    //     address:'123asd',
-                    //     photos:['',''],
-                    //     latestPrice: 123123,
-                    //     userBidPrice:123,
-                    //     reservedPrice: 10000,
-                    // }
-                    // ,{
-                    //     pid:7,
-                    //     status: 'S',
-                    //     address:'123asd',
-                    //     photos:['',''],
-                    //     latestPrice: 123123,
-                    //     userBidPrice:22222,
-                    //     reservedPrice: 10000,
-                    // },
-                    // {
-                    //     pid:3,
-                    //     auction:true,
-                    //     status: 'F',
-                    //     address:'123asd',
-                    //     photos:['',''],
-                    //     latestPrice: 123123,
-                    //     userBidPrice:22222,
-                    // },
-                    // {
-                    //     pid:4,
-                    //     auction:true,
-                    //     status: 'F',
-                    //     address:'123asd',
-                    //     photos:['',''],
-                    //     latestPrice: 123123,
-                    //     userBidPrice:22222,
-                    // },
-                    // {
-                    //     pid:5,
-                    //     auction:true,
-                    //     status: 'A',
-                    //     address:'123asd',
-                    //     photos:['',''],
-                    //     latestPrice: 123123,
-                    //     userBidPrice:22222,
-                    // },
-                    // {
-                    //     pid:6,
-                    //     auction:true,
-                    //     status: 'A',
-                    //     address:'123asd',
-                    //     photos:['',''],
-                    //     latestPrice: 123123,
-                    //     userBidPrice:22222,
-                    // },
-                    // {
-                    //     pid:8,
-                    //     auction:true,
-                    //     status: 'A',
-                    //     address:'123asd',
-                    //     photos:['',''],
-                    //     latestPrice: 123123,
-                    //     userBidPrice:22222,
-                    // },
-                    // {
-                    //     pid:9,
-                    //     auction:true,
-                    //     status: 'A',
-                    //     address:'123asd',
-                    //     photos:['',''],
-                    //     latestPrice: 123123,
-                    //     userBidPrice:22222,
-                    // }
+                    {
+                        aid:1,
+                        status:'A',
+                        bathroomNum:2,
+                        bedroomNum:1,
+                        garageNum:2,
+                        type:'Apartment',
+                        area:123,
+                        address:'2 Gearin Alley, Mascot, NSW',
+                        photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
+                        highestPrice: 123123,
+                        currentBid:123123,
+                        startdate:'',
+                        endddate:'',
+                    }
+                    ,{
+                        aid:2,
+                        status: 'A',
+                        address:'123asd',
+                        photos:['',''],
+                        highestPrice: 123123,
+                        startdate: new Date(2019,10,10,12,10),
+                        currentBid:123,
+                        reservedPrice: 10000,
+                    },
+                    {
+                        aid:3,
+                        status: 'R',
+                        address:'123asd',
+                        photos:['',''],
+                        startdate: new Date(2021,10,10,12,10),
+                        enddate: new Date(2023,10,10,10,10),
+                        highestPrice: 123123,
+                        currentBid:123,
+                        reservedPrice: 10000,
+                    },
+
+                    {
+                        aid:5,
+                        status: 'A',
+                        address:'123asd',
+                        photos:['',''],
+                        highestPrice: 123123,
+                        currentBid:22222,
+                    },
+                    {
+                        aid:6,
+                        status: 'A',
+                        address:'123asd',
+                        photos:['',''],
+                        highestPrice: 123123,
+                        currentBid:22222,
+                    },
+                    {
+                        aid:8,
+                        status: 'A',
+                        address:'123asd',
+                        photos:['',''],
+                        highestPrice: 123123,
+                        currentBid:22222,
+                    },
+                    {
+                        aid:9,
+                        status: 'A',
+                        address:'123asd',
+                        photos:['',''],
+                        highestPrice: 123123,
+                        currentBid:22222,
+                    }
 
                 ],
                 propList:[],
@@ -262,14 +263,14 @@
                         value: "A",
                         label: "In process",
                     },
-                    {
-                        value: "S",
-                        label: "Success",
-                    },
-                    {
-                        value: "F",
-                        label: "Failure",
-                    },
+                    // {
+                    //     value: "S",
+                    //     label: "Sold",
+                    // },
+                    // {
+                    //     value: "F",
+                    //     label: "Passed In",
+                    // },
 
                 ],
                 propList: [{
@@ -294,9 +295,8 @@
             //     this.$message.error("You should login first!");
             //     this.$router.push("/login");
             // }
-
             this.$axios
-                .get('/auction')
+                .get('/auction/list/now')
                 .then(response => {
                     if (response.data.code === 200) {
                         this.originPropertyList = response.data.result;
@@ -311,8 +311,6 @@
                 })
             // this.isEmpty = false;
             // this.propList = this.originPropertyList;
-            // this.propInfo = this.originPropertyList[0]
-            ;
         },
 
         methods: {
@@ -352,10 +350,11 @@
             getStatus(item){
                 switch(item.status){
                     case 'R':
-                        return 'Waiting';
+                        let time = dayjs(item.startdate).format("YYYY-MM-DD HH:mm:ss")
+                        return `This Auction will start at ${time}`;
                         break;
                     case 'A':
-                        return `${ item.userBidPrice }`;
+                        return  `${item.currentBid}`;
                         break;
                     case 'S':
                         return 'Success';
@@ -369,9 +368,9 @@
             },
             getBidStatus(item){
                 if(item.status==='R'){
-                    return item.reservedPrice;
+                    return item.currentBid;
                 }else{
-                    return item.latestPrice;
+                    return item.highestPrice;
                 }
             },
 
@@ -422,11 +421,23 @@
                         path: '/property',
                         query:
                             {
-                                id: item.pid,
+                                id: item.aid,
                             }
                     }
                 )
             },
+            showTime(time){
+                // let time = dayjs(day).format("YYYY-MM-DD HH:mm:ss");
+                let MONTH =['Jan', 'Feb', 'Mar','Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                let day = dayjs(time).day();
+                let mon = MONTH[dayjs(time).month()];
+                let year = dayjs(time).year();
+                let hour = dayjs(time).hour();
+                let min = dayjs(time).minute();
+                let formatTime = `${day} ${mon} ${year}, ${hour}:${min}`;
+                return formatTime;
+            },
+
         },
     };
 </script>
@@ -439,36 +450,32 @@
         margin-left: 10px;
     }
 }
-.card {
-    margin: 20px 25%;
-    height: 600px;
-
-    &:hover {
-        cursor: pointer;
-        transform: scale(1.02);
-    }
-
-    h6{
-        margin:5px 5%;
-    }
-    p {
-        line-height: 2.5;
-    }
-}
 .empty-label{
     /*font-size: 18px;*/
     text-align: center;
     margin: 10px;
 }
 .bid {
-    width :45%;
-    padding: 5px;
+    width :90%;
+    padding: 10px;
     text-align: center;
-    font-size: 15px;
+    font-size: 18px;
     font-weight: bold;
     color: #fff;
     background-color: #133264;
-    border-radius: 5px;
+    border-radius: 3px;
+    margin-top:15px;
+}
+.bid2 {
+    width :90%;
+    padding: 3px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    margin-top:5px;
+    background-color: #133264;
+    border-radius: 3px;
 }
 .userBid{
     width :45%;
@@ -488,15 +495,14 @@
 }
 
 .user-bid-bg-under{
-    background: #ca4b2e;
+    background: rgba(163, 61, 37, 0.65);
 }
 .user-bid-bg-above{
-    background-color: #0F996B;
+    background-color: rgba(16, 160, 112, 0.75);
 }
 
-
 .items{
-    margin: 0 10%;
+    margin: 10px 10%;
     text-align:center;
 
 }
@@ -513,7 +519,7 @@
 .items ul li {
     /*z-index: 1;*/
     width: 600px;
-    height: 500px;
+    height: 600px;
     padding: 10px 0;
     margin: 10px 20px;
     /*display: inline-block;*/

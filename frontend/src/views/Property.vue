@@ -257,12 +257,12 @@
                 bidderFlag: false,
                 timeFlag: false,
                 addNewCard:false,
-                currentBid:'123455',
+                currentBid:'',
                 newBid: '',
                 newPlacedBid:'',
                 tipError: false,
                 time: '',
-                cards:['1234','123123'],
+                cards:[],
                 detail_tags:[],
                 position_tags:[],
                 selectCard:'',
@@ -277,9 +277,9 @@
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
-                    enddate:new Date(2021, 8, 10, 10, 10),
-                    status:'S',
-                    startdate:new Date(2020, 8, 10, 10, 10),
+                    enddate:'',
+                    status:'',
+                    startdate:'',
                     avatar:'',
                     bidderNum:'',
                     latestPrice:'',
@@ -289,7 +289,7 @@
                     position: '',
                     detail: '',
                     latestBid: '',
-                    photos: ['','',''],
+                    photos: [],
                     description: '',
                     bidHistory:[],
                     firstname:'',
@@ -428,17 +428,11 @@
             },
             addStatusColor(status) {
                 switch(status) {
+                    case 'R':
+                        return 'status-not-start';
+                        break;
                     case 'A':
                         return 'status-process';
-                        break;
-                    case 'S':
-                        return 'status-success';
-                        break;
-                    case 'F':
-                        return 'status-failure';
-                        break;
-                    case 'R':
-                        return 'status-out';
                         break;
                     default:
                         break;
@@ -667,19 +661,20 @@
     .btn{
         font-size: 20px;
         background-color:#173b77;
-        width:100%;color:#f3f3f3;
+        width:100%;
+        color:#f3f3f3;
         /*&:hover {*/
         /*    cursor: pointer;*/
         /*    transform: scale(1.02);*/
         /*}*/
     }
-    .status-success {
+    .status-not-start {
         background-color: #89c668;
     }
+    /*.status-process {*/
+    /*    background-color: #e6a23c;*/
+    /*}*/
     .status-process {
-        background-color: #e6a23c;
-    }
-    .status-fail {
         background-color: #f56c6c;
     }
 
