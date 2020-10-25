@@ -1,7 +1,11 @@
 <template>
   <div class="login">
     <Header>
-      <el-button  type="" @click="back">Back</el-button>
+        <div class="back-btn">
+        <span  id="back-btn" style="font-size:20px;" @click="back">Back <i class="el-icon-refresh-right"></i></span>
+        <div class="bottom-line"></div>
+        </div>
+<!--      <el-button  type="" @click="back">Back</el-button>-->
     </Header>
     <el-row type="flex" justify="center" >
       <el-col :span="15" >
@@ -12,63 +16,47 @@
 
       <el-col :span="9">
 
-<!--          <el-form-item v-if="loginByuser"  label="Username:" prop="username">-->
-<!--          <el-input v-model="form.username"></el-input>-->
-<!--        </el-form-item>-->
-
-<!--          <el-form-item v-else label="Email:" prop="email">-->
-<!--            <el-input v-model="form.email"></el-input>-->
-<!--          </el-form-item>-->
-
-<!--          <el-form-item label="Password:" prop="password">-->
-<!--            <el-input-->
-<!--                    type="password"-->
-<!--                    v-model="form.password"-->
-<!--                    show-password-->
-<!--            ></el-input>-->
-<!--          </el-form-item>-->
-<!--        </el-form>-->
-
-
         <div id="container">
-<!--          <el-button :type="byuserType" icon="el-icon-user-solid" circle @click="byuser"></el-button>-->
-<!--          <el-button :type="byemailType" icon="el-icon-message" circle @click="byemail"></el-button>-->
           <div class="btn-style" >
-
-<!--            <transition name="show">-->
            <span v-if="!loginByuser" id="btn-move1" @click="byuser">Login By Username<i class="el-icon-right el-icon--right"></i></span>
             <span v-else  id="btn-move2" @click="byemail">Login By Email<i class="el-icon-right el-icon--right"></i></span>
             <div class="bottom-line"></div>
-
-<!--            </transition>-->
-
-
-<!--            <transition name="show">-->
-<!--              <span v-if="!loginByuser" id="btn-move1" @click="byuser">Login By Username<i class="el-icon-right el-icon&#45;&#45;right"  ></i></span>-->
-<!--               <span v-if="loginByuser" id="btn-move2" @click="byemail">Login By Email<i class="el-icon-right el-icon&#45;&#45;right"></i> </span>-->
-
-<!--            </transition>-->
-
           </div>
 
 
           <div class="content" >
-            <div class="details">
+            <el-form class="details"
+                 ref="form"
+                 :model="form"
+                 :rules="rules"
+            >
               <h1 class="title">Sign In</h1>
 
 
 
-              <div class="item">
-                <transition name="show">-->
-                <label v-show="loginByuser" for="item-firsthev1">Username</label>
-                </transition>
-                <transition name="show">-->
-                <label v-show="!loginByuser" for="item-firsthev2">Email</label>
-                </transition>
+              <div class="item" >
+<!--                <transition name="show">&ndash;&gt;-->
+<!--                <label v-show="loginByuser" for="item-firsthev1">Username</label>-->
+<!--                </transition>-->
+<!--                <transition name="show">&ndash;&gt;-->
+<!--                <label v-show="!loginByuser" for="item-firsthev2">Email</label>-->
+<!--                </transition>-->
 
-                <input  v-if="loginByuser" v-model="form.username" id="item-firsthev1" type="text" >
-                <input  v-else v-model="form.email" id="item-firsthev2" type="text" >
-                <div class="bottom-line"></div>
+<!--                  <span>Username</span>-->
+<!--                  <transition name="show">-->
+                  <el-form-item v-if="loginByuser" prop="username">
+                  <el-input  v-model="form.username"  placeholder="Username" type="text" ></el-input>
+                  </el-form-item>
+
+                  <el-form-item v-else prop="email">
+                  <el-input  v-model="form.email"  placeholder="Email" type="text"  ></el-input>
+                  </el-form-item>
+<!--                  </transition>-->
+                  <el-form-item prop="password">
+                  <el-input v-model="form.password" placeholder="Password" type="password" prop="password" show-password></el-input>
+                  </el-form-item>
+
+<!--                <div class="bottom-line"></div>-->
               </div>
 <!--              <div class="item" v-else>-->
 <!--                <label for="item-firsthev2">Email</label>-->
@@ -76,21 +64,55 @@
 <!--                <div class="bottom-line"></div>-->
 <!--              </div>-->
 
-              <div class="item">
-                <label for="next-hev">Password</label>
-                <input v-model="form.password" id="next-hev" type="password">
-                <div class="bottom-line"></div>
-              </div >
+
+<!--                ========Valid======-->
+<!--              <div class="item">-->
+<!--                <label for="next-hev">Password</label>-->
+<!--                <input v-model="form.password" id="next-hev"  type="password" prop="password">-->
+<!--                <div class="bottom-line"></div>-->
+<!--              </div >-->
+<!--                =================-->
+
 
             <div class="item" style="margin-top:40px">
-              <el-button class="btn" @click="goto('register')">Sign Up</el-button>
-              <el-button type="info" plane @click="forgetpwd">Forget Password?</el-button>
-              <el-button v-if="loginByuser" type="primary" @click="signInUser" style="float: right;">Sign in</el-button>
-              <el-button v-else type="primary" @click="signInEmail" style="float: right;">Sign in</el-button>
+
+              <span class="button"
+                    @mouseover="mouseOver1"
+                    @mouseleave="mouseLeave1"
+                    @click="goto('register')"
+                    :style="active1"
+              ><i class="el-icon-user"></i> Sign Up</span>
+
+              <span class="button"
+                    @mouseover="mouseOver2"
+                    @mouseleave="mouseLeave2"
+                    @click="forgetpwd"
+                    :style="active2"
+              ><i class="el-icon-warning-outline"></i> Forget Password?</span>
+
+                <span class="button"
+                      v-if="loginByuser"
+                      @click="signInUser"
+                      @mouseover="mouseOver3"
+                      @mouseleave="mouseLeave3"
+                      :style="active3">
+                    <i class="el-icon-check"></i> Sign in</span>
+
+                <span class="button"
+                      v-else @click="signInEmail"
+                      @mouseover="mouseOver3"
+                      @mouseleave="mouseLeave3"
+                      :style="active3">
+                    <i class="el-icon-check"></i> Sign in</span>
+
+<!--              <el-button class="btn" @click="goto('register')">Sign Up</el-button>-->
+<!--              <el-button type="info" plane @click="forgetpwd">Forget Password?</el-button>-->
+<!--              <el-button v-if="loginByuser" type="primary" @click="signInUser" style="float: right;">Sign in</el-button>-->
+<!--              <el-button v-else type="primary" @click="signInEmail" style="float: right;">Sign in</el-button>-->
             </div>
 
 
-            </div>
+            </el-form>
           </div>
         </div>
 
@@ -120,11 +142,30 @@
         this.vdaH = h - 120 + 'px';
     },
     mounted(){
+        $("span").hover(function(event) {
+            $(this).stop().animate({"margin-left": "10px"}, 300);
+        });
+
+        $("#try").hover(function(event) {
+            // $(this).siblings("label").stop().animate({"bottom": "50px"}, 300);
+            // $(this).stop().animate({placeholder: "Email"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "150px"}, 200);
+        });
+        $("#try").mouseleave(function(event) {
+            // $(this).stop().animate({"margin-left": "10px"}, 300);
+            // $(this).siblings("label").stop().animate({bottom: "10px"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "150px"}, 200);
+        });
+
+        $("#back-btn").hover(function(event) {
+            $(this).stop().animate({"margin-left": "10px"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+        });
 
 
-      $("#btn-move1").hover(function(event) {
+        $("#btn-move1").hover(function(event) {
         $(this).stop().animate({"margin-left": "10px"}, 300);
-        $(this).next(".bottom-line").stop().animate({"width": "150px"}, 300);
+        $(this).next(".bottom-line").stop().animate({"width": "150px"}, 200);
       });
 
       $("#btn-move2").hover(function(event) {
@@ -141,6 +182,14 @@
         $(this).stop().animate({"margin-left": "0"}, 300);
         $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
       });
+        $("span").mouseleave(function(event) {
+            $(this).stop().animate({"margin-left": "0"}, 300);
+        });
+        $("#back-btn").mouseleave(function(event) {
+            $(this).stop().animate({"margin-left": "0"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+        });
+
 
         $("input").focus(function(event) {
           //label动态上升，升至顶部
@@ -180,6 +229,9 @@
 
       return {
           vdaH:'',
+          active3:'',
+          active1:'',
+          active2:'',
         loginByuser:true,
         byuserType :"primary",
         byemailType : "info",
@@ -190,7 +242,7 @@
         },
         rules: {
           email: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
-          username: [{required: true, message: "Please enter email address", trigger: "blur",}, {validator: validateUsername, trigger: "blur" },],
+          username: [{required: true, message: "Please enter username", trigger: "blur",}, {validator: validateUsername, trigger: "blur" },],
           password: [{required: true, message: "Please enter password", trigger: "blur",},],
         },
       };
@@ -208,13 +260,21 @@
         this.byemailType = "primary";
       },
 
+        mouseOver1() {this.active1 = "border-left:3px solid #123123;";},
+        mouseLeave1() {this.active1 = "";},
 
+        mouseOver2() {this.active2 = "border-left:3px solid #123123;";},
+        mouseLeave2() {this.active2 = "";},
+
+        mouseOver3() {this.active3 = "border-left:3px solid #123123;";},
+        mouseLeave3() {this.active3 = "";},
 
 
       signInEmail() {
-        this.$refs["form"].validate((valid) => {
+        this.$refs.form.validate((valid) => {
           if (valid) {
             let data = this.$qs.stringify(this.form);
+            console.log(data);
             this.$axios.post('/user/emailLogin', data)
                     .then((response) => {
                       if (response.status >= 200 && response.status < 300) {
@@ -247,6 +307,7 @@
         this.$refs["form"].validate((valid) => {
           if (valid) {
             let data = this.$qs.stringify(this.form);
+              console.log(data);
             this.$axios.post('/user/login', data)
                     .then((response) => {
                       if (response.status >= 200 && response.status < 300) {
@@ -285,14 +346,12 @@
       back() {
         this.$router.go(-1);
       },
-      mouseIn(){
-        $(this).next(".bottom-line").stop().animate({"width": "400px"}, 300);
-      }
+
     },
   };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   .title {
     margin-top: 20%;
     width:100%;
@@ -397,19 +456,60 @@
 .btn-style{
   cursor: pointer;
   margin:20px 0;
-  width:200px;
+  width:230px;
   float:right;
-  position: relative;
-}
-.btn-style span{
   /*position: relative;*/
 }
+
 .btn-style .bottom-line{
-  position: absolute;
+  /*position: absolute;*/
   width: 0;
-  height: 2px;
-  left:0;
+  height: 1px;
+  left:5px;
   bottom: -1px;
   background-color: #3b4c73;
 }
+
+.button{
+    cursor: pointer;
+    padding:3px 20px 3px 5px;
+    /*border-radius: 3px;*/
+    /*border-left:3px solid #384a69;*/
+}
+
+  .back-btn{
+      cursor: pointer;
+        position:relative;
+      /*border:1px solid #123123;*/
+  }
+.back-btn .bottom-line{
+    position: absolute;
+    /*margin-left:40px;*/
+    width: 0;
+    height: 2px;
+    left:0;
+    bottom: -1px;
+    background-color: #3b4c73;
+}
+
+  .item .el-input__inner {
+      padding-top: 35px;
+      width:400px;
+      height: 80px;
+      font-size: 20px;
+      border:none;
+      outline: none;
+      border-radius: 0;
+      border-bottom: 1px solid #c3c3c3;
+  }
+    .item .el-form-item__inner{
+        font-size: 16px;
+        position: absolute;
+        left:2px;
+        bottom:10px;
+        color:#777;
+        cursor: text;
+    }
+
+
 </style>
