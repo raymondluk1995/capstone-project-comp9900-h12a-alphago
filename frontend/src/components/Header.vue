@@ -1,20 +1,4 @@
 <template>
-<!--  <div class="header">-->
-<!--    <el-row type="flex" justify="space-around" style="align-items: center"">-->
-<!--    <el-col :span="8">-->
-<!--        <img @click="goto('home')" src="@/assets/Alogo.png"-->
-<!--             alt="render failure" style="width: 100px; height:90px; cursor: pointer">-->
-<!--      </el-col>-->
-<!--      <el-col :span="8"  >-->
-<!--        <div class="slogan" >-->
-<!--          <h4 style="font-family:Georgia;color: #222222">AlphaGo Auction</h4>-->
-<!--        </div>-->
-<!--      </el-col>-->
-<!--        <el-col :span="4"  >-->
-<!--          <slot></slot>-->
-<!--        </el-col>-->
-<!--    </el-row>-->
-<!--  </div>-->
     <div class="header">
         <el-row type="flex" justify="space-around" style="align-items: center;">
             <el-col :span="2">
