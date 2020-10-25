@@ -253,7 +253,7 @@
                 id:'',
                 username:'',
                 hasLogin: false,
-                isBidder: true,
+                isBidder: false,
                 bidderFlag: false,
                 timeFlag: false,
                 addNewCard:false,
@@ -442,12 +442,16 @@
             countDown(time,startime) {
                 let expiredTime = dayjs(time);
                 let startTime = dayjs(startime);
+                console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
+                console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
                 // let startTime = dayjs(new Date(2020, 8, 10, 10, 10));
                 // let expiredTime = dayjs(new Date(2020, 9, 24, 17, 1));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
                 let diff2 = startTime.diff(nowTime) / 1000;
+                console.log(diff);
+                console.log(diff2);
 
                 let day = parseInt(diff / 3600 / 24);
                 let hour = parseInt((diff / 3600) % 24);

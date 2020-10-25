@@ -324,6 +324,7 @@
                     range-separator="To"
                     start-placeholder="Auction Start Time"
                     end-placeholder="Auction End Time"
+                            value-format="timestamp"
                             :picker-options="pickerOptions">
             </el-date-picker>
 
