@@ -6,6 +6,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 import qs from 'qs'
+import dayjs from "dayjs";
 
 import VuePageTitle from 'vue-page-title'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
