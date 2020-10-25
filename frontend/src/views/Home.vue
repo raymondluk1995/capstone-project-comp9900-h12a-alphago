@@ -119,63 +119,30 @@
                 v-model="serachKey"
         > -->
         <div style="display: inline-block; width: 100%">
-          <google-places-autocomplete
-            @resultChanged="(placeDetail) => (place = placeDetail)"
-            @resultCleared="() => (place = null)"
+          <vue-google-autocomplete
+            ref="address"
+            id="map"
+            classname="form-control"
+            placeholder="Please type your address"
+            v-on:placechanged="getAddressData"
+            country="au"
+            types="(cities)"
           >
-            <div slot="input" slot-scope="{ context, events, actions }">
-              <!--                <label for="locationInput" class="middle address-label">Address Search</label><br/>-->
-              <input
-                v-model="context.input"
-                @focus="events.inputHasReceivedFocus"
-                @input="events.inputHasChanged"
-                @keyup="checkPostcode"            
-                @keydown.enter.prevent="actions.selectItemFromList"
-                @keydown.down.prevent="actions.shiftResultsSelection"
-                @keydown.up.prevent="actions.unshiftResultsSelection"
-                type="search"
-                id="locationInput"
-                class="middle form-control"
-                placeholder="Please type in your property's address here for validation."
-                autocomplete="off"
-              />
-            </div>
-
-            <span
-              v-show="notPostcode"
-              slot="item"
-              slot-scope="{ place }"
-              class="btn btn-default middle search-span"
-            >
-              {{ place.description}}
-            </span>
-            <span
-              v-show="notPostcode"
-              slot="activeItem"
-              slot-scope="{ place }"
-              class="btn btn-default middle search-span"
-            >
-              {{ place.description }}
-            </span>
-          </google-places-autocomplete>
+          </vue-google-autocomplete>
         </div>
         <!-- </el-input> -->
       </el-col>
-     
+
       <el-col :span="1">
-        <el-button
-          style=" height:38px"
-          icon="el-icon-search"
-          @click="toSearch">
+        <el-button style="height: 38px" icon="el-icon-search" @click="toSearch">
         </el-button>
       </el-col>
     </el-row>
-
   </div>
 </template>
 
 <script>
-import { GooglePlacesAutocomplete } from "vue-better-google-places-autocomplete";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 // @ is an alias to /src
 import Header from "@/components/Header.vue";
 import { mapActions } from "vuex";
@@ -185,12 +152,13 @@ export default {
   title: "AlphaGo Home",
   components: {
     Header,
-    GooglePlacesAutocomplete,
+    VueGoogleAutocomplete 
   },
   data() {
     return {
-      place: null,
-      notPostcode: true,
+      address:'',
+      // address has the following properties:
+      // street_number, route, locality, administrative_area_level_1, country, postal_code, latitude, longitude.
       hasLogin: false,
       bathNum: 1,
       bedroomNum: 1,
@@ -295,26 +263,10 @@ export default {
           break;
       }
     },
+    getAddressData: function (addressData, placeResultData, id) {
+      this.address = addressData;
+    },
     toSearch() {},
-    removeMarkers: function(event){
-      let li_labels = document.getElementsByTagName("LI");
-      for (var i=0;i<li_labels.length;i++){
-        console.log(li_labels[i].innerHTML);
-        li_labels[i].style.listStyleType = "none";
-      }
-      return ;
-    },
-    checkPostcode:function(event){
-      let value = document.getElementById("locationInput").value;
-      this.notPostcode = true;
-      if(value.length==4){
-        let num = parseInt(value);
-        if(num.toString().length==4){
-          this.notPostcode = false;
-        }
-      }
-      return ;
-    },
     goto(name) {
       this.$router.push({ name: name });
     },
@@ -332,14 +284,12 @@ export default {
       this.screenWidth = window.innerWidth;
       this.setSize();
     };
+    this.$refs.address.focus();
   },
-
-
 };
 </script>
 
 <style scoped lang="scss">
-
 .user {
   display: flex;
   align-items: center;
@@ -375,16 +325,14 @@ export default {
   background-color: #d3dce6;
 }
 
-
 .btn-default:hover {
   background-color: rgba(69, 95, 147, 0.8);
 }
 
-.search-span{
-    width:100%;
-    background-color: rgba(200, 213, 249, 0.4);
+.search-span {
+  width: 100%;
+  background-color: rgba(200, 213, 249, 0.4);
 }
-
 
 span {
   border: 1px solid rgba(138, 138, 138, 0.4);
@@ -393,8 +341,6 @@ span {
 li {
   list-style: none;
   list-style-type: none;
-  display:inline-block;
+  display: inline-block;
 }
-
-
 </style>
