@@ -112,7 +112,7 @@
                 prefix-icon="el-icon-search"
                 v-model="serachKey"
         > -->
-        <div style="display: inline-block; width: 93%">
+        <div style="display: inline-block; width: 100%">
           <google-places-autocomplete
             @resultChanged="(placeDetail) => (place = placeDetail)"
             @resultCleared="() => (place = null)"
@@ -123,7 +123,7 @@
                 v-model="context.input"
                 @focus="events.inputHasReceivedFocus"
                 @input="events.inputHasChanged"
-                @keyup="checkPostcode"
+                @keyup="checkPostcode"            
                 @keydown.enter.prevent="actions.selectItemFromList"
                 @keydown.down.prevent="actions.shiftResultsSelection"
                 @keydown.up.prevent="actions.unshiftResultsSelection"
@@ -154,11 +154,14 @@
           </google-places-autocomplete>
         </div>
         <!-- </el-input> -->
+      </el-col>
+     
+      <el-col :span="1">
         <el-button
-          style="width:7%;float:right; height:38px"
+          style=" height:38px"
           icon="el-icon-search"
-          @click="toSearch"
-        ></el-button>
+          @click="toSearch">
+        </el-button>
       </el-col>
     </el-row>
 
@@ -287,6 +290,14 @@ export default {
       }
     },
     toSearch() {},
+    removeMarkers: function(event){
+      let li_labels = document.getElementsByTagName("LI");
+      for (var i=0;i<li_labels.length;i++){
+        console.log(li_labels[i].innerHTML);
+        li_labels[i].style.listStyleType = "none";
+      }
+      return ;
+    },
     checkPostcode:function(event){
       let value = document.getElementById("locationInput").value;
       this.notPostcode = true;
@@ -322,6 +333,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .user {
   display: flex;
   align-items: center;
@@ -356,4 +368,27 @@ export default {
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
 }
+
+
+.btn-default:hover {
+  background-color: rgba(69, 95, 147, 0.8);
+}
+
+.search-span{
+    width:100%;
+    background-color: rgba(200, 213, 249, 0.4);
+}
+
+
+span {
+  border: 1px solid rgba(138, 138, 138, 0.4);
+}
+
+li {
+  list-style: none;
+  list-style-type: none;
+  display:inline-block;
+}
+
+
 </style>

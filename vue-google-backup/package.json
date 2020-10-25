@@ -1,0 +1,74 @@
+{
+  "_args": [
+    [
+      "vue-better-google-places-autocomplete@1.1.0",
+      "/Users/minruilu/Desktop/OneDrive - UNSW/UNSW/2020 Semester 3/comp9900/GROUP-GITHUB-REPOSITORY/frontend"
+    ]
+  ],
+  "_from": "vue-better-google-places-autocomplete@1.1.0",
+  "_id": "vue-better-google-places-autocomplete@1.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-Ln6OkmLaEGIKD1Re0V3OugdGaFrHkF3tw0UrPAHPPo1lR76ER0uDI7Ka+3dpV5mDPOmHBuCd3QsK92fAjvJ2Sw==",
+  "_location": "/vue-better-google-places-autocomplete",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "vue-better-google-places-autocomplete@1.1.0",
+    "name": "vue-better-google-places-autocomplete",
+    "escapedName": "vue-better-google-places-autocomplete",
+    "rawSpec": "1.1.0",
+    "saveSpec": null,
+    "fetchSpec": "1.1.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vue-better-google-places-autocomplete/-/vue-better-google-places-autocomplete-1.1.0.tgz",
+  "_spec": "1.1.0",
+  "_where": "/Users/minruilu/Desktop/OneDrive - UNSW/UNSW/2020 Semester 3/comp9900/GROUP-GITHUB-REPOSITORY/frontend",
+  "author": {
+    "name": "Marco Mark",
+    "email": "m2de@outlook.com"
+  },
+  "bugs": {
+    "url": "https://github.com/dewsign/vue-better-google-places-autocomplete/issues"
+  },
+  "dependencies": {},
+  "description": "Google Places auto completion for Vue.js with better user experience",
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "7.3.1",
+    "rollup": "^1.1.2",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.2",
+    "rollup-plugin-vue": "^4.7.2",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "files": [
+    "dist",
+    "readme.md"
+  ],
+  "homepage": "https://github.com/dewsign/vue-better-google-places-autocomplete#readme",
+  "keywords": [
+    "vue",
+    "google",
+    "places",
+    "map",
+    "autocomplete"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "name": "vue-better-google-places-autocomplete",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dewsign/vue-better-google-places-autocomplete.git"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "prepublish": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "rollup -mwc"
+  },
+  "version": "1.1.0"
+}
