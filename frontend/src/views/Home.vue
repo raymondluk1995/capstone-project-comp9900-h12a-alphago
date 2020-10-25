@@ -1,3 +1,9 @@
+// Add the following code on the line 442 in the "index.js"
+// file in vue-better-google-places-autocomplete package
+// style:{
+//     listStyleType:"none"
+//                   },
+
 <template>
   <div class="home">
     <Header>
