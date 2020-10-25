@@ -4,8 +4,8 @@
       <el-button round type="primary" @click="back">Back</el-button>
     </Header>
     <el-row type="flex" justify="center" >
-      <el-col :span="12" style="border:1px solid #123123">
-
+      <el-col :span="12" style="border:1px solid #123123; ">
+        <img width="100%" height="100%" src="../assets/bg2.png" alt="" >
       </el-col>
 
       <el-col :span="12">
@@ -41,35 +41,33 @@
 <!--        </el-form>-->
 
 
-<!--        <div id="container">-->
-<!--          <div class="content">-->
-<!--            <div class="details">-->
-<!--              <div class="item">-->
-<!--                <label for="item-firsthev">Username</label>-->
-<!--                <input v-model="form.username" id="item-firsthev" type="text" >-->
-<!--                <div class="bottom-line"></div>-->
-<!--              </div>-->
-<!--              <div class="item">-->
-<!--                <label for="next-hev">Password</label>-->
-<!--                <input v-model="form.password" id="next-hev" type="password">-->
-<!--                <div class="bottom-line"></div>-->
-<!--              </div >-->
-<!--            </div>-->
-<!--            <div class="btns">-->
-<!--              <el-button round @click="goto('register')">Sign Up</el-button>-->
-<!--              <el-button round type="info" plane @click="forgetpwd">Forget Password?</el-button>-->
-<!--              <el-button v-if="loginByuser" round type="primary" @click="signInUser" style="float: right;">Sign in</el-button>-->
-<!--              <el-button v-else round type="primary" @click="signInEmail" style="float: right;">Sign in</el-button>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </el-col>-->
-<!--    </el-row>-->
-<!--  </div>-->
+        <div id="container">
+          <div class="content">
+            <div class="details">
+              <div class="item">
+                <label for="item-firsthev">Username</label>
+                <input v-model="form.username" id="item-firsthev" type="text" >
+                <div class="bottom-line"></div>
+              </div>
+              <div class="item">
+                <label for="next-hev">Password</label>
+                <input v-model="form.password" id="next-hev" type="password">
+                <div class="bottom-line"></div>
+              </div >
+            <div class="item" style="margin-top:40px">
+              <el-button class="btn" @click="goto('register')">Sign Up</el-button>
+              <el-button type="info" plane @click="forgetpwd">Forget Password?</el-button>
+              <el-button v-if="loginByuser" type="primary" @click="signInUser" style="float: right;">Sign in</el-button>
+              <el-button v-else type="primary" @click="signInEmail" style="float: right;">Sign in</el-button>
+            </div>
+
+            </div>
+          </div>
+        </div>
+
       </el-col>
     </el-row>
   </div>
-
 </template>
 
 <script>
@@ -129,6 +127,7 @@
       };
 
       return {
+        img: require('@/assets/bg.jpg'),
         loginByuser:true,
         byuserType :"primary",
         byemailType : "info",
@@ -250,11 +249,10 @@
     /*border: 1px solid #ccc;*/
     border-radius: 15px;
   }
-  .btns {
-    margin-top: 30px;
-    /*display: flex;*/
-    justify-content: space-between;
+  .btn{
+
   }
+
   .forget-password {
     margin-top: 15px;
     text-align: left;
@@ -266,7 +264,7 @@
 
   .content{
     width:100%;
-    height:calc(100vh - 480px);
+    height:calc(100vh - 408px);
     margin:0 auto;
     background-color: #fff;
     /*border:1px solid #133264;*/
