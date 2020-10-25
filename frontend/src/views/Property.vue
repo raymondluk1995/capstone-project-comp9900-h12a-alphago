@@ -668,13 +668,14 @@
         /*    transform: scale(1.02);*/
         /*}*/
     }
-    .status-not-start {
+    .status-process {
         background-color: #89c668;
     }
     /*.status-process {*/
     /*    background-color: #e6a23c;*/
     /*}*/
-    .status-process {
+
+    .status-not-start {
         background-color: #f56c6c;
     }
 

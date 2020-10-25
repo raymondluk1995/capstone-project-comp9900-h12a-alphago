@@ -10,35 +10,35 @@
 
       <el-col :span="12">
         <h1 class="title">Sign In</h1>
-        <el-form
-                class="form"
-                ref="form"
-                :model="form"
-                :rules="rules"
-                label-width="100px"
-                label-position="left"
-        >
-          <el-row type="flex" justify="center" style="margin-bottom: 20px">
-            <el-button :type="byuserType" icon="el-icon-user-solid" circle @click="byuser"></el-button>
-            <el-button :type="byemailType" icon="el-icon-message" circle @click="byemail"></el-button>
-          </el-row>
+<!--        <el-form-->
+<!--                class="form"-->
+<!--                ref="form"-->
+<!--                :model="form"-->
+<!--                :rules="rules"-->
+<!--                label-width="100px"-->
+<!--                label-position="left"-->
+<!--        >-->
+<!--          <el-row type="flex" justify="center" style="margin-bottom: 20px">-->
+<!--            <el-button :type="byuserType" icon="el-icon-user-solid" circle @click="byuser"></el-button>-->
+<!--            <el-button :type="byemailType" icon="el-icon-message" circle @click="byemail"></el-button>-->
+<!--          </el-row>-->
 
-          <el-form-item v-if="loginByuser"  label="Username:" prop="username">
-          <el-input v-model="form.username"></el-input>
-        </el-form-item>
+<!--          <el-form-item v-if="loginByuser"  label="Username:" prop="username">-->
+<!--          <el-input v-model="form.username"></el-input>-->
+<!--        </el-form-item>-->
 
-          <el-form-item v-else label="Email:" prop="email">
-            <el-input v-model="form.email"></el-input>
-          </el-form-item>
+<!--          <el-form-item v-else label="Email:" prop="email">-->
+<!--            <el-input v-model="form.email"></el-input>-->
+<!--          </el-form-item>-->
 
-          <el-form-item label="Password:" prop="password">
-            <el-input
-                    type="password"
-                    v-model="form.password"
-                    show-password
-            ></el-input>
-          </el-form-item>
-        </el-form>
+<!--          <el-form-item label="Password:" prop="password">-->
+<!--            <el-input-->
+<!--                    type="password"-->
+<!--                    v-model="form.password"-->
+<!--                    show-password-->
+<!--            ></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-form>-->
 
 
 <!--        <div id="container">-->
@@ -66,6 +66,10 @@
 <!--      </el-col>-->
 <!--    </el-row>-->
 <!--  </div>-->
+      </el-col>
+    </el-row>
+  </div>
+
 </template>
 
 <script>
