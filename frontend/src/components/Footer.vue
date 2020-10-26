@@ -28,7 +28,7 @@ export default {
     /*margin-top: 30px;*/
     // padding: 15px;
     padding: 0px;
-    background-color: #1e4061;
+    background-color: rgba(8, 18, 27, 0.89);
     color: #fff;
     // position: fixed;
     /*position: absolute;*/

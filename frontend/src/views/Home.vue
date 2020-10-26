@@ -15,87 +15,91 @@
             </el-dropdown-menu>
         </el-dropdown>
       </template>
-      <template v-else>
-        <el-button round @click="goto('login')">Sign In</el-button>
-        <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
+      <template v-else >
+
+        <div class="back-btn">
+          <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="goto('login')">Sign In <i class="el-icon-check"></i></span>
+          <div class="bottom-line"></div>
+        </div>
+        <div class="back-btn">
+          <span  id="back-btn2" style="padding:2px 5px;font-size:20px;" @click="goto('register')">Sign Up <i class="el-icon-user"></i></span>
+          <div class="bottom-line"></div>
+        </div>
+
       </template>
     </Header>
-
-    <el-carousel :interval="5000" type="card" height="1000">
-      <el-carousel-item v-for="item in bigScreen.images"
-                        :key="item.name" :name="item.name">
-        <img style="width:100%;height:100%;" :src="item.url"/>
-      </el-carousel-item>
-    </el-carousel>
-
-    <el-row type="flex" justify="center" style="margin: 40px 0">
-      <el-col :span="12">
-        <el-row type="flex" justify="space-between" class="search-criteria">
-          <el-col :span="6">
-            <img src="@/assets/bath.png" alt="" />
-            <el-select v-model="bathNum" placeholder="Select">
-              <el-option
-                      v-for="item in nums"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-              </el-option>
-            </el-select>
-          </el-col>
-
-          <el-col :span="6">
-            <img src="@/assets/bed.png" alt="" />
-            <el-select v-model="bedroomNum" placeholder="Select">
-              <el-option
-                      v-for="item in nums"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-              </el-option>
-            </el-select>
-          </el-col>
-
-          <el-col :span="6">
-            <img src="@/assets/parking.png" alt="" />
-            <el-select v-model="carNum" placeholder="Select">
-              <el-option
-                      v-for="item in nums"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-              </el-option>
-            </el-select>
-          </el-col>
-
-<!--          <el-col :span="3">-->
-<!--            <el-select v-model="value" placeholder="Select">-->
+    <div class="main" id="main">
+<!--    <el-row type="flex" justify="center" style="margin: 0">-->
+<!--      <el-col :span="12">-->
+<!--        <el-row type="flex" justify="space-between" class="search-criteria">-->
+<!--          <el-col :span="6">-->
+<!--            <img src="@/assets/bath.png" alt="" />-->
+<!--            <el-select v-model="bathNum" placeholder="Select">-->
 <!--              <el-option-->
-<!--                      v-for="item in options"-->
+<!--                      v-for="item in nums"-->
 <!--                      :key="item.value"-->
 <!--                      :label="item.label"-->
 <!--                      :value="item.value">-->
 <!--              </el-option>-->
 <!--            </el-select>-->
 <!--          </el-col>-->
-        </el-row>
-      </el-col>
-    </el-row>
 
-    <el-row type="flex" justify="center" style="margin: 40px 0">
+<!--          <el-col :span="6">-->
+<!--            <img src="@/assets/bed.png" alt="" />-->
+<!--            <el-select v-model="bedroomNum" placeholder="Select">-->
+<!--              <el-option-->
+<!--                      v-for="item in nums"-->
+<!--                      :key="item.value"-->
+<!--                      :label="item.label"-->
+<!--                      :value="item.value">-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+<!--          </el-col>-->
+
+<!--          <el-col :span="6">-->
+<!--            <img src="@/assets/parking.png" alt="" />-->
+<!--            <el-select v-model="carNum" placeholder="Select">-->
+<!--              <el-option-->
+<!--                      v-for="item in nums"-->
+<!--                      :key="item.value"-->
+<!--                      :label="item.label"-->
+<!--                      :value="item.value">-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+<!--          </el-col>-->
+
+<!--&lt;!&ndash;          <el-col :span="3">&ndash;&gt;-->
+<!--&lt;!&ndash;            <el-select v-model="value" placeholder="Select">&ndash;&gt;-->
+<!--&lt;!&ndash;              <el-option&ndash;&gt;-->
+<!--&lt;!&ndash;                      v-for="item in options"&ndash;&gt;-->
+<!--&lt;!&ndash;                      :key="item.value"&ndash;&gt;-->
+<!--&lt;!&ndash;                      :label="item.label"&ndash;&gt;-->
+<!--&lt;!&ndash;                      :value="item.value">&ndash;&gt;-->
+<!--&lt;!&ndash;              </el-option>&ndash;&gt;-->
+<!--&lt;!&ndash;            </el-select>&ndash;&gt;-->
+<!--&lt;!&ndash;          </el-col>&ndash;&gt;-->
+<!--        </el-row>-->
+<!--      </el-col>-->
+<!--    </el-row>-->
+
+    <el-row type="flex" justify="center" class="search">
       <el-col :span="15">
         <el-input
                 class="input"
                 placeholder="Search by address/suburb/others"
                 prefix-icon="el-icon-search"
+                @keyup.enter.native="toSearch"
                 v-model="serachKey"
         >
-          <el-button
-                  slot="append"
-                  icon="el-icon-search"
-                  @click="toSearch"
-          ></el-button>
+<!--          <el-button-->
+<!--                  slot="append"-->
+<!--                  icon="el-icon-search"-->
+<!--                  @click="toSearch"-->
+<!--          ></el-button>-->
         </el-input></el-col>
     </el-row>
+    </div>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -103,6 +107,7 @@
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
 import { mapActions } from "vuex";
+import $ from 'jquery'
 
 export default {
   name: 'Home',
@@ -117,23 +122,7 @@ export default {
           bedroomNum: 1,
           carNum: 1,
           serachKey: "",
-        bigScreen: {
-          images: [
-            {
-              name: 'bigScreen01',
-              url: 'https://www.armourcomms.com/wp-content/uploads/2017/10/company-main-banner.jpg'
-            },
-            {
-              name: 'bigScreen02',
-              url: 'https://www.centurybizsolutions.net/wp-content/uploads/2016/01/Banner-Buildings-1.png'
-            },
-            {
-              name: 'bigScreen03',
-              url: 'http://cdn26.us1.fansshare.com/photo/buildingconstruction/banner-building-construction-1958425491.jpg'
-            }
-          ],},
-        // 图片父容器高度
-        bannerHeight :1000,
+
         // 浏览器宽度
         screenWidth :0,
 
@@ -159,12 +148,7 @@ export default {
             label: 5,
           }
         ],
-        // options: [
-        //   {
-        //     value: 1,
-        //     label: "others",
-        //   },
-        // ]
+
       }
     },
     created () {
@@ -176,9 +160,7 @@ export default {
         }
         this.firstname=  localStorage.getItem('firstname');
     },
-    // computed: {
-    //   ...mapState(["firstname"]),
-    // },
+
     methods: {
       ...mapActions(["logout"]),
       handleCommand(command) {
@@ -214,37 +196,66 @@ export default {
         }
       },
       toSearch() {
+        console.log('search')
       },
       goto(name) {
         this.$router.push({name: name});
       },
-      setSize:function () {
-        // 通过浏览器宽度(图片宽度)计算高度
-        this.bannerHeight = 400 / 1920 * this.screenWidth;
-      },
+
     },
     mounted() {
-      // 首次加载时,需要调用一次
-      this.screenWidth =  window.innerWidth;
-      this.setSize();
-      // 窗口大小发生改变时,调用一次
-      window.onresize = () =>{
-        this.screenWidth =  window.innerWidth;
-        this.setSize();
-      }
+
+      $("#back-btn").hover(function(event) {
+        $(this).stop().animate({"margin-left": "10px"}, 300);
+        $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+      });
+      $("#back-btn").mouseleave(function(event) {
+        $(this).stop().animate({"margin-left": "0"}, 300);
+        $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+      });
+
+      $("#back-btn2").hover(function(event) {
+        $(this).stop().animate({"margin-left": "10px"}, 300);
+        $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+      });
+      $("#back-btn2").mouseleave(function(event) {
+        $(this).stop().animate({"margin-left": "0"}, 300);
+        $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+      });
+
+        $("#main").hover(function(event) {
+            $(this).stop().animate({"opacity": "0.9"}, 300);
+        });
+        $("#main").mouseleave(function(event) {
+            $(this).stop().animate({"opacity": "1"}, 300);
+        });
     }
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .user {
   display: flex;
   align-items: center;
 }
+.main{
+  height:600px;
+  /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
+  background-image: url("../assets/main-bg-3.png");
+}
 
 .el-input--prefix .el-input__inner {
-  border-radius: 20px !important;
+  border-radius: 50px !important;
+  height:50px;
+  font-size:15px;
 }
+
+.search{
+  .input{
+    margin: 20% auto;
+  }
+}
+
 .search-criteria {
   .el-col {
     display: flex;
@@ -270,6 +281,22 @@ export default {
 
 .el-carousel__item:nth-child(2n+1) {
   background-color: #d3dce6;
+}
+
+.back-btn{
+  cursor: pointer;
+  position:relative;
+  width:150px;
+  /*border:1px solid #123123;*/
+}
+.back-btn .bottom-line{
+  position: absolute;
+  /*margin-left:40px;*/
+  width: 0;
+  height: 2px;
+  left:0;
+  bottom: -1px;
+  background-color: #3b4c73;
 }
 
 </style>
