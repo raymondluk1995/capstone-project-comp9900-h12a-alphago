@@ -2,7 +2,7 @@
   <div class="login">
     <Header>
         <div class="back-btn">
-        <span  id="back-btn" style="font-size:20px;" @click="back">Back <i class="el-icon-refresh-right"></i></span>
+        <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="back">Back <i class="el-icon-refresh-right"></i></span>
         <div class="bottom-line"></div>
         </div>
 <!--      <el-button  type="" @click="back">Back</el-button>-->
@@ -33,17 +33,7 @@
               <h1 class="title">Sign In</h1>
 
 
-
               <div class="item" >
-<!--                <transition name="show">-->
-<!--                  <label v-show="loginByuser" for="item-firsthev1">Username</label>-->
-<!--              </transition>-->
-<!--                <transition name="show">-->
-<!--                <label v-show="!loginByuser" for="item-firsthev2">Email</label>-->
-<!--                </transition>-->
-
-<!--                  <span>Username</span>-->
-<!--                  <transition name="show">-->
                   <el-form-item  class="father1" v-if="loginByuser" prop="username">
                   <span v-if="loginByuser" slot="label"></span>
                   <el-input v-model="form.username" type="text" placeholder="Username" id="item-firsthev1" ></el-input>
@@ -53,7 +43,7 @@
                   <span v-if="!loginByuser" slot="label"></span>
                   <el-input  v-model="form.email"  type="text" placeholder="Email"></el-input>
                   </el-form-item>
-<!--                  </transition>-->
+
                   <el-form-item class="father2" prop="password">
                   <span slot="label"></span>
                   <el-input v-model="form.password" type="password" placeholder="Password" prop="password" show-password></el-input>
@@ -61,10 +51,11 @@
 
               </div>
 
-
 <!--                ========Valid======-->
 <!--              <div class="item">-->
-<!--                <label for="next-hev">Password</label>-->
+<!--                  <transition name="show">-->
+<!--                      <label for="next-hev">Password</label>-->
+<!--                  </transition>-->
 <!--                <input v-model="form.password" id="next-hev"  type="password" prop="password">-->
 <!--                <div class="bottom-line"></div>-->
 <!--              </div >-->
@@ -136,7 +127,7 @@
         this.$router.push("/");
       }
         let h = document.documentElement.clientHeight  || document.body.clientHeight;
-        this.vdaH = h - 120 + 'px';
+        this.vdaH = h - 100 + 'px';
     },
     mounted(){
         $("span").hover(function(event) {
@@ -387,7 +378,7 @@
   }
   .item  label{
     font-size: 16px;
-    /*position: absolute;*/
+    position: absolute;
     left:2px;
     bottom:10px;
     color:#777;
