@@ -35,34 +35,31 @@
 
 
               <div class="item" >
-<!--                <transition name="show">&ndash;&gt;-->
-<!--                <label v-show="loginByuser" for="item-firsthev1">Username</label>-->
-<!--                </transition>-->
-<!--                <transition name="show">&ndash;&gt;-->
+<!--                <transition name="show">-->
+<!--                  <label v-show="loginByuser" for="item-firsthev1">Username</label>-->
+<!--              </transition>-->
+<!--                <transition name="show">-->
 <!--                <label v-show="!loginByuser" for="item-firsthev2">Email</label>-->
 <!--                </transition>-->
 
 <!--                  <span>Username</span>-->
 <!--                  <transition name="show">-->
-                  <el-form-item v-if="loginByuser" prop="username">
-                  <el-input  v-model="form.username"  placeholder="Username" type="text" ></el-input>
+                  <el-form-item  class="father1" v-if="loginByuser" prop="username">
+                  <span v-if="loginByuser" slot="label"></span>
+                  <el-input v-model="form.username" type="text" placeholder="Username" id="item-firsthev1" ></el-input>
                   </el-form-item>
 
-                  <el-form-item v-else prop="email">
-                  <el-input  v-model="form.email"  placeholder="Email" type="text"  ></el-input>
+                  <el-form-item class="father1"  v-else prop="email">
+                  <span v-if="!loginByuser" slot="label"></span>
+                  <el-input  v-model="form.email"  type="text" placeholder="Email"></el-input>
                   </el-form-item>
 <!--                  </transition>-->
-                  <el-form-item prop="password">
-                  <el-input v-model="form.password" placeholder="Password" type="password" prop="password" show-password></el-input>
+                  <el-form-item class="father2" prop="password">
+                  <span slot="label"></span>
+                  <el-input v-model="form.password" type="password" placeholder="Password" prop="password" show-password></el-input>
                   </el-form-item>
 
-<!--                <div class="bottom-line"></div>-->
               </div>
-<!--              <div class="item" v-else>-->
-<!--                <label for="item-firsthev2">Email</label>-->
-<!--                <input v-model="form.email" id="item-firsthev2" type="text" >-->
-<!--                <div class="bottom-line"></div>-->
-<!--              </div>-->
 
 
 <!--                ========Valid======-->
@@ -146,17 +143,6 @@
             $(this).stop().animate({"margin-left": "10px"}, 300);
         });
 
-        $("#try").hover(function(event) {
-            // $(this).siblings("label").stop().animate({"bottom": "50px"}, 300);
-            // $(this).stop().animate({placeholder: "Email"}, 300);
-            $(this).next(".bottom-line").stop().animate({"width": "150px"}, 200);
-        });
-        $("#try").mouseleave(function(event) {
-            // $(this).stop().animate({"margin-left": "10px"}, 300);
-            // $(this).siblings("label").stop().animate({bottom: "10px"}, 300);
-            $(this).next(".bottom-line").stop().animate({"width": "150px"}, 200);
-        });
-
         $("#back-btn").hover(function(event) {
             $(this).stop().animate({"margin-left": "10px"}, 300);
             $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
@@ -182,9 +168,11 @@
         $(this).stop().animate({"margin-left": "0"}, 300);
         $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
       });
+
         $("span").mouseleave(function(event) {
             $(this).stop().animate({"margin-left": "0"}, 300);
         });
+
         $("#back-btn").mouseleave(function(event) {
             $(this).stop().animate({"margin-left": "0"}, 300);
             $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
@@ -192,11 +180,12 @@
 
 
         $("input").focus(function(event) {
-          //label动态上升，升至顶部
-          $(this).siblings("label").stop().animate({"bottom": "50px"}, 300);
-          //div模拟的下边框伸出，其width动态改变至input的width
-          $(this).next(".bottom-line").stop().animate({"width": "400px"}, 300);
+            //label动态上升，升至顶部
+            $(this).siblings("label").stop().animate({"bottom": "50px"}, 300);
+            //div模拟的下边框伸出，其width动态改变至input的width
+            $(this).next(".bottom-line").stop().animate({"width": "400px"}, 300);
         });
+
 
         // 输入框失去焦点时
         $("input").blur(function(event) {
@@ -230,6 +219,7 @@
       return {
           vdaH:'',
           active3:'',
+          active:'',
           active1:'',
           active2:'',
         loginByuser:true,
@@ -388,20 +378,30 @@
     position: relative;
     /*border:1px solid #133264;*/
   }
+
+  .details .father1{
+      width:400px;
+      margin:20px auto;
+      position: relative;
+      /*border:1px solid #133264;*/
+  }
   .item  label{
     font-size: 16px;
-    position: absolute;
+    /*position: absolute;*/
     left:2px;
     bottom:10px;
     color:#777;
     cursor: text;
+      z-index:1;
   }
+
   .img-size img{
     width: 62.5%;
     height: 100%;
     position:absolute;
   }
   .item input{
+      border-radius:0;
     padding-top: 35px;
     width:400px;
     height: 80px;
@@ -491,25 +491,33 @@
     bottom: -1px;
     background-color: #3b4c73;
 }
-
-  .item .el-input__inner {
-      padding-top: 35px;
-      width:400px;
-      height: 80px;
-      font-size: 20px;
-      border:none;
-      outline: none;
-      border-radius: 0;
-      border-bottom: 1px solid #c3c3c3;
+  .el-input__inner {
+      &::placeholder {
+          font-size: 15px;
+      }
   }
-    .item .el-form-item__inner{
+    .father1 .el-form-item__label{
         font-size: 16px;
         position: absolute;
         left:2px;
-        bottom:10px;
+        bottom:0;
         color:#777;
         cursor: text;
+        z-index:1;
+        pointer-events: none;
     }
+
+  .father2 .el-form-item__label{
+      font-size: 16px;
+      position: absolute;
+      left:2px;
+      bottom:0;
+      color:#777;
+      cursor: text;
+      z-index:1;
+      pointer-events: none;
+  }
+
 
 
 </style>
