@@ -7,6 +7,8 @@
         </div>
 <!--      <el-button  type="" @click="back">Back</el-button>-->
     </Header>
+
+
     <el-row type="flex" justify="center" >
       <el-col :span="15" >
         <div class="img-size" :style={height:vdaH}>
@@ -392,7 +394,7 @@
     position:absolute;
   }
   .item input{
-      border-radius:0;
+    border-radius:0;
     padding-top: 35px;
     width:400px;
     height: 80px;

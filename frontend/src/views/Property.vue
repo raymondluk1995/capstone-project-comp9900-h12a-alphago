@@ -74,7 +74,7 @@
                             <el-input v-model="form.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>
                         </el-form-item>
                         <el-row>
-                        <el-col :span =12>
+                        <el-col :span=12>
                         <el-form-item prop="expiredDate">
                             <el-input v-model="form.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>
                         </el-form-item>
@@ -151,8 +151,28 @@
                 </section>
 
 
-                <section style="margin: 15px 50px 0 50px">
+                <section style="margin: 15px 50px 0 50px;height:500px;border:1px solid #123123">
                     <h3>Bid History</h3>
+
+                    <el-table
+                            :data="propInfo.bidHistory"
+                            stripe
+                            style="width: 100%">
+                        <el-table-column
+                                prop="time"
+                                label="Time"
+                                width="300px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="user"
+                                label="User"
+                                width="300px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="price"
+                                label="Bid Price">
+                        </el-table-column>
+                    </el-table>
                 </section>
 
             </el-col>
@@ -186,7 +206,7 @@
                 >{{ propInfo.bidderNum }} Bidders</el-button>
 
                 <template v-if="username !== propInfo.username">
-                <div v-if="this.isBidder">
+                <div v-if="this.rab ==='none'">
 <!--                    <h3>Place new bid</h3>-->
                     <div class="new-bid-wrap">
                         <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
@@ -239,7 +259,7 @@
         data() {
             return {
                 websock: null,
-                
+
                 id:'',
                 username:'',
                 hasLogin: false,
@@ -282,7 +302,23 @@
                     latestBid: '',
                     photos: [],
                     description: '',
-                    bidHistory:[],
+                    bidHistory:[
+                        {
+                            time: this.showTime(new Date(2020, 8, 10, 10, 10)) ,
+                            user:'UMR',
+                            price: '$123123',
+                        },
+                        {
+                            time: this.showTime(new Date(2020, 8, 10, 10, 10)),
+                            user:'ooo',
+                            price: '$123123',
+                        },
+                        {
+                            time: this.showTime(new Date(2020, 8, 10, 10, 10)),
+                            user:'TSF',
+                            price: '$123123',
+                        },
+                    ],
                     firstname:'',
                     lastname:'',
                     highestPrice:'',
@@ -319,12 +355,13 @@
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
-                    this.propInfo = response.data.result,
+                    this.propInfo = response.data.result;
+                    this.initWebSocket();
                     // this.isBidder = response.data.result.isBidder,
                     this.lat =  parseFloat(response.data.result.lat),
                     this.lng =  parseFloat(response.data.result.lng),
                     this.position_tags = response.data.result.position,
-                        this.detail_tags = response.data.result.detail,
+                    this.detail_tags = response.data.result.detail,
                     this.center = {
                         lat:this.lat,
                         lng:this.lng
@@ -339,8 +376,7 @@
                 .catch(function (error) {
                     console.log(error)
                 });
-
-            this.initWebSocket();
+            this.propInfo.bidHistory.push({time:new Date(2009,1,1,1,1,1), user:'aaa', price:'$123123123'});
         },
 
         watch: {
@@ -474,6 +510,10 @@
 
                 }
             },
+            showTime(time){
+                let st = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
+                return `${ st }`;
+            },
 
 
             addNewBid() {
@@ -579,8 +619,10 @@
                 this.$router.push({ name: name });
             },
 
-            initWebSocket(){ //初始化weosocket
-                const uri =  `ws://127.0.0.1:8080/auction/${this.propInfo.aid}`;
+            // to update the highest bid
+            initWebSocket(){
+                console.log(this.propInfo.aid);
+                const uri =  `ws://127.0.0.1:8070/auction/${this.propInfo.aid}`;
                 console.log(uri);
                 this.websock = new WebSocket(uri);
                 this.websock.onmessage = this.websocketonmessage;
@@ -596,14 +638,27 @@
                 this.initWebSocket();
             },
             websocketonmessage(e){ //数据接收
-                // const redata = JSON.parse(e.data);
-                console.log(JSON.parse(e.data));
+                let res = JSON.parse(e.data);
+                this.currentBid = res.currentBid;
+                let tabel = [res.user, res.userbid, res.bidtime];
+                this.notice(res.user);
+                this.history.push(table);
+
+
             },
             websocketsend(Data){//数据发送
                 this.websock.send(Data);
             },
             websocketclose(e){  //关闭
                 console.log('close',e);
+            },
+
+            notice(user) {
+                const h = this.$createElement;
+                this.$notify({
+                    title: 'Bid Update!',
+                    message: h('i', { style: 'color: teal'},  `User ${user} becomes the winner!`)
+                });
             },
         },
         destroyed() {
