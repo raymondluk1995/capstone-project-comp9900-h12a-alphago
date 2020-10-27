@@ -88,14 +88,16 @@
                 <p><i class="el-icon-upload2"></i> Upload Your Avatar</p>
               </el-row>
 
-              <div class="btns">
+            </el-col>
+          </el-row>
+          <el-row>
+            <div class="btns">
                 <span class="button"
                       @click="register"
                       id="btns">
                     <i class="el-icon-right"></i> Submit</span>
-                <div class="bottom-line"></div>
-              </div>
-            </el-col>
+              <div class="bottom-line"></div>
+            </div>
           </el-row>
         </el-form>
       </el-col>
@@ -331,7 +333,7 @@ export default {
   }
   .btns {
     /*border:1px solid #333;*/
-    margin:35% auto;
+    margin:5% auto 0 auto;
     /*margin-top: 75px;*/
     position: relative;
     text-align: center;
