@@ -321,7 +321,7 @@
                         this.$router.push("/profile");
                         break;
                     case "auction":
-                        this.$router.push("/auction");
+                        this.$router.push("/auctionmag");
                         break;
                     case "property":
                         this.$router.push("/propmag");
@@ -418,7 +418,7 @@
             goDetails (item) {
                 this.$router.push(
                     {
-                        path: '/property',
+                        path: '/auction',
                         query:
                             {
                                 id: item.aid,
