@@ -239,7 +239,7 @@
         data() {
             return {
                 websock: null,
-                
+
                 id:'',
                 username:'',
                 hasLogin: false,
@@ -319,12 +319,13 @@
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
-                    this.propInfo = response.data.result,
+                    this.propInfo = response.data.result;
+                    this.initWebSocket();
                     // this.isBidder = response.data.result.isBidder,
                     this.lat =  parseFloat(response.data.result.lat),
                     this.lng =  parseFloat(response.data.result.lng),
                     this.position_tags = response.data.result.position,
-                        this.detail_tags = response.data.result.detail,
+                    this.detail_tags = response.data.result.detail,
                     this.center = {
                         lat:this.lat,
                         lng:this.lng
@@ -340,7 +341,6 @@
                     console.log(error)
                 });
 
-            this.initWebSocket();
         },
 
         watch: {
@@ -580,6 +580,7 @@
             },
 
             initWebSocket(){ //初始化weosocket
+                console.log(this.propInfo.aid);
                 const uri =  `ws://127.0.0.1:8080/auction/${this.propInfo.aid}`;
                 console.log(uri);
                 this.websock = new WebSocket(uri);
