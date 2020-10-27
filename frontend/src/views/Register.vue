@@ -5,77 +5,81 @@
       <el-button round type="primary" @click="back">Back</el-button>
     </Header>
     <el-row type="flex" justify="center">
-      <el-col :span="14">
+      <el-col :span="12">
+        <div class="img-size" :style={height:vdaH}>
+          <img src="" alt="" >
+        </div>
+      </el-col>
+      <el-col :span="12">
         <h1 class="title">Sign Up</h1>
         <el-form
           class="form"
           ref="form"
           :model="form"
           :rules="rules"
-          label-width="150px"
-          label-position="left"
+          label-width="80px"
+          label-position="right"
         >
-          <el-row :gutter="10">
-            <el-col :span="15">
-              <el-form-item label="Username:" prop="username">
-                <el-input v-model="form.username"></el-input>
+          <el-row >
+            <el-col >
+              <el-form-item label=" " prop="username">
+                <el-input v-model="form.username" placeholder="Username" required="required"></el-input>
               </el-form-item>
-              <el-form-item label="First Name:" prop="firstname">
-                <el-input v-model="form.firstname"></el-input>
+              <el-form-item label=" " prop="firstname">
+                <el-input v-model="form.firstname" placeholder="Firstname"></el-input>
               </el-form-item>
-              <el-form-item label="Last Name:" prop="lastname">
-                <el-input v-model="form.lastname"></el-input>
+              <el-form-item label=" " prop="lastname">
+                <el-input v-model="form.lastname" placeholder="Lastname"></el-input>
               </el-form-item>
-              <el-form-item label="Phone:" prop="phone">
-                <el-input v-model="form.phone"></el-input>
+              <el-form-item label=" " prop="phone">
+                <el-input v-model="form.phone" placeholder="Phone"></el-input>
               </el-form-item>
-              <el-form-item label="Email:" prop="email">
-                <el-input style="width:60%;float:left;"  v-model="form.email" ></el-input>
-                <el-button round style="width:35%;float:right;" v-show="show" type="info" @click="validate">Validate</el-button>
-                <el-button round style="width:35%;float:right;" v-show="!show" type="ordinary">{{ count }} s</el-button>
+              <el-form-item label=" " prop="email">
+                <el-input style="width:60%;float:left;"  v-model="form.email" placeholder="Email"></el-input>
+<!--                <el-button round style="width:35%;float:right;" v-show="show" type="info" @click="validate">Validate</el-button>-->
+<!--                <el-button round style="width:35%;float:right;" v-show="!show" type="ordinary">{{ count }} s</el-button>-->
               </el-form-item>
-                <el-form-item label="Validate Code:" prop="validate">
-                  <el-input v-model="form.validate" placeholder="Press the Validate button to get the code"></el-input>
+                <el-form-item label="" prop="validate">
+              <el-input v-model="form.validate" placeholder="Press the Validate button to get the code" ></el-input>
               </el-form-item>
-              <el-form-item label="Password:" prop="password">
+              <el-form-item label="" prop="password">
                 <el-input
                   type="password"
                   v-model="form.password"
                   show-password
+                  placeholder="Password"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="Password Again:" prop="passwordAgain">
+              <el-form-item label="" prop="passwordAgain">
                 <el-input
                   type="password"
                   v-model="form.passwordAgain"
                   show-password
+                  placeholder="Password Again"
                 ></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="6" :offset="1">
-              <el-upload
-                class="avatar-uploader"
-                action="upload"
-                :auto-upload="false"
-                :show-file-list="false"
-                :on-change="imgBroadcastChange"
-                :before-upload="beforeAvatarUpload"
-              >
-                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
-              <div class="btns">
-<!--                <div class="validate" @click="validate"  id="validate">-->
-<!--                  <span v-show="show">validate</span>-->
-<!--                  <span v-show="!show">{{ count }} s</span>-->
-<!--                </div>-->
-                <el-button round type="primary" @click="register" id="submit-btn">Submit</el-button>
-<!--                <el-button round type="primary" @click="register" >Submit</el-button>-->
-              </div>
-            </el-col>
+<!--            <el-col :span="6" :offset="1">-->
+<!--              <el-upload-->
+<!--                class="avatar-uploader"-->
+<!--                action="upload"-->
+<!--                :auto-upload="false"-->
+<!--                :show-file-list="false"-->
+<!--                :on-change="imgBroadcastChange"-->
+<!--                :before-upload="beforeAvatarUpload"-->
+<!--              >-->
+<!--                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />-->
+<!--                <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--              </el-upload>-->
+
+<!--              <div class="btns">-->
+<!--                <el-button round type="primary" @click="register" id="submit-btn">Submit</el-button>-->
+<!--              </div>-->
+<!--            </el-col>-->
           </el-row>
         </el-form>
       </el-col>
+
     </el-row>
   </div>
 </template>
@@ -89,6 +93,10 @@ export default {
   title: "User Registration",
   components: {
     Header,
+  },
+  created(){
+    let h = document.documentElement.clientHeight  || document.body.clientHeight;
+    this.vdaH = h - 147 + 'px';
   },
   data() {
     const validateEmail = (rule, value, callback) => {
@@ -257,7 +265,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   .title {
     margin: 30px;
     text-align: center;
@@ -322,17 +330,17 @@ export default {
     user-select:none;
   }
   #submit-btn{
-    /*width: 180px;*/
-    /*height:35px;*/
-    /*margin: 0 auto 20px 0;*/
-    /*line-height: 35px;*/
-    /*border-radius: 5px;*/
-    /*-webkit-user-select:none;*/
-    /*-moz-user-select:none;*/
-    /*-ms-user-select:none;*/
-    /*user-select:none;*/
-    /*text-align: center;*/
-    /*padding:0px;*/
     margin-top: 100%;
+  }
+
+    .form input{
+    border-radius:0;
+    padding: 5px;
+    width:400px;
+    height: 40px;
+    font-size: 20px;
+    /*border:none;*/
+    /*outline: none;*/
+    /*border-bottom: 1px solid #c3c3c3;*/
   }
 </style>

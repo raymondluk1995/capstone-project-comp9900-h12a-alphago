@@ -74,7 +74,7 @@
                             <el-input v-model="form.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>
                         </el-form-item>
                         <el-row>
-                        <el-col :span =12>
+                        <el-col :span=12>
                         <el-form-item prop="expiredDate">
                             <el-input v-model="form.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>
                         </el-form-item>
@@ -186,7 +186,7 @@
                 >{{ propInfo.bidderNum }} Bidders</el-button>
 
                 <template v-if="username !== propInfo.username">
-                <div v-if="this.isBidder">
+                <div v-if="this.rab ==='none'">
 <!--                    <h3>Place new bid</h3>-->
                     <div class="new-bid-wrap">
                         <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
@@ -579,7 +579,8 @@
                 this.$router.push({ name: name });
             },
 
-            initWebSocket(){ //初始化weosocket
+            // to update the highest bid
+            initWebSocket(){
                 console.log(this.propInfo.aid);
                 const uri =  `ws://127.0.0.1:8070/auction/${this.propInfo.aid}`;
                 console.log(uri);
@@ -597,14 +598,27 @@
                 this.initWebSocket();
             },
             websocketonmessage(e){ //数据接收
-                let redata = JSON.parse(e.data);
-                console.log(redata);
+                let res = JSON.parse(e.data);
+                this.currentBid = res.currentBid;
+                let tabel = [res.user, res.userbid, res.bidtime];
+                this.notice(res.user);
+                this.history.push(table);
+
+
             },
             websocketsend(Data){//数据发送
                 this.websock.send(Data);
             },
             websocketclose(e){  //关闭
                 console.log('close',e);
+            },
+
+            notice(user) {
+                const h = this.$createElement;
+                this.$notify({
+                    title: 'Bid Update!',
+                    message: h('i', { style: 'color: teal'},  `User ${user} becomes the winner!`)
+                });
             },
         },
         destroyed() {

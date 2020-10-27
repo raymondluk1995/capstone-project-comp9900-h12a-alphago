@@ -392,7 +392,7 @@
     position:absolute;
   }
   .item input{
-      border-radius:0;
+    border-radius:0;
     padding-top: 35px;
     width:400px;
     height: 80px;
