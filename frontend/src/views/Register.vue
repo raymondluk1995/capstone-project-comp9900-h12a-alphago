@@ -12,7 +12,7 @@
       </div>
     </Header>
     <el-row type="flex" justify="center">
-      <el-col :span="8" style="border: 1px solid #ccc;">
+      <el-col :span="8">
         <div class="img-size-reg" :style={height:vdaH}>
           <img src="../assets/reg-bg-2.png" alt="" >
         </div>
@@ -25,7 +25,7 @@
           :model="form"
           :rules="rules"
         >
-          <el-row  type="flex" justify="center">
+          <el-row  type="flex" justify="center" >
             <el-col :span="8" >
               <el-form-item label="" prop="username">
                 <el-input v-model="form.username" placeholder="* Username" required="required"></el-input>
@@ -48,7 +48,7 @@
               <el-form-item label="" prop="email">
                 <el-input style="width:60%;float:left;"  v-model="form.email"  ref="form.email" placeholder="* Email"></el-input>
                 <el-button  style="width:35%;float:right;" v-show="show" type="" @click="validate"> <i class="el-icon-s-promotion"></i> Validate</el-button>
-                <el-button  style="width:35%;float:right;" v-show="!show" type="ordinary">{{ count }} s</el-button>
+                <el-button  style="width:35%;float:right;" v-show="!show" type="">{{ count }} s</el-button>
               </el-form-item>
                 <el-form-item label="" prop="validate">
               <el-input v-model="form.validate" placeholder="* Verify your Validate code here" ></el-input>
