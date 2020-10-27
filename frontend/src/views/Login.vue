@@ -127,7 +127,7 @@
         this.$router.push("/");
       }
         let h = document.documentElement.clientHeight  || document.body.clientHeight;
-        this.vdaH = h - 100 + 'px';
+        this.vdaH = h - 147 + 'px';
     },
     mounted(){
         $("span").hover(function(event) {
