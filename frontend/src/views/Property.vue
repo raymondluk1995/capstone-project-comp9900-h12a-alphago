@@ -581,7 +581,7 @@
 
             initWebSocket(){ //初始化weosocket
                 console.log(this.propInfo.aid);
-                const uri =  `ws://127.0.0.1:8080/auction/${this.propInfo.aid}`;
+                const uri =  `ws://127.0.0.1:8070/auction/${this.propInfo.aid}`;
                 console.log(uri);
                 this.websock = new WebSocket(uri);
                 this.websock.onmessage = this.websocketonmessage;
