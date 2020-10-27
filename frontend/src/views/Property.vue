@@ -265,6 +265,7 @@
                 markers:[{position:{},}],
                 propInfo: {
                     id: '',
+                    aid:'',
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
@@ -583,7 +584,8 @@
             },
 
             initWebSocket(){ //初始化weosocket
-                const uri =  `ws://127.0.0.1:8080/auction/${this.id}`;
+                const uri =  `ws://127.0.0.1:8080/auction/${this.propInfo.aid}`;
+                console.log(uri);
                 this.websock = new WebSocket(uri);
                 this.websock.onmessage = this.websocketonmessage;
                 this.websock.onopen = this.websocketonopen;
