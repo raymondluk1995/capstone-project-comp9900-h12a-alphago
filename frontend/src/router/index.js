@@ -52,13 +52,13 @@ const routes = [
     component: Profile,
     },
    {
-    path: '/auction',
-    name: 'auction',
+    path: '/auctionmag',
+    name: 'auctionmag',
     component: Auction,
   },
   {
-    path: '/property',
-    name: 'property',
+    path: '/auction',
+    name: 'auction',
     component: Property,
   },
   {

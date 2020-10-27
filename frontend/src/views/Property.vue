@@ -398,7 +398,7 @@
                         this.$router.push("/propmag");
                         break;
                     case "auction":
-                        this.$router.push("/auction");
+                        this.$router.push("/auctionmag");
                         break;
                     case "notification":
                         break;
@@ -583,8 +583,8 @@
             },
 
             initWebSocket(){ //初始化weosocket
-                const wsuri = "ws://127.0.0.1:8080";
-                this.websock = new WebSocket(wsuri);
+                const uri =  `ws://127.0.0.1:8080/auction/${this.id}`;
+                this.websock = new WebSocket(uri);
                 this.websock.onmessage = this.websocketonmessage;
                 this.websock.onopen = this.websocketonopen;
                 this.websock.onerror = this.websocketonerror;

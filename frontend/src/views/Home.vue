@@ -193,7 +193,7 @@ export default {
             this.$router.push("/propmag");
             break;
           case "auction":
-            this.$router.push("/auction");
+            this.$router.push("/auctionmag");
             break;
           case "notification":
             break;
