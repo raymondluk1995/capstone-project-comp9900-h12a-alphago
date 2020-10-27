@@ -151,8 +151,28 @@
                 </section>
 
 
-                <section style="margin: 15px 50px 0 50px">
+                <section style="margin: 15px 50px 0 50px;height:500px;border:1px solid #123123">
                     <h3>Bid History</h3>
+
+                    <el-table
+                            :data="propInfo.bidHistory"
+                            stripe
+                            style="width: 100%">
+                        <el-table-column
+                                prop="time"
+                                label="Time"
+                                width="300px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="user"
+                                label="User"
+                                width="300px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="price"
+                                label="Bid Price">
+                        </el-table-column>
+                    </el-table>
                 </section>
 
             </el-col>
@@ -282,7 +302,23 @@
                     latestBid: '',
                     photos: [],
                     description: '',
-                    bidHistory:[],
+                    bidHistory:[
+                        {
+                            time: this.showTime(new Date(2020, 8, 10, 10, 10)) ,
+                            user:'UMR',
+                            price: '$123123',
+                        },
+                        {
+                            time: this.showTime(new Date(2020, 8, 10, 10, 10)),
+                            user:'ooo',
+                            price: '$123123',
+                        },
+                        {
+                            time: this.showTime(new Date(2020, 8, 10, 10, 10)),
+                            user:'TSF',
+                            price: '$123123',
+                        },
+                    ],
                     firstname:'',
                     lastname:'',
                     highestPrice:'',
@@ -340,7 +376,7 @@
                 .catch(function (error) {
                     console.log(error)
                 });
-
+            this.propInfo.bidHistory.push({time:new Date(2009,1,1,1,1,1), user:'aaa', price:'$123123123'});
         },
 
         watch: {
@@ -473,6 +509,10 @@
                     }
 
                 }
+            },
+            showTime(time){
+                let st = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
+                return `${ st }`;
             },
 
 

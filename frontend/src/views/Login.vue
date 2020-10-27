@@ -7,6 +7,8 @@
         </div>
 <!--      <el-button  type="" @click="back">Back</el-button>-->
     </Header>
+
+
     <el-row type="flex" justify="center" >
       <el-col :span="15" >
         <div class="img-size" :style={height:vdaH}>
