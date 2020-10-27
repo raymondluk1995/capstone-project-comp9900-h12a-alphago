@@ -239,8 +239,7 @@
         data() {
             return {
                 websock: null,
-
-
+                
                 id:'',
                 username:'',
                 hasLogin: false,
@@ -303,6 +302,7 @@
                 },
             };
         },
+
         created() {
             this.username = localStorage.getItem("username");
             // // this.username = this.$store.state.username;
@@ -338,9 +338,8 @@
                 })
                 .catch(function (error) {
                     console.log(error)
-                })
-            this.position_tags = this.position_tags.split(',');
-            this.detail_tags = this.detail_tags.split(',')
+                });
+
             this.initWebSocket();
         },
 
@@ -444,16 +443,16 @@
             countDown(time,startime) {
                 let expiredTime = dayjs(time);
                 let startTime = dayjs(startime);
-                console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
-                console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
+                // console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
+                // console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
                 // let startTime = dayjs(new Date(2020, 8, 10, 10, 10));
                 // let expiredTime = dayjs(new Date(2020, 9, 24, 17, 1));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
                 let diff2 = startTime.diff(nowTime) / 1000;
-                console.log(diff);
-                console.log(diff2);
+                // console.log(diff);
+                // console.log(diff2);
 
                 let day = parseInt(diff / 3600 / 24);
                 let hour = parseInt((diff / 3600) % 24);
@@ -470,7 +469,7 @@
                         this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
                     }else{
                         this.timeFlag = false;
-                        console.log('over');
+                        // console.log('over');
                     }
 
                 }
