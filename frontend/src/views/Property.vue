@@ -303,11 +303,8 @@
                 },
             };
         },
-        destroyed() {
-            this.websock.close() //离开路由之后断开websocket连接
-        },
+
         created() {
-            this.initWebSocket();
             this.username = localStorage.getItem("username");
             // // this.username = this.$store.state.username;
             // if (this.username !== null) {
@@ -345,6 +342,7 @@
                 })
             this.position_tags = this.position_tags.split(',');
             this.detail_tags = this.detail_tags.split(',')
+            this.initWebSocket();
         },
 
         watch: {
@@ -609,6 +607,9 @@
             websocketclose(e){  //关闭
                 console.log('close',e);
             },
+        },
+        destroyed() {
+            this.websock.close() //离开路由之后断开websocket连接
         },
     };
 </script>
