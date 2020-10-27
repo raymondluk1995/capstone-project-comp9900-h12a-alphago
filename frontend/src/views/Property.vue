@@ -597,8 +597,8 @@
                 this.initWebSocket();
             },
             websocketonmessage(e){ //数据接收
-                // const redata = JSON.parse(e.data);
-                console.log(JSON.parse(e.data));
+                let redata = JSON.parse(e.data);
+                console.log(redata);
             },
             websocketsend(Data){//数据发送
                 this.websock.send(Data);
