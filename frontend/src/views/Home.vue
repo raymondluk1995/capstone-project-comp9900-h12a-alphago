@@ -2,8 +2,8 @@
   <div class="home">
     <Header>
       <template v-if="this.hasLogin">
-        <el-dropdown trigger="click" @command="handleCommand" style="align-items: center" placement="bottom">
-          <div class="user">
+        <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
+          <div class="user"  @click="openValue">
             <el-avatar :size="70" :src="avatar"></el-avatar>
           </div>
             <el-dropdown-menu slot="dropdown">
@@ -98,6 +98,18 @@
 <!--          ></el-button>-->
         </el-input></el-col>
     </el-row>
+       <el-row type="flex" justify="center" >
+           <el-col :span="6" >
+
+           </el-col>
+           <el-col :span="6">
+
+           </el-col>
+           <el-col :span="6">
+
+           </el-col>
+       </el-row>
+
     </div>
     <Footer></Footer>
   </div>
@@ -117,7 +129,7 @@ export default {
   },
     data() {
       return {
-          hasLogin: false,
+          hasLogin: true,
           bathNum: 1,
           bedroomNum: 1,
           carNum: 1,
@@ -125,7 +137,6 @@ export default {
 
         // 浏览器宽度
         screenWidth :0,
-
         nums: [
           {
             value: 1,
@@ -163,6 +174,16 @@ export default {
 
     methods: {
       ...mapActions(["logout"]),
+
+        openValue(){
+            this.show=!this.show;
+        },
+        getvalue(index,item){
+            this.value=item.name;
+            this.show=false;
+        },
+
+
       handleCommand(command) {
         switch (command) {
           case "profile":
@@ -204,7 +225,6 @@ export default {
 
     },
     mounted() {
-
       $("#back-btn").hover(function(event) {
         $(this).stop().animate({"margin-left": "10px"}, 300);
         $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
@@ -298,5 +318,19 @@ export default {
   bottom: -1px;
   background-color: #3b4c73;
 }
+.el-dropdown-menu{
+    padding: 25px 20px 25px 10px !important;
+    border-radius: 0 !important;
+}
 
+.el-dropdown-menu__item{
+        &:hover{
+            transform:translateX(10px);
+            transition-duration: 0.5s;
+            border-bottom: 2px solid rgba(4, 10, 30, 0.96);
+            background-color: white !important;
+            color: #143469 !important;
+        }
+
+}
 </style>

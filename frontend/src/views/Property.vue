@@ -33,9 +33,6 @@
                             <img :src="pic"  width="100%" height="100%" alt=""/>
                         </el-carousel-item>
                     </el-carousel>
-<!--                    <el-row class="banner">-->
-<!--                        <h4>{{ time }}</h4>-->
-<!--                    </el-row>-->
                 </section>
 
                 <el-row style="margin: 15px 50px 0 50px">
@@ -74,17 +71,17 @@
                             <el-input v-model="form.name" placeholder="Name" clearable></el-input>
                         </el-form-item>
                         <el-form-item prop="cardNumber">
-                            <el-input v-model="form.cardNumber" @change="validateNum" maxlength="20"  placeholder="Card Number"></el-input>
+                            <el-input v-model="form.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>
                         </el-form-item>
                         <el-row>
                         <el-col :span =12>
-                        <el-form-item prop="expiredDate" >
-                            <el-input v-model="form.expiredDate" placeholder="MM/YY"></el-input>
+                        <el-form-item prop="expiredDate">
+                            <el-input v-model="form.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>
                         </el-form-item>
                         </el-col >
                             <el-col :span=12>
                         <el-form-item prop="cvc" >
-                            <el-input v-model="form.cvc" placeholder="CVC"></el-input>
+                            <el-input v-model="form.cvc" placeholder="CVC" maxlength="3"></el-input>
                         </el-form-item>
                         </el-col>
                         </el-row>
@@ -240,16 +237,10 @@
         },
 
         data() {
-            const validateCVC = (rule, value, callback) => {
-                const cvcReg = /^\d{3}$/;
-                if (!cvcReg.test(value)) {
-                    callback(new Error("Please enter the valid cvc number"));
-                } else {
-                    callback();
-                }
-            };
-
             return {
+                websock: null,
+
+
                 id:'',
                 username:'',
                 hasLogin: false,
@@ -305,14 +296,17 @@
                 },
                 rules: {
                     name: [{required: true, message: " Please enter name", trigger: "blur",},],
-                    cardNumber: [{required: true, message: " Please enter cardNumber", trigger: "blur",},],
+                    cardNumber: [{required: true, message: " Please enter cardNumber", trigger: "blur",}, ,],
                     expiredDate: [{required: true, message: " Please enter expired date", trigger: "blur",},],
-                    cvc: [{required: true, message: " Please enter cvc", trigger: "blur",}, { validator: validateCVC, trigger: "blur" },],
+                    cvc: [{required: true, message: " Please enter cvc", trigger: "blur",},],
                 },
             };
         },
-
+        destroyed() {
+            this.websock.close() //离开路由之后断开websocket连接
+        },
         created() {
+            this.initWebSocket();
             this.username = localStorage.getItem("username");
             // // this.username = this.$store.state.username;
             // if (this.username !== null) {
@@ -350,6 +344,20 @@
                 })
             this.position_tags = this.position_tags.split(',');
             this.detail_tags = this.detail_tags.split(',')
+        },
+
+        watch: {
+            ['form.cardNumber'](val) {
+                this.$nextTick(() => {
+                    this.form.cardNumber = val.replace(/\D/g,'').replace(/....(?!$)/g,'$& ');
+                });
+            },
+
+            ['form.expiredDate'](val) {
+                this.$nextTick(() => {
+                    this.form.expiredDate = val.replace(/\D/g,'').replace(/..(?!$)/g,'$&\/');
+                });
+            }
         },
 
         computed: {
@@ -414,10 +422,6 @@
                 }
             },
 
-            validateNum () {
-                let card = this.form.cardNumber.replace(/\s/g, '').replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
-                this.$set(this.form, 'cardNumber', card)
-            },
 
             notAdd(){
                 this.form.name='';
@@ -576,6 +580,32 @@
             goto(name) {
                 console.log(name);
                 this.$router.push({ name: name });
+            },
+
+            initWebSocket(){ //初始化weosocket
+                const wsuri = "ws://127.0.0.1:8080";
+                this.websock = new WebSocket(wsuri);
+                this.websock.onmessage = this.websocketonmessage;
+                this.websock.onopen = this.websocketonopen;
+                this.websock.onerror = this.websocketonerror;
+                this.websock.onclose = this.websocketclose;
+            },
+            websocketonopen(){ //连接建立之后执行send方法发送数据
+                let actions = {"test":"12345"};
+                this.websocketsend(JSON.stringify(actions));
+            },
+            websocketonerror(){//连接建立失败重连
+                this.initWebSocket();
+            },
+            websocketonmessage(e){ //数据接收
+                // const redata = JSON.parse(e.data);
+                console.log(JSON.parse(e.data));
+            },
+            websocketsend(Data){//数据发送
+                this.websock.send(Data);
+            },
+            websocketclose(e){  //关闭
+                console.log('close',e);
             },
         },
     };
