@@ -82,7 +82,7 @@
             <el-row>
               <div>
                 <h6>{{ item.address }}</h6>
-                <p>{{ getlabel(item.status) }}</p>
+                <p>{{ getLabel(item.status) }}</p>
               </div>
               <el-row type="flex" justify="end">
                 <el-button
@@ -441,7 +441,7 @@ export default {
       }
     },
 
-    getlabel(item) {
+    getLabel(item) {
       const colors = new Map([
         ["N", "Auction not register"],
         ["A", "Auction in process"],

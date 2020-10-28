@@ -32,3 +32,6 @@ Week 6
 In this week, I tried to modify the functionalities of search bar on the home page. I tried to make the autocomplete only returns suburb name and do not show any options when a user is typing a postcode. Also, the autocomplete options should be only available in Australia. I failed in the first few tries on the "vue-better-google-places-autocomplete" package for fixing its intrinsic bugs and restricting the country to be Australia. Eventually, I switched to another npm package called "vue-google-autocomplete".
 
 Moreover, I tested on changing different fonts and integrated a map display functionality to the property auction page.
+
+Week 7
+In this week, I wrote the Retrospective A and start to write the final report. After discussion with the Scrum master, now my role would be report writing and code testing.
