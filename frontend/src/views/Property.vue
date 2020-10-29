@@ -32,7 +32,7 @@
                 <section style="margin: 15px 50px 0 50px">
 <!--                    <h1>{{ propInfo.address }}</h1>-->
                     <el-row class="banner" :class="addStatusColor(propInfo.status)">
-                        <h4>{{ time }}</h4>
+                        <h5 style="padding: 5px;">{{ time }}</h5>
                     </el-row>
                     <el-carousel :interval="5000" arrow="always" :height="cheight">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="propInfo.pid">
@@ -53,7 +53,7 @@
                     <template>
                         <el-row>
                         <el-radio-group v-model="selectCard">
-                            <el-radio :label="item" :key="item" :disabled="addNewCard" v-for="item in cards" style="display:block; margin:20px 50px;">{{item}}</el-radio>
+                            <el-radio :label="item.cardNumber" :key="item.paymentId" :disabled="addNewCard" v-for="item in cards" style="display:block; margin:20px 50px;">{{item}}</el-radio>
                         </el-radio-group>
                         </el-row>
 
@@ -144,7 +144,7 @@
                                         style="height: 300px"
                                 >
                                     <GmapMarker
-                                            :key="index"
+                                            :key="m"
                                             v-for="(m, index) in markers"
                                             :position="m.position"
                                             :clickable="true"
@@ -196,9 +196,10 @@
                 </section>
 
             </el-col>
+
             <el-col :span="5">
                 <div class="info">
-                    <el-row type="flex" justify="center" style="background-color: #133264;">
+                    <el-row type="flex" justify="center" style="background-color: #4f6995;">
                         <h3 style="color:#f3f3f3">Owner</h3>
                     </el-row>
                 <el-row type="flex" justify="center">
@@ -272,13 +273,6 @@
                 type: String,
                 default: '500px'
             },
-            columns: Array,
-            data: Array,
-            pager: Object,
-            maxHeight: {
-                type: Number,
-                default: 2000
-            }
         },
         components: {
             Header,
@@ -320,8 +314,8 @@
                     id: '',
                     aid:'',
                     // endDate: new Date(2000, 10, 10, 10, 10),
-                    username:'',
-                    address: '',
+                    username:'Umarudive',
+                    address: '2 gearin alley, Mascot, NSW',
                     enddate:'',
                     status:'',
                     startdate:'',
@@ -329,12 +323,12 @@
                     bidderNum:'',
                     latestPrice:'',
                     info: '',
-                    phone: '',
-                    email:'',
-                    position: '',
-                    detail: '',
+                    phone: '0426884878',
+                    email:'taria8016@gmail.com',
+                    position: 'school,medicine,station',
+                    detail: 'bbq,pool',
                     latestBid: '',
-                    photos: [],
+                    photos: ['',''],
                     description: '',
                     bidHistory:[
                         {
@@ -414,7 +408,7 @@
 
             if(this.propInfo.rab !=='none'){
                 this.$axios
-                    .get('/payment/add/')
+                    .get('/payment/get/')
                     .then(response => {
                         this.cards = response.data.result;
                     })
@@ -459,7 +453,6 @@
             let timer = setInterval(() => {
                 if (this.timeFlag === true) {
                     clearInterval(timer);
-
                 }
                 this.countDown(this.propInfo.enddate,this.propInfo.startdate);
             }, 1000);
@@ -483,6 +476,7 @@
                 $(this).stop().animate({"margin-left": "0"}, 300);
                 $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
             });
+
         },
 
         methods: {
@@ -542,12 +536,12 @@
             },
 
             countDown(time,startime) {
-                let expiredTime = dayjs(time);
-                let startTime = dayjs(startime);
+                // let expiredTime = dayjs(time);
+                // let startTime = dayjs(startime);
                 // console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
                 // console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
-                // let startTime = dayjs(new Date(2020, 8, 10, 10, 10));
-                // let expiredTime = dayjs(new Date(2020, 9, 24, 17, 1));
+                let startTime = dayjs(new Date(2021, 1, 10, 10, 10));
+                let expiredTime = dayjs(new Date(2021, 2, 24, 17, 1));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
@@ -563,14 +557,15 @@
                 if (diff2 > 0) {
                     this.timeFlag = true;
                     let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
-                    this.time = `This Auction will start at ${ st }`;
+                    this.time = `Will start at ${ this.showTime2(st) }`;
                 }
                 else{
                     if(diff>0){
                         this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
                     }else{
                         this.timeFlag = false;
-                        // console.log('over');
+                        console.log('over');
+                        this.time = `This auction is Over!`;
                     }
 
                 }
@@ -639,6 +634,18 @@
                 this.addNewCard = true;
             },
 
+            showTime2(time){
+                // let time = dayjs(day).format("YYYY-MM-DD HH:mm:ss");
+                let MONTH =['Jan', 'Feb', 'Mar','Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                let day = dayjs(time).day();
+                let mon = MONTH[dayjs(time).month()];
+                let year = dayjs(time).year();
+                let hour = dayjs(time).hour();
+                let min = dayjs(time).minute();
+                let formatTime = `${day} ${mon} ${year}, ${hour}:${min}`;
+                return formatTime;
+            },
+
             submitCard(){
                 if(this.addNewCard){
                     this.$refs["form"].validate((valid) => {
@@ -655,7 +662,7 @@
                                 data.append('cardNumber', this.selectCard);
                             }
 
-                            this.$axios.post('/addcard', data)
+                            this.$axios.post('/payment/add', data)
                                 .then((response) => {
                                     if (response.status >= 200 && response.status < 300) {
                                         if(response.data.code === 200){
@@ -765,7 +772,8 @@
         width:100%;
         height:500px;
         margin-top:50px;
-        box-shadow: 2px 1px 5px 4px #d5dbea;
+        border:1px solid #ccc;
+        /*box-shadow: 2px 1px 5px 4px #d5dbea;*/
     }
     .bid {
         width :80%;
