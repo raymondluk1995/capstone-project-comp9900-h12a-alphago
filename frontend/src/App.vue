@@ -25,6 +25,22 @@
         Height: 0
       };
     },
+    watch:{
+      $route:{
+        handler: function(){
+          var path = this.$route.path;
+          if(path!="/alpha"){
+            var canvas = document.getElementById("c_n3");
+            canvas.style.display = "none";
+            // console.log("canvas concealed");
+          }
+          else{
+            var canvas = document.getElementById("c_n3");
+            canvas.style.display = "block";
+          }
+        }
+      }
+    }
   };
 </script>
 <style lang="scss">

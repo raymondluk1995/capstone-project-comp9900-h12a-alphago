@@ -596,10 +596,10 @@
             addStatusColor(status) {
                 switch(status) {
                     case 'R':
-                        return 'status-not-start';
+                        return 'status-not-start1';
                         break;
                     case 'A':
-                        return 'status-process';
+                        return 'status-process1';
                         break;
                     default:
                         break;
@@ -976,7 +976,7 @@
         /*    transform: scale(1.02);*/
         /*}*/
     }
-    .status-process {
+    .status-process1 {
         background-image: url("../assets/banner-bg-green.png");
         /*background-color: #89c668;*/
     }
@@ -984,7 +984,7 @@
     /*    background-color: #e6a23c;*/
     /*}*/
 
-    .status-not-start {
+    .status-not-start1 {
         background-image: url("../assets/banner-bg-red.png");
         /*background-color: #f56c6c;*/
     }

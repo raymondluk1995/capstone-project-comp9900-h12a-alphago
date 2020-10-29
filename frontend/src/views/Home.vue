@@ -127,7 +127,7 @@ export default {
   title: 'AlphaGo Home',
   components: {
     Header,
-    Canvas
+    // Canvas
   },
     data() {
       return {
