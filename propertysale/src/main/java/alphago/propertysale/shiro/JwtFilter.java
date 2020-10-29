@@ -54,7 +54,6 @@ public class JwtFilter extends AuthenticatingFilter {
         String jwt = ((HttpServletRequest) request).getHeader("jwt");
         // 如果没有， 放行
         if(jwt == null || jwt.equals("") || jwt.equals("null") || jwt.equals("undefined")) return true;
-//        if(jwt == null) return true;
         // 使用jwt登录
         return executeLogin(request, response);
     }

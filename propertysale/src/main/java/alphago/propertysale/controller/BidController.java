@@ -1,9 +1,22 @@
 package alphago.propertysale.controller;
 
+import alphago.propertysale.entity.Rab;
+import alphago.propertysale.entity.RabAction;
+import alphago.propertysale.service.RabActionService;
+import alphago.propertysale.shiro.JwtInfo;
+import alphago.propertysale.utils.Result;
 import alphago.propertysale.websocket.BidHistoryPush;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 /**
  * @program: propertysale
@@ -14,8 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/bid")
 public class BidController {
-    @RequestMapping("/{aid}")
-    public void bid(@PathVariable String aid){
-        BidHistoryPush.bidPush(aid , "User just bid 10000000$");
+    @Autowired
+    RabActionService rabActionService;
+
+    @RequiresAuthentication
+    public Result bid(RabAction rabAction) {
+        Subject subject = SecurityUtils.getSubject();
+        JwtInfo info = (JwtInfo) subject.getPrincipal();
+        long uid = info.getUid();
+
+        rabAction.setBidTime(LocalDateTime.now());
+        rabActionService.bid(rabAction);
+        BidHistoryPush.bidPush(String.valueOf(rabAction.getActionId()), rabAction);
+        return Result.success(rabAction);
     }
 }

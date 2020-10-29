@@ -1,9 +1,6 @@
 package alphago.propertysale.controller;
 
-import alphago.propertysale.entity.Address;
-import alphago.propertysale.entity.Auction;
-import alphago.propertysale.entity.ImgPorter;
-import alphago.propertysale.entity.Property;
+import alphago.propertysale.entity.*;
 import alphago.propertysale.entity.returnVO.PropertyVO;
 import alphago.propertysale.rabbit.MessageProducer;
 import alphago.propertysale.service.AddressService;
@@ -15,10 +12,11 @@ import alphago.propertysale.utils.FileUtil;
 import alphago.propertysale.utils.RedisUtil;
 import alphago.propertysale.utils.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,7 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -54,9 +53,8 @@ public class PropertyController {
     // property registration
     @RequestMapping("/registration")
     @RequiresAuthentication
-    public Result propertyRegister(Property property, Address address, MultipartFile[] photos
-                        ,Auction auction) throws IOException, InterruptedException {
-        // get owner's id
+    public Result propertyRegister(Property property, Address address, MultipartFile[] photos, Auction auction) throws IOException, InterruptedException {
+//         get owner's id
         Subject subject = SecurityUtils.getSubject();
         JwtInfo info = (JwtInfo) subject.getPrincipal();
         long ownerId = info.getUid();
@@ -81,40 +79,101 @@ public class PropertyController {
         // Register Auction
         if(property.isAuction()){
             auction.setPid(pid);
-            auction.setStatus(Auction.REGISTERED);
-            auctionService.save(auction);
 
-            RedisTemplate redisTemplate = RedisUtil.valueRedis();
-            redisTemplate.opsForValue().set("Start:" + auction.getAid() , ""
-                    , auction.getStartdate().getTime() - System.currentTimeMillis() , TimeUnit.MILLISECONDS);
+            registerNewAuction(auction, property.getOwner());
         }
         Thread.sleep(1500);
-        return Result.success("success");
+        return Result.fail("success");
     }
 
     @RequiresAuthentication
-    @RequestMapping("/information")
+    @RequestMapping("/propties")
     public Result information(){
         Subject subject = SecurityUtils.getSubject();
         JwtInfo info = (JwtInfo) subject.getPrincipal();
         long owner = info.getUid();
         List<Property> properties = propertyService.list(new QueryWrapper<Property>().
-                eq("owner", owner).select("pid", "bathroom_num", "bedroom_num", "garage_num", "type", "area"));
+                eq("owner", owner));
         if(properties.size() == 0) return Result.fail("You haven't post any property!");
         List<PropertyVO> voList = new ArrayList<>();
-        Page page = new Page<>();
 
         for(Property property : properties){
             Address address = addressService.getById(property.getPid());
-            voList.add(new PropertyVO().setId(property.getPid())
-                                    .setPhotos(FileUtil.getImages(property.getPid()))
-                                    .setAddress(address.getFullAddress())
-                                    .setArea(property.getArea())
-                                    .setBathroomNum(property.getBathroomNum())
-                                    .setBedroomNum(property.getBedroomNum())
-                                    .setGarageNum(property.getGarageNum())
-                                    .setType(property.getType()));
+            PropertyVO propertyVO = new PropertyVO();
+            BeanUtils.copyProperties(property , propertyVO);
+            propertyVO.setAddress(address.getFullAddress());
+            propertyVO.setPhotos(FileUtil.getImages(property.getPid()));
+            // add status
+            if(property.isAuction()){
+                AuctionStatus status = auctionService.getAuctionStatus(property.getPid());
+                BeanUtils.copyProperties(status, propertyVO);
+            }else{
+                propertyVO.setStatus("N");
+            }
+            voList.add(propertyVO);
         }
         return Result.success(voList);
+    }
+
+    @RequestMapping("/newAuction")
+    @RequiresAuthentication
+    public Result register(Auction auction){
+        Subject subject = SecurityUtils.getSubject();
+        JwtInfo info = (JwtInfo) subject.getPrincipal();
+        long seller = info.getUid();
+
+        // Check
+        long pid = auction.getPid();
+        if(propertyService.getById(pid).isAuction()) return Result.fail("Property has already registered!");
+        else{
+            propertyService.update(new UpdateWrapper<Property>().eq("pid", auction.getPid()).set("auction", true));
+        }
+        registerNewAuction(auction, seller);
+
+        return Result.success("Add new Auction!");
+    }
+
+    @RequestMapping("/delete")
+    @RequiresAuthentication
+    public Result deleteProperty(String pid){
+        if(propertyService.getById(pid) == null) return Result.fail("Already deleted!");
+
+        addressService.removeById(pid);
+        propertyService.removeById(pid);
+        // Delete property photos;
+        messageProducer.sendMsg(pid, CheckCode.REMOVE);
+
+        return Result.success("Remove Property: " + pid);
+    }
+
+    // Cancel registered Auction
+    @RequestMapping("/cancel")
+    @RequiresAuthentication
+    public Result cancel(long aid, long pid){
+        // Check already cancel
+        if(!propertyService.getById(pid).isAuction()){
+            return Result.fail("Already canceled!");
+        }
+        // Check status
+        if(auctionService.getAuctionStatus(pid).getStatus().equals(Auction.AUCTION)){
+            return Result.fail("Auction already started!");
+        }
+        // Cancel
+        auctionService.auctionCancel(pid, aid);
+
+        return Result.success("success!");
+    }
+
+
+    private void registerNewAuction(Auction auction, long seller){
+        auction.setStatus(Auction.REGISTERED);
+        auction.setSeller(seller);
+
+        auctionService.save(auction);
+        // Set count down
+        RedisTemplate redisTemplate = RedisUtil.valueRedis();
+        redisTemplate.opsForValue().set("Start:" + auction.getAid() , ""
+                , auction.getStartdate().toInstant(ZoneOffset.UTC).toEpochMilli() -
+                        System.currentTimeMillis() , TimeUnit.MILLISECONDS);
     }
 }

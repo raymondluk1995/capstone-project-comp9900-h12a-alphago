@@ -19,6 +19,8 @@ import java.util.List;
 public class AuctionVO {
     // auction information
     private long aid;
+    private String Rab;
+
     private String status;
     private long startdate;
     private long enddate;

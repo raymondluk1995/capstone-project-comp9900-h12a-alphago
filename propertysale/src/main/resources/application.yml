@@ -7,12 +7,12 @@ spring:
   datasource:
     username: root
     password: root
-    url: jdbc:mysql://3.25.129.229:3306/property_sale?serverTimezone=UTC&&useUnicode=true&characterEncoding=UTF-8&&useSSL=true
+    url: jdbc:mysql://13.239.120.231:3306/property_sale?serverTimezone=UTC&&useUnicode=true&characterEncoding=UTF-8&&useSSL=true
     driver-class-name: com.mysql.cj.jdbc.Driver
 # redis
   redis:
     password: 123456
-    host: 3.25.129.229
+    host: 13.239.120.231
     timeout: 5000
 
   # mail
@@ -37,7 +37,7 @@ spring:
           port: 465
   # rabbitmq
   rabbitmq:
-    host: 3.25.129.229
+    host: 13.239.120.231
     username: admin
     password: admin
     myExchange: alpha.go.sender

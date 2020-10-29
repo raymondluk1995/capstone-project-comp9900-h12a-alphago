@@ -78,6 +78,15 @@ public class ImageUtil {
         return file.exists();
     }
 
+    public static void remove(String pid){
+        String path = IMG + "property/" + pid;
+        File directory = new File(path);
+        for(File file : directory.listFiles()){
+            file.delete();
+        }
+        directory.delete();
+    }
+
     public static String getType(String fileName){
         return fileName.substring(fileName.lastIndexOf('.'));
     }

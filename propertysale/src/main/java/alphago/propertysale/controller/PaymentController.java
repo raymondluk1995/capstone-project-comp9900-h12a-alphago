@@ -21,29 +21,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
-
-    /**
-    * @Description: Get User's cards from Payment table
-    * @Param:
-    * @return: List of User's cards(payments)
-    */
-    @RequiresAuthentication
-    @RequestMapping("/get")
-    public Result getUserPayments(){
-        // get user's uid
-        JwtInfo info = (JwtInfo)SecurityUtils.getSubject();
-        long uid = info.getUid();
-    }
-
-    /**
-    * @Description: Add new payment method
-    * @Param:
-    */
-    @RequiresAuthentication
-    @RequestMapping("/add")
-    public Result addNewCard(Payment payment){
-        // get user's uid
-        JwtInfo info = (JwtInfo)SecurityUtils.getSubject();
-        long uid = info.getUid();
-    }
+//
+//    /**
+//    * @Description: Get User's cards from Payment table
+//    * @Param:
+//    * @return: List of User's cards(payments)
+//    */
+//    @RequiresAuthentication
+//    @RequestMapping("/get")
+//    public Result getUserPayments(){
+//        // get user's uid
+//        JwtInfo info = (JwtInfo)SecurityUtils.getSubject();
+//        long uid = info.getUid();
+//    }
+//
+//    /**
+//    * @Description: Add new payment method
+//    * @Param:
+//    */
+//    @RequiresAuthentication
+//    @RequestMapping("/add")
+//    public Result addNewCard(Payment payment){
+//        // get user's uid
+//        JwtInfo info = (JwtInfo)SecurityUtils.getSubject();
+//        long uid = info.getUid();
+//    }
 }

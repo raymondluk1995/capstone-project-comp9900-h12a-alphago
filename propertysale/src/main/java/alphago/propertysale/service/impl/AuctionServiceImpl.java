@@ -5,7 +5,9 @@ import alphago.propertysale.entity.returnVO.AuctionVO;
 import alphago.propertysale.mapper.*;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.utils.FileUtil;
+import alphago.propertysale.websocket.BidHistoryPush;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZoneOffset;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @program: propertysale
@@ -33,13 +37,14 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
     UserMapper userMapper;
     @Autowired
     RabMapper rabMapper;
-
+    @Autowired
+    RabActionMapper rabActionMapper;
     @Override
     public AuctionVO getAuctionByAid(long aid) {
         Auction auction = auctionMapper.selectById(aid);
         Property property = propertyMapper.selectById(auction.getPid());
         Address address = addressMapper.selectById(property.getPid());
-        User user = userMapper.selectById(property.getOwner());
+        User user = userMapper.selectById(auction.getSeller());
         AuctionVO auctionVO = new AuctionVO();
         BeanUtils.copyProperties(auction , auctionVO);
         BeanUtils.copyProperties(property , auctionVO);
@@ -57,15 +62,66 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
         }else{
             auctionVO.setLatestPrice(auction.getMinimumPrice());
         }
-        auctionVO.setStartdate(auction.getStartdate().getTime());
-        auctionVO.setEnddate(auction.getEnddate().getTime());
+        auctionVO.setStartdate(auction.getStartdate().toInstant(ZoneOffset.UTC).toEpochMilli());
+        auctionVO.setEnddate(auction.getEnddate().toInstant(ZoneOffset.UTC).toEpochMilli());
         return auctionVO;
     }
 
+    @Deprecated
     @Override
     public AuctionVO getAuctionByProperty(long pid) {
         Auction auction = auctionMapper.selectOne(new QueryWrapper<Auction>()
                 .eq("pid" , pid).eq("status" , "R"));
         return getAuctionByAid(auction.getAid());
+    }
+
+    @Override
+    public AuctionStatus getAuctionStatus(long pid) {
+        Auction auction = auctionMapper.getRunningAuctionById(pid);
+        return new AuctionStatus().setAid(auction.getAid()).setStatus(auction.getStatus());
+    }
+
+    @Override
+    public void auctionCancel(long pid, long aid) {
+        // delete all Rab
+        rabMapper.delete(new QueryWrapper<Rab>().eq("aid", aid));
+        // delete auction
+        auctionMapper.deleteById(aid);
+        // change property auction status
+        propertyMapper.update(new Property().setAuction(false), new UpdateWrapper<Property>().eq("pid",pid));
+    }
+
+    /**
+    * @Description: Initialize auction bid history when auction start
+    */
+    @Override
+    public void initHistory(long aid) {
+        // get all rabs
+        List<Rab> rabList = rabMapper.selectList(new QueryWrapper<Rab>().eq("aid", aid));
+        // sort by highest price
+        rabList.sort(Comparator.comparing(Rab::getInitPrice));
+        // bid
+        rabList.forEach(
+                rab -> {
+                    RabAction bid = new RabAction().setRabId(rab.getRabId()).
+                            setBidPrice(rab.getInitPrice())
+                            .setBidTime(rab.getRegisterTime());
+                    BidHistoryPush.bidPush(String.valueOf(aid), bid);
+                    rabActionMapper.insert(bid);
+                }
+        );
+    }
+
+    @Override
+    public void finishAuction(long aid) {
+        Auction auction = auctionMapper.selectById(aid);
+        if(auction.getCurrentBid() != 0) {
+            RabAction bid = rabActionMapper.selectById(auction.getCurrentBid());
+            if(bid.getBidPrice().compareTo(auction.getPrice())>=0){
+                auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "S"));
+                return;
+            }
+        }
+        auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "F"));
     }
 }

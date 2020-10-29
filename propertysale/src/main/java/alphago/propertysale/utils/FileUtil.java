@@ -2,13 +2,11 @@ package alphago.propertysale.utils;
 
 import alphago.propertysale.entity.User;
 import org.apache.shiro.util.Assert;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.io.File;
 
 /**
  * @program: propertysale

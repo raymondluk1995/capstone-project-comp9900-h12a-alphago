@@ -6,10 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * @program: propertysale
@@ -29,10 +27,11 @@ public class Auction {
     @TableId(type = IdType.AUTO)
     private long aid;
     private long pid;
+    private long seller;
     @TableField(value = "start_date")
-    private Date startdate;
+    private LocalDateTime startdate;
     @TableField(value = "end_date")
-    private Date enddate;
+    private LocalDateTime enddate;
     @TableField(value = "reserve_price")
     private String price;
     private String minimumPrice = "1000000";

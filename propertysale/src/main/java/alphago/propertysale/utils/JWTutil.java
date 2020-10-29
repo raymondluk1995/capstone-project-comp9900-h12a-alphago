@@ -27,7 +27,7 @@ public class JWTutil {
     public static String getJwtToken(Map<String , String> map){
         JWTCreator.Builder tokenBuilder = JWT.create();
         map.forEach(tokenBuilder::withClaim);
-        tokenBuilder.withExpiresAt(expiryDate);
+//        tokenBuilder.withExpiresAt(expiryDate);
         return tokenBuilder.sign(algorithm);
     }
 
