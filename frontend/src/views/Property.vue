@@ -16,8 +16,14 @@
                 </el-dropdown>
             </template>
             <template v-else>
-                <el-button round @click="goto('login')">Sign In</el-button>
-                <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
+                <div class="back-btn">
+                    <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="goto('login')">Sign In <i class="el-icon-check"></i></span>
+                    <div class="bottom-line"></div>
+                </div>
+                <div class="back-btn">
+                    <span  id="back-btn2" style="padding:2px 5px;font-size:20px;" @click="goto('register')">Sign Up <i class="el-icon-user"></i></span>
+                    <div class="bottom-line"></div>
+                </div>
             </template>
         </Header>
         <el-row  type="flex" justify="center" >
@@ -154,6 +160,20 @@
                 <section style="margin: 15px 50px 0 50px;height:500px;border:1px solid #123123">
                     <h3>Bid History</h3>
 
+
+                    <el-table :data="propInfo.bidHistory" :max-height="maxHeight" border stripe tooltip-effect="light"
+                              　　　　　　@selection-change="handleSelectionChange">
+                        <slot name="table_oper"/>
+                        <template v-for="(item, index) in columns">
+                            <el-table-column
+                                    :key="index"
+                                    :prop="item.prop"
+                                    :label="item.label"
+                            >
+                            </el-table-column>
+                        </template>
+                    </el-table>
+
                     <el-table
                             :data="propInfo.bidHistory"
                             stripe
@@ -210,12 +230,12 @@
 <!--                    <h3>Place new bid</h3>-->
                     <div class="new-bid-wrap">
                         <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
-                            <i slot="suffix" class="input-slot">{{newBid |numFormat}} A$</i>
+                            <i slot="suffix" class="input-slot">{{newBid | numFormat }} A$</i>
                         </el-input>
                         <el-button class='wrap-button' type="primary" icon="el-icon-plus" circle @click="addNewBid"></el-button>
                     </div>
 
-                    <p>Your Current Bid is {{ newBidTip | numFormat}}</p>
+                    <p>Your Current Bid is {{ newBidTip | numFormat }}</p>
                 </div>
 
                 <div v-else style="margin-top: 2px">
@@ -240,6 +260,7 @@
     import Header from "@/components/Header.vue";
     import { mapActions } from "vuex";
     import dayjs from "dayjs";
+    import $ from 'jquery'
 
     var customParseFormat = require("dayjs/plugin/customParseFormat");
     dayjs.extend(customParseFormat);
@@ -250,6 +271,13 @@
             cheight: {
                 type: String,
                 default: '500px'
+            },
+            columns: Array,
+            data: Array,
+            pager: Object,
+            maxHeight: {
+                type: Number,
+                default: 2000
             }
         },
         components: {
@@ -280,8 +308,14 @@
                 lat :'',
                 lng:'',
                 center: {},
+
                 // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
                 markers:[{position:{},}],
+                columns: [
+                    {prop: 'time', label: 'Time',width: '300',formatter: this.showTime},
+                    {prop: 'user', label: 'User', width: '300',formatter: this.formatter},
+                    {prop: 'price', label: 'Current Bid'}
+                ],
                 propInfo: {
                     id: '',
                     aid:'',
@@ -376,7 +410,18 @@
                 .catch(function (error) {
                     console.log(error)
                 });
-            this.propInfo.bidHistory.push({time:new Date(2009,1,1,1,1,1), user:'aaa', price:'$123123123'});
+            // this.propInfo.bidHistory.push({time:new Date(2009,1,1,1,1,1), user:'aaa', price:'$123123123'});
+
+            if(this.rab !=='none'){
+                this.$axios
+                    .get('/payment/get/')
+                    .then(response => {
+                        this.cards = response.data.result;
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+            }
         },
 
         watch: {
@@ -418,6 +463,26 @@
                 }
                 this.countDown(this.propInfo.enddate,this.propInfo.startdate);
             }, 1000);
+
+            $("#back-btn").hover(function(event) {
+                $(this).stop().animate({"margin-left": "10px"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+            });
+
+            $("#back-btn").mouseleave(function(event) {
+                $(this).stop().animate({"margin-left": "0"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+            });
+
+            $("#back-btn2").hover(function(event) {
+                $(this).stop().animate({"margin-left": "10px"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+            });
+
+            $("#back-btn2").mouseleave(function(event) {
+                $(this).stop().animate({"margin-left": "0"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+            });
         },
 
         methods: {
@@ -767,6 +832,21 @@
 
     .status-not-start {
         background-color: #f56c6c;
+    }
+    .back-btn{
+        cursor: pointer;
+        position:relative;
+        width:150px;
+        /*border:1px solid #123123;*/
+    }
+    .back-btn .bottom-line{
+        position: absolute;
+        /*margin-left:40px;*/
+        width: 0;
+        height: 2px;
+        left:0;
+        bottom: -1px;
+        background-color: #3b4c73;
     }
 
 </style>

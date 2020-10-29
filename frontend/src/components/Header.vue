@@ -51,8 +51,9 @@ export default {
 .header {
   padding: 15px;
   border-bottom: 2px solid #f2f2f2;
-    box-shadow: 0 2px 10px 4px #d5dbea;
+    /*box-shadow: 0 2px 10px 4px #d5dbea;*/
     /*height:120px;*/
+    z-index: 10;
 }
 
 

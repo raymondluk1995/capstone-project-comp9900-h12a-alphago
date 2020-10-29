@@ -16,8 +16,7 @@
         </div>
       </el-col>
 
-      <el-col :span="9">
-
+      <el-col :span="9" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
         <div id="container">
           <div class="btn-style" >
            <span v-if="!loginByuser" id="btn-move1" @click="byuser">Login By Username<i class="el-icon-right el-icon--right"></i></span>
@@ -140,7 +139,6 @@
             $(this).stop().animate({"margin-left": "10px"}, 300);
             $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
         });
-
 
         $("#btn-move1").hover(function(event) {
         $(this).stop().animate({"margin-left": "10px"}, 300);
@@ -342,6 +340,7 @@
     /*border:1px solid #133264;*/
   }
   .form {
+
     padding: 30px;
     /*border: 1px solid #ccc;*/
     border-radius: 15px;
@@ -357,7 +356,6 @@
     /*height:Height;*/
     /*  height: 100vh;*/
     /*margin:0 auto;*/
-    background-color: #fff;
     /*border:1px solid #133264;*/
     margin-top:50px;
   }
