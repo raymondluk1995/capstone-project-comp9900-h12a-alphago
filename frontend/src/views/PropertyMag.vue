@@ -41,7 +41,8 @@
                     </el-select>
                     </el-col>
                     <el-col>
-                    <el-button type="primary" icon="el-icon-plus" circle  plain style="float:right;margin:10px 30px" @click="goto('propreg')"></el-button>
+
+                    <el-button type="primary" icon="el-icon-plus"  plain style="float:right;margin:10px 30px" @click="goto('propreg')">New</el-button>
                     </el-col>
                 </el-row>
                 <el-row class="property-list">

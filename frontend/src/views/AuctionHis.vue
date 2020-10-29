@@ -17,21 +17,17 @@
             </template>
             <template v-else>
                 <div class="back-btn">
-                    <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="goto('login')">Sign In <i class="el-icon-check"></i></span>
-                    <div class="bottom-line"></div>
-                </div>
-                <div class="back-btn">
-                    <span  id="back-btn2" style="padding:2px 5px;font-size:20px;" @click="goto('register')">Sign Up <i class="el-icon-user"></i></span>
+                    <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="back">Back <i class="el-icon-refresh-right"></i></span>
                     <div class="bottom-line"></div>
                 </div>
             </template>
         </Header>
 
         <el-row type="flex" justify="center">
-            <el-col :span="24" style="background: white;">
+            <el-col :span="24">
                 <template v-if="!isEmpty">
                     <el-row type="flex" justify="space-around" style="background-color: #3b4c73;box-shadow: 0 2px 5px 2px #d5dbea;">
-                        <el-col :span="4">
+                        <el-col>
                             <el-select
                                     v-model="filter"
                                     style="margin:10px 17%; width:200px"
@@ -47,80 +43,54 @@
                                 </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :span="6" >
-                            <div class="reg-btn" style="float:right; margin-top:15px">
-                                <span  id="reg-btn"
-                                       style="
-                                           border:2px solid white;
-                                           color:white;
-                                           padding:2px 5px;
-                                           font-size:20px;"
-                                       @click="goto('auchis')">View History <i class="el-icon-document-copy"></i></span>
-                            </div>
-                        </el-col>
                     </el-row>
 
                     <el-row type="flex" justify="space-around">
-                    <div class="items">
-                        <ul>
-                            <li  v-for="item in propList" :key="item.aid ">
-                                <div class="item" @click.native="goDetails(item)">
-                                    <el-row  v-if="item.status === 'R'" style="height:40px;background-color: rgba(191,71,47,0.63);margin: 10px 2% 0 2%;padding:10px;">
-                                        <h5 >Auction: {{ showTime(item.startdate) }}</h5>
-                                    </el-row>
-
-                                    <el-row v-else style="height:40px;background-color: #93d67f;margin: 10px 2% 0 2%;padding:10px;">
-                                        <h5 >Stop At: {{ showTime(item.enddate) }}</h5>
-                                    </el-row>
-
-
-                                    <el-carousel :interval="5000" arrow="always" :height="cheight" style="margin: 0 2%">
-                                        <el-carousel-item v-for="pic in item.photos" :key="pic.id">
-                                            <img :src="pic"  width="100%" height="100%" alt=""/>
-                                        </el-carousel-item>
-                                    </el-carousel>
-                                    <div style="padding: 10px;">
-                                    <h5>{{ item.address }}</h5>
-                                    <el-row type="flex" justify="left" style="margin:10px 5%;">
-                                        <el-col :span="4">
-                                        <i class="el-icon-toilet-paper"> Baths: {{ item.bathroomNum}}</i>
-                                        </el-col>
-                                        <el-col :span="4">
-                                        <i class="el-icon-house"> Beds: {{ item.bedroomNum }}</i>
-                                        </el-col>
-                                            <el-col :span="4">
-                                        <i class="el-icon-truck"> Cars: {{ item.garageNum }}</i>
-                                            </el-col>
-                                        <el-col :span="4">
-                                            <i class="el-icon-full-screen"> Area: {{ item.area }}</i>
-                                        </el-col>
-                                        <el-col :span="8">
-                                            <i class="el-icon-info"> Type: {{ item.type }}</i>
-                                        </el-col>
-                                    </el-row>
-                                        <el-row type="flex" justify="space-around">
-                                            <div class="bid" v-if="item.status==='R'"> Guide ${{ getBidStatus(item)|numFormat }}</div>
-                                            <div class="bid" v-else> ${{ getBidStatus(item)|numFormat }}</div>
+                        <div class="items">
+                            <ul>
+                                <li  v-for="item in propList" :key="item.aid ">
+                                    <div class="item" @click.native="goDetails(item)">
+                                        <el-row  style="height:40px;background-color: rgba(45,84,146,0.24);margin: 10px 2% 0 2%;padding:10px;">
+                                            <h5 >Stop At: {{ showTime(item.enddate) }}</h5>
                                         </el-row>
-                                        <el-row type="flex" justify="space-around">
-                                            <template v-if="item.status==='A'">
-                                                <div v-if="parseInt(item.currentBid) === parseInt(item.highestPrice)"
-                                                     class="bid2"
-                                                     :class="userBid(item.highestPrice, item.currentBid)"> Winning! </div>
-                                                <div v-else
-                                                     class="bid2"
-                                                     :class="userBid(item.highestPrice, item.currentBid)"> ${{ getStatus(item) |numFormat }} </div>
 
-                                            </template>
-                                            <template v-else>
-                                                <div class="bid2" :class="addStatusColor(item.status)"> {{ getStatus(item) }}</div>
-                                            </template>
-                                        </el-row>
-                                </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                                        <el-carousel :interval="5000" arrow="always" :height="cheight" style="margin: 0 2%">
+                                            <el-carousel-item v-for="pic in item.photos" :key="pic.id">
+                                                <img :src="pic"  width="100%" height="100%" alt=""/>
+                                            </el-carousel-item>
+                                        </el-carousel>
+                                        <div style="padding: 10px;">
+                                            <h5>{{ item.address }}</h5>
+                                            <el-row type="flex" justify="left" style="margin:10px 5%;">
+                                                <el-col :span="4">
+                                                    <i class="el-icon-toilet-paper"> Baths: {{ item.bathroomNum}}</i>
+                                                </el-col>
+                                                <el-col :span="4">
+                                                    <i class="el-icon-house"> Beds: {{ item.bedroomNum }}</i>
+                                                </el-col>
+                                                <el-col :span="4">
+                                                    <i class="el-icon-truck"> Cars: {{ item.garageNum }}</i>
+                                                </el-col>
+                                                <el-col :span="4">
+                                                    <i class="el-icon-full-screen"> Area: {{ item.area }}</i>
+                                                </el-col>
+                                                <el-col :span="8">
+                                                    <i class="el-icon-info"> Type: {{ item.type }}</i>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row type="flex" justify="space-around">
+                                                <div class="bid" > ${{ getBidStatus(item)|numFormat }}</div>
+                                            </el-row>
+                                            <el-row type="flex" justify="space-around">
+                                                <template>
+                                                    <div class="bid2" :class="addStatusColor(item.status)"> {{ getStatus(item) }}</div>
+                                                </template>
+                                            </el-row>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </el-row>
 
                 </template>
@@ -146,7 +116,7 @@
     import Header from "@/components/Header.vue";
     import { mapActions } from "vuex";
     import dayjs from "dayjs";
-    import $ from 'jquery';
+    import $ from 'jquery'
     import numFormat from "../utils/numFormat";
 
     export default {
@@ -160,28 +130,6 @@
         components: {
             Header,
         },
-
-        mounted(){
-            $("#back-btn").hover(function(event) {
-                $(this).stop().animate({"margin-left": "10px"}, 300);
-                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
-            });
-
-            $("#back-btn").mouseleave(function(event) {
-                $(this).stop().animate({"margin-left": "0"}, 300);
-                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
-            });
-            $("#back-btn2").hover(function(event) {
-                $(this).stop().animate({"margin-left": "10px"}, 300);
-                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
-            });
-
-            $("#back-btn2").mouseleave(function(event) {
-                $(this).stop().animate({"margin-left": "0"}, 300);
-                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
-            });
-        },
-
         data() {
             return {
                 id:'',
@@ -192,7 +140,7 @@
                 originPropertyList:[
                     {
                         aid:1,
-                        status:'A',
+                        status:'S',
                         bathroomNum:2,
                         bedroomNum:1,
                         garageNum:2,
@@ -207,7 +155,7 @@
                     }
                     ,{
                         aid:2,
-                        status: 'A',
+                        status: 'S',
                         address:'123asd',
                         photos:['',''],
                         highestPrice: 123123,
@@ -217,7 +165,7 @@
                     },
                     {
                         aid:3,
-                        status: 'R',
+                        status: 'F',
                         address:'123asd',
                         photos:['',''],
                         startdate: new Date(2021,10,10,12,10),
@@ -229,7 +177,7 @@
 
                     {
                         aid:5,
-                        status: 'A',
+                        status: 'F',
                         address:'123asd',
                         photos:['',''],
                         highestPrice: 123123,
@@ -237,7 +185,7 @@
                     },
                     {
                         aid:6,
-                        status: 'A',
+                        status: 'S',
                         address:'123asd',
                         photos:['',''],
                         highestPrice: 123123,
@@ -245,20 +193,13 @@
                     },
                     {
                         aid:8,
-                        status: 'A',
+                        status: 'S',
                         address:'123asd',
                         photos:['',''],
                         highestPrice: 123123,
                         currentBid:22222,
                     },
-                    {
-                        aid:9,
-                        status: 'A',
-                        address:'123asd',
-                        photos:['',''],
-                        highestPrice: 123123,
-                        currentBid:22222,
-                    }
+
 
                 ],
                 propList:[],
@@ -267,22 +208,22 @@
                         value: "all",
                         label: "All",
                     },
-                    {
-                        value: "R",
-                        label: "Not start",
-                    },
-                    {
-                        value: "A",
-                        label: "In process",
-                    },
                     // {
-                    //     value: "S",
-                    //     label: "Sold",
+                    //     value: "R",
+                    //     label: "Not start",
                     // },
                     // {
-                    //     value: "F",
-                    //     label: "Passed In",
+                    //     value: "A",
+                    //     label: "In process",
                     // },
+                    {
+                        value: "S",
+                        label: "Sold",
+                    },
+                    {
+                        value: "F",
+                        label: "Passed In",
+                    },
 
                 ],
                 propList: [{
@@ -307,8 +248,9 @@
             //     this.$message.error("You should login first!");
             //     this.$router.push("/login");
             // }
+
             this.$axios
-                .get('/auction/list/now')
+                .get('/auction/list/past')
                 .then(response => {
                     if (response.data.code === 200) {
                         this.originPropertyList = response.data.result;
@@ -321,10 +263,20 @@
                 .catch(function (error) {
                     console.log(error);
                 })
-            // this.isEmpty = false;
-            // this.propList = this.originPropertyList;
-        },
 
+            this.isEmpty = false;
+            this.propList = this.originPropertyList;
+        },
+        mounted(){
+            $("#back-btn").hover(function(event) {
+                $(this).stop().animate({"margin-left": "10px"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+            });
+            $("#back-btn").mouseleave(function(event) {
+                $(this).stop().animate({"margin-left": "0"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+            });
+        },
         methods: {
             ...mapActions(["logout"]),
             handleCommand(command) {
@@ -361,19 +313,12 @@
             },
             getStatus(item){
                 switch(item.status){
-                    case 'R':
-                        let time = dayjs(item.startdate).format("YYYY-MM-DD HH:mm:ss")
-                        return `This Auction will start at ${time}`;
+                    case 'S':
+                        return 'Sold';
                         break;
-                    case 'A':
-                        return  `${item.currentBid}`;
+                    case 'F':
+                        return 'Passed In';
                         break;
-                    // case 'S':
-                    //     return 'Success';
-                    //     break;
-                    // case 'F':
-                    //     return 'Failed';
-                    //     break;
                     default:
                         break;
                 }
@@ -411,10 +356,10 @@
             },
             addStatusColor(status) {
                 const colors = new Map([
-                    ["R", "status-not-start"],
-                    ["A", "status-process"],
-                    // ["S", "status-success"],
-                    // ["F", "status-failure"],
+                    // ["R", "status-not-start"],
+                    // ["A", "status-process"],
+                    ["S", "status-success"],
+                    ["F", "status-failure"],
                 ]);
                 return colors.get(status);
             },
@@ -455,123 +400,127 @@
 </script>
 
 <style scoped lang="scss">
-.user {
-    display: flex;
-    align-items: center;
-    p {
-        margin-left: 10px;
+    .user {
+        display: flex;
+        align-items: center;
+        p {
+            margin-left: 10px;
+        }
     }
-}
-.empty-label{
-    /*font-size: 18px;*/
-    text-align: center;
-    margin: 10px;
-}
-.bid {
-    width :90%;
-    padding: 10px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #133264;
-    border-radius: 3px;
-    margin-top:15px;
-}
-.bid2 {
-    width :90%;
-    padding: 3px;
-    text-align: center;
-    font-size: 12px;
-    font-weight: bold;
-    color: #fff;
-    margin-top:5px;
-    background-color: #133264;
-    border-radius: 3px;
-}
-.userBid{
-    width :45%;
-    padding: 5px;
-    text-align: center;
-    font-size: 15px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #133264;
-    border-radius: 5px;
-}
-.img{
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-}
+    .empty-label{
+        /*font-size: 18px;*/
+        text-align: center;
+        margin: 10px;
+    }
+    .bid {
+        width :90%;
+        padding: 10px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #133264;
+        border-radius: 3px;
+        margin-top:15px;
+    }
+    .bid2 {
+        width :90%;
+        padding: 3px;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+        color: #fff;
+        margin-top:5px;
+        background-color: #133264;
+        border-radius: 3px;
+    }
+    .userBid{
+        width :45%;
+        padding: 5px;
+        text-align: center;
+        font-size: 15px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #133264;
+        border-radius: 5px;
+    }
+    .img{
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+    }
 
-.user-bid-bg-under{
-    background: rgba(163, 61, 37, 0.65);
-}
-.user-bid-bg-above{
-    background-color: rgba(16, 160, 112, 0.75);
-}
+    .user-bid-bg-under{
+        background: rgba(163, 61, 37, 0.65);
+    }
+    .user-bid-bg-above{
+        background-color: rgba(16, 160, 112, 0.75);
+    }
 
-.items{
-    margin: 10px 10%;
-    text-align:center;
+    .items{
+        margin: 10px 10%;
+        text-align:center;
 
-}
-.items ul{
-    text-align:center;
-    /*display: inline-block;*/
-}
-.items li{
-    /*text-align:center;*/
-    /*float:left;*/
-    display:inline-block;
-}
+    }
+    .items ul{
+        text-align:center;
+        /*display: inline-block;*/
+    }
+    .items li{
+        /*text-align:center;*/
+        /*float:left;*/
+        display:inline-block;
+    }
 
-.items ul li {
-    /*z-index: 1;*/
-    width: 600px;
-    height: 600px;
-    padding: 10px 0;
-    margin: 10px 20px;
-    /*display: inline-block;*/
-    position: relative;
-    border: 1px solid rgba(20, 52, 105, 0.55);
-    list-style-type:none;
-    &:hover {
+    .items ul li {
+        /*z-index: 1;*/
+        width: 600px;
+        height: 600px;
+        padding: 10px 0;
+        margin: 10px 20px;
+        /*display: inline-block;*/
+        position: relative;
+        border: 1px solid rgba(20, 52, 105, 0.55);
+        list-style-type:none;
+        &:hover {
+            cursor: pointer;
+            /*transform: scale(1.02);*/
+            background-color: rgba(193, 212, 240, 0.55);
+            transition-duration: 0.3s;
+        }
+    }
+
+    .status-failure {
+        background-color: rgba(50, 17, 18, 0.67);
+    }
+
+    .status-process {
+        background-color:  #d7d997;
+    }
+
+    .status-success {
+        background-color: rgba(135, 196, 116, 0.82);
+    }
+
+    .status-not-start {
+        /*border-top: 15px solid #bcc8e6;*/
+        background-color:  #8a97a6;
+    }
+    .back-btn{
         cursor: pointer;
-        /*transform: scale(1.02);*/
-        background-color: rgba(193, 212, 240, 0.55);
-        transition-duration: 0.3s;
+        position:relative;
+        /*border:1px solid #123123;*/
     }
-}
-
-.status-failure {
-    background-color: rgba(50, 17, 18, 0.67);
-}
-
-.status-process {
-    background-color:  #d7d997;
-}
-
-.status-success {
-    background-color: rgba(135, 196, 116, 0.82);
-}
-
-.status-not-start {
-    /*border-top: 15px solid #bcc8e6;*/
-    background-color:  #8a97a6;
-}
-
-.reg-btn{
-    cursor: pointer;
-    position:relative;
-    width:200px;
-    &:hover{
-        transform:translateX(10px);
-        transition-duration: 0.5s;
+    .back-btn .bottom-line{
+        position: absolute;
+        /*margin-left:40px;*/
+        width: 0;
+        height: 2px;
+        left:0;
+        bottom: -1px;
+        background-color: #3b4c73;
     }
-    float:left;
-}
+
 
 </style>

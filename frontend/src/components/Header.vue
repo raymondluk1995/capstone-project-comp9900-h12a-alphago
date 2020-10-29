@@ -42,6 +42,9 @@ export default {
     goto(name) {
       // console.log(name);
       this.$router.push({ name: name });
+        if(this.$route.path!='/alpha'){
+            this.$router.push({ name: name });
+        }
     },
   },
 };

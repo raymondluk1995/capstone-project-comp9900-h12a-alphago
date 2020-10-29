@@ -1,11 +1,20 @@
 <template>
     <div class="profile">
         <Header>
-            <el-button round type="primary" @click="back">Back</el-button>
+            <div class="back-btn">
+                <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="back">Back <i class="el-icon-refresh-right"></i></span>
+                <div class="bottom-line"></div>
+            </div>
         </Header>
         <el-row type="flex" justify="center">
-            <el-col :span="15">
-                <h1 class="title">My Profile</h1>
+            <el-col :span="10" >
+                <div class="img-size" :style={height:vdaH}>
+                    <img src="../assets/profile-bg.png" alt="" >
+                </div>
+            </el-col>
+
+            <el-col :span="14" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
+                <h1 class="title">{{form.username}}</h1>
                 <el-form
                         class="form"
                         ref="form"
@@ -14,10 +23,7 @@
                         label-position="left"
                 >
                     <el-row :gutter="50">
-                        <el-col :span="14">
-                            <el-form-item label="Username:" prop="username">
-                                <el-input v-model="form.username" disabled></el-input>
-                            </el-form-item>
+                        <el-col :span="14" style="border:1px solid #123123">
 
                             <el-form-item v-if="!canEditEmail" label="Email:" prop="email">
                                 <el-input style="width:70%;float:left;" v-model="form.oldemail" :disabled="!canEditEmail"></el-input>
@@ -58,8 +64,9 @@
                             </el-form-item>
 
                         </el-col>
-                        <el-col :span="6" :offset="1" >
-                            <div class="user-avatar-container">
+
+                        <el-col :span="6" :offset="1" style="border:1px solid #123123">
+                            <div class="user-avatar-container" style="border:1px solid #123123">
                             <div class="user-avatar">
                             <el-upload
                                     class="avatar-uploader"
@@ -95,6 +102,7 @@
     import { mapMutations } from "vuex";
     import $ from 'jquery'
 
+
     export default {
         title: 'My Profile',
         components: {
@@ -120,11 +128,11 @@
                 avatarOriginal:'',
                 timerstart:false,
                 form: {
-                    username: "",
+                    username: "Umaru",
                     firstname: "",
                     lastname: "",
-                    ofirstname:'',
-                    olastname:'',
+                    ofirstname:'U',
+                    olastname:'maru',
                     email: "",
                     oldemail:'',
                     imageRaw:'',
@@ -140,31 +148,43 @@
             };
         },
         created(){
-                this.username = localStorage.getItem("username");
-                // this.username = this.$store.state.username;
-                if (this.username !== null) {
-                    this.hasLogin = true;
-                    this.avatar = localStorage.getItem("avatar");
-                    this.firstname = localStorage.getItem("firstname");
-                }
-                else{
-                    this.$message.error("You should login first!");
-                    this.$router.push("/login");
-                }
+                // this.username = localStorage.getItem("username");
+                // // this.username = this.$store.state.username;
+                // if (this.username !== null) {
+                //     this.hasLogin = true;
+                //     this.avatar = localStorage.getItem("avatar");
+                //     this.firstname = localStorage.getItem("firstname");
+                // }
+                // else{
+                //     this.$message.error("You should login first!");
+                //     this.$router.push("/login");
+                // }
 
             this.form.imageUrl = localStorage.getItem('avatar');
-            this.$axios
-                .get('/user/information')
-                .then(response => {
-                        this.form.username = response.data.result.username,
-                        this.form.oldemail = response.data.result.email,
-                        this.form.olastname = response.data.result.lastname,
-                        this.form.ofirstname = response.data.result.firstname
-                        this.form.imageUrl = response.data.result.avatar
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
+            // this.$axios
+            //     .get('/user/information')
+            //     .then(response => {
+            //             this.form.username = response.data.result.username,
+            //             this.form.oldemail = response.data.result.email,
+            //             this.form.olastname = response.data.result.lastname,
+            //             this.form.ofirstname = response.data.result.firstname
+            //             this.form.imageUrl = response.data.result.avatar
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error)
+            //     })
+            let h = document.documentElement.clientHeight  || document.body.clientHeight;
+            this.vdaH = h - 147 + 'px';
+        },
+        mounted(){
+            $("#back-btn").hover(function(event) {
+                $(this).stop().animate({"margin-left": "10px"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+            });
+            $("#back-btn").mouseleave(function(event) {
+                $(this).stop().animate({"margin-left": "0"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+            });
         },
         methods: {
             ...mapMutations(["setFirstname", "setAvatar"]),
@@ -387,13 +407,14 @@
 
 <style scoped lang="scss">
     .title {
-        margin: 30px;
+        margin-top: 10%;
+        width:100%;
         text-align: center;
     }
     .form {
         padding: 30px;
-        border: 1px solid #ccc;
-        border-radius: 15px;
+        /*border: 1px solid #ccc;*/
+        /*border-radius: 15px;*/
     }
     .el-input.is-disabled .el-input__inner {
         background-color: #fff !important;
@@ -422,11 +443,11 @@
     .avatar-uploader-icon {
         border: 1px dashed #d9d9d9 !important;
         /*border-radius: 50%;*/
-        border-radius: 10%;
+        border-radius: 50%;
         font-size: 28px;
         color: #8c939d;
-        width: 178px;
-        height: 178px;
+        width: 200px;
+        height: 200px;
         line-height: 178px;
         text-align: center;
     }
@@ -446,5 +467,35 @@
     .huise{
         background-color: #dcdcdc !important;
         color: black;
+    }
+
+    .back-btn{
+        cursor: pointer;
+        position:relative;
+        /*border:1px solid #123123;*/
+    }
+    .back-btn .bottom-line{
+        position: absolute;
+        /*margin-left:40px;*/
+        width: 0;
+        height: 2px;
+        left:0;
+        bottom: -1px;
+        background-color: #3b4c73;
+    }
+    .form input{
+        border-radius:0;
+        padding: 5px;
+        /*width:400px;*/
+        height: 40px;
+        font-size: 15px;
+        /*border:none;*/
+        /*outline: none;*/
+        /*border-bottom: 1px solid #c3c3c3;*/
+    }
+    .img-size img{
+        width: 41.667%;
+        height: 100%;
+        /*position:absolute;*/
     }
 </style>

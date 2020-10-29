@@ -17,7 +17,7 @@
           <img src="../assets/reg-bg-2.png" alt="" >
         </div>
       </el-col>
-      <el-col :span="16"style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
+      <el-col :span="16" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
         <h1 class="title">Sign Up</h1>
         <el-form
           class="form"
