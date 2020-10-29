@@ -175,25 +175,6 @@
                         </template>
                     </el-table>
 
-                    <el-table
-                            :data="propInfo.bidHistory"
-                            stripe
-                            style="width: 100%">
-                        <el-table-column
-                                prop="time"
-                                label="Time"
-                                width="300px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="user"
-                                label="User"
-                                width="300px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="price"
-                                label="Bid Price">
-                        </el-table-column>
-                    </el-table>
                 </section>
 
             </el-col>
@@ -318,7 +299,7 @@
                     username:'Umarudive',
                     address: '2 gearin alley, Mascot, NSW',
                     enddate:'',
-                    status:'',
+                    status:'A',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
@@ -541,7 +522,7 @@
                 // let startTime = dayjs(startime);
                 // console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
                 // console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
-                let startTime = dayjs(new Date(2021, 1, 10, 10, 10));
+                let startTime = dayjs(new Date(2020, 1, 10, 10, 10));
                 let expiredTime = dayjs(new Date(2021, 2, 24, 17, 1));
                 let nowTime = dayjs();
 
@@ -656,8 +637,8 @@
                                 data.append('addNewCard', this.addNewCard);
                                 data.append('name',this.form.name);
                                 data.append('cardNumber', this.form.cardNumber);
-                                data.append('expiredDate', this.form.expiredDate);
-                                data.append('cvc', this.form.cvc);
+                                data.append('expiryDate', this.form.expiredDate);
+                                data.append('cvv', this.form.cvc);
                             }else{
                                 data.append('addNewCard', this.addNewCard);
                                 data.append('cardNumber', this.selectCard);
@@ -833,7 +814,8 @@
         /*}*/
     }
     .status-process {
-        background-color: #89c668;
+        background-image: url("../assets/banner-bg-green.png");
+        /*background-color: #89c668;*/
     }
     /*.status-process {*/
     /*    background-color: #e6a23c;*/
