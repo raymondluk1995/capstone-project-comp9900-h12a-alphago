@@ -7,7 +7,7 @@
       </div>
 
       <div class="back-btn">
-        <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="back">Back <i class="el-icon-refresh-right"></i></span>
+        <span  id="back-btn" style="padding:2px 5px;font-size:20px" @click="back">Back <i class="el-icon-refresh-right"></i></span>
         <div class="bottom-line"></div>
       </div>
     </Header>
@@ -17,7 +17,7 @@
           <img src="../assets/reg-bg-2.png" alt="" >
         </div>
       </el-col>
-      <el-col :span="16" >
+      <el-col :span="16"style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
         <h1 class="title">Sign Up</h1>
         <el-form
           class="form"
@@ -349,6 +349,10 @@ export default {
     background-color: #3b4c73;
   }
 
+.back-btn{
+  /*border:1px solid #111111;*/
+  width:150px;
+}
 
   .validate:active{
     background-color: #0F996B;

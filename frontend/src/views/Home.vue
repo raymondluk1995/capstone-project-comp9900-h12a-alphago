@@ -120,12 +120,14 @@
 import Header from '@/components/Header.vue'
 import { mapActions } from "vuex";
 import $ from 'jquery'
+import Canvas from '@/utils/canvas-nest.min.js'
 
 export default {
   name: 'Home',
   title: 'AlphaGo Home',
   components: {
-    Header
+    Header,
+    Canvas
   },
     data() {
       return {
@@ -222,8 +224,8 @@ export default {
       goto(name) {
         this.$router.push({name: name});
       },
-
     },
+
     mounted() {
       $("#back-btn").hover(function(event) {
         $(this).stop().animate({"margin-left": "10px"}, 300);
@@ -247,7 +249,7 @@ export default {
             $(this).stop().animate({"opacity": "0.9"}, 300);
         });
         $("#main").mouseleave(function(event) {
-            $(this).stop().animate({"opacity": "1"}, 300);
+            $(this).stop().animate({"opacity": "0.8"}, 300);
         });
     }
   }
@@ -259,7 +261,9 @@ export default {
   align-items: center;
 }
 .main{
-  height:600px;
+    height:600px;
+    opacity: 0.8;
+    z-index:-3;
   /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
   background-image: url("../assets/main-bg-3.png");
 }
@@ -331,6 +335,6 @@ export default {
             background-color: white !important;
             color: #143469 !important;
         }
-
 }
+
 </style>
