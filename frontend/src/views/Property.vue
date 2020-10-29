@@ -338,24 +338,25 @@
                 newPlacedBid:'',
                 tipError: false,
                 time: '',
-                cards:[{
-                    paymentId:'12',
-                    name:'Tom',
-                    cardNumber:'4321432143214321',
-                    cvc:'123',
-                },
-                    {
-                        paymentId:'11',
-                        name:'Bob',
-                        cardNumber:'1234123412341234',
-                        cvc:'012',
-                    },
-                    {
-                        paymentId:'15',
-                        name:'Tom',
-                        cardNumber:'4321432143214321',
-                        cvc:'123',
-                    }
+                cards:[
+                //     {
+                //     paymentId:'12',
+                //     name:'Tom',
+                //     cardNumber:'4321432143214321',
+                //     cvc:'123',
+                // },
+                //     {
+                //         paymentId:'11',
+                //         name:'Bob',
+                //         cardNumber:'1234123412341234',
+                //         cvc:'012',
+                //     },
+                //     {
+                //         paymentId:'15',
+                //         name:'Tom',
+                //         cardNumber:'4321432143214321',
+                //         cvc:'123',
+                //     }
                 ],
 
                 detail_tags:[],
@@ -376,47 +377,42 @@
                 propInfo: {
                     id: '',
                     aid:'',
-                    rab:'123',
+                    rab:'',
                     // endDate: new Date(2000, 10, 10, 10, 10),
-                    username:'Umarudive',
-                    address: '2 gearin alley, Mascot, NSW',
+                    username:'',
+                    address: '',
                     enddate:'',
-                    status:'A',
+                    status:'',
                     startdate:'',
                     avatar:'',
-                    bidderNum:'15',
-                    latestPrice:'1200000',
+                    bidderNum:'',
+                    latestPrice:'',
                     info: '',
-                    bedroomNum:3,
-                    bathroomNum:2,
-                    garageNum:2,
-                    phone: '0426884878',
-                    email:'taria8016@gmail.com',
-                    position: 'school,medicine,station',
-                    detail: 'bbq,pool',
-                    photos: ['https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1975278815,16844527&fm=26&gp=0.jpg',
-                        'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2843682015,2027679531&fm=26&gp=0.jpg'],
-                    description: 'A friendly reminder that your first progressive demo (A) takes place next week.\n' +
-                        'Note that you\'ll need to be present at such demos otherwise you cannot receive marks for these.\n' +
-                        '\n' +
-                        'For your retrospective, do try to conduct your retrospective meeting as soon as is possible after the demo.\n' +
-                        'You need to be present at your retrospective meetings to receive a mark for the retrospectives.',
+                    bedroomNum:'',
+                    bathroomNum:'',
+                    garageNum:'',
+                    phone: '',
+                    email:'',
+                    position: '',
+                    detail: '',
+                    photos: [],
+                    description: '',
                     bidHistory:[
-                        {
-                            time: 1603981349 ,
-                            user:'UMR',
-                            price: '123123',
-                        },
-                        {
-                            time: 1603981349,
-                            user:'ooo',
-                            price: '11100000',
-                        },
-                        {
-                            time: 1603981349,
-                            user:'TSF',
-                            price: '123123',
-                        },
+                        // {
+                        //     time: 1603981349 ,
+                        //     user:'UMR',
+                        //     price: '123123',
+                        // },
+                        // {
+                        //     time: 1603981349,
+                        //     user:'ooo',
+                        //     price: '11100000',
+                        // },
+                        // {
+                        //     time: 1603981349,
+                        //     user:'TSF',
+                        //     price: '123123',
+                        // },
 
 
 
@@ -424,7 +420,7 @@
                     firstname:'',
                     lastname:'',
                     highestPrice:'',
-                    minimumPrice:'1000000',
+                    minimumPrice:'',
                 },
                 form: {
                     name: '',
@@ -478,7 +474,6 @@
                 .catch(function (error) {
                     console.log(error)
                 });
-            // this.propInfo.bidHistory.push({time:new Date(2009,1,1,1,1,1), user:'aaa', price:'$123123123'});
 
             if(this.propInfo.rab !=='none'){
                 this.$axios
@@ -613,12 +608,12 @@
 
 
             countDown(time,startime) {
-                // let expiredTime = dayjs(time);
-                // let startTime = dayjs(startime);
+                let expiredTime = dayjs(time);
+                let startTime = dayjs(startime);
                 // console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
                 // console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
-                let startTime = dayjs(new Date(2019, 1, 10, 10, 10));
-                let expiredTime = dayjs(new Date(2021, 2, 24, 17, 1));
+                // let startTime = dayjs(new Date(2019, 1, 10, 10, 10));
+                // let expiredTime = dayjs(new Date(2021, 2, 24, 17, 1));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
