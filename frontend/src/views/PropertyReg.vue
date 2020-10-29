@@ -435,7 +435,11 @@ export default {
         }, {
             value: 'Studio',
             label: 'Studio'
-        }],
+        },
+           { value: 'Commercial',
+          label: 'Commercial'
+           }
+        ],
         pickerOptions: {
             // disabledDate(time) {
             //     return parseInt(time.getTime()) < Date.now()
