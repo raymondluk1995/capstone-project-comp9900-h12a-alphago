@@ -34,102 +34,71 @@
 <!--                    <h1>{{ propInfo.address }}</h1>-->
                     <el-row class="banner" :class="addStatusColor(propInfo.status)">
                         <h5 style="padding: 5px;">{{ time }}</h5>
+
                     </el-row>
                     <el-carousel :interval="5000" arrow="always" :height="cheight">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="propInfo.pid">
                             <img :src="pic"  width="100%" height="100%" alt=""/>
                         </el-carousel-item>
                     </el-carousel>
+                    <el-row>
+                    </el-row>
                 </section>
 
-                <el-row style="margin: 15px 50px 0 50px">
-                    <el-col :span="12">
-                        <h3>Latest Bid</h3>
-                        <div class="bid"> ${{ propInfo.latestPrice }}</div>
-<!--                        <h4  class="countdownTime">{{ time }}</h4>-->
+                <el-row type="flex" justify="center" style="margin: 15px 50px 0 50px">
+                    <el-col :span="12" >
+                        <div class="bid" v-show="propInfo.status=='R'">
+                            <span style="font-size:15px">Guide</span>
+                            ${{ propInfo.minimumPrice | numFormat }}
+                        </div>
+
+                        <div class="bid" v-show="propInfo.status=='A'">
+                            <span style="font-size:15px">Latest Bid</span>
+                            ${{ propInfo.latestPrice | numFormat }}
+                        </div>
+                    </el-col>
+                        <el-col :span="12">
+                        <div class="bidder">
+                            {{ propInfo.bidderNum }}  <span style="font-size:15px">Bidders</span>
+                        </div>
                     </el-col>
                 </el-row>
 
-                <el-dialog type="flex" title="Payment" :visible.sync="bidderFlag" style="position:absolute;left:25%; right:25%;">
-                    <template>
-                        <el-row>
-                        <el-radio-group v-model="selectCard">
-                            <el-radio :label="item.cardNumber" :key="item.paymentId" :disabled="addNewCard" v-for="item in cards" style="display:block; margin:20px 50px;">{{item}}</el-radio>
-                        </el-radio-group>
-                        </el-row>
-
-                        <el-row style="margin-left:10%">
-                        <el-link v-show="!addNewCard" icon="el-icon-right" type="primary" @click="addCard">Add New Card</el-link>
-                        </el-row>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button type="primary" @click="submitCard">Submit</el-button>
-                        </div>
-                    </template>
-
-                    <template v-show="addNewCard">
-                    <el-form
-                            class="form"
-                            ref="form"
-                            :model="form"
-                            :rules="rules"
-                            v-show="addNewCard"
-                    >
-                        <el-form-item prop="name">
-                            <el-input v-model="form.name" placeholder="Name" clearable></el-input>
-                        </el-form-item>
-                        <el-form-item prop="cardNumber">
-                            <el-input v-model="form.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>
-                        </el-form-item>
-                        <el-row>
-                        <el-col :span=12>
-                        <el-form-item prop="expiredDate">
-                            <el-input v-model="form.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>
-                        </el-form-item>
-                        </el-col >
-                            <el-col :span=12>
-                        <el-form-item prop="cvc" >
-                            <el-input v-model="form.cvc" placeholder="CVC" maxlength="3"></el-input>
-                        </el-form-item>
-                        </el-col>
-                        </el-row>
-                        <el-row>
-                        <el-link  icon="el-icon-top" type="primary" @click="notAdd">Cancel</el-link>
-                        </el-row>
-                    </el-form>
-
-<!--                    <div slot="footer" class="dialog-footer">-->
-<!--                        <el-button @click="backCard">Back</el-button>-->
-<!--                        <el-button type="primary" @click="submitCard">Add</el-button>-->
-<!--                    </div>-->
-                    </template>
-                </el-dialog>
 
                 <section style="margin: 15px 50px 0 50px">
                     <el-row>
                     <el-col >
-                    <h3>Details</h3>
-                    <el-row type="flex" style="margin-bottom: 10px;">
-                            <i class="el-icon-toilet-paper"> Bathroom Number: <span> {{ propInfo.bathroomNum}} </span></i>
+<!--                    <h3>Details</h3>-->
+                        <h3></h3>
+                    <el-row type="flex" justify="left"  style="margin-bottom: 10px">
+                        <el-col :span="4">
+                        <div style="font-size: 20px">
+                            <i class="el-icon-toilet-paper"><span> {{ propInfo.bathroomNum}} </span> Baths</i>
+                        </div>
+                    </el-col>
+                        <el-col :span="4">
+                        <div style="font-size: 20px">
+                            <i class="el-icon-house"><span> {{ propInfo.bedroomNum}} </span> Beds</i>
+                        </div>
+                        </el-col>
+
+                    <el-col :span="4">
+                        <div style="font-size: 20px">
+                            <i class="el-icon-truck"><span> {{ propInfo.garageNum}} </span> Garages</i>
+                        </div>
+                    </el-col>
                     </el-row>
 
-                    <el-row type="flex" style="margin-bottom: 10px;">
-                            <i class="el-icon-house"> Bedroom Number: <span> {{ propInfo.bedroomNum}} </span></i>
-                    </el-row>
-
-                    <el-row type="flex" style="margin-bottom: 10px;">
-                            <i class="el-icon-truck"> Garage Number: <span> {{ propInfo.garageNum}} </span></i>
-                    </el-row>
-
-                        <el-row type="flex" style="margin-bottom: 10px;">
+                        <el-row type="flex" style="margin: 20px 0;">
                     <p>{{ propInfo.description }}</p>
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in propInfo.position.split(',')" effect="plain" :key="propInfo.position">{{ tag }}</el-tag>
+                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain">{{ tag }}</el-tag>
                         </el-row>
 
-                        <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="propInfo.detail">{{ tag }}</el-tag>
+                        <el-row type="flex" style="margin: 20px 0;">
+                        <el-tag v-for="tag in propInfo.detail.split(',')">{{ tag }}</el-tag>
                         </el-row>
                     </el-col>
                     </el-row>
@@ -145,8 +114,7 @@
                                         style="height: 300px"
                                 >
                                     <GmapMarker
-                                            :key="m"
-                                            v-for="(m, index) in markers"
+                                            v-for="m in markers"
                                             :position="m.position"
                                             :clickable="true"
                                             :draggable="true"
@@ -158,18 +126,23 @@
                 </section>
 
 
-                <section style="margin: 15px 50px 0 50px;height:500px;border:1px solid #123123">
+                <section style="margin: 15px 50px 0 50px;height:400px;">
                     <h3>Bid History</h3>
 
+                    <el-table :data="propInfo.bidHistory"
+                              :max-height="300"
+                              border
+                              stripe
+                              tooltip-effect="light"
+                              style="overflow-y: scroll; "
+                    >
 
-                    <el-table :data="propInfo.bidHistory" :max-height="maxHeight" border stripe tooltip-effect="light"
-                              　　　　　　@selection-change="handleSelectionChange">
-                        <slot name="table_oper"/>
                         <template v-for="(item, index) in columns">
                             <el-table-column
                                     :key="index"
                                     :prop="item.prop"
                                     :label="item.label"
+                                    :formatter="item.formatter"
                             >
                             </el-table-column>
                         </template>
@@ -205,20 +178,20 @@
                     </el-row>
                 </div>
 
-                <el-button type="" :disabled="true" style="margin-top: 10px;color:#173b77;font-size: 20px;background-color:#a0b9df; width:100%"
-                >{{ propInfo.bidderNum }} Bidders</el-button>
+<!--                <el-button type="" :disabled="true" style="margin-top: 10px;color:#173b77;font-size: 20px;background-color:#a0b9df; width:100%"-->
+<!--                >{{ propInfo.bidderNum }} Bidders</el-button>-->
 
                 <template v-if="username !== propInfo.username">
-                <div v-if="this.rab ==='none'">
+                <div v-if="this.propInfo.rab !=='none'">
 <!--                    <h3>Place new bid</h3>-->
                     <div class="new-bid-wrap">
                         <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
                             <i slot="suffix" class="input-slot">{{newBid | numFormat }} A$</i>
                         </el-input>
-                        <el-button class='wrap-button' type="primary" icon="el-icon-plus" circle @click="addNewBid"></el-button>
+                        <el-button class='wrap-button' type="" icon="el-icon-plus" circle @click="addNewBid"></el-button>
                     </div>
 
-                    <p>Your Current Bid is {{ newBidTip | numFormat }}</p>
+                    <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.currentBid | numFormat }}</p>
                 </div>
 
                 <div v-else style="margin-top: 2px">
@@ -226,6 +199,7 @@
                                class="btn"
                                @click="Bidreg"
                                icon="el-icon-right"
+                               style="font-size:20px;"
                     >Register to Bid</el-button>
                 </div>
                 </template>
@@ -236,6 +210,93 @@
                 </template>
             </el-col>
         </el-row>
+
+        <el-dialog
+                class="dialog"
+                type="flex"
+                title="Payment"
+                :visible.sync="bidderFlag"
+                style="position:absolute;left:25%; right:25%;"
+                >
+            <template>
+                <el-row>
+                    <el-row style="margin:20px 50px 0 50px;">
+                    <span>Select your card:</span>
+                    </el-row>
+
+                    <el-row style="margin:20px 10px 10px 15%;width:70%;">
+                    <el-radio-group v-model="selectCard" >
+                        <el-radio
+                                class="radio"
+                                :label="item.paymentId"
+                                :key="item.paymentId"
+                                :disabled="addNewCard"
+                                :value="item.paymentId"
+                                v-for="item in cards"
+                                border
+                        >
+                            {{showCard(item.cardNumber)}}
+                        </el-radio>
+                    </el-radio-group>
+                    </el-row>
+
+                </el-row>
+
+                <el-row>
+                    <div class="btns" style="margin-left: 20px">
+                        <span  v-show="!addNewCard" id="add-btn" style="padding:2px 5px;" @click="addCard"><i class="el-icon-bottom"></i> Add New Card</span>
+                    </div>
+<!--                    <el-link v-show="!addNewCard" icon="el-icon-right" type="primary" @click="addCard">Add New Card</el-link>-->
+                </el-row>
+
+            </template>
+
+            <template v-show="addNewCard">
+                <el-row v-show="addNewCard" style="margin:20px 50px 0 50px;">
+                    <span>Add your new card:</span>
+                </el-row>
+                <el-form
+                        class="form"
+                        ref="form"
+                        :model="form"
+                        :rules="rules"
+                        v-show="addNewCard"
+                >
+                    <el-form-item prop="name">
+                        <el-input v-model="form.name" placeholder="Name" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item prop="cardNumber">
+                        <el-input v-model="form.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>
+                    </el-form-item>
+                    <el-row>
+                        <el-col :span=12>
+                            <el-form-item prop="expiredDate">
+                                <el-input v-model="form.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>
+                            </el-form-item>
+                        </el-col >
+                        <el-col :span=12>
+                            <el-form-item prop="cvc" >
+                                <el-input v-model="form.cvc" placeholder="CVC" maxlength="3"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <el-row v-show="addNewCard">
+                    <div class="btns"  style="margin-left: 20px">
+                        <span id="cancel-btn" style="padding:2px 5px;" @click="notAdd"><i class="el-icon-right"></i> Cancel</span>
+                    </div>
+
+                </el-row>
+            </template>
+
+            <el-row >
+                <div style="margin:50px 20px 30px 20px;float:right">
+                    <div class="btns">
+                        <span id="submit-btn" style="padding:2px 5px;" @click="submitCard"><i class="el-icon-right"></i> Submit</span>
+                    </div>
+                </div>
+            </el-row>
+        </el-dialog>
     </div>
 </template>
 
@@ -244,6 +305,7 @@
     import { mapActions } from "vuex";
     import dayjs from "dayjs";
     import $ from 'jquery'
+    import numFormat from "../utils/numFormat";
 
     var customParseFormat = require("dayjs/plugin/customParseFormat");
     dayjs.extend(customParseFormat);
@@ -276,7 +338,26 @@
                 newPlacedBid:'',
                 tipError: false,
                 time: '',
-                cards:[],
+                cards:[{
+                    paymentId:'12',
+                    name:'Tom',
+                    cardNumber:'4321432143214321',
+                    cvc:'123',
+                },
+                    {
+                        paymentId:'11',
+                        name:'Bob',
+                        cardNumber:'1234123412341234',
+                        cvc:'012',
+                    },
+                    {
+                        paymentId:'15',
+                        name:'Tom',
+                        cardNumber:'4321432143214321',
+                        cvc:'123',
+                    }
+                ],
+
                 detail_tags:[],
                 position_tags:[],
                 selectCard:'',
@@ -288,13 +369,14 @@
                 // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
                 markers:[{position:{},}],
                 columns: [
-                    {prop: 'time', label: 'Time',width: '300',formatter: this.showTime},
-                    {prop: 'user', label: 'User', width: '300',formatter: this.formatter},
-                    {prop: 'price', label: 'Current Bid'}
+                    {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table},
+                    {prop: 'user', label: 'User', width: '300'},
+                    {prop: 'price', label: 'Current Bid',formatter: this.formatPrice}
                 ],
                 propInfo: {
                     id: '',
                     aid:'',
+                    rab:'123',
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'Umarudive',
                     address: '2 gearin alley, Mascot, NSW',
@@ -302,37 +384,47 @@
                     status:'A',
                     startdate:'',
                     avatar:'',
-                    bidderNum:'',
-                    latestPrice:'',
+                    bidderNum:'15',
+                    latestPrice:'1200000',
                     info: '',
+                    bedroomNum:3,
+                    bathroomNum:2,
+                    garageNum:2,
                     phone: '0426884878',
                     email:'taria8016@gmail.com',
                     position: 'school,medicine,station',
                     detail: 'bbq,pool',
-                    latestBid: '',
-                    photos: ['',''],
-                    description: '',
+                    photos: ['https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1975278815,16844527&fm=26&gp=0.jpg',
+                        'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2843682015,2027679531&fm=26&gp=0.jpg'],
+                    description: 'A friendly reminder that your first progressive demo (A) takes place next week.\n' +
+                        'Note that you\'ll need to be present at such demos otherwise you cannot receive marks for these.\n' +
+                        '\n' +
+                        'For your retrospective, do try to conduct your retrospective meeting as soon as is possible after the demo.\n' +
+                        'You need to be present at your retrospective meetings to receive a mark for the retrospectives.',
                     bidHistory:[
                         {
-                            time: this.showTime(new Date(2020, 8, 10, 10, 10)) ,
+                            time: 1603981349 ,
                             user:'UMR',
-                            price: '$123123',
+                            price: '123123',
                         },
                         {
-                            time: this.showTime(new Date(2020, 8, 10, 10, 10)),
+                            time: 1603981349,
                             user:'ooo',
-                            price: '$123123',
+                            price: '11100000',
                         },
                         {
-                            time: this.showTime(new Date(2020, 8, 10, 10, 10)),
+                            time: 1603981349,
                             user:'TSF',
-                            price: '$123123',
+                            price: '123123',
                         },
+
+
+
                     ],
                     firstname:'',
                     lastname:'',
                     highestPrice:'',
-                    minimumPrice:'',
+                    minimumPrice:'1000000',
                 },
                 form: {
                     name: '',
@@ -415,20 +507,20 @@
         },
 
         computed: {
-            newBidTip() {
-                let tip = "";
-                if (!this.newPlacedBid && !this.currentBid) {
-                    tip = "0";
-                    this.tipError = false;
-                } else if(!this.newPlacedBid && this.currentBid){
-                    tip = this.currentBid;
-                    this.tipError = false;
-                }else{
-                    tip = this.newPlacedBid;
-                    this.tipError = false;
-                }
-                return tip;
-            },
+            // newBidTip() {
+            //     let tip = "";
+            //     if (!this.newPlacedBid && !this.currentBid) {
+            //         tip = "0";
+            //         this.tipError = false;
+            //     } else if(!this.newPlacedBid && this.currentBid){
+            //         tip = this.currentBid;
+            //         this.tipError = false;
+            //     }else{
+            //         tip = this.newPlacedBid;
+            //         this.tipError = false;
+            //     }
+            //     return tip;
+            // },
         },
 
         mounted() {
@@ -458,6 +550,8 @@
                 $(this).stop().animate({"margin-left": "0"}, 300);
                 $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
             });
+
+
 
         },
 
@@ -517,12 +611,13 @@
                 }
             },
 
+
             countDown(time,startime) {
                 // let expiredTime = dayjs(time);
                 // let startTime = dayjs(startime);
                 // console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
                 // console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
-                let startTime = dayjs(new Date(2020, 1, 10, 10, 10));
+                let startTime = dayjs(new Date(2019, 1, 10, 10, 10));
                 let expiredTime = dayjs(new Date(2021, 2, 24, 17, 1));
                 let nowTime = dayjs();
 
@@ -551,10 +646,42 @@
                     }
 
                 }
+
+                if (diff2 > 0) {
+                    this.timeFlag = true;
+                    let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
+                    this.time = `Will start at ${ this.showTime2(st) }`;
+                }
+                else{
+                    if(diff>0){
+                        this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
+                    }else{
+                        this.timeFlag = false;
+                        console.log('over');
+                        this.time = `This auction is Over!`;
+                    }
+
+                }
             },
+
             showTime(time){
+                console.log(time)
                 let st = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
                 return `${ st }`;
+            },
+
+            showTime_table(row,column){
+                console.log(row.time)
+                let st = dayjs(row.time).format("YYYY-MM-DD HH:mm:ss");
+                return `${ st }`;
+            },
+
+
+
+            formatPrice(row,coloum) {
+                // console.log(number)
+                let temp =  row.price.toString().replace(/(\d)(?=(?:\d{3})+$)/g,'$1,')
+                return `$ ${ temp }`;
             },
 
 
@@ -576,17 +703,18 @@
                     .then(() => {
                         let data = new FormData();
                         data.append('pid', this.id);
-                        data.append('newBid', this.newBid);
+                        data.append('currentBid', this.newBid);
                         this.$axios.post('/property/newbid', data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
-                                        this.currentBid = this.newBid;
-                                        this.newPlacedBid = this.newBid;
+                                        // this.currentBid = this.newBid;
+                                        // this.newPlacedBid = this.newBid;
                                         this.newBid='';
                                         this.$message({
                                             type: "success",
                                             message: "Place new bid successful!", })
+                                        location.reload();
                                     }else if(response.data.code === 400){
                                         this.$message.error(response.msg);
                                     }else{
@@ -629,30 +757,28 @@
             },
 
             submitCard(){
-                if(this.addNewCard){
+                if(this.addNewCard) {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
                             let data = new FormData();
-                            if(this.addNewCard){
-                                data.append('addNewCard', this.addNewCard);
-                                data.append('name',this.form.name);
-                                data.append('cardNumber', this.form.cardNumber);
-                                data.append('expiryDate', this.form.expiredDate);
-                                data.append('cvv', this.form.cvc);
-                            }else{
-                                data.append('addNewCard', this.addNewCard);
-                                data.append('cardNumber', this.selectCard);
-                            }
+
+                            data.append('name', this.form.name);
+
+                            let card = this.form.cardNumber.replace(/\s+/g, "");
+                            data.append('cardNumber', card);
+
+                            data.append('expiryDate', this.form.expiredDate);
+                            data.append('cvv', this.form.cvc);
 
                             this.$axios.post('/payment/add', data)
                                 .then((response) => {
                                     if (response.status >= 200 && response.status < 300) {
-                                        if(response.data.code === 200){
+                                        if (response.data.code === 200) {
                                             this.$message.success("Register successful!");
                                         }
-                                    } else if(response.data.code === 400){
+                                    } else if (response.data.code === 400) {
                                         this.$message.error(response.msg);
-                                    }else{
+                                    } else {
                                         console.log(response.msg);
                                     }
                                 })
@@ -664,8 +790,31 @@
                             return false;
                         }
                     });
+                    this.addNewCard = false;
+
                 }
-                this.addNewCard = false;
+                else{
+                    let data = new FormData();
+                    data.append('paymentId', this.selectCard);
+
+                    this.$axios.post('/payment/old', data)
+                        .then((response) => {
+                            if (response.status >= 200 && response.status < 300) {
+                                if (response.data.code === 200) {
+                                    this.$message.success("Register successful!");
+                                }
+                            } else if (response.data.code === 400) {
+                                this.$message.error(response.msg);
+                            } else {
+                                console.log(response.msg);
+                            }
+                        })
+                        .catch((res) => {
+                            console.log('error', res);
+                            this.$message.error('Register Error');
+                        });
+                }
+                this.bidderFlag = false;
             },
 
             goto(name) {
@@ -693,10 +842,12 @@
             },
             websocketonmessage(e){ //数据接收
                 let res = JSON.parse(e.data);
-                this.currentBid = res.currentBid;
-                let tabel = [res.user, res.userbid, res.bidtime];
+                this.currentBid = res.bid;
+
+                let Time = showTime(res.time);
+                this.propInfo.bidHistory.push({time:Time, user:res.user, price:res.bid});
+
                 this.notice(res.user);
-                this.history.push(table);
 
 
             },
@@ -714,6 +865,11 @@
                     message: h('i', { style: 'color: teal'},  `User ${user} becomes the winner!`)
                 });
             },
+            showCard(card){
+                var reg = /^(\d{4})\d+(\d{4})$/;
+                return card.replace(reg, "$1 **** **** $2");
+            }
+
         },
         destroyed() {
             this.websock.close() //离开路由之后断开websocket连接
@@ -721,10 +877,10 @@
     };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
     .form{
         margin-left:10%;
-        margin-top:20px;
+        /*margin-top:20px;*/
         width:80%;
     }
     .property{
@@ -758,14 +914,24 @@
         /*box-shadow: 2px 1px 5px 4px #d5dbea;*/
     }
     .bid {
-        width :80%;
-        padding: 10px;
+        padding: 15px;
         text-align: center;
         font-size: 25px;
         font-weight: bold;
         color: #fff;
-        background-color: #133264;
-        border-radius: 5px;
+        background-color: rgba(24, 64, 128, 0.82);
+        /*border-radius: 5px;*/
+        /*border-left: 15px solid #133264;*/
+    }
+    .bidder{
+        padding: 15px;
+        text-align: center;
+        font-size: 25px;
+        font-weight: bold;
+        color: #184080;
+        background-color: rgba(34, 91, 182, 0.25);
+        /*border-radius: 5px;*/
+        /*border-left: 15px solid #133264;*/
     }
     .countdownTime{
         width :80%;
@@ -822,7 +988,8 @@
     /*}*/
 
     .status-not-start {
-        background-color: #f56c6c;
+        background-image: url("../assets/banner-bg-red.png");
+        /*background-color: #f56c6c;*/
     }
     .back-btn{
         cursor: pointer;
@@ -838,6 +1005,53 @@
         left:0;
         bottom: -1px;
         background-color: #3b4c73;
+    }
+
+    .el-tag{
+        padding: 0 10px !important;
+        height:30px !important;
+        border-radius: 0 !important;
+        border-left:2px solid #133264 !important;
+        border-bottom:0;
+        border-right:0;
+        border-top:0;
+        color: rgba(24, 64, 128, 0.51) !important;
+        font-size: 18px !important;
+    }
+
+    .el-table__header{
+        font-size: 20px !important;
+    }
+    .el-dialog__header{
+        padding:20px 20px 10px;
+        background-color: #2f4764;
+    }
+    .el-dialog__title{
+        color:white !important;
+    }
+    .table-header{
+        background-color:#4f6995;
+        color:white
+    }
+
+    .btns{
+        cursor: pointer;
+        position:relative;
+        width:150px;
+        font-size:15px;
+        /*border:1px solid #123123;*/
+        &:hover{
+            transform:translateX(10px);
+            transition-duration: 0.5s;
+            border-left:2px solid #184080;
+
+        }
+    }
+
+
+
+    .el-radio{
+        margin-left:0 !important;
     }
 
 </style>
