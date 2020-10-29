@@ -412,9 +412,9 @@
                 });
             // this.propInfo.bidHistory.push({time:new Date(2009,1,1,1,1,1), user:'aaa', price:'$123123123'});
 
-            if(this.rab !=='none'){
+            if(this.propInfo.rab !=='none'){
                 this.$axios
-                    .get('/payment/get/')
+                    .get('/payment/add/')
                     .then(response => {
                         this.cards = response.data.result;
                     })
