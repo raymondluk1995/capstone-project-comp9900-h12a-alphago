@@ -770,6 +770,7 @@
                                     if (response.status >= 200 && response.status < 300) {
                                         if (response.data.code === 200) {
                                             this.$message.success("Register successful!");
+                                            location.reload();
                                         }
                                     } else if (response.data.code === 400) {
                                         this.$message.error(response.msg);
@@ -797,6 +798,7 @@
                             if (response.status >= 200 && response.status < 300) {
                                 if (response.data.code === 200) {
                                     this.$message.success("Register successful!");
+                                    location.reload();
                                 }
                             } else if (response.data.code === 400) {
                                 this.$message.error(response.msg);
