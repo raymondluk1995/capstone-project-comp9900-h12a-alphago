@@ -10,6 +10,7 @@ import Profile from "../views/Profile";
 import Auction from "../views/Auction";
 import Property from "../views/Property";
 import PropertyMag from "../views/PropertyMag";
+import AuctionHis from "../views/AuctionHis";
 
 Vue.use(VueRouter);
 
@@ -66,7 +67,14 @@ const routes = [
     name: 'propmag',
     component: PropertyMag
     ,
+  },
+  {
+    path: '/auchis',
+    name: 'auchis',
+    component: AuctionHis
+    ,
   }
+
 ];
 
 const router = new VueRouter({

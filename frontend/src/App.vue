@@ -13,28 +13,25 @@
       Footer,
     },
     mounted(){
+      //动态设置内容高度 让footer始终居底   header+footer的高度是100
+      // this.Height = document.documentElement.clientHeight - 100;
+
+
       var path = this.$route.path;
       if(path!="/alpha"){
         var canvas = document.getElementById("c_n3");
         canvas.style.display = "none";
         // console.log("canvas concealed");
       }
-
-
-
-
-      //动态设置内容高度 让footer始终居底   header+footer的高度是100
-      // this.Height = document.documentElement.clientHeight - 100;
       this.Height = document.documentElement.clientHeight - 44;
       //监听浏览器窗口变化　
       // window.onresize = ()=> {this.Height = document.documentElement.clientHeight -100}
-      window.onresize = ()=> {this.Height = document.documentElement.clientHeight -44};
+      window.onresize = ()=> {this.Height = document.documentElement.clientHeight -44}
     },
     data() {
       return {
-        Height: 0,
-        title: document.title,
-      };    
+        Height: 0
+      };
     },
     watch:{
       $route:{

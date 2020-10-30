@@ -107,20 +107,35 @@
 
       <el-row type="flex" justify="center" class="search">
         <el-col :span="15">
-          <el-input
-            class="input"
-            placeholder="Search by address/suburb/others"
-            prefix-icon="el-icon-search"
-            @keyup.enter.native="toSearch"
-            v-model="serachKey"
-          >
-            <!--          <el-button-->
-            <!--                  slot="append"-->
-            <!--                  icon="el-icon-search"-->
-            <!--                  @click="toSearch"-->
-            <!--          ></el-button>-->
-          </el-input></el-col
-        >
+          <div class="input">
+            <el-col :span="20">
+              <vue-google-autocomplete
+                ref="address"
+                id="map"
+                classname="form-control"
+                placeholder="Please search suburb name or postcode here"
+                v-on:placechanged="getAddressData"
+                country="au"
+                types="(cities)"
+              >
+              </vue-google-autocomplete>
+            </el-col>
+
+            <el-col style="margin-left: 2px" :span="2" id="search-btn">
+              <el-button
+                style="
+                  height: 38px;
+                  color: white;
+                  background-color: rgb(20, 60, 127);
+                "
+                icon="el-icon-search"
+                @click="toSearch"
+              >
+                Search
+              </el-button>
+            </el-col>
+          </div>
+        </el-col>
       </el-row>
       <el-row type="flex" justify="center">
         <el-col :span="6"> </el-col>
@@ -137,13 +152,16 @@
 import Header from "@/components/Header.vue";
 import { mapActions } from "vuex";
 import $ from "jquery";
-import Canvas from '@/utils/canvas-nest.min.js'
+import Canvas from "@/utils/canvas-nest.min.js";
+
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 
 export default {
   name: "Home",
   title: "AlphaGo Home",
   components: {
     Header,
+    VueGoogleAutocomplete,
     // Canvas
   },
   data() {
@@ -152,7 +170,7 @@ export default {
       bathNum: 1,
       bedroomNum: 1,
       carNum: 1,
-      serachKey: "",
+      address: "",
 
       // 浏览器宽度
       screenWidth: 0,
@@ -199,6 +217,10 @@ export default {
     getvalue(index, item) {
       this.value = item.name;
       this.show = false;
+    },
+
+    getAddressData: function (addressData, placeResultData, id) {
+      this.address = addressData;
     },
 
     handleCommand(command) {
@@ -265,6 +287,7 @@ export default {
     $("#main").mouseleave(function (event) {
       $(this).stop().animate({ opacity: "0.8" }, 300);
     });
+    
   },
 };
 </script>
@@ -280,6 +303,22 @@ export default {
   z-index: -3;
   /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
   background-image: url("../assets/main-bg-3.png");
+}
+
+@media only screen and (max-width: 1300px) and (min-width: 1100px) {
+  .main {
+    height: 600px;
+    opacity: 0.8;
+    z-index: -3;
+    /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
+    background-image: url("../assets/main-bg-3.png");
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .main {
+    background-image: url("../assets/main-bg_copy.png");
+  }
 }
 
 .el-input--prefix .el-input__inner {
@@ -305,6 +344,7 @@ export default {
     margin-right: 10px;
   }
 }
+
 .el-carousel__item h3 {
   color: #475669;
   font-size: 18px;
