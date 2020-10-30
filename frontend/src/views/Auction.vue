@@ -53,7 +53,7 @@
                                     </el-row>
 
                                     <el-row v-else style="height:40px;background-color: #93d67f;margin: 10px 2% 0 2%;padding:10px;">
-                                        <h5 >Stop At: {{ showTime(item.enddate) }}</h5>
+                                        <h5 >Auction Ends At: {{ showTime(item.enddate) }}</h5>
                                     </el-row>
 
 
@@ -249,7 +249,6 @@
                     }
 
                 ],
-                propList:[],
                 options: [
                     {
                         value: "all",
@@ -295,6 +294,11 @@
             //     this.$message.error("You should login first!");
             //     this.$router.push("/login");
             // }
+
+            this.propList = this.originPropertyList;
+
+
+
             this.$axios
                 .get('/auction/list/now')
                 .then(response => {
