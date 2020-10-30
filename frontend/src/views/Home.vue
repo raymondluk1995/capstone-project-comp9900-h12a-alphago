@@ -123,7 +123,7 @@
             ref="address"
             id="map"
             classname="form-control"
-            placeholder="Please type your address"
+            placeholder="Please search postcode or suburb name"
             v-on:placechanged="getAddressData"
             country="au"
             types="(cities)"
