@@ -114,6 +114,7 @@
                                             :position="m.position"
                                             :clickable="true"
                                             :draggable="true"
+                                            :key="m"
                                     />
                                 </GmapMap>
                             </div>
