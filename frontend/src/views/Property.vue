@@ -698,7 +698,7 @@
                 })
                     .then(() => {
                         let data = new FormData();
-                        data.append('rabId', this.rabId);
+                        data.append('rabId', this.propInfo.rab);
                         data.append('bidPrice', this.newBid);
                         this.$axios.post('/bid', data)
                             .then((response) => {
@@ -710,7 +710,7 @@
                                         this.$message({
                                             type: "success",
                                             message: "Place new bid successful!", })
-                                        location.reload();
+                                        // location.reload();
                                     }else if(response.data.code === 400){
                                         this.$message.error(response.msg);
                                     }else{
