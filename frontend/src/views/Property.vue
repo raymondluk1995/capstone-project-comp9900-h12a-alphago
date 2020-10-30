@@ -89,11 +89,11 @@
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain">{{ tag }}</el-tag>
+                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>
                         </el-row>
 
                         <el-row type="flex" style="margin: 20px 0;">
-                        <el-tag v-for="tag in propInfo.detail.split(',')">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="tag.id">{{ tag }}</el-tag>
                         </el-row>
                     </el-col>
                     </el-row>
@@ -110,6 +110,7 @@
                                 >
                                     <GmapMarker
                                             v-for="m in markers"
+                                            :key="m"
                                             :position="m.position"
                                             :clickable="true"
                                             :draggable="true"
@@ -607,12 +608,12 @@
 
 
             countDown(time,startime) {
-                let expiredTime = dayjs(time);
-                let startTime = dayjs(startime);
+                // let expiredTime = dayjs(time);
+                // let startTime = dayjs(startime);
                 // console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
                 // console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
-                // let startTime = dayjs(16400000);
-                // let expiredTime = dayjs(new Date(2021, 2, 24, 17, 1));04102
+                // let startTime = dayjs(new Date(2020, 11, 24, 17, 1));
+                // let expiredTime = dayjs(new Date(2020, 11, 31, 17, 1));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
@@ -627,7 +628,8 @@
 
                 // console.log(this.showTime(startTime))
 
-                if (diff2 > 0) {
+                // if (diff2 > 0) {
+                if(this.propInfo.status === 'R'){
                     this.timeFlag = true;
                     let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
                     this.time = `Will start at ${ this.showTime2(st) }`;
@@ -640,8 +642,9 @@
                         // console.log('over');
                         this.time = `This auction is Over!`;
                     }
-
                 }
+
+
             },
 
             showTime(time){
