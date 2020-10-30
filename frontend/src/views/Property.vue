@@ -178,7 +178,7 @@
 
                 <template v-if="username !== propInfo.username">
                     <div v-if="this.username !== null">
-                    <div v-if="this.propInfo.rabId !== 'none'">
+                    <div v-if="this.propInfo.rab !== null">
     <!--                    <h3>Place new bid</h3>-->
                         <div class="new-bid-wrap">
                             <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
