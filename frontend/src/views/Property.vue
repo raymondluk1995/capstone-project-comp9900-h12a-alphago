@@ -89,11 +89,11 @@
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain">{{ tag }}</el-tag>
+                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>
                         </el-row>
 
                         <el-row type="flex" style="margin: 20px 0;">
-                        <el-tag v-for="tag in propInfo.detail.split(',')">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="tag.id">{{ tag }}</el-tag>
                         </el-row>
                     </el-col>
                     </el-row>
@@ -110,6 +110,7 @@
                                 >
                                     <GmapMarker
                                             v-for="m in markers"
+                                            :key="m"
                                             :position="m.position"
                                             :clickable="true"
                                             :draggable="true"
@@ -124,7 +125,7 @@
                 <section style="margin: 15px 50px 0 50px;height:400px;">
                     <h3>Bid History</h3>
 
-                    <el-table :data="propInfo.bidHistory"
+                    <el-table :data="propInfo.history"
                               :max-height="300"
                               border
                               stripe
@@ -150,7 +151,7 @@
             <el-col :span="5">
                 <div class="info">
                     <el-row type="flex" justify="center" style="background-color: #4f6995;">
-                        <h3 style="color:#f3f3f3">Owner</h3>
+                        <h3 style="color:#f3f3f3">Seller</h3>
                     </el-row>
                 <el-row type="flex" justify="center">
                     <el-avatar :size="70" :src="propInfo.avatar" style="margin-top:50px"></el-avatar>
@@ -175,33 +176,38 @@
 
 <!--                <el-button type="" :disabled="true" style="margin-top: 10px;color:#173b77;font-size: 20px;background-color:#a0b9df; width:100%"-->
 <!--                >{{ propInfo.bidderNum }} Bidders</el-button>-->
-
+                <template v-if="this.username !== null">
                 <template v-if="username !== propInfo.username">
-                <div v-if="this.propInfo.rabId !== 'none'">
-<!--                    <h3>Place new bid</h3>-->
-                    <div class="new-bid-wrap">
-                        <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
-                            <i slot="suffix" class="input-slot">{{newBid | numFormat }} A$</i>
-                        </el-input>
-                        <el-button class='wrap-button' type="" icon="el-icon-plus" circle @click="addNewBid"></el-button>
+                    <div v-if="this.propInfo.rab !== null">
+    <!--                    <h3>Place new bid</h3>-->
+                        <div class="new-bid-wrap">
+                            <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
+                                <i slot="suffix" class="input-slot">{{newBid | numFormat }} A$</i>
+                            </el-input>
+                            <el-button class='wrap-button' type="" icon="el-icon-plus" circle @click="addNewBid"></el-button>
+                        </div>
+
+                        <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
                     </div>
 
-                    <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
-                </div>
-
-                <div v-else style="margin-top: 2px">
-                    <el-button type=""
-                               class="btn"
-                               @click="Bidreg"
-                               icon="el-icon-right"
-                               style="font-size:20px;"
-                    >Register as RAB</el-button>
-                </div>
-                </template>
+                    <div v-else style="margin-top: 2px">
+                        <el-button type=""
+                                   class="btn"
+                                   @click="Bidreg"
+                                   icon="el-icon-right"
+                                   style="font-size:20px;"
+                        >Register as RAB</el-button>
+                    </div>
+                    </template>
                 <template v-else>
                     <div class="new-bid-wrap">
-                    <el-button type="" :disabled="true" style="color:#f1f1f1;font-size: 20px;background-color:#3b4c73; width:100%">You are the Owner!</el-button>
+                    <el-button type="" :disabled="true" style="color:#f1f1f1;font-size: 20px;background-color:#3b4c73; width:100%">You are the Seller!</el-button>
                     </div>
+                </template>
+                </template>
+
+                <template v-else>
+                    <el-button @click="goto('login')">Login</el-button>
                 </template>
             </el-col>
         </el-row>
@@ -257,24 +263,27 @@
                         :rules="rules"
                         v-show="addNewCard"
                 >
-                    <el-form-item prop="name">
-                        <el-input v-model="form.name" placeholder="Name" clearable></el-input>
+<!--                    <el-form-item prop="name">-->
+<!--                        <el-input v-model="form.name" placeholder="Name" clearable></el-input>-->
+<!--                    </el-form-item>-->
+<!--                    <el-form-item prop="cardNumber">-->
+<!--                        <el-input v-model="form.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>-->
+<!--                    </el-form-item>-->
+<!--                    <el-row>-->
+<!--                        <el-col :span=12>-->
+<!--                            <el-form-item prop="expiredDate">-->
+<!--                                <el-input v-model="form.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>-->
+<!--                            </el-form-item>-->
+<!--                        </el-col >-->
+<!--                        <el-col :span=12>-->
+<!--                            <el-form-item prop="cvc" >-->
+<!--                                <el-input v-model="form.cvc" placeholder="CVC" maxlength="3"></el-input>-->
+<!--                            </el-form-item>-->
+<!--                        </el-col>-->
+<!--                    </el-row>-->
+                    <el-form-item prop="initPrice">
+                        <el-input v-model="form.initPrice" placeholder="Initial Price"></el-input>
                     </el-form-item>
-                    <el-form-item prop="cardNumber">
-                        <el-input v-model="form.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>
-                    </el-form-item>
-                    <el-row>
-                        <el-col :span=12>
-                            <el-form-item prop="expiredDate">
-                                <el-input v-model="form.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>
-                            </el-form-item>
-                        </el-col >
-                        <el-col :span=12>
-                            <el-form-item prop="cvc" >
-                                <el-input v-model="form.cvc" placeholder="CVC" maxlength="3"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
                 </el-form>
                 <el-row v-show="addNewCard">
                     <div class="btns"  style="margin-left: 20px">
@@ -282,9 +291,9 @@
                     </div>
 
                 </el-row>
-                <el-row style="margin:50px auto;width:70%;">
-                    <el-input v-model="this.initialBid" placeholder="Initial Bid" ></el-input>
-                </el-row>
+<!--                <el-row style="margin:50px auto;width:70%;" prop="initPrice">-->
+<!--                    <el-input v-model="this.initialBid" placeholder="请输入内容"></el-input>-->
+<!--                </el-row>-->
             </template>
 
             <el-row >
@@ -371,18 +380,19 @@
                 markers:[{position:{},}],
                 columns: [
                     {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table},
+                    {prop: 'uid', label: 'UID', width: '300'},
                     {prop: 'user', label: 'User', width: '300'},
                     {prop: 'price', label: 'Current Bid',formatter: this.formatPrice}
                 ],
                 propInfo: {
                     id: '',
                     aid:'',
-
+                    rab:null,
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
                     enddate:'',
-                    status:'R',
+                    status:'',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
@@ -397,7 +407,7 @@
                     detail: '',
                     photos: [],
                     description: '',
-                    bidHistory:[
+                    history:[
                         // {
                         //     time: 1603981349 ,
                         //     user:'UMR',
@@ -427,6 +437,7 @@
                     cardNumber: '',
                     expiredDate: '',
                     cvc: '',
+                    initPrice:'',
                 },
                 rules: {
                     name: [{required: true, message: " Please enter name", trigger: "blur",},],
@@ -439,16 +450,7 @@
 
         created() {
             this.username = localStorage.getItem("username");
-            // // this.username = this.$store.state.username;
-            // if (this.username !== null) {
-            //     this.hasLogin = true;
-            //     this.avatar = localStorage.getItem("avatar");
-            //     this.firstname = localStorage.getItem("firstname");
-            // }
-            // else{
-            //     this.$message.error("You should login first!");
-            //     this.$router.push("/login");
-            // }
+            // this.username= '123'
             this.id = this.$route.query.id;
             this.$axios
                 .get('/auction/information/' + this.id)
@@ -485,6 +487,7 @@
             //             console.log(error)
             //         });
             // }
+
         },
 
         watch: {
@@ -612,8 +615,8 @@
                 let startTime = dayjs(startime);
                 // console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
                 // console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
-                // let startTime = dayjs(16400000);
-                // let expiredTime = dayjs(new Date(2021, 2, 24, 17, 1));04102
+                // let startTime = dayjs(new Date(2020, 11, 24, 17, 1));
+                // let expiredTime = dayjs(new Date(2020, 11, 31, 17, 1));
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
@@ -628,7 +631,8 @@
 
                 // console.log(this.showTime(startTime))
 
-                if (diff2 > 0) {
+                // if (diff2 > 0) {
+                if(this.propInfo.status === 'R'){
                     this.timeFlag = true;
                     let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
                     this.time = `Will start at ${ this.showTime2(st) }`;
@@ -638,28 +642,12 @@
                         this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
                     }else{
                         this.timeFlag = false;
-                        console.log('over');
+                        // console.log('over');
                         this.time = `This auction is Over!`;
                     }
-
                 }
 
-                if (diff2 > 0) {
-                    this.timeFlag = true;
-                    let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
-                    this.time = `Will start at ${ this.showTime2(st) }`;
 
-                }
-                else{
-                    if(diff>0){
-                        this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
-                    }else{
-                        this.timeFlag = false;
-                        console.log('over');
-                        this.time = `This auction is Over!`;
-                    }
-
-                }
             },
 
             showTime(time){
@@ -712,7 +700,7 @@
                 })
                     .then(() => {
                         let data = new FormData();
-                        data.append('rabId', this.rabId);
+                        data.append('rabId', this.propInfo.rab);
                         data.append('bidPrice', this.newBid);
                         this.$axios.post('/bid', data)
                             .then((response) => {
@@ -724,7 +712,7 @@
                                         this.$message({
                                             type: "success",
                                             message: "Place new bid successful!", })
-                                        location.reload();
+                                        // location.reload();
                                     }else if(response.data.code === 400){
                                         this.$message.error(response.msg);
                                     }else{
@@ -734,8 +722,8 @@
                                     console.log(response.msg);
                                 }
                             })
-                            .catch((res) => {
-                                console.log('error ', res);
+                            .catch((response) => {
+                                console.log('error ', response);
                                 this.$message.error('New Bid failed!');
                             })
 
@@ -757,23 +745,24 @@
 
 
             submitCard(){
-                if(this.addNewCard) {
+                // if(this.addNewCard) {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
                             let data = new FormData();
 
-                            data.append('name', this.form.name);
+                            // data.append('name', this.form.name);
 
-                            let card = this.form.cardNumber.replace(/\s+/g, "");
-                            data.append('cardNumber', card);
-
-                            data.append('expiryDate', this.form.expiredDate);
-                            data.append('cvv', this.form.cvc);
+                            // let card = this.form.cardNumber.replace(/\s+/g, "");
+                            // data.append('cardNumber', card);
+                            //
+                            // data.append('expiryDate', this.form.expiredDate);
+                            // data.append('cvv', this.form.cvc);
                             data.append('aid', this.id);
+                            data.append('registerTime', dayjs().valueOf().toString());
+                            data.append('initPrice',this.form.initPrice);
+                            console.log(this.form.initPrice);
 
-                            data.append('registerTime', dayjs().valueOf().toString())
-                            data.append('initPrice',this.initialBid)
-                            this.$axios.post('/register/rab', data)
+                            this.$axios.post('/rab/register', data)
                                 .then((response) => {
                                     if (response.status >= 200 && response.status < 300) {
                                         if (response.data.code === 200) {
@@ -797,29 +786,29 @@
                     });
                     this.addNewCard = false;
 
-                }
-                else{
-                    let data = new FormData();
-                    data.append('paymentId', this.selectCard);
-
-                    this.$axios.post('/payment/old', data)
-                        .then((response) => {
-                            if (response.status >= 200 && response.status < 300) {
-                                if (response.data.code === 200) {
-                                    this.$message.success("Register successful!");
-                                    location.reload();
-                                }
-                            } else if (response.data.code === 400) {
-                                this.$message.error(response.msg);
-                            } else {
-                                console.log(response.msg);
-                            }
-                        })
-                        .catch((res) => {
-                            console.log('error', res);
-                            this.$message.error('Register Error');
-                        });
-                }
+                // }
+                // else{
+                //     let data = new FormData();
+                //     data.append('paymentId', this.selectCard);
+                //
+                //     this.$axios.post('/payment/old', data)
+                //         .then((response) => {
+                //             if (response.status >= 200 && response.status < 300) {
+                //                 if (response.data.code === 200) {
+                //                     this.$message.success("Register successful!");
+                //                     location.reload();
+                //                 }
+                //             } else if (response.data.code === 400) {
+                //                 this.$message.error(response.msg);
+                //             } else {
+                //                 console.log(response.msg);
+                //             }
+                //         })
+                //         .catch((res) => {
+                //             console.log('error', res);
+                //             this.$message.error('Register Error');
+                //         });
+                // }
                 this.bidderFlag = false;
             },
 
@@ -830,9 +819,7 @@
 
             // to update the highest bid
             initWebSocket(){
-                console.log(this.propInfo.aid);
                 const uri =  `ws://127.0.0.1:8070/auction/${this.propInfo.aid}`;
-                console.log(uri);
                 this.websock = new WebSocket(uri);
                 this.websock.onmessage = this.websocketonmessage;
                 this.websock.onopen = this.websocketonopen;
@@ -848,13 +835,18 @@
             },
             websocketonmessage(e){ //数据接收
                 let res = JSON.parse(e.data);
-                this.currentBid = res.bid;
 
-                let Time = showTime(res.time);
-                this.propInfo.bidHistory.push({time:Time, user:res.user, price:res.bid});
+                if(!res.overtime){
+                    this.propInfo.latestPrice = res.price;
+                    // for (let i = 0; i < res.bidHistory.length; i++) {
+                    // console.log(i, ' => ', bidHistory[i])
+                    let Time = this.showTime(res.time);
+                    this.propInfo.history.push({time:Time, uid:res.uid, user:res.username, price:res.price});
 
-                this.notice(res.user);
-
+                    this.notice(res.username);
+                }else{
+                    this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
+                }
 
             },
             websocketsend(Data){//数据发送
