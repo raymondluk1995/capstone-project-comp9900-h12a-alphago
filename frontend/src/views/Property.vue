@@ -114,7 +114,6 @@
                                             :position="m.position"
                                             :clickable="true"
                                             :draggable="true"
-                                            :key="m"
                                     />
                                 </GmapMap>
                             </div>
@@ -283,7 +282,7 @@
 <!--                        </el-col>-->
 <!--                    </el-row>-->
                     <el-form-item prop="initPrice">
-                        <el-input v-model="form.initialBid" placeholder="请输入内容"></el-input>
+                        <el-input v-model="form.initPrice" placeholder="Initial Price"></el-input>
                     </el-form-item>
                 </el-form>
                 <el-row v-show="addNewCard">
@@ -387,7 +386,7 @@
                 propInfo: {
                     id: '',
                     aid:'',
-                    rab:'',
+                    rab:null,
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
@@ -437,6 +436,7 @@
                     cardNumber: '',
                     expiredDate: '',
                     cvc: '',
+                    initPrice:'',
                 },
                 rules: {
                     name: [{required: true, message: " Please enter name", trigger: "blur",},],
@@ -449,7 +449,7 @@
 
         created() {
             this.username = localStorage.getItem("username");
-
+            // this.username= '123'
             this.id = this.$route.query.id;
             this.$axios
                 .get('/auction/information/' + this.id)
@@ -756,9 +756,10 @@
                             // data.append('expiryDate', this.form.expiredDate);
                             // data.append('cvv', this.form.cvc);
                             data.append('aid', this.id);
+                            data.append('registerTime', dayjs().valueOf().toString());
+                            data.append('initPrice',this.form.initPrice);
+                            console.log(this.form.initPrice);
 
-                            data.append('registerTime', dayjs().valueOf().toString())
-                            data.append('initPrice',this.initialBid)
                             this.$axios.post('/rab/register', data)
                                 .then((response) => {
                                     if (response.status >= 200 && response.status < 300) {
