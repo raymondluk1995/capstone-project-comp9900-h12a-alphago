@@ -217,92 +217,128 @@
                 type="flex"
                 title="Payment"
                 :visible.sync="bidderFlag"
-                style="position:absolute;left:25%; right:25%;"
+                style="position:absolute;left:15%; right:15%;"
                 >
             <template>
-                <el-row>
-                    <el-row style="margin:20px 50px 0 50px;">
-                    <span>Select your card:</span>
-                    </el-row>
 
-                    <el-row style="margin:20px 10px 10px 15%;width:70%;">
-                    <el-radio-group v-model="selectCard" >
-                        <el-radio
-                                class="radio"
-                                :label="item.paymentId"
-                                :key="item.paymentId"
-                                :disabled="addNewCard"
-                                :value="item.paymentId"
-                                v-for="item in cards"
-                                border
-                        >
-                            {{showCard(item.cardNumber)}}
-                        </el-radio>
-                    </el-radio-group>
-                    </el-row>
-
-                </el-row>
-
-                <el-row>
-                    <div class="btns" style="margin-left: 20px">
-                        <span  v-show="!addNewCard" id="add-btn" style="padding:2px 5px;" @click="addCard"><i class="el-icon-bottom"></i> Add New Card</span>
-                    </div>
-<!--                    <el-link v-show="!addNewCard" icon="el-icon-right" type="primary" @click="addCard">Add New Card</el-link>-->
-                </el-row>
-
-            </template>
-
-            <template v-show="addNewCard">
-                <el-row v-show="addNewCard" style="margin:20px 50px 0 50px;">
-                    <span>Add your new card:</span>
-                </el-row>
-                <el-form
-                        class="form"
-                        ref="form"
-                        :model="form"
-                        :rules="rules"
-                        v-show="addNewCard"
-                >
-<!--                    <el-form-item prop="name">-->
-<!--                        <el-input v-model="form.name" placeholder="Name" clearable></el-input>-->
-<!--                    </el-form-item>-->
-<!--                    <el-form-item prop="cardNumber">-->
-<!--                        <el-input v-model="form.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>-->
-<!--                    </el-form-item>-->
-<!--                    <el-row>-->
-<!--                        <el-col :span=12>-->
-<!--                            <el-form-item prop="expiredDate">-->
-<!--                                <el-input v-model="form.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>-->
-<!--                            </el-form-item>-->
-<!--                        </el-col >-->
-<!--                        <el-col :span=12>-->
-<!--                            <el-form-item prop="cvc" >-->
-<!--                                <el-input v-model="form.cvc" placeholder="CVC" maxlength="3"></el-input>-->
-<!--                            </el-form-item>-->
-<!--                        </el-col>-->
-<!--                    </el-row>-->
-                    <el-form-item prop="initPrice">
-                        <el-input v-model="form.initPrice" placeholder="Initial Price"></el-input>
-                    </el-form-item>
-                </el-form>
-                <el-row v-show="addNewCard">
-                    <div class="btns"  style="margin-left: 20px">
-                        <span id="cancel-btn" style="padding:2px 5px;" @click="notAdd"><i class="el-icon-right"></i> Cancel</span>
-                    </div>
-
-                </el-row>
-<!--                <el-row style="margin:50px auto;width:70%;" prop="initPrice">-->
-<!--                    <el-input v-model="this.initialBid" placeholder="请输入内容"></el-input>-->
-<!--                </el-row>-->
-            </template>
-
-            <el-row >
-                <div style="margin:50px 20px 30px 20px;float:right">
-                    <div class="btns">
-                        <span id="submit-btn" style="padding:2px 5px;" @click="submitCard"><i class="el-icon-right"></i> Submit</span>
-                    </div>
+                <div style="height: 100px;">
+                    <el-steps  :active="activateIndex - 0" align-center finish-status="success" >
+                        <el-step title="Select Card"></el-step>
+                        <el-step title="Add Card"></el-step>
+                        <el-step title="Submit"></el-step>
+                    </el-steps>
                 </div>
-            </el-row>
+
+                <el-form>
+                    <el-tabs v-model="activateIndex" :tab-position="'left'" >
+                        <el-tab-pane label="Select Card" name="0" >
+                            <el-row type="flex" justify="center">
+                                <el-col :span="15">
+                                        <el-row>
+                                            <div v-if="this.cards.length===0">
+                                            <h6> You don't have any Card at this moment.</h6>
+                                             <span>Please add a new card!</span>
+                                            </div>
+                                            <el-radio-group v-else v-model="selectCard" >
+                                                <el-radio
+                                                        class="radio"
+                                                        :label="item.paymentId"
+                                                        :key="item.paymentId"
+                                                        :value="item.paymentId"
+                                                        v-for="item in cards"
+                                                        border
+                                                >
+                                                    {{showCard(item.cardNumber)}}
+                                                </el-radio>
+                                            </el-radio-group>
+                                        </el-row>
+                                        <el-row>
+                                            <div class="btns2">
+                                            <el-col>
+
+                                                <span  style="padding:2px 5px;" @click="checktable2"><i class="el-icon-right"></i> Submit</span>
+
+                                            </el-col>
+                                            </div>
+
+                                            <div class="btns2">
+                                            <el-col>
+                                                <span  style="padding:2px 5px;" @click="checktable1"><i class="el-icon-right"></i> Use New Card</span>
+
+                                            </el-col>
+                                            </div>
+                                        </el-row>
+
+                                </el-col>
+                            </el-row>
+                        </el-tab-pane>
+
+                        <el-tab-pane label="Add New Card" name="1" >
+                            <el-row type="flex" justify="center">
+                                <el-col>
+                                    <el-form
+                                            class="form"
+                                            ref="form2"
+                                            :model="form2"
+                                            :rules="rules"
+                                    >
+                                        <el-form-item prop="name">
+                                            <el-input v-model="form2.name" placeholder="Name" clearable></el-input>
+                                        </el-form-item>
+                                        <el-form-item prop="cardNumber">
+                                            <el-input v-model="form2.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>
+                                        </el-form-item>
+                                        <el-row>
+                                            <el-col :span=12>
+                                                <el-form-item prop="expiredDate">
+                                                    <el-input v-model="form2.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>
+                                                </el-form-item>
+                                            </el-col >
+                                            <el-col :span=12>
+                                                <el-form-item prop="cvc" >
+                                                    <el-input v-model="form2.cvc" placeholder="CVC" maxlength="3"></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row>
+                                            <div class="btns2">
+                                                <span  style="padding:2px 5px;" @click="checktable3"><i class="el-icon-right"></i> Submit</span>
+                                            </div>
+                                        </el-row>
+                                    </el-form>
+                                </el-col>
+                            </el-row>
+                        </el-tab-pane>
+
+                        <el-tab-pane label="Submit" name="2" >
+                            <el-col :span="20">
+                            <el-row type="flex" justify="center">
+
+                                <el-form
+                                        class="form"
+                                        ref="form3"
+                                        :model="form3"
+                                        :rules="rules"
+
+                                >
+                                    <el-form-item prop="initPrice">
+                                        <el-input v-model="form3.initPrice" placeholder="Initial Price"></el-input>
+                                    </el-form-item>
+                                </el-form>
+                            </el-row>
+                            <el-row>
+                                <div class="btns2">
+                                    <span  style="padding:2px 5px;" @click="submitCard"><i class="el-icon-right"></i> Submit</span>
+                                </div>
+
+                            </el-row>
+                            </el-col>
+
+                        </el-tab-pane>
+                    </el-tabs>
+                </el-form>
+            </template>
+
         </el-dialog>
     </div>
 </template>
@@ -331,6 +367,7 @@
 
         data() {
             return {
+                activateIndex:'0',
                 websock: null,
 
                 id:'',
@@ -347,24 +384,24 @@
                 tipError: false,
                 time: '',
                 cards:[
-                //     {
-                //     paymentId:'12',
-                //     name:'Tom',
-                //     cardNumber:'4321432143214321',
-                //     cvc:'123',
-                // },
-                //     {
-                //         paymentId:'11',
-                //         name:'Bob',
-                //         cardNumber:'1234123412341234',
-                //         cvc:'012',
-                //     },
-                //     {
-                //         paymentId:'15',
-                //         name:'Tom',
-                //         cardNumber:'4321432143214321',
-                //         cvc:'123',
-                //     }
+                    {
+                    paymentId:'12',
+                    name:'Tom',
+                    cardNumber:'4321432143214321',
+                    cvc:'123',
+                },
+                    {
+                        paymentId:'11',
+                        name:'Bob',
+                        cardNumber:'1234123412341234',
+                        cvc:'012',
+                    },
+                    {
+                        paymentId:'15',
+                        name:'Tom',
+                        cardNumber:'4321432143214321',
+                        cvc:'123',
+                    }
                 ],
 
                 detail_tags:[],
@@ -432,11 +469,14 @@
                     highestPrice:'',
                     minimumPrice:'',
                 },
-                form: {
+                form2: {
                     name: '',
                     cardNumber: '',
                     expiredDate: '',
                     cvc: '',
+                    initPrice:'',
+                },
+                form3:{
                     initPrice:'',
                 },
                 rules: {
@@ -586,6 +626,27 @@
                     default:
                         break;
                 }
+            },
+
+            checktable1(){
+                this.activateIndex = '1';
+            },
+            checktable2(){
+                // this.$refs["form1"].validate((valid) =>{
+                //     if (valid) {
+                //         this.dis1 = false;
+                //         this.activateIndex = '1';
+                //     }
+                //     else{
+                //         this.$message.error("Please complete the form.");
+                //     }
+                // })
+                this.activateIndex = '2';
+            },
+
+            checktable3(){
+                this.addNewCard = true;
+                this.activateIndex = '2';
             },
 
 
@@ -746,7 +807,7 @@
 
             submitCard(){
                 // if(this.addNewCard) {
-                    this.$refs["form"].validate((valid) => {
+                    this.$refs["form3"].validate((valid) => {
                         if (valid) {
                             let data = new FormData();
 
@@ -759,8 +820,8 @@
                             // data.append('cvv', this.form.cvc);
                             data.append('aid', this.id);
                             data.append('registerTime', dayjs().valueOf().toString());
-                            data.append('initPrice',this.form.initPrice);
-                            console.log(this.form.initPrice);
+                            data.append('initPrice',this.form3.initPrice);
+                            console.log(this.form3.initPrice);
 
                             this.$axios.post('/rab/register', data)
                                 .then((response) => {
@@ -835,7 +896,7 @@
             },
             websocketonmessage(e){ //数据接收
                 let res = JSON.parse(e.data);
-
+                console.log(res);
                 if(!res.overtime){
                     this.propInfo.latestPrice = res.price;
                     // for (let i = 0; i < res.bidHistory.length; i++) {
@@ -1041,7 +1102,23 @@
         &:hover{
             transform:translateX(10px);
             transition-duration: 0.5s;
-            border-left:2px solid #184080;
+            /*border:2px solid #184080;*/
+
+        }
+    }
+    .btns2{
+        /*border:1px solid #123123;*/
+        cursor: pointer;
+        position:relative;
+        /*width:150px;*/
+        font-size:15px;
+        float:right;
+        margin:50px 5px;
+        /*border:1px solid #123123;*/
+        &:hover{
+            transform:translateX(10px);
+            transition-duration: 0.5s;
+            /*border:2px solid #184080;*/
 
         }
     }
