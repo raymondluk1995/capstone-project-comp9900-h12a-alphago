@@ -200,7 +200,7 @@
                     </div>
                     </div>
                     <div v-else>
-                        <el-button @click="goto(login)">Login</el-button>
+                        <el-button @click="goto('login')">Login</el-button>
                     </div>
                 </template>
 
