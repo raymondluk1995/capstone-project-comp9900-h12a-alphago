@@ -125,7 +125,7 @@
                 <section style="margin: 15px 50px 0 50px;height:400px;">
                     <h3>Bid History</h3>
 
-                    <el-table :data="propInfo.bidHistory"
+                    <el-table :data="propInfo.history"
                               :max-height="300"
                               border
                               stripe
@@ -407,7 +407,7 @@
                     detail: '',
                     photos: [],
                     description: '',
-                    bidHistory:[
+                    history:[
                         // {
                         //     time: 1603981349 ,
                         //     user:'UMR',
@@ -841,7 +841,7 @@
                     // for (let i = 0; i < res.bidHistory.length; i++) {
                     // console.log(i, ' => ', bidHistory[i])
                     let Time = this.showTime(res.time);
-                    this.propInfo.bidHistory.push({time:Time, uid:res.uid, user:res.username, price:res.price});
+                    this.propInfo.history.push({time:Time, uid:res.uid, user:res.username, price:res.price});
 
                     this.notice(res.username);
                 }else{
