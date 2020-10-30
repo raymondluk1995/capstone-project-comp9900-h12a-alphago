@@ -380,6 +380,7 @@
                 markers:[{position:{},}],
                 columns: [
                     {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table},
+                    {prop: 'uid', label: 'UID', width: '300'},
                     {prop: 'user', label: 'User', width: '300'},
                     {prop: 'price', label: 'Current Bid',formatter: this.formatPrice}
                 ],
@@ -486,6 +487,9 @@
             //             console.log(error)
             //         });
             // }
+
+
+
         },
 
         watch: {
@@ -720,8 +724,8 @@
                                     console.log(response.msg);
                                 }
                             })
-                            .catch((res) => {
-                                console.log('error ', res);
+                            .catch((response) => {
+                                console.log('error ', response);
                                 this.$message.error('New Bid failed!');
                             })
 
@@ -817,9 +821,7 @@
 
             // to update the highest bid
             initWebSocket(){
-                console.log(this.propInfo.aid);
                 const uri =  `ws://127.0.0.1:8070/auction/${this.propInfo.aid}`;
-                console.log(uri);
                 this.websock = new WebSocket(uri);
                 this.websock.onmessage = this.websocketonmessage;
                 this.websock.onopen = this.websocketonopen;
@@ -835,14 +837,14 @@
             },
             websocketonmessage(e){ //数据接收
                 let res = JSON.parse(e.data);
-                this.currentBid = res.bid;
+                this.propInfo.latestPrice = res.price;
 
-                let Time = showTime(res.time);
-                this.propInfo.bidHistory.push({time:Time, user:res.user, price:res.bid});
+                // for (let i = 0; i < res.bidHistory.length; i++) {
+                    // console.log(i, ' => ', bidHistory[i])
+                let Time = this.showTime(res.time);
+                this.propInfo.bidHistory.push({time:Time, uid:res.uid, user:res.username, price:res.price});
 
-                this.notice(res.user);
-
-
+                this.notice(res.username);
             },
             websocketsend(Data){//数据发送
                 this.websock.send(Data);
