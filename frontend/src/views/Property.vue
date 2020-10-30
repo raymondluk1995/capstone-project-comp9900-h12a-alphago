@@ -47,12 +47,7 @@
 
                 <el-row type="flex" justify="center" style="margin: 15px 50px 0 50px">
                     <el-col :span="12" >
-                        <div class="bid" v-show="propInfo.status==='R'">
-                            <span style="font-size:15px">Guide</span>
-                            ${{ propInfo.minimumPrice | numFormat }}
-                        </div>
-
-                        <div class="bid" v-show="propInfo.status==='A'">
+                        <div class="bid">
                             <span style="font-size:15px">Latest Bid</span>
                             ${{ propInfo.latestPrice | numFormat }}
                         </div>
@@ -387,7 +382,7 @@
                     username:'',
                     address: '',
                     enddate:'',
-                    status:'',
+                    status:'R',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
@@ -617,8 +612,8 @@
                 let startTime = dayjs(startime);
                 // console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
                 // console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
-                // let startTime = dayjs(new Date(2019, 1, 10, 10, 10));
-                // let expiredTime = dayjs(new Date(2021, 2, 24, 17, 1));
+                // let startTime = dayjs(16400000);
+                // let expiredTime = dayjs(new Date(2021, 2, 24, 17, 1));04102
                 let nowTime = dayjs();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
@@ -630,6 +625,8 @@
                 let hour = parseInt((diff / 3600) % 24);
                 let minute = parseInt((diff / 60) % 60);
                 let second = parseInt(diff % 60);
+
+                // console.log(this.showTime(startTime))
 
                 if (diff2 > 0) {
                     this.timeFlag = true;
@@ -651,6 +648,7 @@
                     this.timeFlag = true;
                     let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
                     this.time = `Will start at ${ this.showTime2(st) }`;
+
                 }
                 else{
                     if(diff>0){
@@ -671,9 +669,21 @@
             },
 
             showTime_table(row,column){
-                console.log(row.time)
+                // console.log(row.time)
                 let st = dayjs(row.time).format("YYYY-MM-DD HH:mm:ss");
                 return `${ st }`;
+            },
+
+            showTime2(time){
+                // let time = dayjs(day).format("YYYY-MM-DD HH:mm:ss");
+                let MONTH =['Jan', 'Feb', 'Mar','Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                let day = dayjs(time).date();
+                let mon = MONTH[dayjs(time).month()];
+                let year = dayjs(time).year();
+                let hour = dayjs(time).hour();
+                let min = dayjs(time).minute();
+                let formatTime = `${day} ${mon} ${year}, ${hour}:${min}`;
+                return formatTime;
             },
 
 
@@ -744,17 +754,6 @@
                 this.addNewCard = true;
             },
 
-            showTime2(time){
-                // let time = dayjs(day).format("YYYY-MM-DD HH:mm:ss");
-                let MONTH =['Jan', 'Feb', 'Mar','Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                let day = dayjs(time).day();
-                let mon = MONTH[dayjs(time).month()];
-                let year = dayjs(time).year();
-                let hour = dayjs(time).hour();
-                let min = dayjs(time).minute();
-                let formatTime = `${day} ${mon} ${year}, ${hour}:${min}`;
-                return formatTime;
-            },
 
 
             submitCard(){
