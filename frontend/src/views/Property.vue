@@ -488,8 +488,6 @@
             //         });
             // }
 
-
-
         },
 
         watch: {
@@ -837,14 +835,19 @@
             },
             websocketonmessage(e){ //数据接收
                 let res = JSON.parse(e.data);
-                this.propInfo.latestPrice = res.price;
 
-                // for (let i = 0; i < res.bidHistory.length; i++) {
+                if(!res.overtime){
+                    this.propInfo.latestPrice = res.price;
+                    // for (let i = 0; i < res.bidHistory.length; i++) {
                     // console.log(i, ' => ', bidHistory[i])
-                let Time = this.showTime(res.time);
-                this.propInfo.bidHistory.push({time:Time, uid:res.uid, user:res.username, price:res.price});
+                    let Time = this.showTime(res.time);
+                    this.propInfo.bidHistory.push({time:Time, uid:res.uid, user:res.username, price:res.price});
 
-                this.notice(res.username);
+                    this.notice(res.username);
+                }else{
+                    this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
+                }
+
             },
             websocketsend(Data){//数据发送
                 this.websock.send(Data);
