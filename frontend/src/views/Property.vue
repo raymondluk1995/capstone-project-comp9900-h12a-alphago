@@ -177,27 +177,35 @@
 <!--                >{{ propInfo.bidderNum }} Bidders</el-button>-->
 
                 <template v-if="username !== propInfo.username">
-                <div v-if="this.propInfo.rabId !== 'none'">
-<!--                    <h3>Place new bid</h3>-->
-                    <div class="new-bid-wrap">
-                        <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
-                            <i slot="suffix" class="input-slot">{{newBid | numFormat }} A$</i>
-                        </el-input>
-                        <el-button class='wrap-button' type="" icon="el-icon-plus" circle @click="addNewBid"></el-button>
+                    <div v-if="this.username !== null">
+                    <div v-if="this.propInfo.rabId !== 'none'">
+    <!--                    <h3>Place new bid</h3>-->
+                        <div class="new-bid-wrap">
+                            <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
+                                <i slot="suffix" class="input-slot">{{newBid | numFormat }} A$</i>
+                            </el-input>
+                            <el-button class='wrap-button' type="" icon="el-icon-plus" circle @click="addNewBid"></el-button>
+                        </div>
+
+                        <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
                     </div>
 
-                    <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
-                </div>
-
-                <div v-else style="margin-top: 2px">
-                    <el-button type=""
-                               class="btn"
-                               @click="Bidreg"
-                               icon="el-icon-right"
-                               style="font-size:20px;"
-                    >Register as RAB</el-button>
-                </div>
+                    <div v-else style="margin-top: 2px">
+                        <el-button type=""
+                                   class="btn"
+                                   @click="Bidreg"
+                                   icon="el-icon-right"
+                                   style="font-size:20px;"
+                        >Register as RAB</el-button>
+                    </div>
+                    </div>
+                    <div v-else>
+                        <el-button @click="goto(login)">Login</el-button>
+                    </div>
                 </template>
+
+
+
                 <template v-else>
                     <div class="new-bid-wrap">
                     <el-button type="" :disabled="true" style="color:#f1f1f1;font-size: 20px;background-color:#3b4c73; width:100%">You are the Seller!</el-button>
@@ -440,15 +448,15 @@
         created() {
             this.username = localStorage.getItem("username");
             // this.username = this.$store.state.username;
-            if (this.username !== null) {
-                this.hasLogin = true;
-                this.avatar = localStorage.getItem("avatar");
-                this.firstname = localStorage.getItem("firstname");
-            }
-            else{
-                this.$message.error("You should login first!");
-                this.$router.push("/login");
-            }
+            // if (this.username !== null) {
+            //     this.hasLogin = true;
+            //     this.avatar = localStorage.getItem("avatar");
+            //     this.firstname = localStorage.getItem("firstname");
+            // }
+            // else{
+            //     this.$message.error("You should login first!");
+            //     this.$router.push("/login");
+            // }
             this.id = this.$route.query.id;
             this.$axios
                 .get('/auction/information/' + this.id)
