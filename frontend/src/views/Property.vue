@@ -47,12 +47,12 @@
 
                 <el-row type="flex" justify="center" style="margin: 15px 50px 0 50px">
                     <el-col :span="12" >
-                        <div class="bid" v-show="propInfo.status=='R'">
+                        <div class="bid" v-show="propInfo.status==='R'">
                             <span style="font-size:15px">Guide</span>
                             ${{ propInfo.minimumPrice | numFormat }}
                         </div>
 
-                        <div class="bid" v-show="propInfo.status=='A'">
+                        <div class="bid" v-show="propInfo.status==='A'">
                             <span style="font-size:15px">Latest Bid</span>
                             ${{ propInfo.latestPrice | numFormat }}
                         </div>
@@ -182,7 +182,7 @@
 <!--                >{{ propInfo.bidderNum }} Bidders</el-button>-->
 
                 <template v-if="username !== propInfo.username">
-                <div v-if="this.propInfo.rab !=='none'">
+                <div v-if="this.propInfo.rabId !== 'none'">
 <!--                    <h3>Place new bid</h3>-->
                     <div class="new-bid-wrap">
                         <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
@@ -191,7 +191,7 @@
                         <el-button class='wrap-button' type="" icon="el-icon-plus" circle @click="addNewBid"></el-button>
                     </div>
 
-                    <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.currentBid | numFormat }}</p>
+                    <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
                 </div>
 
                 <div v-else style="margin-top: 2px">
@@ -200,7 +200,7 @@
                                @click="Bidreg"
                                icon="el-icon-right"
                                style="font-size:20px;"
-                    >Register to Bid</el-button>
+                    >Register as RAB</el-button>
                 </div>
                 </template>
                 <template v-else>
@@ -287,6 +287,9 @@
                     </div>
 
                 </el-row>
+                <el-row style="margin:50px auto;width:70%;">
+                    <el-input v-model="this.initialBid" placeholder="Initial Bid" ></el-input>
+                </el-row>
             </template>
 
             <el-row >
@@ -334,6 +337,7 @@
                 timeFlag: false,
                 addNewCard:false,
                 currentBid:'',
+                rabId:'',
                 newBid: '',
                 newPlacedBid:'',
                 tipError: false,
@@ -366,6 +370,7 @@
                 lat :'',
                 lng:'',
                 center: {},
+                initialBid:'',
 
                 // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
                 markers:[{position:{},}],
@@ -377,7 +382,7 @@
                 propInfo: {
                     id: '',
                     aid:'',
-                    rab:'',
+
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
@@ -475,16 +480,16 @@
                     console.log(error)
                 });
 
-            if(this.propInfo.rab !=='none'){
-                this.$axios
-                    .get('/payment/get/')
-                    .then(response => {
-                        this.cards = response.data.result;
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    });
-            }
+            // if(this.propInfo.rabId !=='none'){
+            //     this.$axios
+            //         .get('/payment/get/')
+            //         .then(response => {
+            //             this.cards = response.data.result;
+            //         })
+            //         .catch(function (error) {
+            //             console.log(error)
+            //         });
+            // }
         },
 
         watch: {
@@ -697,9 +702,9 @@
                 })
                     .then(() => {
                         let data = new FormData();
-                        data.append('pid', this.id);
-                        data.append('currentBid', this.newBid);
-                        this.$axios.post('/property/newbid', data)
+                        data.append('rabId', this.rabId);
+                        data.append('bidPrice', this.newBid);
+                        this.$axios.post('/bid', data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
@@ -751,6 +756,7 @@
                 return formatTime;
             },
 
+
             submitCard(){
                 if(this.addNewCard) {
                     this.$refs["form"].validate((valid) => {
@@ -764,11 +770,15 @@
 
                             data.append('expiryDate', this.form.expiredDate);
                             data.append('cvv', this.form.cvc);
+                            data.append('aid', this.id);
 
-                            this.$axios.post('/payment/add', data)
+                            data.append('registerTime', dayjs().valueOf().toString())
+                            data.append('initPrice',this.initialBid)
+                            this.$axios.post('/register/rab', data)
                                 .then((response) => {
                                     if (response.status >= 200 && response.status < 300) {
                                         if (response.data.code === 200) {
+                                            this.rabId = response.data.result;
                                             this.$message.success("Register successful!");
                                             location.reload();
                                         }
@@ -780,7 +790,7 @@
                                 })
                                 .catch((res) => {
                                     console.log('error', res);
-                                    this.$message.error('Add Card Error');
+                                    this.$message.error('Error');
                                 });
                         } else {
                             return false;
