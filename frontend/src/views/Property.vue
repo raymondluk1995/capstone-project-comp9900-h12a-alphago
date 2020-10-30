@@ -150,7 +150,7 @@
             <el-col :span="5">
                 <div class="info">
                     <el-row type="flex" justify="center" style="background-color: #4f6995;">
-                        <h3 style="color:#f3f3f3">Owner</h3>
+                        <h3 style="color:#f3f3f3">Seller</h3>
                     </el-row>
                 <el-row type="flex" justify="center">
                     <el-avatar :size="70" :src="propInfo.avatar" style="margin-top:50px"></el-avatar>
@@ -200,7 +200,7 @@
                 </template>
                 <template v-else>
                     <div class="new-bid-wrap">
-                    <el-button type="" :disabled="true" style="color:#f1f1f1;font-size: 20px;background-color:#3b4c73; width:100%">You are the Owner!</el-button>
+                    <el-button type="" :disabled="true" style="color:#f1f1f1;font-size: 20px;background-color:#3b4c73; width:100%">You are the Seller!</el-button>
                     </div>
                 </template>
             </el-col>
@@ -439,16 +439,16 @@
 
         created() {
             this.username = localStorage.getItem("username");
-            // // this.username = this.$store.state.username;
-            // if (this.username !== null) {
-            //     this.hasLogin = true;
-            //     this.avatar = localStorage.getItem("avatar");
-            //     this.firstname = localStorage.getItem("firstname");
-            // }
-            // else{
-            //     this.$message.error("You should login first!");
-            //     this.$router.push("/login");
-            // }
+            // this.username = this.$store.state.username;
+            if (this.username !== null) {
+                this.hasLogin = true;
+                this.avatar = localStorage.getItem("avatar");
+                this.firstname = localStorage.getItem("firstname");
+            }
+            else{
+                this.$message.error("You should login first!");
+                this.$router.push("/login");
+            }
             this.id = this.$route.query.id;
             this.$axios
                 .get('/auction/information/' + this.id)
