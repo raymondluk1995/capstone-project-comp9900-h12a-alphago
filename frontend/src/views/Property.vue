@@ -609,8 +609,8 @@
 
 
             countDown(time,startime) {
-                // let expiredTime = dayjs(time);
-                // let startTime = dayjs(startime);
+                let expiredTime = dayjs(time);
+                let startTime = dayjs(startime);
                 // console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
                 // console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
                 // let startTime = dayjs(new Date(2020, 11, 24, 17, 1));
