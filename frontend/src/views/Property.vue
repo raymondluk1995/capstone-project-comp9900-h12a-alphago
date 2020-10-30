@@ -217,6 +217,7 @@
                 type="flex"
                 title="Payment"
                 :visible.sync="bidderFlag"
+                :before-close="closedialog"
                 style="position:absolute;left:15%; right:15%;"
                 >
             <template>
@@ -231,7 +232,7 @@
 
                 <el-form>
                     <el-tabs v-model="activateIndex" :tab-position="'left'" >
-                        <el-tab-pane label="Select Card" name="0" >
+                        <el-tab-pane label="Select Card" name="0"  :disabled="dis1">
                             <el-row type="flex" justify="center">
                                 <el-col :span="15">
                                         <el-row>
@@ -246,6 +247,7 @@
                                                         :key="item.paymentId"
                                                         :value="item.paymentId"
                                                         v-for="item in cards"
+
                                                         border
                                                 >
                                                     {{showCard(item.cardNumber)}}
@@ -273,7 +275,7 @@
                             </el-row>
                         </el-tab-pane>
 
-                        <el-tab-pane label="Add New Card" name="1" >
+                        <el-tab-pane label="Add New Card" name="1" :disabled="dis2">
                             <el-row type="flex" justify="center">
                                 <el-col>
                                     <el-form
@@ -321,7 +323,8 @@
                                         :rules="rules"
 
                                 >
-                                    <el-form-item prop="initPrice">
+                                    <el-form-item  prop="initPrice">
+                                        <h6>Input your initial bid to proceed.</h6>
                                         <el-input v-model="form3.initPrice" placeholder="Initial Price"></el-input>
                                     </el-form-item>
                                 </el-form>
@@ -366,9 +369,48 @@
         },
 
         data() {
+            const checkCVC = (rule, value, callback) => {
+                const cvcreg = /^\d{3}$/;
+                if (!cvcreg.test(value)) {
+                    callback(new Error("Please enter the correct cvc code"));
+                } else {
+                    callback();
+                }
+            };
+
+            const checkDate = (rule, value, callback) => {
+                const datereg = /^.{5,}$/;
+                if (!datereg.test(value)) {
+                    callback(new Error("Please enter the correct expiry date"));
+                } else {
+                    callback();
+                }
+            };
+
+            const checkCard = (rule, value, callback) => {
+                const cardreg =  /^.{19,}$/;
+                if (!cardreg.test(value)) {
+                    callback(new Error("Please enter the correct card number"));
+                } else {
+                    callback();
+                }
+            };
+
+            const checkinit = (rule, value, callback) => {
+                let price = value.replace(/,/g, "");
+                if(parseInt(price) < parseInt(this.propInfo.latestPrice)){
+                    callback(new Error("Should larger than the latest price"));
+                }else{
+                    callback();
+                }
+            };
+
+
             return {
                 activateIndex:'0',
                 websock: null,
+                dis1:false,
+                dis2:true,
 
                 id:'',
                 username:'',
@@ -418,7 +460,7 @@
                 columns: [
                     {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table},
                     {prop: 'uid', label: 'UID', width: '300'},
-                    {prop: 'user', label: 'User', width: '300'},
+                    {prop: 'username', label: 'User', width: '300'},
                     {prop: 'price', label: 'Current Bid',formatter: this.formatPrice}
                 ],
                 propInfo: {
@@ -429,11 +471,11 @@
                     username:'',
                     address: '',
                     enddate:'',
-                    status:'',
+                    status:'R',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
-                    latestPrice:'',
+                    latestPrice:'100',
                     info: '',
                     bedroomNum:'',
                     bathroomNum:'',
@@ -467,7 +509,6 @@
                     firstname:'',
                     lastname:'',
                     highestPrice:'',
-                    minimumPrice:'',
                 },
                 form2: {
                     name: '',
@@ -479,18 +520,21 @@
                 form3:{
                     initPrice:'',
                 },
+
                 rules: {
+
                     name: [{required: true, message: " Please enter name", trigger: "blur",},],
-                    cardNumber: [{required: true, message: " Please enter cardNumber", trigger: "blur",}, ,],
-                    expiredDate: [{required: true, message: " Please enter expired date", trigger: "blur",},],
-                    cvc: [{required: true, message: " Please enter cvc", trigger: "blur",},],
+                    cardNumber: [{required: true, message: " Please enter cardNumber", trigger: "blur",}, {validator:checkCard, trigger: "blur" },],
+                    expiredDate: [{required: true, message: " Please enter expired date", trigger: "blur"}, {validator:checkDate, trigger: "blur" },],
+                    cvc: [{required: true, message: " Please enter cvc", trigger: "blur",},{validator:checkCVC, trigger: "blur" }],
+                    initPrice: [{required: true, message: " Please initial price", trigger: "blur",},{validator:checkinit, trigger: "blur" }],
                 },
             };
         },
 
         created() {
-            this.username = localStorage.getItem("username");
-            // this.username= '123'
+            // this.username = localStorage.getItem("username");
+            this.username= '123'
             this.id = this.$route.query.id;
             this.$axios
                 .get('/auction/information/' + this.id)
@@ -528,20 +572,28 @@
             //         });
             // }
 
+            if(this.cards.length !== 0){
+                this.selectCard = this.cards[0].paymentId;
+            }
         },
 
         watch: {
-            ['form.cardNumber'](val) {
+            ['form2.cardNumber'](val) {
                 this.$nextTick(() => {
-                    this.form.cardNumber = val.replace(/\D/g,'').replace(/....(?!$)/g,'$& ');
+                    this.form2.cardNumber = val.replace(/\D/g,'').replace(/....(?!$)/g,'$& ');
                 });
             },
 
-            ['form.expiredDate'](val) {
+            ['form2.expiredDate'](val) {
                 this.$nextTick(() => {
-                    this.form.expiredDate = val.replace(/\D/g,'').replace(/..(?!$)/g,'$&\/');
+                    this.form2.expiredDate = val.replace(/\D/g,'').replace(/..(?!$)/g,'$&\/');
                 });
-            }
+            },
+            ['form3.initPrice'](val) {
+                this.$nextTick(() => {
+                    this.form3.initPrice = val.replace(/\D/g,'').replace(/...(?!$)/g,'$&,');
+                });
+            },
         },
 
         computed: {
@@ -630,33 +682,39 @@
 
             checktable1(){
                 this.activateIndex = '1';
+                this.dis1=true;
+                this.dis2=false;
             },
             checktable2(){
-                // this.$refs["form1"].validate((valid) =>{
-                //     if (valid) {
-                //         this.dis1 = false;
-                //         this.activateIndex = '1';
-                //     }
-                //     else{
-                //         this.$message.error("Please complete the form.");
-                //     }
-                // })
                 this.activateIndex = '2';
             },
 
             checktable3(){
-                this.addNewCard = true;
-                this.activateIndex = '2';
+                this.$refs["form2"].validate((valid) =>{
+                    if (valid) {
+                        this.addNewCard = true;
+                        this.activateIndex = '2';
+                    }
+                    else{
+                        this.$message.error("Please complete the form.");
+                    }
+                })
             },
-
-
-            notAdd(){
-                this.form.name='';
-                this.form.cardNumber= '';
-                this.form.expiredDate= '';
-                this.form.cvc='';
+            closedialog(){
+                this.dis1 = false;
+                this.bidderFlag = false;
                 this.addNewCard = false;
+                this.dis2 = true;
+                this.form2.cvc = '';
+                this.form2.name = '';
+                this.form2.cardNumber = '';
+                this.form2.expiredDate = '';
+                this.selectCard = '';
+                this.form3.initPrice = '';
+                this.activateIndex = '0';
             },
+
+
             addStatusColor(status) {
                 switch(status) {
                     case 'R':
@@ -799,18 +857,12 @@
             Bidreg() {
                 this.bidderFlag = true;
             },
-            addCard() {
-                this.addNewCard = true;
-            },
-
-
 
             submitCard(){
-                // if(this.addNewCard) {
                     this.$refs["form3"].validate((valid) => {
                         if (valid) {
                             let data = new FormData();
-
+                            data.append('addNewCard', this.addNewCard);
                             // data.append('name', this.form.name);
 
                             // let card = this.form.cardNumber.replace(/\s+/g, "");
@@ -841,11 +893,13 @@
                                     console.log('error', res);
                                     this.$message.error('Error');
                                 });
+                            this.addNewCard = false;
+                            this.bidderFlag = false;
                         } else {
                             return false;
                         }
                     });
-                    this.addNewCard = false;
+                    // this.addNewCard = false;
 
                 // }
                 // else{
@@ -870,7 +924,7 @@
                 //             this.$message.error('Register Error');
                 //         });
                 // }
-                this.bidderFlag = false;
+
             },
 
             goto(name) {
@@ -899,12 +953,16 @@
                 console.log(res);
                 if(!res.overtime){
                     this.propInfo.latestPrice = res.price;
+                    console.log(res.price);
+                    console.log(res.username);
+                    console.log(this.propInfo.latestPrice);
                     // for (let i = 0; i < res.bidHistory.length; i++) {
                     // console.log(i, ' => ', bidHistory[i])
                     let Time = this.showTime(res.time);
                     this.propInfo.history.push({time:Time, uid:res.uid, user:res.username, price:res.price});
 
                     this.notice(res.username);
+
                 }else{
                     this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
                 }
