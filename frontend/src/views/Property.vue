@@ -89,11 +89,11 @@
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain">{{ tag }}</el-tag>
+                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>
                         </el-row>
 
                         <el-row type="flex" style="margin: 20px 0;">
-                        <el-tag v-for="tag in propInfo.detail.split(',')">{{ tag }}</el-tag>
+                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="tag.id">{{ tag }}</el-tag>
                         </el-row>
                     </el-col>
                     </el-row>
@@ -113,6 +113,7 @@
                                             :position="m.position"
                                             :clickable="true"
                                             :draggable="true"
+                                            :key="m"
                                     />
                                 </GmapMap>
                             </div>
