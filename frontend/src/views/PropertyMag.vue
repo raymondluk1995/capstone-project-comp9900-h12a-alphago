@@ -270,25 +270,25 @@
                 ],
                 urlObjImg:{},
                 originPropertyList: [
-                    {
-                        pid:1,
-                        status:'R',
-                        address:'afdgdag',
-                        photos:['', '']
-                    }
-                    ,{
-                        pid:2,
-                        status: 'N',
-                        address:'123asd',
-                        photos:['','']
-                    },
-                    {
-                        pid:3,
-                        auction:true,
-                        status: 'A',
-                        address:'123asd',
-                        photos:['','']
-                    }
+                    // {
+                    //     pid:1,
+                    //     status:'R',
+                    //     address:'afdgdag',
+                    //     photos:['', '']
+                    // }
+                    // ,{
+                    //     pid:2,
+                    //     status: 'N',
+                    //     address:'123asd',
+                    //     photos:['','']
+                    // },
+                    // {
+                    //     pid:3,
+                    //     auction:true,
+                    //     status: 'A',
+                    //     address:'123asd',
+                    //     photos:['','']
+                    // }
 
                 ],
                 propList: [],
@@ -310,7 +310,7 @@
         },
 
         created(){
-            // this.username = localStorage.getItem("username");
+            this.username = localStorage.getItem("username");
             // // this.username = this.$store.state.username;
             // if (this.username !== null) {
             //     this.hasLogin = true;

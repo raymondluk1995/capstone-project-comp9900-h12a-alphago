@@ -265,24 +265,27 @@
                         :rules="rules"
                         v-show="addNewCard"
                 >
-                    <el-form-item prop="name">
-                        <el-input v-model="form.name" placeholder="Name" clearable></el-input>
+<!--                    <el-form-item prop="name">-->
+<!--                        <el-input v-model="form.name" placeholder="Name" clearable></el-input>-->
+<!--                    </el-form-item>-->
+<!--                    <el-form-item prop="cardNumber">-->
+<!--                        <el-input v-model="form.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>-->
+<!--                    </el-form-item>-->
+<!--                    <el-row>-->
+<!--                        <el-col :span=12>-->
+<!--                            <el-form-item prop="expiredDate">-->
+<!--                                <el-input v-model="form.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>-->
+<!--                            </el-form-item>-->
+<!--                        </el-col >-->
+<!--                        <el-col :span=12>-->
+<!--                            <el-form-item prop="cvc" >-->
+<!--                                <el-input v-model="form.cvc" placeholder="CVC" maxlength="3"></el-input>-->
+<!--                            </el-form-item>-->
+<!--                        </el-col>-->
+<!--                    </el-row>-->
+                    <el-form-item prop="initPrice">
+                        <el-input v-model="form.initialBid" placeholder="请输入内容"></el-input>
                     </el-form-item>
-                    <el-form-item prop="cardNumber">
-                        <el-input v-model="form.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>
-                    </el-form-item>
-                    <el-row>
-                        <el-col :span=12>
-                            <el-form-item prop="expiredDate">
-                                <el-input v-model="form.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>
-                            </el-form-item>
-                        </el-col >
-                        <el-col :span=12>
-                            <el-form-item prop="cvc" >
-                                <el-input v-model="form.cvc" placeholder="CVC" maxlength="3"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
                 </el-form>
                 <el-row v-show="addNewCard">
                     <div class="btns"  style="margin-left: 20px">
@@ -290,9 +293,9 @@
                     </div>
 
                 </el-row>
-                <el-row style="margin:50px auto;width:70%;">
-                    <el-input v-model="this.initialBid" placeholder="Initial Bid" ></el-input>
-                </el-row>
+<!--                <el-row style="margin:50px auto;width:70%;" prop="initPrice">-->
+<!--                    <el-input v-model="this.initialBid" placeholder="请输入内容"></el-input>-->
+<!--                </el-row>-->
             </template>
 
             <el-row >
@@ -385,12 +388,12 @@
                 propInfo: {
                     id: '',
                     aid:'',
-
+                    rab:null,
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
                     enddate:'',
-                    status:'R',
+                    status:'',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
@@ -446,7 +449,8 @@
         },
 
         created() {
-            this.username = localStorage.getItem("username");
+            // this.username = localStorage.getItem("username");
+            this.username = '12'
             // this.username = this.$store.state.username;
             // if (this.username !== null) {
             //     this.hasLogin = true;
@@ -646,24 +650,7 @@
                         this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
                     }else{
                         this.timeFlag = false;
-                        console.log('over');
-                        this.time = `This auction is Over!`;
-                    }
-
-                }
-
-                if (diff2 > 0) {
-                    this.timeFlag = true;
-                    let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
-                    this.time = `Will start at ${ this.showTime2(st) }`;
-
-                }
-                else{
-                    if(diff>0){
-                        this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
-                    }else{
-                        this.timeFlag = false;
-                        console.log('over');
+                        // console.log('over');
                         this.time = `This auction is Over!`;
                     }
 
@@ -765,18 +752,18 @@
 
 
             submitCard(){
-                if(this.addNewCard) {
+                // if(this.addNewCard) {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
                             let data = new FormData();
 
-                            data.append('name', this.form.name);
+                            // data.append('name', this.form.name);
 
-                            let card = this.form.cardNumber.replace(/\s+/g, "");
-                            data.append('cardNumber', card);
-
-                            data.append('expiryDate', this.form.expiredDate);
-                            data.append('cvv', this.form.cvc);
+                            // let card = this.form.cardNumber.replace(/\s+/g, "");
+                            // data.append('cardNumber', card);
+                            //
+                            // data.append('expiryDate', this.form.expiredDate);
+                            // data.append('cvv', this.form.cvc);
                             data.append('aid', this.id);
 
                             data.append('registerTime', dayjs().valueOf().toString())
@@ -805,29 +792,29 @@
                     });
                     this.addNewCard = false;
 
-                }
-                else{
-                    let data = new FormData();
-                    data.append('paymentId', this.selectCard);
-
-                    this.$axios.post('/payment/old', data)
-                        .then((response) => {
-                            if (response.status >= 200 && response.status < 300) {
-                                if (response.data.code === 200) {
-                                    this.$message.success("Register successful!");
-                                    location.reload();
-                                }
-                            } else if (response.data.code === 400) {
-                                this.$message.error(response.msg);
-                            } else {
-                                console.log(response.msg);
-                            }
-                        })
-                        .catch((res) => {
-                            console.log('error', res);
-                            this.$message.error('Register Error');
-                        });
-                }
+                // }
+                // else{
+                //     let data = new FormData();
+                //     data.append('paymentId', this.selectCard);
+                //
+                //     this.$axios.post('/payment/old', data)
+                //         .then((response) => {
+                //             if (response.status >= 200 && response.status < 300) {
+                //                 if (response.data.code === 200) {
+                //                     this.$message.success("Register successful!");
+                //                     location.reload();
+                //                 }
+                //             } else if (response.data.code === 400) {
+                //                 this.$message.error(response.msg);
+                //             } else {
+                //                 console.log(response.msg);
+                //             }
+                //         })
+                //         .catch((res) => {
+                //             console.log('error', res);
+                //             this.$message.error('Register Error');
+                //         });
+                // }
                 this.bidderFlag = false;
             },
 
