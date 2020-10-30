@@ -447,7 +447,7 @@
 
         created() {
             this.username = localStorage.getItem("username");
- 
+
             this.id = this.$route.query.id;
             this.$axios
                 .get('/auction/information/' + this.id)
@@ -755,7 +755,7 @@
 
                             data.append('registerTime', dayjs().valueOf().toString())
                             data.append('initPrice',this.initialBid)
-                            this.$axios.post('/register/rab', data)
+                            this.$axios.post('/rab/register', data)
                                 .then((response) => {
                                     if (response.status >= 200 && response.status < 300) {
                                         if (response.data.code === 200) {
