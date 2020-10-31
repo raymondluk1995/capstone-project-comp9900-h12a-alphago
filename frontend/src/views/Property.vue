@@ -885,14 +885,15 @@
                                 data.append('registerTime', dayjs().valueOf().toString());
                                 let price = this.form3.initPrice.replace(/,/g, "");
                                 data.append('initPrice', price);
+                                data.append('paymentId', this.selectCard)
 
                                 this.$axios.post('/rab/register', data)
                                     .then((response) => {
                                         if (response.status >= 200 && response.status < 300) {
                                             if (response.data.code === 200) {
-                                                this.rabId = response.data.result;
+                                                this.propInfo.rab = response.data.result;
                                                 this.$message.success("Register successful!");
-                                                location.reload();
+                                                // location.reload();
                                             }
                                         } else if (response.data.code === 400) {
                                             this.$message.error(response.msg);
