@@ -185,7 +185,7 @@
                             <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
                                 <i slot="suffix" class="input-slot">{{newBid | numFormat }} A$</i>
                             </el-input>
-                            <el-button class='wrap-button' type="" icon="el-icon-plus" circle @click="addNewBid"></el-button>
+                            <el-button class='wrap-button' type="primary" icon="el-icon-plus"  @click="addNewBid"></el-button>
                         </div>
 
                         <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
@@ -475,8 +475,8 @@
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
-                    enddate: '',
-                    status:'',
+                    enddate: new Date(2021,10,10,10,10),
+                    status:'A',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
@@ -542,8 +542,8 @@
         },
 
         created() {
-            this.username = localStorage.getItem("username");
-            // this.username= '123';
+            // this.username = localStorage.getItem("username");
+            this.username= '123';
             this.id = this.$route.query.id;
             this.$axios
                 .get('/auction/information/' + this.id)
@@ -945,9 +945,9 @@
                 this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
                 this.notice(res.username);
                 if(res.overtime === true){
-                    console.log('isoverTime')
                     clearInterval(this.timer);
-                    this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
+                    let min = this.propInfo.enddate.getMinutes() + 2;
+                    this.propInfo.enddate.setMinutes( min );
                     this.timer = setInterval(() => {
                         this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                     }, 1000);
@@ -956,7 +956,8 @@
 
             test(){
                 clearInterval(this.timer);
-                this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
+                let min = this.propInfo.enddate.getMinutes() + 2;
+                this.propInfo.enddate.setMinutes( min );
                 this.timer = setInterval(() => {
                     this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                 }, 1000);
@@ -1077,7 +1078,7 @@
         width:100%;
         margin-top:20px;
         .wrap-button{
-            margin-left: 30px;
+            /*margin-left: 30px;*/
         }
     }
     .btn{
