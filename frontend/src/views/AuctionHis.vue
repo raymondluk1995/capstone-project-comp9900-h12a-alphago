@@ -48,10 +48,11 @@
                     <el-row type="flex" justify="space-around">
                         <div class="items">
                             <ul>
-                                <li  v-for="item in propList" :key="item.aid " @click="goDetails(item)">
+                                <li  v-for="item in propList" :key="item.aid ">
                                     <div class="item" >
                                         <el-row  style="height:40px;background-color: rgba(45,84,146,0.24);margin: 10px 2% 0 2%;padding:10px;">
-                                            <h5 >Stop At: {{ showTime(item.enddate) }}</h5>
+<!--                                            <h5 >Stop At: {{ showTime(item.enddate) }}</h5>-->
+                                            <h5>Latest Bid: ${{item.currentBid|numFormat}} </h5>
                                         </el-row>
 
                                         <el-carousel :interval="5000" arrow="always" :height="cheight" style="margin: 0 2%">
@@ -78,8 +79,16 @@
                                                     <i class="el-icon-info"> Type: {{ item.type }}</i>
                                                 </el-col>
                                             </el-row>
+                                            <el-row>
+                                                <el-col :span="12">
+                                                    <i class="el-icon-info"> Start Date: {{ showTime(item.startdate) }}</i>
+                                                </el-col>
+                                                <el-col :span="12">
+                                                    <i class="el-icon-info"> End Date: {{ showTime(item.enddate) }}</i>
+                                                </el-col>
+                                            </el-row>
                                             <el-row type="flex" justify="space-around">
-                                                <div class="bid" > ${{ getBidStatus(item)|numFormat }}</div>
+                                                <div class="bid" > ${{ item.highestPrice |numFormat }}</div>
                                             </el-row>
                                             <el-row type="flex" justify="space-around">
                                                 <template>
@@ -138,67 +147,78 @@
                 hasLogin: false,
                 filterPropertyList:[],
                 originPropertyList:[
-                    {
-                        aid:1,
-                        status:'S',
-                        bathroomNum:2,
-                        bedroomNum:1,
-                        garageNum:2,
-                        type:'Apartment',
-                        area:123,
-                        address:'2 Gearin Alley, Mascot, NSW',
-                        photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
-                        highestPrice: 123123,
-                        currentBid:123123,
-                        startdate:'',
-                        endddate:'',
-                    }
-                    ,{
-                        aid:2,
-                        status: 'S',
-                        address:'123asd',
-                        photos:['',''],
-                        highestPrice: 123123,
-                        startdate: new Date(2019,10,10,12,10),
-                        currentBid:123,
-                        reservedPrice: 10000,
-                    },
-                    {
-                        aid:3,
-                        status: 'F',
-                        address:'123asd',
-                        photos:['',''],
-                        startdate: new Date(2021,10,10,12,10),
-                        enddate: new Date(2023,10,10,10,10),
-                        highestPrice: 123123,
-                        currentBid:123,
-                        reservedPrice: 10000,
-                    },
-
-                    {
-                        aid:5,
-                        status: 'F',
-                        address:'123asd',
-                        photos:['',''],
-                        highestPrice: 123123,
-                        currentBid:22222,
-                    },
-                    {
-                        aid:6,
-                        status: 'S',
-                        address:'123asd',
-                        photos:['',''],
-                        highestPrice: 123123,
-                        currentBid:22222,
-                    },
-                    {
-                        aid:8,
-                        status: 'S',
-                        address:'123asd',
-                        photos:['',''],
-                        highestPrice: 123123,
-                        currentBid:22222,
-                    },
+                    // {
+                    //     aid:1,
+                    //     status:'S',
+                    //     bathroomNum:2,
+                    //     bedroomNum:1,
+                    //     garageNum:2,
+                    //     type:'Apartment',
+                    //     area:123,
+                    //     address:'2 Gearin Alley, Mascot, NSW',
+                    //     photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
+                    //     highestPrice: 123123,
+                    //     currentBid:123123,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // }
+                    // ,{
+                    //     aid:2,
+                    //     status: 'S',
+                    //     address:'123asd',
+                    //     photos:['',''],
+                    //     highestPrice: 123123,
+                    //     currentBid:123123,
+                    //     startdate: new Date(2019,10,10,12,10),
+                    //     currentBid:123,
+                    //     reservedPrice: 10000,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // },
+                    // {
+                    //     aid:3,
+                    //     status: 'F',
+                    //     address:'123asd',
+                    //     photos:['',''],
+                    //     startdate: new Date(2021,10,10,12,10),
+                    //     enddate: new Date(2023,10,10,10,10),
+                    //     highestPrice: 123123,
+                    //     currentBid:123,
+                    //     reservedPrice: 10000,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // },
+                    //
+                    // {
+                    //     aid:5,
+                    //     status: 'F',
+                    //     address:'123asd',
+                    //     photos:['',''],
+                    //     highestPrice: 123123,
+                    //     currentBid:22222,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // },
+                    // {
+                    //     aid:6,
+                    //     status: 'S',
+                    //     address:'123asd',
+                    //     photos:['',''],
+                    //     highestPrice: 123123,
+                    //     currentBid:22222,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // },
+                    // {
+                    //     aid:8,
+                    //     status: 'S',
+                    //     address:'123asd',
+                    //     photos:['',''],
+                    //     highestPrice: 123123,
+                    //     currentBid:22222,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // },
 
 
                 ],
@@ -226,14 +246,16 @@
                     },
 
                 ],
-                propList: [{
-                    status:'',
-                    address:'sdf13',
-                    bathroomNum:1,
-                    bedroomNum:2,
-                    garageNum:2,
-                    photos:['',''],
-                }],
+                propList: [
+                //     {
+                //     status:'',
+                //     address:'sdf13',
+                //     bathroomNum:1,
+                //     bedroomNum:2,
+                //     garageNum:2,
+                //     photos:['',''],
+                // }
+                ],
             }
         },
         created(){
@@ -264,8 +286,8 @@
                     console.log(error);
                 })
 
-            this.isEmpty = false;
-            this.propList = this.originPropertyList;
+            // this.isEmpty = false;
+            // this.propList = this.originPropertyList;
         },
         mounted(){
             $("#back-btn").hover(function(event) {
@@ -323,13 +345,7 @@
                         break;
                 }
             },
-            getBidStatus(item){
-                if(item.status==='R'){
-                    return item.currentBid;
-                }else{
-                    return item.highestPrice;
-                }
-            },
+
 
             changeSearch(value) {
                 let filterPropertyList = [];

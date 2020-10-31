@@ -472,6 +472,7 @@
                     id: '',
                     aid:'',
                     rab:null,
+                    notFound:false,
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
@@ -548,6 +549,7 @@
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
+                    if (response.data.code === 200){
                     this.propInfo = response.data.result;
                     this.initWebSocket();
                     // this.isBidder = response.data.result.isBidder,
@@ -564,7 +566,10 @@
                             lat:this.lat,
                             lng:this.lng
                         },
-                    }]
+                    }]}
+                    else if (response.data.code === 404) {
+                        this.notFound = true;
+                    }
                 })
                 .catch(function (error) {
                     console.log(error)
