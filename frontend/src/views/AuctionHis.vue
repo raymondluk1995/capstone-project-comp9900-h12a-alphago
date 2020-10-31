@@ -135,6 +135,7 @@
                 id:'',
                 filter:'all',
                 isEmpty: false,
+                // isEmpty:true,
                 hasLogin: false,
                 filterPropertyList:[],
                 originPropertyList:[

@@ -847,6 +847,10 @@ li {
   list-style-type: none;
 }
 
+.btn{
+  color:black;
+}
+
 .btn-default:hover {
   background-color: rgba(69, 95, 147, 0.8);
 }

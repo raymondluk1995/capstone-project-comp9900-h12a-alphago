@@ -292,7 +292,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .user {
   display: flex;
   align-items: center;
