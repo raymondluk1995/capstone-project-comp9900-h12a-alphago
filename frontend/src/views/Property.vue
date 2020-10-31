@@ -483,6 +483,7 @@
                     phone: '',
                     email:'',
                     position: '',
+                    timer:'',
                     detail: '',
                     photos: [],
                     description: '',
@@ -561,7 +562,7 @@
                     console.log(error)
                 });
 
-            if(this.propInfo.rabId !=='none'){
+            if(this.propInfo.rab === null){
                 this.$axios
                     .get('/payment/get/')
                     .then(response => {
@@ -596,27 +597,10 @@
             },
         },
 
-        computed: {
-            // newBidTip() {
-            //     let tip = "";
-            //     if (!this.newPlacedBid && !this.currentBid) {
-            //         tip = "0";
-            //         this.tipError = false;
-            //     } else if(!this.newPlacedBid && this.currentBid){
-            //         tip = this.currentBid;
-            //         this.tipError = false;
-            //     }else{
-            //         tip = this.newPlacedBid;
-            //         this.tipError = false;
-            //     }
-            //     return tip;
-            // },
-        },
-
         mounted() {
-            let timer = setInterval(() => {
+            this.timer = setInterval(() => {
                 if (this.timeFlag === true) {
-                    clearInterval(timer);
+                    clearInterval(this.timer);
                 }
                 this.countDown(this.propInfo.enddate,this.propInfo.startdate);
             }, 1000);
@@ -957,6 +941,12 @@
                 this.notice(res.username);
                 if(res.overtime){
                     this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
+                    clearInterval(timer);
+
+                    this.timer = setInterval(() => {
+                        this.countDown(this.propInfo.enddate,this.propInfo.startdate);
+                    }, 1000);
+
                 }
 
             },
