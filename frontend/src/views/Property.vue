@@ -946,8 +946,7 @@
                 this.notice(res.username);
                 if(res.overtime === true){
                     clearInterval(this.timer);
-                    let min = this.propInfo.enddate.getMinutes() + 2;
-                    this.propInfo.enddate.setMinutes( min );
+                    this.propInfo.enddate = this.propInfo.enddate + 2*1000*60;
                     this.timer = setInterval(() => {
                         this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                     }, 1000);
@@ -956,8 +955,12 @@
 
             test(){
                 clearInterval(this.timer);
-                let min = this.propInfo.enddate.getMinutes() + 2;
-                this.propInfo.enddate.setMinutes( min );
+                console.log(this.propInfo.enddate)
+                console.log(this.showTime(this.propInfo.enddate))
+                this.propInfo.enddate = this.propInfo.enddate + 2 * 1000*60;
+                console.log(this.showTime(this.propInfo.enddate))
+                // let min = this.propInfo.enddate.getMinutes() + 2;
+                // this.propInfo.enddate.setMinutes( min );
                 this.timer = setInterval(() => {
                     this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                 }, 1000);
