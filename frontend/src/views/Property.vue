@@ -475,8 +475,8 @@
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
-                    enddate: new Date(2021,10,10,10,10),
-                    status:'A',
+                    enddate:'',
+                    status:'',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
@@ -542,8 +542,8 @@
         },
 
         created() {
-            // this.username = localStorage.getItem("username");
-            this.username= '123';
+            this.username = localStorage.getItem("username");
+            // this.username= '123';
             this.id = this.$route.query.id;
             this.$axios
                 .get('/auction/information/' + this.id)
