@@ -87,7 +87,7 @@
                       :style="active3">
                     <i class="el-icon-check"></i> Sign in</span>
 
-                <span class="button"
+                <span class="button2"
                       v-else @click="signInEmail"
                       @mouseover="mouseOver3"
                       @mouseleave="mouseLeave3"
@@ -467,6 +467,14 @@
     /*border-radius: 3px;*/
     /*border-left:3px solid #384a69;*/
 }
+  .button2{
+      cursor: pointer;
+      padding:3px 20px 3px 5px;
+      /*border-radius: 3px;*/
+      /*border-left:3px solid #384a69;*/
+      margin-left:10px;
+      font-size:20px;
+  }
 
   .back-btn{
       cursor: pointer;

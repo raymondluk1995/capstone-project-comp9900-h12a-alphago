@@ -63,8 +63,8 @@
                     <el-row type="flex" justify="space-around">
                     <div class="items">
                         <ul>
-                            <li  v-for="item in propList" :key="item.aid ">
-                                <div class="item" @click.native="goDetails(item)">
+                            <li  v-for="item in propList" :key="item.aid " @click="goDetails(item)">
+                                <div class="item">
                                     <el-row  v-if="item.status === 'R'" style="height:40px;background-color: rgba(191,71,47,0.63);margin: 10px 2% 0 2%;padding:10px;">
                                         <h5 >Auction: {{ showTime(item.startdate) }}</h5>
                                     </el-row>
@@ -428,6 +428,7 @@
             },
 
             goDetails (item) {
+                console.log('here')
                 this.$router.push(
                     {
                         path: '/auction',

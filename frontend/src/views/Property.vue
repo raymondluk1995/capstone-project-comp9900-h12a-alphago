@@ -131,6 +131,7 @@
                               stripe
                               tooltip-effect="light"
                               style="overflow-y: scroll; "
+                              :default-sort = "{prop: 'time', order: 'descending'}"
                     >
 
                         <template v-for="(item, index) in columns">
@@ -207,8 +208,10 @@
                 </template>
 
                 <template v-else>
-                    <el-button @click="goto('login')">Login</el-button>
+                    <el-button style="width:100%" @click="goto('login')">Login to Bid</el-button>
                 </template>
+
+                <el-button style="width:100%" @click="test">test</el-button>
             </el-col>
         </el-row>
 
@@ -222,23 +225,23 @@
                 >
             <template>
 
-                <div style="height: 100px;">
-                    <el-steps  :active="activateIndex - 0" align-center finish-status="success" >
-                        <el-step title="Select Card"></el-step>
-                        <el-step title="Add Card"></el-step>
-                        <el-step title="Submit"></el-step>
-                    </el-steps>
-                </div>
+<!--                <div style="height: 100px;">-->
+<!--                    <el-steps  :active="activateIndex - 0" align-center finish-status="success" >-->
+<!--                        <el-step title="Select Card"></el-step>-->
+<!--&lt;!&ndash;                        <el-step title="Add Card"></el-step>&ndash;&gt;-->
+<!--                        <el-step title="Submit"></el-step>-->
+<!--                    </el-steps>-->
+<!--                </div>-->
 
                 <el-form>
                     <el-tabs v-model="activateIndex" :tab-position="'left'" >
-                        <el-tab-pane label="Select Card" name="0"  :disabled="dis1">
+                        <el-tab-pane label="Select Card" name="0" >
                             <el-row type="flex" justify="center">
                                 <el-col :span="15">
                                         <el-row>
                                             <div v-if="this.cards.length===0">
-                                            <h6> You don't have any Card at this moment.</h6>
-                                             <span>Please add a new card!</span>
+<!--                                            <h6> You don't have any Card at this moment.</h6>-->
+<!--                                             <span>Please add a new card!</span>-->
                                             </div>
                                             <el-radio-group v-else v-model="selectCard" >
                                                 <el-radio
@@ -255,27 +258,29 @@
                                             </el-radio-group>
                                         </el-row>
                                         <el-row>
-                                            <div class="btns2">
+                                            <div class="btns3">
                                             <el-col>
-
-                                                <span  style="padding:2px 5px;" @click="checktable2"><i class="el-icon-right"></i> Submit</span>
-
-                                            </el-col>
-                                            </div>
-
-                                            <div class="btns2">
-                                            <el-col>
-                                                <span  style="padding:2px 5px;" @click="checktable1"><i class="el-icon-right"></i> Use New Card</span>
+                                                <span style="padding:5px 10px; border:2px solid #666666; border-radius: 5px" @click="checktable1">
+                                                    <i class="el-icon-plus">
+                                                    </i> Add New Card</span>
 
                                             </el-col>
                                             </div>
                                         </el-row>
+                                    <el-row>
+                                        <div class="btns2">
+                                            <el-col>
+                                                <span  style="padding:2px 5px;" @click="checktable2"><i class="el-icon-right"></i> Next</span>
+
+                                            </el-col>
+                                        </div>
+                                    </el-row>
 
                                 </el-col>
                             </el-row>
                         </el-tab-pane>
 
-                        <el-tab-pane label="Add New Card" name="1" :disabled="dis2">
+                        <el-tab-pane label="Add New Card" name="1" >
                             <el-row type="flex" justify="center">
                                 <el-col>
                                     <el-form
@@ -304,7 +309,7 @@
                                         </el-row>
                                         <el-row>
                                             <div class="btns2">
-                                                <span  style="padding:2px 5px;" @click="checktable3"><i class="el-icon-right"></i> Submit</span>
+                                                <span  style="padding:2px 5px;" @click="checktable3"><i class="el-icon-plus"></i> Add</span>
                                             </div>
                                         </el-row>
                                     </el-form>
@@ -336,7 +341,6 @@
 
                             </el-row>
                             </el-col>
-
                         </el-tab-pane>
                     </el-tabs>
                 </el-form>
@@ -426,24 +430,24 @@
                 tipError: false,
                 time: '',
                 cards:[
-                //     {
-                //     paymentId:'12',
-                //     name:'Tom',
-                //     cardNumber:'4321432143214321',
-                //     cvc:'123',
-                // },
-                //     {
-                //         paymentId:'11',
-                //         name:'Bob',
-                //         cardNumber:'1234123412341234',
-                //         cvc:'012',
-                //     },
-                //     {
-                //         paymentId:'15',
-                //         name:'Tom',
-                //         cardNumber:'4321432143214321',
-                //         cvc:'123',
-                //     }
+                    {
+                    paymentId:'12',
+                    name:'Tom',
+                    cardNumber:'4321432143214321',
+                    cvc:'123',
+                },
+                    {
+                        paymentId:'11',
+                        name:'Bob',
+                        cardNumber:'1234123412341234',
+                        cvc:'012',
+                    },
+                    {
+                        paymentId:'15',
+                        name:'Tom',
+                        cardNumber:'4321432143214321',
+                        cvc:'123',
+                    }
                 ],
 
                 detail_tags:[],
@@ -458,7 +462,7 @@
                 // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
                 markers:[{position:{},}],
                 columns: [
-                    {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table},
+                    {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table,sortable:true},
                     {prop: 'uid', label: 'UID', width: '300'},
                     {prop: 'username', label: 'User', width: '300'},
                     {prop: 'price', label: 'Current Bid',formatter: this.formatPrice}
@@ -470,8 +474,8 @@
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
-                    enddate:'',
-                    status:'',
+                    enddate: new Date(2020,11,2,10,10),
+                    status:'A',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
@@ -488,21 +492,24 @@
                     photos: [],
                     description: '',
                     history:[
-                        // {
-                        //     time: 1603981349 ,
-                        //     user:'UMR',
-                        //     price: '123123',
-                        // },
-                        // {
-                        //     time: 1603981349,
-                        //     user:'ooo',
-                        //     price: '11100000',
-                        // },
-                        // {
-                        //     time: 1603981349,
-                        //     user:'TSF',
-                        //     price: '123123',
-                        // },
+                        {
+                            time: 1603981349 ,
+                            uid:123,
+                            user:'UMR',
+                            price: '123123',
+                        },
+                        {
+                            time: 1603981349,
+                            user:'ooo',
+                            uid:345,
+                            price: '11100000',
+                        },
+                        {
+                            time: 1603981349,
+                            user:'TSF',
+                            uid:456,
+                            price: '123123',
+                        },
 
 
 
@@ -534,8 +541,8 @@
         },
 
         created() {
-            this.username = localStorage.getItem("username");
-            // this.username= '123'
+            // this.username = localStorage.getItem("username");
+            this.username= '123';
             this.id = this.$route.query.id;
             this.$axios
                 .get('/auction/information/' + this.id)
@@ -561,21 +568,6 @@
                 .catch(function (error) {
                     console.log(error)
                 });
-
-            if(this.propInfo.rab === null){
-                this.$axios
-                    .get('/payment/get/')
-                    .then(response => {
-                        this.cards = response.data.result;
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    });
-            }
-
-            if(this.cards.length !== 0){
-                this.selectCard = this.cards[0].paymentId;
-            }
         },
 
         watch: {
@@ -865,42 +857,60 @@
             },
             Bidreg() {
                 this.bidderFlag = true;
+                if(this.propInfo.rab === null){
+                    this.$axios
+                        .get('/payment/get/')
+                        .then(response => {
+                            this.cards = response.data.result;
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        });
+                }
+
+                if(this.cards.length !== 0){
+                    this.selectCard = this.cards[0].paymentId;
+                }
             },
 
             submitCard(){
-                    this.$refs["form3"].validate((valid) => {
-                        if (valid) {
-                            let data = new FormData();
+                    if(this.selectCard !== '') {
+                        this.$refs["form3"].validate((valid) => {
+                            if (valid) {
+                                let data = new FormData();
 
-                            data.append('aid', this.id);
-                            data.append('registerTime', dayjs().valueOf().toString());
-                            data.append('initPrice',this.form3.initPrice);
-                            console.log(this.form3.initPrice);
+                                data.append('aid', this.id);
+                                data.append('registerTime', dayjs().valueOf().toString());
+                                data.append('initPrice', this.form3.initPrice);
+                                console.log(this.form3.initPrice);
 
-                            this.$axios.post('/rab/register', data)
-                                .then((response) => {
-                                    if (response.status >= 200 && response.status < 300) {
-                                        if (response.data.code === 200) {
-                                            this.rabId = response.data.result;
-                                            this.$message.success("Register successful!");
-                                            location.reload();
+                                this.$axios.post('/rab/register', data)
+                                    .then((response) => {
+                                        if (response.status >= 200 && response.status < 300) {
+                                            if (response.data.code === 200) {
+                                                this.rabId = response.data.result;
+                                                this.$message.success("Register successful!");
+                                                location.reload();
+                                            }
+                                        } else if (response.data.code === 400) {
+                                            this.$message.error(response.msg);
+                                        } else {
+                                            console.log(response.msg);
                                         }
-                                    } else if (response.data.code === 400) {
-                                        this.$message.error(response.msg);
-                                    } else {
-                                        console.log(response.msg);
-                                    }
-                                })
-                                .catch((res) => {
-                                    console.log('error', res);
-                                    this.$message.error('Error');
-                                });
-                            this.addNewCard = false;
-                            this.bidderFlag = false;
-                        } else {
-                            return false;
-                        }
-                    });
+                                    })
+                                    .catch((res) => {
+                                        console.log('error', res);
+                                        this.$message.error('Error');
+                                    });
+                                this.addNewCard = false;
+                                this.bidderFlag = false;
+                            } else {
+                                return false;
+                            }
+                        });
+                    }else{
+                        this.$message.error('You should select a card before submit.');
+                    }
             },
 
             goto(name) {
@@ -941,8 +951,8 @@
                 this.notice(res.username);
                 if(res.overtime){
                     this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
-                    clearInterval(timer);
 
+                    clearInterval(this.timer);
                     this.timer = setInterval(() => {
                         this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                     }, 1000);
@@ -950,6 +960,7 @@
                 }
 
             },
+
             websocketsend(Data){//数据发送
                 this.websock.send(Data);
             },
@@ -1159,6 +1170,23 @@
             transform:translateX(10px);
             transition-duration: 0.5s;
             /*border:2px solid #184080;*/
+
+        }
+    }
+    .btns3{
+        /*border:1px solid #123123;*/
+        cursor: pointer;
+        position:relative;
+        /*width:150px;*/
+        font-size:15px;
+        /*float:right;*/
+        margin:10px 5px;
+        /*border:1px solid #123123;*/
+        &:hover{
+            transform:translateX(10px);
+            transition-duration: 0.5s;
+            /*border:2px solid #184080;*/
+            /*color: rgba(83, 109, 155, 0.42);*/
 
         }
     }

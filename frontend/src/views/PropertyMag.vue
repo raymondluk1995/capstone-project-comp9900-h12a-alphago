@@ -60,8 +60,10 @@
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
+                            <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-document" @click="aucreg">Register</el-button>
                             <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item)">Remove</el-button>
                             <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>
+                            <el-button v-show="item.status === 'A'" type="" plain round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
                         </el-row>
                     </el-row>
                 </el-card>
@@ -209,7 +211,7 @@
                     <h5>Auction</h5>
                     <p> This property has not been registered for an Auction. </p>
                     <el-row type="flex" justify="front" >
-                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>
+<!--                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>-->
                     </el-row>
                 </section>
              </el-row>
@@ -270,25 +272,26 @@
                 ],
                 urlObjImg:{},
                 originPropertyList: [
-                    // {
-                    //     pid:1,
-                    //     status:'R',
-                    //     address:'afdgdag',
-                    //     photos:['', '']
-                    // }
-                    // ,{
-                    //     pid:2,
-                    //     status: 'N',
-                    //     address:'123asd',
-                    //     photos:['','']
-                    // },
-                    // {
-                    //     pid:3,
-                    //     auction:true,
-                    //     status: 'A',
-                    //     address:'123asd',
-                    //     photos:['','']
-                    // }
+                    {
+                        pid:1,
+                        status:'R',
+                        address:'afdgdag',
+                        photos:['', '']
+                    }
+                    ,{
+                        pid:2,
+                        status: 'N',
+                        address:'123asd',
+                        photos:['','']
+                    },
+                    {
+                        pid:3,
+                        aid:1,
+                        auction:true,
+                        status: 'A',
+                        address:'123asd',
+                        photos:['','']
+                    }
 
                 ],
                 propList: [],
@@ -322,23 +325,23 @@
             //     this.$router.push("/login");
             // }
 
-            this.$axios
-                .get('/property/propties')
-                .then(response => {
-                    if (response.data.code === 200) {
-                        this.originPropertyList = response.data.result;
-                        this.propList = response.data.result;
-                        this.propInfo = this.originPropertyList[0];
-                    }else if(response.data.code === 400){
-                        this.isEmpty = true;
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-            // this.isEmpty = false;
-            // this.propList = this.originPropertyList;
-            // this.propInfo = this.originPropertyList[0];
+            // this.$axios
+            //     .get('/property/propties')
+            //     .then(response => {
+            //         if (response.data.code === 200) {
+            //             this.originPropertyList = response.data.result;
+            //             this.propList = response.data.result;
+            //             this.propInfo = this.originPropertyList[0];
+            //         }else if(response.data.code === 400){
+            //             this.isEmpty = true;
+            //         }
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     })
+            this.isEmpty = false;
+            this.propList = this.originPropertyList;
+            this.propInfo = this.originPropertyList[0];
         },
 
 
@@ -405,7 +408,17 @@
                     });
                 })
             },
-
+            goDetails (item) {
+                this.$router.push(
+                    {
+                        path: '/auction',
+                        query:
+                            {
+                                id: item.aid,
+                            }
+                    }
+                )
+            },
             submitReg(pid){
                 this.$refs["form"].validate((valid) => {
                     if (valid) {

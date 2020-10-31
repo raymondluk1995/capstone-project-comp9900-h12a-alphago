@@ -48,8 +48,8 @@
                     <el-row type="flex" justify="space-around">
                         <div class="items">
                             <ul>
-                                <li  v-for="item in propList" :key="item.aid ">
-                                    <div class="item" @click.native="goDetails(item)">
+                                <li  v-for="item in propList" :key="item.aid " @click="goDetails(item)">
+                                    <div class="item" >
                                         <el-row  style="height:40px;background-color: rgba(45,84,146,0.24);margin: 10px 2% 0 2%;padding:10px;">
                                             <h5 >Stop At: {{ showTime(item.enddate) }}</h5>
                                         </el-row>
