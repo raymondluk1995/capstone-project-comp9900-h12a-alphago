@@ -475,7 +475,7 @@
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
-                    enddate:'',
+                    enddate: '',
                     status:'',
                     startdate:'',
                     avatar:'',
@@ -943,23 +943,20 @@
                 this.propInfo.latestPrice = res.price;
                 let Time = this.showTime(res.time);
                 this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
-
                 this.notice(res.username);
                 if(res.overtime === true){
-                    this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
-
+                    console.log('isoverTime')
                     clearInterval(this.timer);
+                    this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
                     this.timer = setInterval(() => {
                         this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                     }, 1000);
-
                 }
-
             },
-            test(){
-                this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
 
+            test(){
                 clearInterval(this.timer);
+                this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
                 this.timer = setInterval(() => {
                     this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                 }, 1000);

@@ -60,6 +60,7 @@
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
+                            <el-button  v-show="item.status === 'R'" type="" plain round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
                             <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-document" @click="aucreg">Register</el-button>
                             <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item)">Remove</el-button>
                             <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>
