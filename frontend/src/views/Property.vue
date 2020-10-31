@@ -561,16 +561,16 @@
                     console.log(error)
                 });
 
-            // if(this.propInfo.rabId !=='none'){
-            //     this.$axios
-            //         .get('/payment/get/')
-            //         .then(response => {
-            //             this.cards = response.data.result;
-            //         })
-            //         .catch(function (error) {
-            //             console.log(error)
-            //         });
-            // }
+            if(this.propInfo.rabId !=='none'){
+                this.$axios
+                    .get('/payment/get/')
+                    .then(response => {
+                        this.cards = response.data.result;
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+            }
 
             if(this.cards.length !== 0){
                 this.selectCard = this.cards[0].paymentId;
@@ -692,8 +692,33 @@
             checktable3(){
                 this.$refs["form2"].validate((valid) =>{
                     if (valid) {
+                        let data = new FormData();
+                        data.append('name', this.form2.name);
+
+                        let card = this.form2.cardNumber.replace(/\s+/g, "");
+                        data.append('cardNumber', card);
+                        let date = this.form2.cardNumber.replace(/\//g, "");
+                        data.append('expiryDate', date);
+                        data.append('cvv', this.form2.cvc);
+
+                        this.$axios
+                            .post('/payment/add', data)
+                            .then(response => {
+                                let newCard = response.data.result;
+                                this.cards.push({
+                                    paymentId:newCard.paymentId,
+                                    name:newCard.name,
+                                    cardNumber:newCard.cardNumber,
+                                    cvc:newCard.cvc,
+                                    expiredDate:newCard.expiryDate});
+                            })
+                            .catch(function (error) {
+                                console.log(error)
+                            });
+
                         this.addNewCard = true;
-                        this.activateIndex = '2';
+                        this.activateIndex = '0';
+                        this.dis2 = true;
                     }
                     else{
                         this.$message.error("Please complete the form.");
@@ -862,14 +887,7 @@
                     this.$refs["form3"].validate((valid) => {
                         if (valid) {
                             let data = new FormData();
-                            data.append('addNewCard', this.addNewCard);
-                            // data.append('name', this.form.name);
 
-                            // let card = this.form.cardNumber.replace(/\s+/g, "");
-                            // data.append('cardNumber', card);
-                            //
-                            // data.append('expiryDate', this.form.expiredDate);
-                            // data.append('cvv', this.form.cvc);
                             data.append('aid', this.id);
                             data.append('registerTime', dayjs().valueOf().toString());
                             data.append('initPrice',this.form3.initPrice);
@@ -899,32 +917,6 @@
                             return false;
                         }
                     });
-                    // this.addNewCard = false;
-
-                // }
-                // else{
-                //     let data = new FormData();
-                //     data.append('paymentId', this.selectCard);
-                //
-                //     this.$axios.post('/payment/old', data)
-                //         .then((response) => {
-                //             if (response.status >= 200 && response.status < 300) {
-                //                 if (response.data.code === 200) {
-                //                     this.$message.success("Register successful!");
-                //                     location.reload();
-                //                 }
-                //             } else if (response.data.code === 400) {
-                //                 this.$message.error(response.msg);
-                //             } else {
-                //                 console.log(response.msg);
-                //             }
-                //         })
-                //         .catch((res) => {
-                //             console.log('error', res);
-                //             this.$message.error('Register Error');
-                //         });
-                // }
-
             },
 
             goto(name) {
@@ -948,6 +940,7 @@
             websocketonerror(){//连接建立失败重连
                 this.initWebSocket();
             },
+
             websocketonmessage(e){ //数据接收
                 let res = JSON.parse(e.data);
                 console.log(res);
@@ -959,7 +952,7 @@
                 // for (let i = 0; i < res.bidHistory.length; i++) {
                 // console.log(i, ' => ', bidHistory[i])
                 let Time = this.showTime(res.time);
-                this.propInfo.history.push({time:Time, uid:res.uid, user:res.username, price:res.price});
+                this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
 
                 this.notice(res.username);
                 if(res.overtime){

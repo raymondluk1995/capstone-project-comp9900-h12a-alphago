@@ -36,7 +36,7 @@
     <el-form  label-width="80px" label-position="left">
       <el-tabs v-model="activateIndex" :tab-position="'left'" style="margin:0 20%" >
         <el-tab-pane label="Basic" name="0" >
-          <div>
+          <div class="google-map">
             <google-places-autocomplete
                     @resultChanged="(placeDetail) => (place = placeDetail)"
                     @resultCleared="() => (place = null)"
@@ -882,13 +882,17 @@ li {
     background-color: rgba(200, 213, 249, 0.4);
 }
 
-span {
-  border: 1px solid rgba(138, 138, 138, 0.4);
+.google-map {
+    span {
+        color:black;
+        border: 1px solid rgba(138, 138, 138, 0.4);
+    }
 }
 
 
-.el-checkbox {
-  display: block;
-}
+    .el-checkbox {
+        display: block;
+    }
+
 
 </style>
