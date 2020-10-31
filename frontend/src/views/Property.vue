@@ -951,19 +951,18 @@
             websocketonmessage(e){ //数据接收
                 let res = JSON.parse(e.data);
                 console.log(res);
-                if(!res.overtime){
-                    this.propInfo.latestPrice = res.price;
-                    console.log(res.price);
-                    console.log(res.username);
-                    console.log(this.propInfo.latestPrice);
-                    // for (let i = 0; i < res.bidHistory.length; i++) {
-                    // console.log(i, ' => ', bidHistory[i])
-                    let Time = this.showTime(res.time);
-                    this.propInfo.history.push({time:Time, uid:res.uid, user:res.username, price:res.price});
 
-                    this.notice(res.username);
+                this.propInfo.latestPrice = res.price;
+                console.log(res.price);
+                console.log(res.username);
+                console.log(this.propInfo.latestPrice);
+                // for (let i = 0; i < res.bidHistory.length; i++) {
+                // console.log(i, ' => ', bidHistory[i])
+                let Time = this.showTime(res.time);
+                this.propInfo.history.push({time:Time, uid:res.uid, user:res.username, price:res.price});
 
-                }else{
+                this.notice(res.username);
+                if(res.overtime){
                     this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
                 }
 
