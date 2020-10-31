@@ -131,7 +131,7 @@
                               stripe
                               tooltip-effect="light"
                               style="overflow-y: scroll; "
-                              :default-sort = "{prop: 'time', order: 'descending'}"
+                              :default-sort = "{prop: 'price', order: 'descending'}"
                     >
 
                         <template v-for="(item, index) in columns">
@@ -430,24 +430,24 @@
                 tipError: false,
                 time: '',
                 cards:[
-                    {
-                    paymentId:'12',
-                    name:'Tom',
-                    cardNumber:'4321432143214321',
-                    cvc:'123',
-                },
-                    {
-                        paymentId:'11',
-                        name:'Bob',
-                        cardNumber:'1234123412341234',
-                        cvc:'012',
-                    },
-                    {
-                        paymentId:'15',
-                        name:'Tom',
-                        cardNumber:'4321432143214321',
-                        cvc:'123',
-                    }
+                //     {
+                //     paymentId:'12',
+                //     name:'Tom',
+                //     cardNumber:'4321432143214321',
+                //     cvc:'123',
+                // },
+                //     {
+                //         paymentId:'11',
+                //         name:'Bob',
+                //         cardNumber:'1234123412341234',
+                //         cvc:'012',
+                //     },
+                //     {
+                //         paymentId:'15',
+                //         name:'Tom',
+                //         cardNumber:'4321432143214321',
+                //         cvc:'123',
+                //     }
                 ],
 
                 detail_tags:[],
@@ -462,10 +462,10 @@
                 // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
                 markers:[{position:{},}],
                 columns: [
-                    {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table,sortable:true},
+                    {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table},
                     {prop: 'uid', label: 'UID', width: '300'},
                     {prop: 'username', label: 'User', width: '300'},
-                    {prop: 'price', label: 'Current Bid',formatter: this.formatPrice}
+                    {prop: 'price', label: 'Current Bid',formatter: this.formatPrice,sortable:true}
                 ],
                 propInfo: {
                     id: '',
@@ -492,25 +492,25 @@
                     photos: [],
                     description: '',
                     history:[
-                        {
-                            time: 1603981349 ,
-                            uid:123,
-                            user:'UMR',
-                            price: '123123',
-                        },
-                        {
-                            time: 1603981349,
-                            user:'ooo',
-                            uid:345,
-                            price: '11100000',
-                        },
-                        {
-                            time: 1603981349,
-                            user:'TSF',
-                            uid:456,
-                            price: '123123',
-                        },
-
+                        // {
+                        //     time: 1603981349 ,
+                        //     uid:123,
+                        //     user:'UMR',
+                        //     price: '123123123',
+                        // },
+                        // {
+                        //     time: 160398890,
+                        //     user:'ooo',
+                        //     uid:345,
+                        //     price: '1110001',
+                        // },
+                        // {
+                        //     time: 1603890349,
+                        //     user:'TSF',
+                        //     uid:456,
+                        //     price: '123123',
+                        // },
+                        //
 
 
                     ],
@@ -673,7 +673,7 @@
 
                         let card = this.form2.cardNumber.replace(/\s+/g, "");
                         data.append('cardNumber', card);
-                        let date = this.form2.cardNumber.replace(/\//g, "");
+                        let date = this.form2.expiredDate.replace(/\//g, "");
                         data.append('expiryDate', date);
                         data.append('cvv', this.form2.cvc);
 
@@ -937,14 +937,7 @@
 
             websocketonmessage(e){ //数据接收
                 let res = JSON.parse(e.data);
-                console.log(res);
-
                 this.propInfo.latestPrice = res.price;
-                console.log(res.price);
-                console.log(res.username);
-                console.log(this.propInfo.latestPrice);
-                // for (let i = 0; i < res.bidHistory.length; i++) {
-                // console.log(i, ' => ', bidHistory[i])
                 let Time = this.showTime(res.time);
                 this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
 
@@ -959,6 +952,14 @@
 
                 }
 
+            },
+            test(){
+                this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
+
+                clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                    this.countDown(this.propInfo.enddate,this.propInfo.startdate);
+                }, 1000);
             },
 
             websocketsend(Data){//数据发送
