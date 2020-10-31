@@ -426,24 +426,24 @@
                 tipError: false,
                 time: '',
                 cards:[
-                    {
-                    paymentId:'12',
-                    name:'Tom',
-                    cardNumber:'4321432143214321',
-                    cvc:'123',
-                },
-                    {
-                        paymentId:'11',
-                        name:'Bob',
-                        cardNumber:'1234123412341234',
-                        cvc:'012',
-                    },
-                    {
-                        paymentId:'15',
-                        name:'Tom',
-                        cardNumber:'4321432143214321',
-                        cvc:'123',
-                    }
+                //     {
+                //     paymentId:'12',
+                //     name:'Tom',
+                //     cardNumber:'4321432143214321',
+                //     cvc:'123',
+                // },
+                //     {
+                //         paymentId:'11',
+                //         name:'Bob',
+                //         cardNumber:'1234123412341234',
+                //         cvc:'012',
+                //     },
+                //     {
+                //         paymentId:'15',
+                //         name:'Tom',
+                //         cardNumber:'4321432143214321',
+                //         cvc:'123',
+                //     }
                 ],
 
                 detail_tags:[],
@@ -471,11 +471,11 @@
                     username:'',
                     address: '',
                     enddate:'',
-                    status:'R',
+                    status:'',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
-                    latestPrice:'100',
+                    latestPrice:'',
                     info: '',
                     bedroomNum:'',
                     bathroomNum:'',
@@ -533,8 +533,8 @@
         },
 
         created() {
-            // this.username = localStorage.getItem("username");
-            this.username= '123'
+            this.username = localStorage.getItem("username");
+            // this.username= '123'
             this.id = this.$route.query.id;
             this.$axios
                 .get('/auction/information/' + this.id)
