@@ -259,8 +259,8 @@
                                         </el-row>
                                         <el-row>
                                             <div class="btns3">
-                                            <el-col>
-                                                <span style="padding:5px 10px; border:2px solid #666666; border-radius: 5px" @click="checktable1">
+                                            <el-col >
+                                                <span style=";padding:5px 10px; border:2px solid #666666; border-radius: 5px" @click="checktable1">
                                                     <i class="el-icon-plus">
                                                     </i> Add New Card</span>
 
@@ -331,6 +331,7 @@
                                     <el-form-item  prop="initPrice">
                                         <h6>Input your initial bid to proceed.</h6>
                                         <el-input v-model="form3.initPrice" placeholder="Initial Price"></el-input>
+                                        <p>Your initial bid is ${{ form3.initPrice | numFormat }}.</p>
                                     </el-form-item>
                                 </el-form>
                             </el-row>
@@ -474,7 +475,7 @@
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
-                    enddate: '',
+                    enddate:'',
                     status:'',
                     startdate:'',
                     avatar:'',
@@ -584,7 +585,7 @@
             },
             ['form3.initPrice'](val) {
                 this.$nextTick(() => {
-                    this.form3.initPrice = val.replace(/\D/g,'').replace(/...(?!$)/g,'$&,');
+                    // this.form3.initPrice = val|numFormat;
                 });
             },
         },
@@ -821,6 +822,7 @@
                     .then(() => {
                         let data = new FormData();
                         data.append('rabId', this.propInfo.rab);
+
                         data.append('bidPrice', this.newBid);
                         this.$axios.post('/bid', data)
                             .then((response) => {
@@ -881,8 +883,8 @@
 
                                 data.append('aid', this.id);
                                 data.append('registerTime', dayjs().valueOf().toString());
-                                data.append('initPrice', this.form3.initPrice);
-                                console.log(this.form3.initPrice);
+                                let price = this.form3.initPrice.replace(/,/g, "");
+                                data.append('initPrice', price);
 
                                 this.$axios.post('/rab/register', data)
                                     .then((response) => {
@@ -942,7 +944,7 @@
                 this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
 
                 this.notice(res.username);
-                if(res.overtime){
+                if(res.overtime === true){
                     this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
 
                     clearInterval(this.timer);
