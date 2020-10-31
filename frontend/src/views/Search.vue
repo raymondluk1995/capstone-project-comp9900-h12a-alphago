@@ -53,242 +53,287 @@
     </Header>
 
     <div id="main" justify="center">
-      <!-- Search Bar Part  -->
-      <el-row
-        type="flex"
-        justify="center"
-        class="search"
-        style="margin-top: 10px"
-      >
-        <el-col :span="15">
-          <div>
-            <el-col :span="20">
-              <vue-google-autocomplete
-                ref="address"
-                id="map"
-                classname="form-control"
-                placeholder="Please search suburb name or postcode here"
-                v-on:placechanged="getAddressData"
-                country="au"
-                types="(cities)"
-              >
-              </vue-google-autocomplete>
-            </el-col>
+      <template>
+        <!-- Search Bar Part  -->
+        <el-row
+          type="flex"
+          justify="center"
+          class="search"
+          style="margin-top: 10px"
+        >
+          <el-col :span="15">
+            <div>
+              <el-col :span="20">
+                <vue-google-autocomplete
+                  ref="address"
+                  id="map"
+                  classname="form-control"
+                  placeholder="Please search suburb name or postcode here"
+                  v-on:placechanged="getAddressData"
+                  country="au"
+                  types="(cities)"
+                >
+                </vue-google-autocomplete>
+              </el-col>
 
-            <el-col style="margin-left: 2px" :span="2" id="search-btn">
-              <el-button
-                style="
-                  height: 38px;
-                  color: white;
-                  background-color: rgb(20, 60, 127);
-                "
-                icon="el-icon-search"
-                @click="toSearch"
-              >
-                Search
-              </el-button>
-            </el-col>
-          </div>
-        </el-col>
-      </el-row>
-
-      <!-- Filters Part  -->
-      <el-row type="flex" justify="center" style="margin-top: 10px">
-        <div id="filters">
-          <el-row :gutter="3" type="flex" justify="center">
-            <el-col :span="5">
-              <h4 id="filter-title">FILTERS:</h4>
-            </el-col>
-            <el-col :span="5">
-              <el-dropdown :hide-on-click="false" placement="bottom">
+              <el-col style="margin-left: 2px" :span="2" id="search-btn">
                 <el-button
                   style="
+                    height: 38px;
                     color: white;
-                    background-color: rgba(20, 60, 127, 0.9);
-                    margin: 15px;
-                    padding: 5px;
-                    border-radius: 10px;
+                    background-color: rgb(20, 60, 127);
                   "
+                  icon="el-icon-search"
+                  @click="toSearch"
                 >
-                  <i class="el-icon-s-home" style="margin-right: 10px"></i
-                  >{{ bedrooms }} Bedrooms<i
-                    class="el-icon-arrow-down el-icon--right"
-                  ></i>
+                  Search
                 </el-button>
-                <el-dropdown-menu slot="dropdown" style="margin: 0">
-                  <el-dropdown-item>
-                    <el-input-number
-                      v-model="bedrooms"
-                      @change="handleChange"
-                      :min="1"
-                      :max="10"
-                    ></el-input-number>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-col>
+              </el-col>
+            </div>
+          </el-col>
+        </el-row>
 
-            <el-col :span="5">
-              <el-dropdown :hide-on-click="false" placement="bottom">
+        <!-- Filters Part  -->
+        <el-row type="flex" justify="center" style="margin-top: 10px">
+          <div id="filters">
+            <el-row :gutter="3" type="flex" justify="center">
+              <el-col :span="5">
+                <h4 id="filter-title">FILTERS:</h4>
+              </el-col>
+              <el-col :span="5">
+                <el-dropdown :hide-on-click="false" placement="bottom">
+                  <el-button
+                    style="
+                      color: white;
+                      background-color: rgba(20, 60, 127, 0.9);
+                      margin: 15px;
+                      padding: 5px;
+                      border-radius: 10px;
+                    "
+                  >
+                    <i class="el-icon-s-home" style="margin-right: 10px"></i
+                    >{{ bedrooms }} Bedrooms<i
+                      class="el-icon-arrow-down el-icon--right"
+                    ></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown" style="margin: 0">
+                    <el-dropdown-item>
+                      <el-input-number
+                        v-model="bedrooms"
+                        @change="handleChange"
+                        :min="1"
+                        :max="10"
+                      ></el-input-number>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+
+              <el-col :span="5">
+                <el-dropdown :hide-on-click="false" placement="bottom">
+                  <el-button
+                    style="
+                      color: white;
+                      background-color: rgba(20, 60, 127, 0.9);
+                      margin: 15px;
+                      padding: 5px;
+                      border-radius: 10px;
+                    "
+                  >
+                    <i
+                      class="el-icon-toilet-paper"
+                      style="margin-right: 10px"
+                    ></i
+                    >{{ bathrooms }} Bathrooms<i
+                      class="el-icon-arrow-down el-icon--right"
+                    ></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown" style="margin: 0">
+                    <el-dropdown-item>
+                      <el-input-number
+                        v-model="bathrooms"
+                        @change="handleChange"
+                        :min="1"
+                        :max="10"
+                      ></el-input-number>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+
+              <el-col :span="5">
+                <el-dropdown :hide-on-click="false" placement="bottom">
+                  <el-button
+                    style="
+                      color: white;
+                      background-color: rgba(20, 60, 127, 0.9);
+                      margin: 15px;
+                      padding: 5px;
+                      border-radius: 10px;
+                    "
+                  >
+                    <i class="el-icon-truck" style="margin-right: 10px"></i
+                    >{{ garages }} Garages<i
+                      class="el-icon-arrow-down el-icon--right"
+                    ></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown" style="margin: 0">
+                    <el-dropdown-item>
+                      <el-input-number
+                        v-model="garages"
+                        @change="handleChange"
+                        :min="1"
+                        :max="10"
+                      ></el-input-number>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+
+              <el-col :span="5">
+                <el-dropdown :placement="bottom" @command="handleCommand_type">
+                  <el-button
+                    style="
+                      color: white;
+                      background-color: rgba(20, 60, 127, 0.9);
+                      margin: 15px;
+                      padding: 5px;
+                      border-radius: 10px;
+                    "
+                  >
+                    <i
+                      class="el-icon-collection-tag"
+                      style="margin-right: 10px"
+                    ></i
+                    >Type: {{ type
+                    }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="All"> All </el-dropdown-item>
+                    <el-dropdown-item command="Apartment">
+                      Apartment
+                    </el-dropdown-item>
+                    <el-dropdown-item command="Unit"> Unit </el-dropdown-item>
+                    <el-dropdown-item command="House"> House </el-dropdown-item>
+                    <el-dropdown-item command="Studio">
+                      Studio
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+
+              <el-col :span="5">
+                <el-dropdown :hide-on-click="false" placement="bottom">
+                  <el-button
+                    style="
+                      color: white;
+                      background-color: rgba(20, 60, 127, 0.9);
+                      margin: 15px;
+                      padding: 5px;
+                      border-radius: 10px;
+                    "
+                  >
+                    <i class="el-icon-coin" style="margin-right: 10px"></i
+                    >Price<i class="el-icon-arrow-down el-icon--right"></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>
+                      <div>min ($k)</div>
+                      <el-input-number
+                        v-model="minPrice"
+                        @change="handleChange"
+                        :min="0"
+                        :max="100000"
+                        size="small"
+                      ></el-input-number>
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                      <div>max ($k)</div>
+                      <el-input-number
+                        v-model="maxPrice"
+                        @change="handleChange"
+                        :min="0"
+                        :max="100000"
+                        size="small"
+                      ></el-input-number>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+
+              <el-col :span="5">
+                <el-dropdown :hide-on-click="false" placement="bottom">
+                  <el-button
+                    style="
+                      color: white;
+                      background-color: rgba(20, 60, 127, 0.9);
+                      margin: 15px;
+                      padding: 5px;
+                      border-radius: 10px;
+                    "
+                  >
+                    <i class="el-icon-full-screen" style="margin-right: 10px"></i
+                    >Area<i class="el-icon-arrow-down el-icon--right"></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>
+                      <div>min (m<sup>2</sup>)</div>
+                      <el-input-number
+                        v-model="minArea"
+                        @change="handleChange"
+                        :min="0"
+                        :max="10000"
+                        size="small"
+                      ></el-input-number>
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                      <div>max (m<sup>2</sup>)</div>
+                      <el-input-number
+                        v-model="maxArea"
+                        @change="handleChange"
+                        :min="0"
+                        :max="100000"
+                        size="small"
+                      ></el-input-number>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+
+              <el-col :span="6">
+                <el-dropdown
+                  :hide-on-click="false"
+                  placement="bottom"
+                  @command="handleCommand2"
+                >
+                  <el-button
+                    style="
+                      color: white;
+                      background-color: rgba(20, 60, 127, 0.9);
+                      margin: 15px;
+                      padding: 5px;
+                      border-radius: 10px;
+                    "
+                  >
+                    <i class="el-icon-sort" style="margin-right: 10px"></i
+                    >Sort<i class="el-icon-arrow-down el-icon--right"></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="0">
+                      Recommended
+                    </el-dropdown-item>
+                    <el-dropdown-item command="+">
+                      Price: Low to High
+                    </el-dropdown-item>
+                    <el-dropdown-item command="-">
+                      Price: High to Low
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+
+              <el-col :span="5">
                 <el-button
-                  style="
-                    color: white;
-                    background-color: rgba(20, 60, 127, 0.9);
-                    margin: 15px;
-                    padding: 5px;
-                    border-radius: 10px;
-                  "
-                >
-                  <i class="el-icon-toilet-paper" style="margin-right: 10px"></i
-                  >{{ bathrooms }} Bathrooms<i
-                    class="el-icon-arrow-down el-icon--right"
-                  ></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown" style="margin: 0">
-                  <el-dropdown-item>
-                    <el-input-number
-                      v-model="bathrooms"
-                      @change="handleChange"
-                      :min="1"
-                      :max="10"
-                    ></el-input-number>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-col>
-
-            <el-col :span="5">
-              <el-dropdown :hide-on-click="false" placement="bottom">
-                <el-button
-                  style="
-                    color: white;
-                    background-color: rgba(20, 60, 127, 0.9);
-                    margin: 15px;
-                    padding: 5px;
-                    border-radius: 10px;
-                  "
-                >
-                  <i class="el-icon-truck" style="margin-right: 10px"></i
-                  >{{ garages }} Garages<i
-                    class="el-icon-arrow-down el-icon--right"
-                  ></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown" style="margin: 0">
-                  <el-dropdown-item>
-                    <el-input-number
-                      v-model="garages"
-                      @change="handleChange"
-                      :min="1"
-                      :max="10"
-                    ></el-input-number>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-col>
-
-            <el-col :span="5">
-              <el-dropdown :placement="bottom" @command="handleCommand_type">
-                <el-button
-                  style="
-                    color: white;
-                    background-color: rgba(20, 60, 127, 0.9);
-                    margin: 15px;
-                    padding: 5px;
-                    border-radius: 10px;
-                  "
-                >
-                  <i
-                    class="el-icon-collection-tag"
-                    style="margin-right: 10px"
-                  ></i
-                  >Type: {{ type
-                  }}<i class="el-icon-arrow-down el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="All"> All </el-dropdown-item>
-                  <el-dropdown-item command="Apartment">
-                    Apartment
-                  </el-dropdown-item>
-                  <el-dropdown-item command="Unit"> Unit </el-dropdown-item>
-                  <el-dropdown-item command="House"> House </el-dropdown-item>
-                  <el-dropdown-item command="Studio"> Studio </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-col>
-
-            <el-col :span="5">
-              <el-dropdown :hide-on-click="false" placement="bottom">
-                <el-button
-                  style="
-                    color: white;
-                    background-color: rgba(20, 60, 127, 0.9);
-                    margin: 15px;
-                    padding: 5px;
-                    border-radius: 10px;
-                  "
-                >
-                  <i class="el-icon-coin" style="margin-right: 10px"></i>Price<i
-                    class="el-icon-arrow-down el-icon--right"
-                  ></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>
-                    <div>min</div>
-                    <el-input-number
-                      v-model="minPrice"
-                      @change="handleChange"
-                      :min="0"
-                      :max="10000"
-                      size="small"
-                    ></el-input-number>
-                  </el-dropdown-item>
-                  <el-dropdown-item>
-                    <div>max</div>
-                    <el-input-number
-                      v-model="maxPrice"
-                      @change="handleChange"
-                      :min="0"
-                      :max="10000"
-                      size="small"
-                    ></el-input-number>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-col>
-
-            <el-col :span="6">
-              <el-dropdown
-                :hide-on-click="false"
-                placement="bottom"
-                @command="handleCommand2"
-              >
-                <el-button
-                  style="
-                    color: white;
-                    background-color: rgba(20, 60, 127, 0.9);
-                    margin: 15px;
-                    padding: 5px;
-                    border-radius: 10px;
-                  "
-                >
-                  <i class="el-icon-sort" style="margin-right: 10px"></i>Sort<i
-                    class="el-icon-arrow-down el-icon--right"
-                  ></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="0"> Recommended </el-dropdown-item>
-                  <el-dropdown-item command="+">
-                    Price: Low to High
-                  </el-dropdown-item>
-                  <el-dropdown-item command="-">
-                    Price: High to Low
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-col>
-
-            <el-col :span="5">
-              <el-button
                   style="
                     color: white;
                     background-color: rgb(35, 150, 19);
@@ -296,12 +341,22 @@
                     padding: 5px 10px;
                     border-radius: 10px;
                   "
-                ><i class="el-icon-check" style="margin-right: 10px"></i>Apply
-              </el-button>
-            </el-col>
-          </el-row>
-        </div>
-      </el-row>
+                  @click="handlesearch"
+                  ><i class="el-icon-check" style="margin-right: 10px"></i>Apply
+                </el-button>
+              </el-col>
+            </el-row>
+          </div>
+        </el-row>
+      </template>
+
+
+      <template>
+
+
+
+      </template>
+
     </div>
   </div>
 </template>
@@ -313,6 +368,7 @@ import Header from "@/components/Header.vue";
 import { mapActions } from "vuex";
 import $ from "jquery";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
+import numFormat from "../utils/numFormat";
 
 export default {
   name: "Search",
@@ -330,6 +386,8 @@ export default {
       filterPropertyList: [],
       minPrice: 0,
       maxPrice: 999_999_999,
+      minArea: 0,
+      maxArea: 999_999_999,
       bedrooms: 1,
       bathrooms: 1,
       garages: 1,
