@@ -221,6 +221,7 @@ export default {
 
     getAddressData: function (addressData, placeResultData, id) {
       this.address = addressData;
+      // console.log(this.address.locality);
     },
 
     handleCommand(command) {
