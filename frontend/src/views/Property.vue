@@ -523,14 +523,14 @@
                     bidderNum:'',
                     latestPrice:'',
                     info: '',
-                    bedroomNum:'1',
-                    bathroomNum:'2',
-                    garageNum:'2',
+                    bedroomNum:'',
+                    bathroomNum:'',
+                    garageNum:'',
                     phone: '',
                     email:'',
-                    position: 'bbq, pool',
+                    position: '',
                     timer:'',
-                    detail: 'close to car, close to school',
+                    detail: '',
                     photos: [],
                     description: '',
                     history:[
@@ -589,34 +589,34 @@
             let h = document.documentElement.clientHeight  || document.body.clientHeight;
             this.vdaH = h - 147 + 'px';
 
-            // this.$axios
-            //     .get('/auction/information/' + this.id)
-            //     .then(response => {
-            //         if (response.data.code === 200){
-            //         this.propInfo = response.data.result;
-            //         this.initWebSocket();
-            //         // this.isBidder = response.data.result.isBidder,
-            //         this.lat =  parseFloat(response.data.result.lat),
-            //         this.lng =  parseFloat(response.data.result.lng),
-            //         this.position_tags = response.data.result.position,
-            //         this.detail_tags = response.data.result.detail,
-            //         this.center = {
-            //             lat:this.lat,
-            //             lng:this.lng
-            //         },
-            //         this.markers = [{
-            //             position:{
-            //                 lat:this.lat,
-            //                 lng:this.lng
-            //             },
-            //         }]}
-            //         else if (response.data.code === 404) {
-            //             this.notFound = true;
-            //         }
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error)
-            //     });
+            this.$axios
+                .get('/auction/information/' + this.id)
+                .then(response => {
+                    if (response.data.code === 200){
+                    this.propInfo = response.data.result;
+                    this.initWebSocket();
+                    // this.isBidder = response.data.result.isBidder,
+                    this.lat =  parseFloat(response.data.result.lat),
+                    this.lng =  parseFloat(response.data.result.lng),
+                    this.position_tags = response.data.result.position,
+                    this.detail_tags = response.data.result.detail,
+                    this.center = {
+                        lat:this.lat,
+                        lng:this.lng
+                    },
+                    this.markers = [{
+                        position:{
+                            lat:this.lat,
+                            lng:this.lng
+                        },
+                    }]}
+                    else if (response.data.code === 404) {
+                        this.notFound = true;
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error)
+                });
 
 
             // this.notFound = true;

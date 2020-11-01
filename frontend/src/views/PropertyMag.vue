@@ -273,26 +273,26 @@
                 ],
                 urlObjImg:{},
                 originPropertyList: [
-                    {
-                        pid:1,
-                        status:'R',
-                        address:'afdgdag',
-                        photos:['', '']
-                    }
-                    ,{
-                        pid:2,
-                        status: 'N',
-                        address:'123asd',
-                        photos:['','']
-                    },
-                    {
-                        pid:3,
-                        aid:1,
-                        auction:true,
-                        status: 'A',
-                        address:'123asd',
-                        photos:['','']
-                    }
+                    // {
+                    //     pid:1,
+                    //     status:'R',
+                    //     address:'afdgdag',
+                    //     photos:['', '']
+                    // }
+                    // ,{
+                    //     pid:2,
+                    //     status: 'N',
+                    //     address:'123asd',
+                    //     photos:['','']
+                    // },
+                    // {
+                    //     pid:3,
+                    //     aid:1,
+                    //     auction:true,
+                    //     status: 'A',
+                    //     address:'123asd',
+                    //     photos:['','']
+                    // }
 
                 ],
                 propList: [],
@@ -326,23 +326,23 @@
             //     this.$router.push("/login");
             // }
 
-            // this.$axios
-            //     .get('/property/propties')
-            //     .then(response => {
-            //         if (response.data.code === 200) {
-            //             this.originPropertyList = response.data.result;
-            //             this.propList = response.data.result;
-            //             this.propInfo = this.originPropertyList[0];
-            //         }else if(response.data.code === 400){
-            //             this.isEmpty = true;
-            //         }
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     })
-            this.isEmpty = false;
-            this.propList = this.originPropertyList;
-            this.propInfo = this.originPropertyList[0];
+            this.$axios
+                .get('/property/propties')
+                .then(response => {
+                    if (response.data.code === 200) {
+                        this.originPropertyList = response.data.result;
+                        this.propList = response.data.result;
+                        this.propInfo = this.originPropertyList[0];
+                    }else if(response.data.code === 400){
+                        this.isEmpty = true;
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+            // this.isEmpty = false;
+            // this.propList = this.originPropertyList;
+            // this.propInfo = this.originPropertyList[0];
         },
 
 
@@ -599,7 +599,7 @@
     }
 
     .btn-long{
-        
+
     }
 
 </style>
