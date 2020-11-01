@@ -64,36 +64,33 @@
 
 
             <div class="item" style="margin-top:40px">
-
-              <span class="button"
-                    @mouseover="mouseOver1"
-                    @mouseleave="mouseLeave1"
-                    @click="goto('register')"
-                    :style="active1"
-              ><i class="el-icon-user"></i> Sign Up</span>
-
-              <span class="button"
-                    @mouseover="mouseOver2"
-                    @mouseleave="mouseLeave2"
-                    @click="forgetpwd"
-                    :style="active2"
-              ><i class="el-icon-warning-outline"></i> Forget Password?</span>
-
-                <span class="button"
+                <el-row tyle="flex" style="text-align:center;">
+                <span class="button2"
                       v-if="loginByuser"
                       @click="signInUser"
-                      @mouseover="mouseOver3"
-                      @mouseleave="mouseLeave3"
+
                       :style="active3">
                     <i class="el-icon-check"></i> Sign in</span>
 
                 <span class="button2"
                       v-else @click="signInEmail"
-                      @mouseover="mouseOver3"
-                      @mouseleave="mouseLeave3"
+
                       :style="active3">
                     <i class="el-icon-check"></i> Sign in</span>
+                </el-row>
 
+
+                <el-row tyle="flex" justify="center" style="text-align:center;margin-top:30px;">
+                     <span class="button"
+                           @click="goto('register')"
+                           :style="active1"
+                     ><i class="el-icon-user"></i> Sign Up</span>
+
+                    <span class="button"
+                          @click="forgetpwd"
+                          :style="active2"
+                    ><i class="el-icon-warning-outline"></i> Forget Password?</span>
+                </el-row>
 <!--              <el-button class="btn" @click="goto('register')">Sign Up</el-button>-->
 <!--              <el-button type="info" plane @click="forgetpwd">Forget Password?</el-button>-->
 <!--              <el-button v-if="loginByuser" type="primary" @click="signInUser" style="float: right;">Sign in</el-button>-->
@@ -240,15 +237,6 @@
         this.byuserType = "info"
         this.byemailType = "primary";
       },
-
-        mouseOver1() {this.active1 = "border-left:3px solid #123123;";},
-        mouseLeave1() {this.active1 = "";},
-
-        mouseOver2() {this.active2 = "border-left:3px solid #123123;";},
-        mouseLeave2() {this.active2 = "";},
-
-        mouseOver3() {this.active3 = "border-left:3px solid #123123;";},
-        mouseLeave3() {this.active3 = "";},
 
 
       signInEmail() {
@@ -464,6 +452,13 @@
 .button{
     cursor: pointer;
     padding:3px 20px 3px 5px;
+    font-size:15px;
+    color: #596c84;
+    &:hover{
+        border-bottom:1px solid #123123;
+        transform:translateX(15px);
+        transition-duration: 0.5s;
+    }
     /*border-radius: 3px;*/
     /*border-left:3px solid #384a69;*/
 }
@@ -474,6 +469,11 @@
       /*border-left:3px solid #384a69;*/
       margin-left:10px;
       font-size:20px;
+      &:hover{
+          border-bottom:1px solid #123123;
+          transform:translateX(10px);
+          transition-duration: 0.5s;
+      }
   }
 
   .back-btn{

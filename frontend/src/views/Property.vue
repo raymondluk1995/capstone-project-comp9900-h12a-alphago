@@ -26,8 +26,8 @@
                 </div>
             </template>
         </Header>
-
-        <el-row  type="flex" justify="center" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
+        <template v-if="!this.notFound">
+        <el-row type="flex" justify="center" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
             <el-col :span="16" style="margin: 0 50px 20px 30px; border:1px solid #ccc">
                 <h1 style="margin: 50px 50px 0 50px">{{ propInfo.address }}</h1>
                 <section style="margin: 15px 50px 0 50px">
@@ -66,39 +66,58 @@
 <!--                    <h3>Details</h3>-->
                         <h3></h3>
                     <el-row type="flex" justify="left"  style="margin-bottom: 10px">
-                        <el-col :span="4">
-                        <div style="font-size: 20px">
-                            <i class="el-icon-toilet-paper"><span> {{ propInfo.bathroomNum}} </span> Baths</i>
-                        </div>
+<!--                        <el-col :span="4">-->
+                            <el-col class="tag-wrap2" :span="4">
+                                <img src="@/assets/bath.png" alt="" />
+                                <span> {{ propInfo.bathroomNum}} <span style="font-size:15px">Baths</span> </span>
+
+<!--                            </el-col>-->
+<!--                        <div style="font-size: 20px">-->
+<!--                            <i class="el-icon-toilet-paper"><span> {{ propInfo.bathroomNum}} </span> Baths</i>-->
+<!--                        </div>-->
                     </el-col>
-                        <el-col :span="4">
-                        <div style="font-size: 20px">
-                            <i class="el-icon-house"><span> {{ propInfo.bedroomNum}} </span> Beds</i>
-                        </div>
+<!--                        <el-col :span="4">-->
+<!--                        <div style="font-size: 20px">-->
+<!--                            <i class="el-icon-house"><span> {{ propInfo.bedroomNum}} </span> Beds</i>-->
+<!--                        </div>-->
+<!--                        </el-col>-->
+
+<!--                    <el-col :span="4">-->
+<!--                        <div style="font-size: 20px">-->
+<!--                            <i class="el-icon-truck"><span> {{ propInfo.garageNum}} </span> Garages</i>-->
+<!--                        </div>-->
+<!--                    </el-col>-->
+                        <el-col class="tag-wrap2" :span="4" >
+                            <img src="@/assets/bed.png" alt="" />
+                            <span> {{ propInfo.bedroomNum}} <span style="font-size:15px">Beds</span></span>
                         </el-col>
 
-                    <el-col :span="4">
-                        <div style="font-size: 20px">
-                            <i class="el-icon-truck"><span> {{ propInfo.garageNum}} </span> Garages</i>
-                        </div>
-                    </el-col>
+                        <el-col class="tag-wrap2" :span="4">
+                            <img src="@/assets/parking.png" alt="" />
+                            <span> {{ propInfo.garageNum}} <span style="font-size:15px">Garages</span></span>
+                        </el-col>
+
                     </el-row>
+
 
                         <el-row type="flex" style="margin: 20px 0;">
                     <p>{{ propInfo.description }}</p>
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>
+<!--                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>-->
+                            <p class='tag-wrap' v-for="tag in propInfo.position.split(',')" >{{ tag }}</p>
+                            <p class='tag-wrap3' v-for="tag in propInfo.detail.split(',')" >{{ tag }}</p>
                         </el-row>
 
-                        <el-row type="flex" style="margin: 20px 0;">
-                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="tag.id">{{ tag }}</el-tag>
-                        </el-row>
+<!--                        <el-row type="flex" style="margin: 20px 0;">-->
+<!--                            <p class='tag-wrap3' v-for="tag in propInfo.detail.split(',')" >{{ tag }}</p>-->
+<!--&lt;!&ndash;                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="tag.id">{{ tag }}</el-tag>&ndash;&gt;-->
+<!--                        </el-row>-->
                     </el-col>
                     </el-row>
 
-                        <el-row>
+                        <el-row style="margin-bottom:50px">
                         <el-col >
                             <h3>Map</h3>
                             <div class="map" id="map">
@@ -122,7 +141,7 @@
                 </section>
 
 
-                <section style="margin: 15px 50px 0 50px;height:400px;">
+                <section v-show="propInfo.status ==='A'" style="margin: 0 50px 0 50px;height:400px;">
                     <h3>Bid History</h3>
 
                     <el-table :data="propInfo.history"
@@ -196,7 +215,7 @@
                                    class="btn"
                                    @click="Bidreg"
                                    icon="el-icon-right"
-                                   style="font-size:20px;"
+
                         >Register as RAB</el-button>
                     </div>
                     </template>
@@ -211,7 +230,6 @@
                     <el-button style="width:100%" @click="goto('login')">Login to Bid</el-button>
                 </template>
 
-                <el-button style="width:100%" @click="test">test</el-button>
             </el-col>
         </el-row>
 
@@ -348,6 +366,28 @@
             </template>
 
         </el-dialog>
+        </template>
+
+        <template v-else>
+            <div >
+
+                <div class="img-404">
+                    <img src="../assets/sad.png" alt="" >
+                </div>
+
+            <el-row type="flex" justify="center">
+                <span style="
+                margin-top:10px;
+                font-size: 100px;
+               color:#475669;
+                font-weight: bold">404</span>
+            </el-row>
+            <el-row type="flex" justify="center">
+                <span style="font-size:20px;color:rgba(89,108,132,0.88);">Oops..This auction has ended.</span>
+            </el-row>
+            </div>
+        </template>
+
     </div>
 </template>
 
@@ -459,7 +499,7 @@
                 lng:'',
                 center: {},
                 initialBid:'',
-
+                vdaH:'',
                 // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
                 markers:[{position:{},}],
                 columns: [
@@ -483,14 +523,14 @@
                     bidderNum:'',
                     latestPrice:'',
                     info: '',
-                    bedroomNum:'',
-                    bathroomNum:'',
-                    garageNum:'',
+                    bedroomNum:'1',
+                    bathroomNum:'2',
+                    garageNum:'2',
                     phone: '',
                     email:'',
-                    position: '',
+                    position: 'bbq, pool',
                     timer:'',
-                    detail: '',
+                    detail: 'close to car, close to school',
                     photos: [],
                     description: '',
                     history:[
@@ -546,34 +586,40 @@
             this.username = localStorage.getItem("username");
             // this.username= '123';
             this.id = this.$route.query.id;
-            this.$axios
-                .get('/auction/information/' + this.id)
-                .then(response => {
-                    if (response.data.code === 200){
-                    this.propInfo = response.data.result;
-                    this.initWebSocket();
-                    // this.isBidder = response.data.result.isBidder,
-                    this.lat =  parseFloat(response.data.result.lat),
-                    this.lng =  parseFloat(response.data.result.lng),
-                    this.position_tags = response.data.result.position,
-                    this.detail_tags = response.data.result.detail,
-                    this.center = {
-                        lat:this.lat,
-                        lng:this.lng
-                    },
-                    this.markers = [{
-                        position:{
-                            lat:this.lat,
-                            lng:this.lng
-                        },
-                    }]}
-                    else if (response.data.code === 404) {
-                        this.notFound = true;
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                });
+            let h = document.documentElement.clientHeight  || document.body.clientHeight;
+            this.vdaH = h - 147 + 'px';
+
+            // this.$axios
+            //     .get('/auction/information/' + this.id)
+            //     .then(response => {
+            //         if (response.data.code === 200){
+            //         this.propInfo = response.data.result;
+            //         this.initWebSocket();
+            //         // this.isBidder = response.data.result.isBidder,
+            //         this.lat =  parseFloat(response.data.result.lat),
+            //         this.lng =  parseFloat(response.data.result.lng),
+            //         this.position_tags = response.data.result.position,
+            //         this.detail_tags = response.data.result.detail,
+            //         this.center = {
+            //             lat:this.lat,
+            //             lng:this.lng
+            //         },
+            //         this.markers = [{
+            //             position:{
+            //                 lat:this.lat,
+            //                 lng:this.lng
+            //             },
+            //         }]}
+            //         else if (response.data.code === 404) {
+            //             this.notFound = true;
+            //         }
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error)
+            //     });
+
+
+            // this.notFound = true;
         },
 
         watch: {
@@ -958,19 +1004,6 @@
                 }
             },
 
-            test(){
-                clearInterval(this.timer);
-                console.log(this.propInfo.enddate)
-                console.log(this.showTime(this.propInfo.enddate))
-                this.propInfo.enddate = this.propInfo.enddate + 2 * 1000*60;
-                console.log(this.showTime(this.propInfo.enddate))
-                // let min = this.propInfo.enddate.getMinutes() + 2;
-                // this.propInfo.enddate.setMinutes( min );
-                this.timer = setInterval(() => {
-                    this.countDown(this.propInfo.enddate,this.propInfo.startdate);
-                }, 1000);
-            },
-
             websocketsend(Data){//数据发送
                 this.websock.send(Data);
             },
@@ -1101,15 +1134,10 @@
     }
     .status-process1 {
         background-image: url("../assets/banner-bg-green.png");
-        /*background-color: #89c668;*/
     }
-    /*.status-process {*/
-    /*    background-color: #e6a23c;*/
-    /*}*/
 
     .status-not-start1 {
         background-image: url("../assets/banner-bg-red.png");
-        /*background-color: #f56c6c;*/
     }
     .back-btn{
         cursor: pointer;
@@ -1201,10 +1229,75 @@
         }
     }
 
-
+    .img-404
+    {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+            img{
+            margin:100px 0 0 0;
+            width: 5%;
+            /*height: 10%;*/
+            /*position:absolute;*/
+            }
+    }
 
     .el-radio{
         margin-left:0 !important;
     }
+
+    .tag-wrap {
+        margin-right: 20px;
+        /*width: 150px;*/
+        /*height: 60px;*/
+        padding:0 20px;
+        color: #004e85;
+        border: 1px solid #c4ccd5;
+        border-radius: 3px;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+    .tag-wrap3 {
+        margin-right: 20px;
+        /*width: 150px;*/
+        /*height: 60px;*/
+        padding:0 20px;
+        background-color: rgba(0, 78, 133, 0.68);
+        color: white;
+        border: 1px solid #c4ccd5;
+        border-radius: 3px;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .tag-wrap2 {
+        margin-right: 30px;
+        width: 100px;
+        height: 60px;
+        color: #004e85;
+        border: 1px solid #c4ccd5;
+        border-top:10px solid rgba(0, 91, 154, 0.58);
+        /*border-radius: 3px;*/
+        font-weight: bold;
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+            width: 25px;
+            height: 25px;
+            margin-right: 20px;
+        }
+    }
+
+
 
 </style>
