@@ -66,7 +66,7 @@
               <el-col :span="20">
                 <vue-google-autocomplete
                   ref="address"
-                  id="map"
+                  id="address"
                   classname="form-control"
                   placeholder="Please search suburb name or postcode here"
                   v-on:placechanged="getAddressData"
@@ -494,12 +494,13 @@ export default {
       total: 0,
       pageSize: 8,
       currentPage: 1,
-      search: "",
+      search: "", // the search condition for whole page
       type: "All",
       filterDates: [
         new Date(),
         new Date(new Date().setFullYear(new Date().getFullYear() + 2)),
       ],
+      filterFlag: false,
       address: "",
       colNumObject: {
         twoColUl: true,
@@ -786,39 +787,55 @@ export default {
     },
 
     handlesearch() {
-      this.getProductBySearch();
+      this.filterFlag = true;
+      this.getProductBySearch;
     },
 
     getProductBySearch() {
-      this.search =
-        "start_date=" +
-        this.filterDates[0] +
-        "&end_date=" +
-        this.filterDates[1] +
-        "&location=" +
-        this.address.locality;
-      if (this.min_price > 0) {
-        this.search = this.search + "&min_price=" + this.min_price;
+      // this.search = "suburb" this.address.locality;
+      var addr = document.getElementById("address").value;
+      if (isNaN(addr)) {
+        addr = this.address.locality;
+        this.search = "suburb=" + this.address.locality;
+      } else {
+        this.search = "postcode=" + addr;
       }
-      if (this.max_price < 10000) {
-        this.search = this.search + "&max_price=" + this.max_price;
+
+      if (this.filterFlag) {
+        this.search = this.search + "&startDate=" + this.startDate;
+        this.search = this.search + "&endDate=" + this.endDate;
+
+        if (this.minPrice > 0) {
+          this.search = this.search + "&minPrice=" + this.minPrice;
+        }
+        if (this.maxPrice < 999999999) {
+          this.search = this.search + "&maxPrice=" + this.maxPrice;
+        }
+        if (this.bedrooms !== "") {
+          this.search = this.search + "&bedrooms=" + this.bedrooms;
+        }
+        if (this.bathrooms !== "") {
+          this.search = this.search + "&bathrooms=" + this.bathrooms;
+        }
+        if (this.garages !== "") {
+          this.search = this.search + "&garages=" + this.garages;
+        }
+
+        if (this.order !== "") {
+          this.search = this.search + "&order=" + this.order;
+        }
+        if (this.type !== "All") {
+          this.search = this.search + "&property_type=" + this.type;
+        }
+        if(this.minArea!=0){
+          this.search = this.search + "&minArea=" + this.minArea;
+        }
+        if(this.maxArea!=999999999){
+          this.search = this.search + "&maxArea=" + this.maxArea;
+        }
       }
-      if (this.bedrooms !== "") {
-        this.search = this.search + "&bedrooms=" + this.bedrooms;
-      }
-      if (this.bathrooms !== "") {
-        this.search = this.search + "&bathrooms=" + this.bathrooms;
-      }
-      if (this.order !== "") {
-        this.search = this.search + "&order=" + this.order;
-      }
-      if (this.$store.getters.getStorage) {
-        this.search = this.search + "&email=" + this.$store.getters.getStorage;
-      }
-      if (this.type !== "All") {
-        this.search = this.search + "&property_type=" + this.type;
-      }
-      // type
+
+
       this.$axios
         .get("/api/search_property?" + this.search + "&page=" + this.page)
         .then((res) => {

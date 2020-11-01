@@ -111,7 +111,7 @@
             <el-col :span="20">
               <vue-google-autocomplete
                 ref="address"
-                id="map"
+                id="address"
                 classname="form-control"
                 placeholder="Please search suburb name or postcode here"
                 v-on:placechanged="getAddressData"
@@ -221,7 +221,6 @@ export default {
 
     getAddressData: function (addressData, placeResultData, id) {
       this.address = addressData;
-      // console.log(this.address.locality);
     },
 
     handleCommand(command) {
@@ -256,6 +255,11 @@ export default {
       }
     },
     toSearch() {
+      var addr = document.getElementById("address").value;
+      if(isNaN(addr)){
+        addr = this.address.locality;
+      }
+      console.log(addr);
       console.log("search");
     },
     goto(name) {
