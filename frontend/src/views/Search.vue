@@ -111,7 +111,7 @@
                       border-radius: 10px;
                     "
                   >
-                    <i class="el-icon-s-home" style="margin-right: 10px"></i
+                    <i class="fas fa-bed" style="margin-right: 10px"></i
                     >{{ bedrooms }} Bedrooms<i
                       class="el-icon-arrow-down el-icon--right"
                     ></i>
@@ -141,7 +141,7 @@
                     "
                   >
                     <i
-                      class="el-icon-toilet-paper"
+                      class="fas fa-bath"
                       style="margin-right: 10px"
                     ></i
                     >{{ bathrooms }} Bathrooms<i
@@ -172,7 +172,7 @@
                       border-radius: 10px;
                     "
                   >
-                    <i class="el-icon-truck" style="margin-right: 10px"></i
+                    <i class="fas fa-car" style="margin-right: 10px"></i
                     >{{ garages }} Garages<i
                       class="el-icon-arrow-down el-icon--right"
                     ></i>
@@ -202,7 +202,7 @@
                     "
                   >
                     <i
-                      class="el-icon-collection-tag"
+                      class="fas fa-info-circle"
                       style="margin-right: 10px"
                     ></i
                     >Type: {{ type
@@ -233,7 +233,7 @@
                       border-radius: 10px;
                     "
                   >
-                    <i class="el-icon-coin" style="margin-right: 10px"></i
+                    <i class="fas fa-dollar-sign" style="margin-right: 10px"></i
                     >Price<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
@@ -272,7 +272,10 @@
                       border-radius: 10px;
                     "
                   >
-                    <i class="el-icon-full-screen" style="margin-right: 10px"></i
+                    <i
+                      class="fas fa-couch"
+                      style="margin-right: 10px"
+                    ></i
                     >Area<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
@@ -350,13 +353,84 @@
         </el-row>
       </template>
 
+      <!-- SEARCH RESULTS -->
+      <template v-if="!isEmpty">
+        <el-row type="flex" justify="center">
+          <div class="items">
+            <ul>
+              <li v-for="item in propList" :key="item.aid">
+                <div class="item" @click.native="goDetails(item)">
+                  <el-row
+                    style="
+                      height: 40px;
+                      background-color: rgba(45, 84, 146, 0.24);
+                      margin: 10px 2% 0 2%;
+                      padding: 10px;
+                    "
+                  >
+                    <h5>Stop At: {{ showTime(item.enddate) }}</h5>
+                  </el-row>
 
-      <template>
-
-
-
+                  <el-carousel
+                    :interval="5000"
+                    arrow="always"
+                    :height="cheight"
+                    style="margin: 0 2%"
+                  >
+                    <el-carousel-item v-for="pic in item.photos" :key="pic.id">
+                      <img :src="pic" width="100%" height="100%" alt="" />
+                    </el-carousel-item>
+                  </el-carousel>
+                  <div style="padding: 10px">
+                    <h5>{{ item.address }}</h5>
+                    <el-row type="flex" justify="left" style="margin: 10px 5%">
+                      <el-col :span="4">
+                        <i class="fas fa-bath">
+                          Baths: {{ item.bathroomNum }}</i
+                        >
+                      </el-col>
+                      <el-col :span="4">
+                        <i class="fas fa-bed">
+                          Beds: {{ item.bedroomNum }}</i
+                        >
+                      </el-col>
+                      <el-col :span="4">
+                        <i class="fas fa-car"> Cars: {{ item.garageNum }}</i>
+                      </el-col>
+                      <el-col :span="4">
+                        <i class="fas fa-couch">
+                          Area: {{ item.area }}</i
+                        >
+                      </el-col>
+                      <el-col :span="8">
+                        <i class="fas fa-info-circle"> Type: {{ item.type }}</i>
+                      </el-col>
+                    </el-row>
+                    <el-row type="flex" justify="space-around">
+                      <div class="bid">
+                        ${{ getBidStatus(item) | numFormat }}
+                      </div>
+                    </el-row>
+                    <el-row type="flex" justify="space-around">
+                      <template>
+                        <div class="bid2" :class="addStatusColor(item.status)">
+                          {{ getStatus(item) }}
+                        </div>
+                      </template>
+                    </el-row>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </el-row>
       </template>
 
+      <template v-else>
+        <div style="margin-left: 10%">
+          <h3 style="color: rgb(102, 102, 102)">No Results Found</h3>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -380,7 +454,7 @@ export default {
 
   data() {
     return {
-      isEmpty: false,
+      isEmpty: true,
       hasLogin: false,
       searchPropertyList: [],
       filterPropertyList: [],
@@ -577,5 +651,10 @@ export default {
   padding: 0;
   color: white;
   font-family: "Dancing Script", cursive;
+}
+
+.items {
+  margin: 10px 10%;
+  text-align: center;
 }
 </style>

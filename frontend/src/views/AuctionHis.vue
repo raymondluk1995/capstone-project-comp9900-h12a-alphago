@@ -51,7 +51,7 @@
                                 <li  v-for="item in propList" :key="item.aid ">
                                     <div class="item" @click.native="goDetails(item)">
                                         <el-row  style="height:40px;background-color: rgba(45,84,146,0.24);margin: 10px 2% 0 2%;padding:10px;">
-                                            <h5 >Stop At: {{ showTime(item.enddate) }}</h5>
+                                            <h5 >Auction Ends At: {{ showTime(item.enddate) }}</h5>
                                         </el-row>
 
                                         <el-carousel :interval="5000" arrow="always" :height="cheight" style="margin: 0 2%">
@@ -151,8 +151,8 @@
                         photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
                         highestPrice: 123123,
                         currentBid:123123,
-                        startdate:'',
-                        endddate:'',
+                        startdate:new Date(2021,10,10,12,10),
+                        endddate: new Date(1995, 11, 17, 3, 24, 0),
                     }
                     ,{
                         aid:2,
