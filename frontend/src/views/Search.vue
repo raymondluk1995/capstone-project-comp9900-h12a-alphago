@@ -548,8 +548,8 @@ export default {
       bathrooms: 1,
       garages: 1,
       order: "",
-      total: 0,
-      pageSize: 8,
+      total: 4,
+      pageSize: 2,
       currentPage: 1,
       search: "", // the search condition for whole page
       type: "All",
