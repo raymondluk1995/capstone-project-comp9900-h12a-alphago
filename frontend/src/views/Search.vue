@@ -455,6 +455,18 @@
           <h3 style="color: rgb(102, 102, 102)">No Results Found</h3>
         </div>
       </template>
+
+
+
+      <div class="pagination">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :page-size="pageSize"
+          :total="total"
+          @current-change="currentChange"
+        ></el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -979,5 +991,13 @@ li {
   .cardWidth {
     width: 60vw;
   }
+}
+
+
+
+
+.pagination{
+  height: 50px;
+  text-align: center;
 }
 </style>
