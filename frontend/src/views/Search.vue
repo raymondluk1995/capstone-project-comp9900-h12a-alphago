@@ -414,53 +414,82 @@
                   </el-row>
 
                   <el-row type="flex" justify="center" class="width:100%">
-                      <el-col :span="2" style="margin-right: 10px">
-                        <i class="fas fa-bed" style="margin-right: 5px"></i>
-                        {{ item.bedroomNum }}
-                      </el-col>
+                    <el-col :span="3" style="margin-right: 10px">
+                      <i class="fas fa-bed" style="margin-right: 5px"></i>
+                      {{ item.bedroomNum }}
+                    </el-col>
 
-                      <el-col :span="2" style="margin-right: 10px">
-                        <i class="fas fa-bath" style="margin-right: 5px"></i>
-                        {{ item.bathroomNum }}
-                      </el-col>
+                    <el-col :span="3" style="margin-right: 10px">
+                      <i class="fas fa-bath" style="margin-right: 5px"></i>
+                      {{ item.bathroomNum }}
+                    </el-col>
 
-                      <el-col :span="2" style="margin-right: 10px">
-                        <i class="fas fa-car" style="margin-right: 5px"></i>
-                        {{ item.garageNum }}
-                      </el-col>
+                    <el-col :span="3" style="margin-right: 6px">
+                      <i class="fas fa-car" style="margin-right: 5px"></i>
+                      {{ item.garageNum }}
+                    </el-col>
 
-                      <el-col :span="5" style="margin-right: 10px">
-                        <i class="fas fa-home" style="margin-right: 5px"></i>
-                        {{ item.area }} m<sup>2</sup>
-                      </el-col>
-                    </el-row>
-                  
+                    <el-col :span="5" style="margin-right: 10px">
+                      <i class="fas fa-home" style="margin-right: 5px"></i>
+                      {{ item.area }} m<sup>2</sup>
+                    </el-col>
+                  </el-row>
 
-                  <v-card-text>
-                    <div class="my-4 subtitle-1 result-type">
-                      Type: {{ item.type }}
-                    </div>
-                    <div class="my-4 subtitle-1 result-type">
-                      Auction Ends At: {{ showTime(item.endDate) }}
-                    </div>
-                  </v-card-text>
-
-                  <v-divider
-                    class="mx-4"
-                    style="margin: 0; padding: 0"
-                  ></v-divider>
-                  <v-card-text style="padding: 5px; margin: 0">
-                    <el-row
-                      type="flex"
-                      justify="space-around"
-                      class="current-price"
-                    >
-                      <div class="bid">
-                        Current Bid: <br />
-                        ${{ getBidStatus(item) | numFormat }}
+                  <div v-if="item.status==='A'"> 
+                    <v-card-text>
+                      <div class="my-4 subtitle-1 result-type">
+                        Type: {{ item.type }}
                       </div>
-                    </el-row>
-                  </v-card-text>
+                      <div class="my-4 subtitle-1 result-type">
+                        Auction Ends At: {{ showTime(item.endDate) }}
+                      </div>
+                    </v-card-text>
+
+                    <v-divider
+                      class="mx-4"
+                      style="margin: 0; padding: 0"
+                    ></v-divider>
+                    <v-card-text style="padding: 5px; margin: 0">
+                      <el-row
+                        type="flex"
+                        justify="space-around"
+                        class="current-price"
+                      >
+                        <div class="bid">
+                          Current Highest Bid: <br />
+                          ${{ getBidStatus(item) | numFormat }}
+                        </div>
+                      </el-row>
+                    </v-card-text>
+                  </div>
+
+                  <div v-else> 
+                    <v-card-text>
+                      <div class="my-4 subtitle-1 result-type">
+                        Type: {{ item.type }}
+                      </div>
+                      <div class="my-4 subtitle-1 result-type">
+                        Auction Starts At: {{ showTime(item.startDate) }}
+                      </div>
+                    </v-card-text>
+
+                    <v-divider
+                      class="mx-4"
+                      style="margin: 0; padding: 0"
+                    ></v-divider>
+                    <v-card-text style="padding: 5px; margin: 0">
+                      <el-row
+                        type="flex"
+                        justify="space-around"
+                        class="current-price"
+                      >
+                        <div class="comingSoon">
+                          COMING SOON<br>
+                          PLEASE WAIT
+                        </div>
+                      </el-row>
+                    </v-card-text>
+                  </div>
                 </v-card>
               </li>
             </ul>
@@ -566,7 +595,7 @@ export default {
       propList: [
         {
           aid: 1,
-          status: "S",
+          status: "A",
           bathroomNum: 2,
           bedroomNum: 1,
           garageNum: 2,
@@ -975,6 +1004,21 @@ li {
   border-radius: 3px;
   margin-top: 15px;
 }
+
+.comingSoon{
+  width: 90%;
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  background-color: rgb(216, 158, 15);
+  border-radius: 3px;
+  margin-top: 15px;
+}
+
+
+
 .bid2 {
   width: 90%;
   padding: 3px;
@@ -1005,9 +1049,9 @@ li {
 
 .cardWidth40 {
   width: 40vw;
-} 
+}
 
-.cardWidth{
+.cardWidth {
   width: 35vw;
 }
 
