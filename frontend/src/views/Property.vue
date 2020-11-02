@@ -48,7 +48,8 @@
                 <el-row type="flex" justify="center" style="margin: 15px 50px 0 50px">
                     <el-col :span="12" >
                         <div class="bid">
-                            <span style="font-size:15px">Latest Bid</span>
+                            <span v-if="propInfo.status==='R' || parseInt(propInfo.bidderNum) === 0" style="font-size:15px">Guide Bid</span>
+                            <span v-else style="font-size:15px">Latest Bid</span>
                             ${{ propInfo.latestPrice | numFormat }}
                         </div>
                     </el-col>
@@ -71,22 +72,7 @@
                                 <img src="@/assets/bath.png" alt="" />
                                 <span> {{ propInfo.bathroomNum}} <span style="font-size:15px">Baths</span> </span>
 
-<!--                            </el-col>-->
-<!--                        <div style="font-size: 20px">-->
-<!--                            <i class="el-icon-toilet-paper"><span> {{ propInfo.bathroomNum}} </span> Baths</i>-->
-<!--                        </div>-->
-                    </el-col>
-<!--                        <el-col :span="4">-->
-<!--                        <div style="font-size: 20px">-->
-<!--                            <i class="el-icon-house"><span> {{ propInfo.bedroomNum}} </span> Beds</i>-->
-<!--                        </div>-->
-<!--                        </el-col>-->
-
-<!--                    <el-col :span="4">-->
-<!--                        <div style="font-size: 20px">-->
-<!--                            <i class="el-icon-truck"><span> {{ propInfo.garageNum}} </span> Garages</i>-->
-<!--                        </div>-->
-<!--                    </el-col>-->
+                            </el-col>
                         <el-col class="tag-wrap2" :span="4" >
                             <img src="@/assets/bed.png" alt="" />
                             <span> {{ propInfo.bedroomNum}} <span style="font-size:15px">Beds</span></span>
@@ -95,6 +81,16 @@
                         <el-col class="tag-wrap2" :span="4">
                             <img src="@/assets/parking.png" alt="" />
                             <span> {{ propInfo.garageNum}} <span style="font-size:15px">Garages</span></span>
+                        </el-col>
+
+                        <el-col class="tag-wrap2" :span="4">
+                            <img src="@/assets/bx-area.png" alt="" />
+                            <span> {{ propInfo.area}} <span style="font-size:15px">m2</span></span>
+                        </el-col>
+
+                        <el-col class="tag-wrap2" :span="4">
+                            <img src="@/assets/type.png" alt="" />
+                            <span> {{ propInfo.type}} </span>
                         </el-col>
 
                     </el-row>
@@ -517,10 +513,10 @@
                     username:'',
                     address: '',
                     enddate:'',
-                    status:'',
+                    status:'A',
                     startdate:'',
                     avatar:'',
-                    bidderNum:'',
+                    bidderNum:'0',
                     latestPrice:'',
                     info: '',
                     bedroomNum:'',
@@ -592,25 +588,29 @@
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
-                    if (response.data.code === 200){
-                    this.propInfo = response.data.result;
-                    this.initWebSocket();
-                    // this.isBidder = response.data.result.isBidder,
-                    this.lat =  parseFloat(response.data.result.lat),
-                    this.lng =  parseFloat(response.data.result.lng),
-                    this.position_tags = response.data.result.position,
-                    this.detail_tags = response.data.result.detail,
-                    this.center = {
-                        lat:this.lat,
-                        lng:this.lng
-                    },
-                    this.markers = [{
-                        position:{
-                            lat:this.lat,
-                            lng:this.lng
-                        },
-                    }]}
-                    else if (response.data.code === 404) {
+                    if (response.status >= 200 && response.status < 300) {
+                        if (response.data.code === 200) {
+                            this.propInfo = response.data.result;
+                            this.initWebSocket();
+                            // this.isBidder = response.data.result.isBidder,
+                            //     this.propInfo.enddate = parseInt( this.propInfo.enddate ) + 11*60*60*1000;
+                            this.lat = parseFloat(response.data.result.lat),
+                                this.lng = parseFloat(response.data.result.lng),
+                                this.position_tags = response.data.result.position,
+                                this.detail_tags = response.data.result.detail,
+                                this.center = {
+                                    lat: this.lat,
+                                    lng: this.lng
+                                },
+                                this.markers = [{
+                                    position: {
+                                        lat: this.lat,
+                                        lng: this.lng
+                                    },
+                                }]
+                        }
+                    }
+                    else if (response.status === 404) {
                         this.notFound = true;
                     }
                 })
@@ -879,7 +879,7 @@
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
-                                        // this.currentBid = this.newBid;
+                                        this.currentBid = this.newBid;
                                         // this.newPlacedBid = this.newBid;
                                         this.newBid='';
                                         this.$message({
@@ -1167,15 +1167,16 @@
         font-size: 18px !important;
     }
 
-    .el-table__header{
-        font-size: 20px !important;
-    }
     .el-dialog__header{
         padding:20px 20px 10px;
         background-color: #2f4764;
     }
     .el-dialog__title{
         color:white !important;
+    }
+
+    .el-table__header{
+        font-size: 20px !important;
     }
     .table-header{
         background-color:#4f6995;
