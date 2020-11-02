@@ -47,7 +47,7 @@
                 </el-row>
                 <el-row class="property-list">
                 <el-card
-                        class="card"
+                        class="card2"
                         :class="addStatusColor(item.status)"
                         v-for="item in propList"
                         @click.native="selectItem(item)"
@@ -160,6 +160,7 @@
                                                             range-separator="-"
                                                             start-placeholder="Auction Start Time"
                                                             end-placeholder="Auction End Time"
+                                                            value-format="timestamp"
                                                             :picker-options="pickerOptions">
                                             </el-date-picker>
 
@@ -293,7 +294,6 @@
                     //     address:'123asd',
                     //     photos:['','']
                     // }
-
                 ],
                 propList: [],
                 propInfo: {},
@@ -501,7 +501,7 @@
                     }).then(() => {
                         let data = new FormData();
                         data.append('pid', item.pid);
-                        data.append('aid', item.aid);
+                        // data.append('aid', item.aid);
                         this.$axios.post('/property/delete' + data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
@@ -571,7 +571,7 @@
         margin-left:50px;
         /*box-shadow: 2px 1px 5px 4px #d5dbea;*/
     }
-    .card {
+    .card2 {
         margin: 20px 20px;
         &:hover {
             cursor: pointer;
@@ -594,9 +594,6 @@
         border-left: 15px solid #8a97a6;
     }
 
-    .swiper-slide {
-        height: 500px;
-    }
 
     .btn-long{
 
