@@ -61,7 +61,7 @@
           class="search"
           style="margin-top: 10px"
         >
-          <el-col :span="15">
+          <el-col :span="20" justify="center" type="flex">
             <div>
               <el-col :span="20">
                 <vue-google-autocomplete
@@ -89,13 +89,28 @@
                   Search
                 </el-button>
               </el-col>
+
+              <el-col style="margin-left: 10px" :span="1" id="search-btn">
+                <el-button
+                  style="
+                    height: 38px;
+                    color: white;
+                    background-color: rgba(26, 156, 196, 0.6);
+                    margin: 0;
+                  "
+                  @click="showFilter"
+                >
+                  <i class="fas fa-filter"></i> Filters
+                </el-button>
+              </el-col>
             </div>
           </el-col>
         </el-row>
 
         <!-- Filters Part  -->
+
         <el-row type="flex" justify="center" style="margin-top: 10px">
-          <div id="filters">
+          <div id="filters" v-show="showFilterFlag">
             <el-row :gutter="3" type="flex" justify="center">
               <el-col :span="5">
                 <h4 id="filter-title">FILTERS:</h4>
@@ -394,31 +409,34 @@
                     </el-carousel-item>
                   </el-carousel>
 
-                  <v-card-title>{{ item.address }}</v-card-title>
+                  <el-row justify="center" type="flex">
+                    <v-card-title>{{ item.address }}</v-card-title>
+                  </el-row>
 
-                  <v-card-text>
-                    <el-row type="flex" justify="center" class="width:100%">
-                      <el-col :span="5" style="margin-right: 10px">
+                  <el-row type="flex" justify="center" class="width:100%">
+                      <el-col :span="2" style="margin-right: 10px">
                         <i class="fas fa-bed" style="margin-right: 5px"></i>
                         {{ item.bedroomNum }}
                       </el-col>
 
-                      <el-col :span="5" style="margin-right: 10px">
+                      <el-col :span="2" style="margin-right: 10px">
                         <i class="fas fa-bath" style="margin-right: 5px"></i>
                         {{ item.bathroomNum }}
                       </el-col>
 
-                      <el-col :span="5" style="margin-right: 10px">
+                      <el-col :span="2" style="margin-right: 10px">
                         <i class="fas fa-car" style="margin-right: 5px"></i>
                         {{ item.garageNum }}
                       </el-col>
 
-                      <el-col :span="10" style="margin-right: 10px">
+                      <el-col :span="5" style="margin-right: 10px">
                         <i class="fas fa-home" style="margin-right: 5px"></i>
                         {{ item.area }} m<sup>2</sup>
                       </el-col>
                     </el-row>
+                  
 
+                  <v-card-text>
                     <div class="my-4 subtitle-1 result-type">
                       Type: {{ item.type }}
                     </div>
@@ -455,8 +473,6 @@
           <h3 style="color: rgb(102, 102, 102)">No Results Found</h3>
         </div>
       </template>
-
-
 
       <div class="pagination">
         <el-pagination
@@ -518,6 +534,7 @@ export default {
         twoColUl: true,
         oneColUl: false,
       },
+      showFilterFlag: false,
 
       vcardObject: {
         "mx-auto": true,
@@ -745,6 +762,10 @@ export default {
       console.log("search");
     },
 
+    showFilter() {
+      this.showFilterFlag = !this.showFilterFlag;
+    },
+
     showTime(time) {
       // let time = dayjs(day).format("YYYY-MM-DD HH:mm:ss");
       let MONTH = [
@@ -810,7 +831,11 @@ export default {
         addr = this.address.locality;
         this.search = "suburb=" + this.address.locality;
       } else {
-        this.search = "postcode=" + addr;
+        if (addr.toString().length != 4) {
+          this.$message.error("Please input a valid postcode!");
+        } else {
+          this.search = "postcode=" + addr;
+        }
       }
 
       if (this.filterFlag) {
@@ -837,16 +862,15 @@ export default {
           this.search = this.search + "&order=" + this.order;
         }
         if (this.type !== "All") {
-          this.search = this.search + "&property_type=" + this.type;
+          this.search = this.search + "&propertyType=" + this.type;
         }
-        if(this.minArea!=0){
+        if (this.minArea != 0) {
           this.search = this.search + "&minArea=" + this.minArea;
         }
-        if(this.maxArea!=999999999){
+        if (this.maxArea != 999999999) {
           this.search = this.search + "&maxArea=" + this.maxArea;
         }
       }
-
 
       this.$axios
         .get("/api/search_property?" + this.search + "&page=" + this.page)
@@ -981,6 +1005,10 @@ li {
 
 .cardWidth40 {
   width: 40vw;
+} 
+
+.cardWidth{
+  width: 35vw;
 }
 
 @media only screen and (max-width: 1100px) {
@@ -993,10 +1021,7 @@ li {
   }
 }
 
-
-
-
-.pagination{
+.pagination {
   height: 50px;
   text-align: center;
 }
