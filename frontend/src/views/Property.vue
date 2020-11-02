@@ -26,8 +26,8 @@
                 </div>
             </template>
         </Header>
-
-        <el-row  type="flex" justify="center" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
+        <template v-if="!this.notFound">
+        <el-row type="flex" justify="center" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
             <el-col :span="16" style="margin: 0 50px 20px 30px; border:1px solid #ccc">
                 <h1 style="margin: 50px 50px 0 50px">{{ propInfo.address }}</h1>
                 <section style="margin: 15px 50px 0 50px">
@@ -66,39 +66,58 @@
 <!--                    <h3>Details</h3>-->
                         <h3></h3>
                     <el-row type="flex" justify="left"  style="margin-bottom: 10px">
-                        <el-col :span="4">
-                        <div style="font-size: 20px">
-                            <i class="el-icon-toilet-paper"><span> {{ propInfo.bathroomNum}} </span> Baths</i>
-                        </div>
+<!--                        <el-col :span="4">-->
+                            <el-col class="tag-wrap2" :span="4">
+                                <img src="@/assets/bath.png" alt="" />
+                                <span> {{ propInfo.bathroomNum}} <span style="font-size:15px">Baths</span> </span>
+
+<!--                            </el-col>-->
+<!--                        <div style="font-size: 20px">-->
+<!--                            <i class="el-icon-toilet-paper"><span> {{ propInfo.bathroomNum}} </span> Baths</i>-->
+<!--                        </div>-->
                     </el-col>
-                        <el-col :span="4">
-                        <div style="font-size: 20px">
-                            <i class="el-icon-house"><span> {{ propInfo.bedroomNum}} </span> Beds</i>
-                        </div>
+<!--                        <el-col :span="4">-->
+<!--                        <div style="font-size: 20px">-->
+<!--                            <i class="el-icon-house"><span> {{ propInfo.bedroomNum}} </span> Beds</i>-->
+<!--                        </div>-->
+<!--                        </el-col>-->
+
+<!--                    <el-col :span="4">-->
+<!--                        <div style="font-size: 20px">-->
+<!--                            <i class="el-icon-truck"><span> {{ propInfo.garageNum}} </span> Garages</i>-->
+<!--                        </div>-->
+<!--                    </el-col>-->
+                        <el-col class="tag-wrap2" :span="4" >
+                            <img src="@/assets/bed.png" alt="" />
+                            <span> {{ propInfo.bedroomNum}} <span style="font-size:15px">Beds</span></span>
                         </el-col>
 
-                    <el-col :span="4">
-                        <div style="font-size: 20px">
-                            <i class="el-icon-truck"><span> {{ propInfo.garageNum}} </span> Garages</i>
-                        </div>
-                    </el-col>
+                        <el-col class="tag-wrap2" :span="4">
+                            <img src="@/assets/parking.png" alt="" />
+                            <span> {{ propInfo.garageNum}} <span style="font-size:15px">Garages</span></span>
+                        </el-col>
+
                     </el-row>
+
 
                         <el-row type="flex" style="margin: 20px 0;">
                     <p>{{ propInfo.description }}</p>
                         </el-row>
 
                         <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>
+<!--                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>-->
+                            <p class='tag-wrap' v-for="tag in propInfo.position.split(',')" >{{ tag }}</p>
+                            <p class='tag-wrap3' v-for="tag in propInfo.detail.split(',')" >{{ tag }}</p>
                         </el-row>
 
-                        <el-row type="flex" style="margin: 20px 0;">
-                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="tag.id">{{ tag }}</el-tag>
-                        </el-row>
+<!--                        <el-row type="flex" style="margin: 20px 0;">-->
+<!--                            <p class='tag-wrap3' v-for="tag in propInfo.detail.split(',')" >{{ tag }}</p>-->
+<!--&lt;!&ndash;                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="tag.id">{{ tag }}</el-tag>&ndash;&gt;-->
+<!--                        </el-row>-->
                     </el-col>
                     </el-row>
 
-                        <el-row>
+                        <el-row style="margin-bottom:50px">
                         <el-col >
                             <h3>Map</h3>
                             <div class="map" id="map">
@@ -122,7 +141,7 @@
                 </section>
 
 
-                <section style="margin: 15px 50px 0 50px;height:400px;">
+                <section v-show="propInfo.status ==='A'" style="margin: 0 50px 0 50px;height:400px;">
                     <h3>Bid History</h3>
 
                     <el-table :data="propInfo.history"
@@ -131,6 +150,7 @@
                               stripe
                               tooltip-effect="light"
                               style="overflow-y: scroll; "
+                              :default-sort = "{prop: 'price', order: 'descending'}"
                     >
 
                         <template v-for="(item, index) in columns">
@@ -184,7 +204,7 @@
                             <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
                                 <i slot="suffix" class="input-slot">{{newBid | numFormat }} A$</i>
                             </el-input>
-                            <el-button class='wrap-button' type="" icon="el-icon-plus" circle @click="addNewBid"></el-button>
+                            <el-button class='wrap-button' type="primary" icon="el-icon-plus"  @click="addNewBid"></el-button>
                         </div>
 
                         <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
@@ -195,7 +215,7 @@
                                    class="btn"
                                    @click="Bidreg"
                                    icon="el-icon-right"
-                                   style="font-size:20px;"
+
                         >Register as RAB</el-button>
                     </div>
                     </template>
@@ -207,8 +227,9 @@
                 </template>
 
                 <template v-else>
-                    <el-button @click="goto('login')">Login</el-button>
+                    <el-button style="width:100%" @click="goto('login')">Login to Bid</el-button>
                 </template>
+
             </el-col>
         </el-row>
 
@@ -222,23 +243,23 @@
                 >
             <template>
 
-                <div style="height: 100px;">
-                    <el-steps  :active="activateIndex - 0" align-center finish-status="success" >
-                        <el-step title="Select Card"></el-step>
-                        <el-step title="Add Card"></el-step>
-                        <el-step title="Submit"></el-step>
-                    </el-steps>
-                </div>
+<!--                <div style="height: 100px;">-->
+<!--                    <el-steps  :active="activateIndex - 0" align-center finish-status="success" >-->
+<!--                        <el-step title="Select Card"></el-step>-->
+<!--&lt;!&ndash;                        <el-step title="Add Card"></el-step>&ndash;&gt;-->
+<!--                        <el-step title="Submit"></el-step>-->
+<!--                    </el-steps>-->
+<!--                </div>-->
 
                 <el-form>
                     <el-tabs v-model="activateIndex" :tab-position="'left'" >
-                        <el-tab-pane label="Select Card" name="0"  :disabled="dis1">
+                        <el-tab-pane label="Select Card" name="0" >
                             <el-row type="flex" justify="center">
                                 <el-col :span="15">
                                         <el-row>
                                             <div v-if="this.cards.length===0">
-                                            <h6> You don't have any Card at this moment.</h6>
-                                             <span>Please add a new card!</span>
+<!--                                            <h6> You don't have any Card at this moment.</h6>-->
+<!--                                             <span>Please add a new card!</span>-->
                                             </div>
                                             <el-radio-group v-else v-model="selectCard" >
                                                 <el-radio
@@ -255,27 +276,29 @@
                                             </el-radio-group>
                                         </el-row>
                                         <el-row>
-                                            <div class="btns2">
-                                            <el-col>
-
-                                                <span  style="padding:2px 5px;" @click="checktable2"><i class="el-icon-right"></i> Submit</span>
-
-                                            </el-col>
-                                            </div>
-
-                                            <div class="btns2">
-                                            <el-col>
-                                                <span  style="padding:2px 5px;" @click="checktable1"><i class="el-icon-right"></i> Use New Card</span>
+                                            <div class="btns3">
+                                            <el-col >
+                                                <span style=";padding:5px 10px; border:2px solid #666666; border-radius: 5px" @click="checktable1">
+                                                    <i class="el-icon-plus">
+                                                    </i> Add New Card</span>
 
                                             </el-col>
                                             </div>
                                         </el-row>
+                                    <el-row>
+                                        <div class="btns2">
+                                            <el-col>
+                                                <span  style="padding:2px 5px;" @click="checktable2"><i class="el-icon-right"></i> Next</span>
+
+                                            </el-col>
+                                        </div>
+                                    </el-row>
 
                                 </el-col>
                             </el-row>
                         </el-tab-pane>
 
-                        <el-tab-pane label="Add New Card" name="1" :disabled="dis2">
+                        <el-tab-pane label="Add New Card" name="1" >
                             <el-row type="flex" justify="center">
                                 <el-col>
                                     <el-form
@@ -304,7 +327,7 @@
                                         </el-row>
                                         <el-row>
                                             <div class="btns2">
-                                                <span  style="padding:2px 5px;" @click="checktable3"><i class="el-icon-right"></i> Submit</span>
+                                                <span  style="padding:2px 5px;" @click="checktable3"><i class="el-icon-plus"></i> Add</span>
                                             </div>
                                         </el-row>
                                     </el-form>
@@ -326,6 +349,7 @@
                                     <el-form-item  prop="initPrice">
                                         <h6>Input your initial bid to proceed.</h6>
                                         <el-input v-model="form3.initPrice" placeholder="Initial Price"></el-input>
+                                        <p>Your initial bid is ${{ form3.initPrice | numFormat }}.</p>
                                     </el-form-item>
                                 </el-form>
                             </el-row>
@@ -336,13 +360,34 @@
 
                             </el-row>
                             </el-col>
-
                         </el-tab-pane>
                     </el-tabs>
                 </el-form>
             </template>
 
         </el-dialog>
+        </template>
+
+        <template v-else>
+            <div >
+
+                <div class="img-404">
+                    <img src="../assets/sad.png" alt="" >
+                </div>
+
+            <el-row type="flex" justify="center">
+                <span style="
+                margin-top:10px;
+                font-size: 100px;
+               color:#475669;
+                font-weight: bold">404</span>
+            </el-row>
+            <el-row type="flex" justify="center">
+                <span style="font-size:20px;color:rgba(89,108,132,0.88);">Oops..This auction has ended.</span>
+            </el-row>
+            </div>
+        </template>
+
     </div>
 </template>
 
@@ -426,24 +471,24 @@
                 tipError: false,
                 time: '',
                 cards:[
-                    {
-                    paymentId:'12',
-                    name:'Tom',
-                    cardNumber:'4321432143214321',
-                    cvc:'123',
-                },
-                    {
-                        paymentId:'11',
-                        name:'Bob',
-                        cardNumber:'1234123412341234',
-                        cvc:'012',
-                    },
-                    {
-                        paymentId:'15',
-                        name:'Tom',
-                        cardNumber:'4321432143214321',
-                        cvc:'123',
-                    }
+                //     {
+                //     paymentId:'12',
+                //     name:'Tom',
+                //     cardNumber:'4321432143214321',
+                //     cvc:'123',
+                // },
+                //     {
+                //         paymentId:'11',
+                //         name:'Bob',
+                //         cardNumber:'1234123412341234',
+                //         cvc:'012',
+                //     },
+                //     {
+                //         paymentId:'15',
+                //         name:'Tom',
+                //         cardNumber:'4321432143214321',
+                //         cvc:'123',
+                //     }
                 ],
 
                 detail_tags:[],
@@ -454,28 +499,29 @@
                 lng:'',
                 center: {},
                 initialBid:'',
-
+                vdaH:'',
                 // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
                 markers:[{position:{},}],
                 columns: [
                     {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table},
                     {prop: 'uid', label: 'UID', width: '300'},
                     {prop: 'username', label: 'User', width: '300'},
-                    {prop: 'price', label: 'Current Bid',formatter: this.formatPrice}
+                    {prop: 'price', label: 'Current Bid',formatter: this.formatPrice,sortable:true}
                 ],
                 propInfo: {
                     id: '',
                     aid:'',
                     rab:null,
+                    notFound:false,
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
                     enddate:'',
-                    status:'R',
+                    status:'',
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
-                    latestPrice:'100',
+                    latestPrice:'',
                     info: '',
                     bedroomNum:'',
                     bathroomNum:'',
@@ -483,26 +529,30 @@
                     phone: '',
                     email:'',
                     position: '',
+                    timer:'',
                     detail: '',
                     photos: [],
                     description: '',
                     history:[
                         // {
                         //     time: 1603981349 ,
+                        //     uid:123,
                         //     user:'UMR',
-                        //     price: '123123',
+                        //     price: '123123123',
                         // },
                         // {
-                        //     time: 1603981349,
+                        //     time: 160398890,
                         //     user:'ooo',
-                        //     price: '11100000',
+                        //     uid:345,
+                        //     price: '1110001',
                         // },
                         // {
-                        //     time: 1603981349,
+                        //     time: 1603890349,
                         //     user:'TSF',
+                        //     uid:456,
                         //     price: '123123',
                         // },
-
+                        //
 
 
                     ],
@@ -533,12 +583,16 @@
         },
 
         created() {
-            // this.username = localStorage.getItem("username");
-            this.username= '123'
+            this.username = localStorage.getItem("username");
+            // this.username= '123';
             this.id = this.$route.query.id;
+            let h = document.documentElement.clientHeight  || document.body.clientHeight;
+            this.vdaH = h - 147 + 'px';
+
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
+                    if (response.data.code === 200){
                     this.propInfo = response.data.result;
                     this.initWebSocket();
                     // this.isBidder = response.data.result.isBidder,
@@ -555,26 +609,17 @@
                             lat:this.lat,
                             lng:this.lng
                         },
-                    }]
+                    }]}
+                    else if (response.data.code === 404) {
+                        this.notFound = true;
+                    }
                 })
                 .catch(function (error) {
                     console.log(error)
                 });
 
-            // if(this.propInfo.rabId !=='none'){
-            //     this.$axios
-            //         .get('/payment/get/')
-            //         .then(response => {
-            //             this.cards = response.data.result;
-            //         })
-            //         .catch(function (error) {
-            //             console.log(error)
-            //         });
-            // }
 
-            if(this.cards.length !== 0){
-                this.selectCard = this.cards[0].paymentId;
-            }
+            // this.notFound = true;
         },
 
         watch: {
@@ -591,32 +636,15 @@
             },
             ['form3.initPrice'](val) {
                 this.$nextTick(() => {
-                    this.form3.initPrice = val.replace(/\D/g,'').replace(/...(?!$)/g,'$&,');
+                    // this.form3.initPrice = val|numFormat;
                 });
             },
         },
 
-        computed: {
-            // newBidTip() {
-            //     let tip = "";
-            //     if (!this.newPlacedBid && !this.currentBid) {
-            //         tip = "0";
-            //         this.tipError = false;
-            //     } else if(!this.newPlacedBid && this.currentBid){
-            //         tip = this.currentBid;
-            //         this.tipError = false;
-            //     }else{
-            //         tip = this.newPlacedBid;
-            //         this.tipError = false;
-            //     }
-            //     return tip;
-            // },
-        },
-
         mounted() {
-            let timer = setInterval(() => {
+            this.timer = setInterval(() => {
                 if (this.timeFlag === true) {
-                    clearInterval(timer);
+                    clearInterval(this.timer);
                 }
                 this.countDown(this.propInfo.enddate,this.propInfo.startdate);
             }, 1000);
@@ -692,8 +720,33 @@
             checktable3(){
                 this.$refs["form2"].validate((valid) =>{
                     if (valid) {
+                        let data = new FormData();
+                        data.append('name', this.form2.name);
+
+                        let card = this.form2.cardNumber.replace(/\s+/g, "");
+                        data.append('cardNumber', card);
+                        let date = this.form2.expiredDate.replace(/\//g, "");
+                        data.append('expiryDate', date);
+                        data.append('cvv', this.form2.cvc);
+
+                        this.$axios
+                            .post('/payment/add', data)
+                            .then(response => {
+                                let newCard = response.data.result;
+                                this.cards.push({
+                                    paymentId:newCard.paymentId,
+                                    name:newCard.name,
+                                    cardNumber:newCard.cardNumber,
+                                    cvc:newCard.cvc,
+                                    expiredDate:newCard.expiryDate});
+                            })
+                            .catch(function (error) {
+                                console.log(error)
+                            });
+
                         this.addNewCard = true;
-                        this.activateIndex = '2';
+                        this.activateIndex = '0';
+                        this.dis2 = true;
                     }
                     else{
                         this.$message.error("Please complete the form.");
@@ -820,6 +873,7 @@
                     .then(() => {
                         let data = new FormData();
                         data.append('rabId', this.propInfo.rab);
+
                         data.append('bidPrice', this.newBid);
                         this.$axios.post('/bid', data)
                             .then((response) => {
@@ -856,75 +910,61 @@
             },
             Bidreg() {
                 this.bidderFlag = true;
+                if(this.propInfo.rab === null){
+                    this.$axios
+                        .get('/payment/get/')
+                        .then(response => {
+                            this.cards = response.data.result;
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        });
+                }
+
+                if(this.cards.length !== 0){
+                    this.selectCard = this.cards[0].paymentId;
+                }
             },
 
             submitCard(){
-                    this.$refs["form3"].validate((valid) => {
-                        if (valid) {
-                            let data = new FormData();
-                            data.append('addNewCard', this.addNewCard);
-                            // data.append('name', this.form.name);
+                    if(this.selectCard !== '') {
+                        this.$refs["form3"].validate((valid) => {
+                            if (valid) {
+                                let data = new FormData();
 
-                            // let card = this.form.cardNumber.replace(/\s+/g, "");
-                            // data.append('cardNumber', card);
-                            //
-                            // data.append('expiryDate', this.form.expiredDate);
-                            // data.append('cvv', this.form.cvc);
-                            data.append('aid', this.id);
-                            data.append('registerTime', dayjs().valueOf().toString());
-                            data.append('initPrice',this.form3.initPrice);
-                            console.log(this.form3.initPrice);
+                                data.append('aid', this.id);
+                                data.append('registerTime', dayjs().valueOf().toString());
+                                let price = this.form3.initPrice.replace(/,/g, "");
+                                data.append('initPrice', price);
+                                data.append('paymentId', this.selectCard)
 
-                            this.$axios.post('/rab/register', data)
-                                .then((response) => {
-                                    if (response.status >= 200 && response.status < 300) {
-                                        if (response.data.code === 200) {
-                                            this.rabId = response.data.result;
-                                            this.$message.success("Register successful!");
-                                            location.reload();
+                                this.$axios.post('/rab/register', data)
+                                    .then((response) => {
+                                        if (response.status >= 200 && response.status < 300) {
+                                            if (response.data.code === 200) {
+                                                this.propInfo.rab = response.data.result;
+                                                this.$message.success("Register successful!");
+                                                // location.reload();
+                                            }
+                                        } else if (response.data.code === 400) {
+                                            this.$message.error(response.msg);
+                                        } else {
+                                            console.log(response.msg);
                                         }
-                                    } else if (response.data.code === 400) {
-                                        this.$message.error(response.msg);
-                                    } else {
-                                        console.log(response.msg);
-                                    }
-                                })
-                                .catch((res) => {
-                                    console.log('error', res);
-                                    this.$message.error('Error');
-                                });
-                            this.addNewCard = false;
-                            this.bidderFlag = false;
-                        } else {
-                            return false;
-                        }
-                    });
-                    // this.addNewCard = false;
-
-                // }
-                // else{
-                //     let data = new FormData();
-                //     data.append('paymentId', this.selectCard);
-                //
-                //     this.$axios.post('/payment/old', data)
-                //         .then((response) => {
-                //             if (response.status >= 200 && response.status < 300) {
-                //                 if (response.data.code === 200) {
-                //                     this.$message.success("Register successful!");
-                //                     location.reload();
-                //                 }
-                //             } else if (response.data.code === 400) {
-                //                 this.$message.error(response.msg);
-                //             } else {
-                //                 console.log(response.msg);
-                //             }
-                //         })
-                //         .catch((res) => {
-                //             console.log('error', res);
-                //             this.$message.error('Register Error');
-                //         });
-                // }
-
+                                    })
+                                    .catch((res) => {
+                                        console.log('error', res);
+                                        this.$message.error('Error');
+                                    });
+                                this.addNewCard = false;
+                                this.bidderFlag = false;
+                            } else {
+                                return false;
+                            }
+                        });
+                    }else{
+                        this.$message.error('You should select a card before submit.');
+                    }
             },
 
             goto(name) {
@@ -948,25 +988,22 @@
             websocketonerror(){//连接建立失败重连
                 this.initWebSocket();
             },
+
             websocketonmessage(e){ //数据接收
                 let res = JSON.parse(e.data);
-                console.log(res);
-
                 this.propInfo.latestPrice = res.price;
-                console.log(res.price);
-                console.log(res.username);
-                console.log(this.propInfo.latestPrice);
-                // for (let i = 0; i < res.bidHistory.length; i++) {
-                // console.log(i, ' => ', bidHistory[i])
                 let Time = this.showTime(res.time);
-                this.propInfo.history.push({time:Time, uid:res.uid, user:res.username, price:res.price});
-
+                this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
                 this.notice(res.username);
-                if(res.overtime){
-                    this.propInfo.enddate.setMinutes( this.propInfo.enddate.getMinutes() + 2);
+                if(res.overtime === true){
+                    clearInterval(this.timer);
+                    this.propInfo.enddate = this.propInfo.enddate + 2*1000*60;
+                    this.timer = setInterval(() => {
+                        this.countDown(this.propInfo.enddate,this.propInfo.startdate);
+                    }, 1000);
                 }
-
             },
+
             websocketsend(Data){//数据发送
                 this.websock.send(Data);
             },
@@ -1082,7 +1119,7 @@
         width:100%;
         margin-top:20px;
         .wrap-button{
-            margin-left: 30px;
+            /*margin-left: 30px;*/
         }
     }
     .btn{
@@ -1097,15 +1134,10 @@
     }
     .status-process1 {
         background-image: url("../assets/banner-bg-green.png");
-        /*background-color: #89c668;*/
     }
-    /*.status-process {*/
-    /*    background-color: #e6a23c;*/
-    /*}*/
 
     .status-not-start1 {
         background-image: url("../assets/banner-bg-red.png");
-        /*background-color: #f56c6c;*/
     }
     .back-btn{
         cursor: pointer;
@@ -1179,11 +1211,93 @@
 
         }
     }
+    .btns3{
+        /*border:1px solid #123123;*/
+        cursor: pointer;
+        position:relative;
+        /*width:150px;*/
+        font-size:15px;
+        /*float:right;*/
+        margin:10px 5px;
+        /*border:1px solid #123123;*/
+        &:hover{
+            transform:translateX(10px);
+            transition-duration: 0.5s;
+            /*border:2px solid #184080;*/
+            /*color: rgba(83, 109, 155, 0.42);*/
 
+        }
+    }
 
+    .img-404
+    {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+            img{
+            margin:100px 0 0 0;
+            width: 5%;
+            /*height: 10%;*/
+            /*position:absolute;*/
+            }
+    }
 
     .el-radio{
         margin-left:0 !important;
     }
+
+    .tag-wrap {
+        margin-right: 20px;
+        /*width: 150px;*/
+        /*height: 60px;*/
+        padding:0 20px;
+        color: #004e85;
+        border: 1px solid #c4ccd5;
+        border-radius: 3px;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+    .tag-wrap3 {
+        margin-right: 20px;
+        /*width: 150px;*/
+        /*height: 60px;*/
+        padding:0 20px;
+        background-color: rgba(0, 78, 133, 0.68);
+        color: white;
+        border: 1px solid #c4ccd5;
+        border-radius: 3px;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .tag-wrap2 {
+        margin-right: 30px;
+        width: 100px;
+        height: 60px;
+        color: #004e85;
+        border: 1px solid #c4ccd5;
+        border-top:10px solid rgba(0, 91, 154, 0.58);
+        /*border-radius: 3px;*/
+        font-weight: bold;
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+            width: 25px;
+            height: 25px;
+            margin-right: 20px;
+        }
+    }
+
+
 
 </style>

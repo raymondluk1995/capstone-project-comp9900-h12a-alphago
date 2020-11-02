@@ -6,6 +6,7 @@
                 <div class="bottom-line"></div>
             </div>
         </Header>
+
         <el-row type="flex" justify="center">
             <el-col :span="10" >
                 <div class="img-size" :style={height:vdaH}>
@@ -14,19 +15,50 @@
             </el-col>
 
             <el-col :span="14" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
-                <h1 class="title">{{form.username}}</h1>
-                <el-form
-                        class="form"
-                        ref="form"
-                        :model="form"
-                        label-width="100px"
-                        label-position="left"
-                >
-                    <el-row :gutter="50">
-                        <el-col :span="14" style="border:1px solid #123123">
+                <el-row tyle="flex" justify="center" style="margin-top:100px">
+                <el-col :span="12" ><h1 class="title">{{form.username}}</h1></el-col>
+                <el-col :span="12">
+                <el-row tyle="flex" justify="center">
+                    <div class="user-avatar-container" >
+                        <div class="user-avatar">
+                            <el-upload
+                                    class="avatar-uploader"
+                                    action="upload"
+                                    :auto-upload="false"
+                                    :show-file-list="false"
+                                    :on-change="imgBroadcastChange"
+                                    :before-upload="beforeAvatarUpload"
+                            >
+                                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </el-upload>
+                        </div>
+                        <template v-if="changeA">
+                            <div class="user-avatar-button">
+                                <el-row type="flex" justify="space-around" style="align-items: center;">
+                                    <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>
+                                    <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>
+                                </el-row>
+                            </div>
+                        </template>
+                    </div>
+                </el-row>
+                </el-col>
+                </el-row>
 
+                    <el-row  >
+                        <el-form
+                                class="form"
+                                ref="form"
+                                :model="form"
+                                label-width="100px"
+                                label-position="left"
+                        >
+                        <el-col :span="15">
+                            <el-row tyle="flex" justify="center" style="margin-top:200px">
                             <el-form-item v-if="!canEditEmail" label="Email:" prop="email">
-                                <el-input style="width:70%;float:left;" v-model="form.oldemail" :disabled="!canEditEmail"></el-input>
+                                <span> {{form.oldemail}} </span>
+<!--                                <el-input style="width:70%;float:left;" v-model="form.oldemail" :disabled="!canEditEmail"></el-input>-->
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editE">Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="Email:" prop="email">
@@ -44,7 +76,8 @@
                             </el-form-item>
 
                             <el-form-item v-if="!canEditFirstname" label="First Name:" prop="firstname">
-                                <el-input style="width:70%;float:left;" v-model="form.ofirstname" :disabled="!canEditFirstname"></el-input>
+                                <span> {{form.ofirstname}} </span>
+<!--                                <el-input style="width:70%;float:left;" v-model="form.ofirstname" :disabled="!canEditFirstname"></el-input>-->
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editF">Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="First Name:" prop="firstname">
@@ -54,7 +87,8 @@
                             </el-form-item>
 
                             <el-form-item v-if="!canEditLastname" label="Last Name:" prop="lastname">
-                                <el-input style="width:70%;float:left;" v-model="form.olastname" :disabled="!canEditLastname"></el-input>
+                                <span> {{form.olastname}} </span>
+<!--                                <el-input style="width:70%;float:left;" v-model="form.olastname" :disabled="!canEditLastname"></el-input>-->
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editL">Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="Last Name:" prop="lastname">
@@ -62,36 +96,36 @@
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelL">Cancel</el-button>
                                 <el-button round style="width:25%;float:right;margin-top:10px;" type="success" @click="submitL">Submit</el-button>
                             </el-form-item>
-
+                            </el-row>
                         </el-col>
 
-                        <el-col :span="6" :offset="1" style="border:1px solid #123123">
-                            <div class="user-avatar-container" style="border:1px solid #123123">
-                            <div class="user-avatar">
-                            <el-upload
-                                    class="avatar-uploader"
-                                    action="upload"
-                                    :auto-upload="false"
-                                    :show-file-list="false"
-                                    :on-change="imgBroadcastChange"
-                                    :before-upload="beforeAvatarUpload"
-                            >
-                                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                            </div>
-                                <template v-if="changeA">
-                                <div class="user-avatar-button">
-                                    <el-row type="flex" justify="space-around" style="align-items: center;">
-                                        <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>
-                                        <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>
-                                    </el-row>
-                            </div>
-                                </template>
-                            </div>
-                        </el-col>
+<!--                        <el-col :span="6" :offset="1" >-->
+<!--                            <div class="user-avatar-container" >-->
+<!--                            <div class="user-avatar">-->
+<!--                            <el-upload-->
+<!--                                    class="avatar-uploader"-->
+<!--                                    action="upload"-->
+<!--                                    :auto-upload="false"-->
+<!--                                    :show-file-list="false"-->
+<!--                                    :on-change="imgBroadcastChange"-->
+<!--                                    :before-upload="beforeAvatarUpload"-->
+<!--                            >-->
+<!--                                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />-->
+<!--                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                            </el-upload>-->
+<!--                            </div>-->
+<!--                                <template v-if="changeA">-->
+<!--                                <div class="user-avatar-button">-->
+<!--                                    <el-row type="flex" justify="space-around" style="align-items: center;">-->
+<!--                                        <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>-->
+<!--                                        <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>-->
+<!--                                    </el-row>-->
+<!--                            </div>-->
+<!--                                </template>-->
+<!--                            </div>-->
+<!--                        </el-col>-->
+                        </el-form>
                     </el-row>
-                </el-form>
             </el-col>
         </el-row>
     </div>
@@ -424,7 +458,7 @@
         text-align: center;
     }
     .user-avatar{
-        margin-top: 20px;
+        /*margin-top: 20px;*/
         text-align: center;
     }
     .avatar-uploader .el-upload {

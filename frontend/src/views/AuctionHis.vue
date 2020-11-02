@@ -49,17 +49,26 @@
                         <div class="items">
                             <ul>
                                 <li  v-for="item in propList" :key="item.aid ">
-                                    <div class="item" @click.native="goDetails(item)">
-                                        <el-row  style="height:40px;background-color: rgba(45,84,146,0.24);margin: 10px 2% 0 2%;padding:10px;">
-                                            <h5 >Stop At: {{ showTime(item.enddate) }}</h5>
+                                    <div>
+                                        <el-row :class="addStatusColor(item.status)" style="height:60px;padding:0 10px;">
+<!--                                            <h5 >Stop At: {{ showTime(item.enddate) }}</h5>-->
+                                            <div style="float:left;font-weight: bold;margin-top:10px;">
+                                                <span style="font-size:30px;color:white;">{{ getStatus(item)}}</span>
+                                            </div>
+                                            <div style="float:right;font-weight: bold;padding:15px;">
+                                                <span style="font-size:15px">Highest Bid  </span>
+                                                <span style="font-size:20px">${{item.currentBid|numFormat}}</span>
+                                                <span style="font-size:15px">AUD</span>
+                                            </div>
                                         </el-row>
-
-                                        <el-carousel :interval="5000" arrow="always" :height="cheight" style="margin: 0 2%">
+                                        <el-row>
+                                        <el-carousel :interval="5000" arrow="always" :height="cheight" style="width:100%">
                                             <el-carousel-item v-for="pic in item.photos" :key="pic.id">
                                                 <img :src="pic"  width="100%" height="100%" alt=""/>
                                             </el-carousel-item>
                                         </el-carousel>
-                                        <div style="padding: 10px;">
+                                        </el-row>
+                                        <div style="padding: 20px;">
                                             <h5>{{ item.address }}</h5>
                                             <el-row type="flex" justify="left" style="margin:10px 5%;">
                                                 <el-col :span="4">
@@ -78,12 +87,22 @@
                                                     <i class="el-icon-info"> Type: {{ item.type }}</i>
                                                 </el-col>
                                             </el-row>
+                                            <el-row>
+                                                <el-col :span="12">
+                                                    <i class="el-icon-info"> Start Date: {{ showTime(item.startdate) }}</i>
+                                                </el-col>
+                                                <el-col :span="12">
+                                                    <i class="el-icon-info"> End Date: {{ showTime(item.enddate) }}</i>
+                                                </el-col>
+                                            </el-row>
                                             <el-row type="flex" justify="space-around">
-                                                <div class="bid" > ${{ getBidStatus(item)|numFormat }}</div>
+                                                <div class="bid" >
+                                                    <span style="font-size:15px">My Bid</span>
+                                                    ${{ item.highestPrice | numFormat }}</div>
                                             </el-row>
                                             <el-row type="flex" justify="space-around">
                                                 <template>
-                                                    <div class="bid2" :class="addStatusColor(item.status)"> {{ getStatus(item) }}</div>
+<!--                                                    <div class="bid2" :class="addStatusColor(item.status)"> {{ getStatus(item) }}</div>-->
                                                 </template>
                                             </el-row>
                                         </div>
@@ -155,50 +174,61 @@
                     }
                     ,{
                         aid:2,
-                        status: 'S',
+                        status: 'F',
                         address:'123asd',
                         photos:['',''],
                         highestPrice: 123123,
+                        currentBid:123123,
                         startdate: new Date(2019,10,10,12,10),
                         currentBid:123,
                         reservedPrice: 10000,
+                        startdate:'',
+                        endddate:'',
                     },
-                    {
-                        aid:3,
-                        status: 'F',
-                        address:'123asd',
-                        photos:['',''],
-                        startdate: new Date(2021,10,10,12,10),
-                        enddate: new Date(2023,10,10,10,10),
-                        highestPrice: 123123,
-                        currentBid:123,
-                        reservedPrice: 10000,
-                    },
-
-                    {
-                        aid:5,
-                        status: 'F',
-                        address:'123asd',
-                        photos:['',''],
-                        highestPrice: 123123,
-                        currentBid:22222,
-                    },
-                    {
-                        aid:6,
-                        status: 'S',
-                        address:'123asd',
-                        photos:['',''],
-                        highestPrice: 123123,
-                        currentBid:22222,
-                    },
-                    {
-                        aid:8,
-                        status: 'S',
-                        address:'123asd',
-                        photos:['',''],
-                        highestPrice: 123123,
-                        currentBid:22222,
-                    },
+                    // {
+                    //     aid:3,
+                    //     status: 'F',
+                    //     address:'123asd',
+                    //     photos:['',''],
+                    //     startdate: new Date(2021,10,10,12,10),
+                    //     enddate: new Date(2023,10,10,10,10),
+                    //     highestPrice: 123123,
+                    //     currentBid:123,
+                    //     reservedPrice: 10000,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // },
+                    //
+                    // {
+                    //     aid:5,
+                    //     status: 'F',
+                    //     address:'123asd',
+                    //     photos:['',''],
+                    //     highestPrice: 123123,
+                    //     currentBid:22222,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // },
+                    // {
+                    //     aid:6,
+                    //     status: 'S',
+                    //     address:'123asd',
+                    //     photos:['',''],
+                    //     highestPrice: 123123,
+                    //     currentBid:22222,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // },
+                    // {
+                    //     aid:8,
+                    //     status: 'S',
+                    //     address:'123asd',
+                    //     photos:['',''],
+                    //     highestPrice: 123123,
+                    //     currentBid:22222,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // },
 
 
                 ],
@@ -226,14 +256,16 @@
                     },
 
                 ],
-                propList: [{
-                    status:'',
-                    address:'sdf13',
-                    bathroomNum:1,
-                    bedroomNum:2,
-                    garageNum:2,
-                    photos:['',''],
-                }],
+                propList: [
+                //     {
+                //     status:'',
+                //     address:'sdf13',
+                //     bathroomNum:1,
+                //     bedroomNum:2,
+                //     garageNum:2,
+                //     photos:['',''],
+                // }
+                ],
             }
         },
         created(){
@@ -323,13 +355,7 @@
                         break;
                 }
             },
-            getBidStatus(item){
-                if(item.status==='R'){
-                    return item.currentBid;
-                }else{
-                    return item.highestPrice;
-                }
-            },
+
 
             changeSearch(value) {
                 let filterPropertyList = [];
@@ -355,14 +381,26 @@
                 }
             },
             addStatusColor(status) {
-                const colors = new Map([
-                    // ["R", "status-not-start"],
-                    // ["A", "status-process"],
-                    ["S", "status-success"],
-                    ["F", "status-failure"],
-                ]);
-                return colors.get(status);
+                switch(status) {
+                    case 'S':
+                        return 'status-not-start1';
+                        break;
+                    case 'F':
+                        return 'status-process1';
+                        break;
+                    default:
+                        break;
+                }
             },
+            // addStatusColor(status) {
+            //     const colors = new Map([
+            //         // ["R", "status-not-start"],
+            //         // ["A", "status-process"],
+            //         ["S", "status-success"],
+            //         ["F", "status-failure"],
+            //     ]);
+            //     return colors.get(status);
+            // },
 
             goto(name) {
                 console.log(name);
@@ -419,7 +457,7 @@
         font-size: 18px;
         font-weight: bold;
         color: #fff;
-        background-color: #133264;
+        background-color: #465c84;
         border-radius: 3px;
         margin-top:15px;
     }
@@ -477,14 +515,14 @@
         /*z-index: 1;*/
         width: 600px;
         height: 600px;
-        padding: 10px 0;
+        /*padding: 10px 0;*/
         margin: 10px 20px;
         /*display: inline-block;*/
         position: relative;
         border: 1px solid rgba(20, 52, 105, 0.55);
         list-style-type:none;
         &:hover {
-            cursor: pointer;
+            /*cursor: pointer;*/
             /*transform: scale(1.02);*/
             background-color: rgba(193, 212, 240, 0.55);
             transition-duration: 0.3s;
@@ -520,6 +558,16 @@
         left:0;
         bottom: -1px;
         background-color: #3b4c73;
+    }
+
+    .status-process1 {
+        background-image: url("../assets/banner-bg-green.png");
+        /*background-color: #89c668;*/
+    }
+
+    .status-not-start1 {
+        background-image: url("../assets/banner-bg-red.png");
+        /*background-color: #f56c6c;*/
     }
 
 

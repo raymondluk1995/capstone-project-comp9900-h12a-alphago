@@ -60,8 +60,11 @@
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
+                            <el-button class="btn-long" v-show="item.status === 'R'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
+                            <el-button v-show="item.status === 'N'" type="info"  round icon="el-icon-document" @click="aucreg">Register</el-button>
                             <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item)">Remove</el-button>
                             <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>
+                            <el-button v-show="item.status === 'A'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
                         </el-row>
                     </el-row>
                 </el-card>
@@ -209,7 +212,7 @@
                     <h5>Auction</h5>
                     <p> This property has not been registered for an Auction. </p>
                     <el-row type="flex" justify="front" >
-                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>
+<!--                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>-->
                     </el-row>
                 </section>
              </el-row>
@@ -284,6 +287,7 @@
                     // },
                     // {
                     //     pid:3,
+                    //     aid:1,
                     //     auction:true,
                     //     status: 'A',
                     //     address:'123asd',
@@ -405,7 +409,17 @@
                     });
                 })
             },
-
+            goDetails (item) {
+                this.$router.push(
+                    {
+                        path: '/auction',
+                        query:
+                            {
+                                id: item.aid,
+                            }
+                    }
+                )
+            },
             submitReg(pid){
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
@@ -583,4 +597,9 @@
     .swiper-slide {
         height: 500px;
     }
+
+    .btn-long{
+
+    }
+
 </style>
