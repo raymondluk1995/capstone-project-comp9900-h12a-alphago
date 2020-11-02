@@ -29,7 +29,6 @@
 
         <el-row type="flex" justify="center">
             <el-col :span="24" style="background: white;">
-                <template v-if="!isEmpty">
                     <el-row type="flex" justify="space-around" style="background-color: #3b4c73;box-shadow: 0 2px 5px 2px #d5dbea;">
                         <el-col :span="4">
                             <el-select
@@ -60,6 +59,7 @@
                         </el-col>
                     </el-row>
 
+                <template v-if="!isEmpty">
                     <el-row type="flex" justify="space-around">
                     <div class="items">
                         <ul>
@@ -295,7 +295,6 @@
                     // }
 
                 ],
-                propList:[],
                 options: [
                     {
                         value: "all",
@@ -319,19 +318,21 @@
                     // },
 
                 ],
-                propList: [{
-                    status:'',
-                    address:'sdf13',
-                    bathroomNum:1,
-                    bedroomNum:2,
-                    garageNum:2,
-                    photos:['',''],
-                }],
+                propList: [
+                //     {
+                //     status:'',
+                //     address:'sdf13',
+                //     bathroomNum:1,
+                //     bedroomNum:2,
+                //     garageNum:2,
+                //     photos:['',''],
+                // }
+                ],
             }
         },
         created(){
-            // this.username = localStorage.getItem("username");
-            // // this.username = this.$store.state.username;
+            this.username = localStorage.getItem("username");
+
             // if (this.username !== null) {
             //     this.hasLogin = true;
             //     this.avatar = localStorage.getItem("avatar");
@@ -341,23 +342,26 @@
             //     this.$message.error("You should login first!");
             //     this.$router.push("/login");
             // }
-            // this.$axios
-            //     .get('/auction/list/now')
-            //     .then(response => {
-            //         if (response.data.code === 200) {
-            //             this.originPropertyList = response.data.result;
-            //             this.propList = response.data.result;
-            //             // this.propInfo = this.originPropertyList[0];
-            //         }else if(response.data.code === 400){
-            //             this.isEmpty = true;
-            //         }
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     })
+            this.$axios
+                .get('/auction/list/now')
+                .then(response => {
+                    if (response.data.code === 200) {
+                        this.originPropertyList = response.data.result;
+                        this.propList = response.data.result;
+                        // this.propInfo = this.originPropertyList[0];
+                        if(this.originPropertyList.length === 0){
+                            this.isEmpty = true;
+                            this.propList = this.originPropertyList;
+                        }
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
 
-            this.isEmpty = true;
-            this.propList = this.originPropertyList;
+
+
+            // this.isEmpty = true;
         },
 
         methods: {

@@ -11,6 +11,7 @@ import Auction from "../views/Auction";
 import Property from "../views/Property";
 import PropertyMag from "../views/PropertyMag";
 import AuctionHis from "../views/AuctionHis";
+import Notification from "../views/Notification";
 
 Vue.use(VueRouter);
 
@@ -72,6 +73,12 @@ const routes = [
     path: '/auchis',
     name: 'auchis',
     component: AuctionHis
+    ,
+  },
+  {
+    path: '/notice',
+    name: 'notice',
+    component: Notification
     ,
   }
 
