@@ -115,6 +115,7 @@
                 classname="form-control"
                 placeholder="Please search suburb name or postcode here"
                 v-on:placechanged="getAddressData"
+                @keyup.enter="toSearch"
                 country="au"
                 types="(cities)"
               >
@@ -258,6 +259,11 @@ export default {
       var addr = document.getElementById("address").value;
       if(isNaN(addr)){
         addr = this.address.locality;
+      }
+      else{
+        if(addr.toString().length!=4){
+          this.$message.error("Please input a valid postcode!");
+        }
       }
       console.log(addr);
       console.log("search");

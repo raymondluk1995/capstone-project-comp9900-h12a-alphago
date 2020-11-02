@@ -356,7 +356,7 @@
                 <el-button
                   style="
                     color: white;
-                    background-color: rgb(35, 150, 19);
+                    background-color: rgb(40, 131, 19);
                     margin: 15px;
                     padding: 5px 10px;
                     border-radius: 10px;
@@ -904,7 +904,7 @@ export default {
 #filters {
   margin: 0;
   padding: 0;
-  background-color: rgba(20, 150, 251, 0.5);
+  background-color: rgba(59, 124, 221, 0.6);
   width: auto;
   border-radius: 20px;
 }
