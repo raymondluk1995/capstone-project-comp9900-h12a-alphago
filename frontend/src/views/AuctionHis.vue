@@ -157,34 +157,34 @@
                 hasLogin: false,
                 filterPropertyList:[],
                 originPropertyList:[
-                    {
-                        aid:1,
-                        status:'S',
-                        bathroomNum:2,
-                        bedroomNum:1,
-                        garageNum:2,
-                        type:'Apartment',
-                        area:123,
-                        address:'2 Gearin Alley, Mascot, NSW',
-                        photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
-                        highestPrice: 123123,
-                        currentBid:123123,
-                        startdate:'',
-                        endddate:'',
-                    }
-                    ,{
-                        aid:2,
-                        status: 'F',
-                        address:'123asd',
-                        photos:['',''],
-                        highestPrice: 123123,
-                        currentBid:123123,
-                        startdate: new Date(2019,10,10,12,10),
-                        currentBid:123,
-                        reservedPrice: 10000,
-                        startdate:'',
-                        endddate:'',
-                    },
+                    // {
+                    //     aid:1,
+                    //     status:'S',
+                    //     bathroomNum:2,
+                    //     bedroomNum:1,
+                    //     garageNum:2,
+                    //     type:'Apartment',
+                    //     area:123,
+                    //     address:'2 Gearin Alley, Mascot, NSW',
+                    //     photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
+                    //     highestPrice: 123123,
+                    //     currentBid:123123,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // }
+                    // ,{
+                    //     aid:2,
+                    //     status: 'F',
+                    //     address:'123asd',
+                    //     photos:['',''],
+                    //     highestPrice: 123123,
+                    //     currentBid:123123,
+                    //     startdate: new Date(2019,10,10,12,10),
+                    //     currentBid:123,
+                    //     reservedPrice: 10000,
+                    //     startdate:'',
+                    //     endddate:'',
+                    // },
                     // {
                     //     aid:3,
                     //     status: 'F',
@@ -288,6 +288,10 @@
                         this.originPropertyList = response.data.result;
                         this.propList = response.data.result;
                         // this.propInfo = this.originPropertyList[0];
+                        if(this.originPropertyList.length === 0){
+                            this.isEmpty = true;
+                            this.propList = this.originPropertyList;
+                        }
                     }else if(response.data.code === 400){
                         this.isEmpty = true;
                     }
@@ -296,8 +300,8 @@
                     console.log(error);
                 })
 
-            this.isEmpty = false;
-            this.propList = this.originPropertyList;
+            // this.isEmpty = false;
+            // this.propList = this.originPropertyList;
         },
         mounted(){
             $("#back-btn").hover(function(event) {

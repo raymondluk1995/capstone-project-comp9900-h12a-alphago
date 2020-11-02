@@ -23,10 +23,10 @@
         canvas.style.display = "none";
         // console.log("canvas concealed");
       }
-      this.Height = document.documentElement.clientHeight - 44;
+      this.Height = document.documentElement.clientHeight - 60;
       //监听浏览器窗口变化　
       // window.onresize = ()=> {this.Height = document.documentElement.clientHeight -100}
-      window.onresize = ()=> {this.Height = document.documentElement.clientHeight -44}
+      window.onresize = ()=> {this.Height = document.documentElement.clientHeight -60}
     },
     data() {
       return {
