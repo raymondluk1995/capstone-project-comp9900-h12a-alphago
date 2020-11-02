@@ -95,7 +95,7 @@
                   style="
                     height: 38px;
                     color: white;
-                    background-color: rgba(26, 156, 196, 0.6);
+                    background-color: rgba(16, 117, 244,0.7);
                     margin: 0;
                   "
                   @click="showFilter"
@@ -390,7 +390,7 @@
         <el-row type="flex" justify="center" class="result-rows">
           <div class="items">
             <ul :class="colNumObject">
-              <li v-for="item in propList" :key="item.aid">
+              <li v-for="item in showPropList" :key="item.aid">
                 <v-card :class="vcardObject" max-width="2000">
                   <div
                     style="
@@ -435,7 +435,7 @@
                     </el-col>
                   </el-row>
 
-                  <div v-if="item.status==='A'"> 
+                  <div v-if="item.status === 'A'">
                     <v-card-text>
                       <div class="my-4 subtitle-1 result-type">
                         Type: {{ item.type }}
@@ -463,7 +463,7 @@
                     </v-card-text>
                   </div>
 
-                  <div v-else> 
+                  <div v-else>
                     <v-card-text>
                       <div class="my-4 subtitle-1 result-type">
                         Type: {{ item.type }}
@@ -484,7 +484,7 @@
                         class="current-price"
                       >
                         <div class="comingSoon">
-                          COMING SOON<br>
+                          COMING SOON<br />
                           PLEASE WAIT
                         </div>
                       </el-row>
@@ -503,15 +503,19 @@
         </div>
       </template>
 
-      <div class="pagination">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :page-size="pageSize"
-          :total="total"
-          @current-change="currentChange"
-        ></el-pagination>
-      </div>
+      <el-row justify="center" type="flex">
+        <div class="pagination">
+          <el-pagination
+            background
+            layout="prev, pager, next,total"
+            @size-change="handleSizeChange"
+            :page-size="pageSize"
+            :total="total"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+          ></el-pagination>
+        </div>
+      </el-row>
     </div>
   </div>
 </template>
@@ -548,9 +552,12 @@ export default {
       bathrooms: 1,
       garages: 1,
       order: "",
+      //pagination starts
       total: 4,
       pageSize: 2,
       currentPage: 1,
+      showPropList: [],
+      // pagination ends
       search: "", // the search condition for whole page
       type: "All",
       filterDates: [
@@ -677,6 +684,8 @@ export default {
       this.avatar = localStorage.getItem("avatar");
     }
     this.firstname = localStorage.getItem("firstname");
+
+    this.showProperties(this.currentPage, this.pageSize);
   },
 
   mounted() {
@@ -916,6 +925,23 @@ export default {
           console.log(error);
         });
     },
+
+    handleSizeChange: function (size) {
+      this.pageSize = size;
+      this.showProperties(this.currentPage, this.pageSize);
+    },
+
+    handleCurrentChange: function (currentPage) {
+      this.currentPage = currentPage;
+      this.showProperties(this.currentPage, this.pageSize);
+    },
+
+    showProperties(currentPage, pageSize) {
+      this.showPropList = this.propList.slice(
+        (currentPage - 1) * pageSize,
+        currentPage * pageSize
+      );
+    },
   },
   watch: {
     propList: function (val) {
@@ -1005,7 +1031,7 @@ li {
   margin-top: 15px;
 }
 
-.comingSoon{
+.comingSoon {
   width: 90%;
   padding: 10px;
   text-align: center;
@@ -1016,8 +1042,6 @@ li {
   border-radius: 3px;
   margin-top: 15px;
 }
-
-
 
 .bid2 {
   width: 90%;
