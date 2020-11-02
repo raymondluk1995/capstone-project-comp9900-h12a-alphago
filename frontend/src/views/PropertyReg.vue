@@ -109,7 +109,7 @@
 
         <el-tab-pane label="Interior" name="1" :disabled="dis1">
           <el-row type="flex" justify="center">
-            <el-col :span="20">
+            <el-col :span="23">
               <el-form
                       class="form"
                       ref="form2"
@@ -131,7 +131,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="Area:" prop="area" >
-                      <el-input v-model="form2.area">
+                      <el-input v-model="form2.area" style="width:50%">
                           <i slot="suffix" class="input-slot">㎡</i>
                       </el-input>
 <!--                        <template>-->
