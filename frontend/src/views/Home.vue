@@ -177,19 +177,20 @@ export default {
         if(this.username!==null){
             this.hasLogin = true;
             this.avatar = localStorage.getItem('avatar');
+            this.$axios
+                .get('/notification/unread')
+                .then(response => {
+                    if (response.data.code === 200) {
+                        this.unread = response.data.result;
+                    }
+                })
+                .catch(function (error) {
+                    this.$message.error(error);
+                });
         }
         this.firstname=  localStorage.getItem('firstname');
 
-        this.$axios
-            .get('/notification/unread')
-            .then(response => {
-                if (response.data.code === 200) {
-                    this.unread = response.data.result;
-                }
-            })
-            .catch(function (error) {
-                this.$message.error(error);
-            });
+
 
     },
 
