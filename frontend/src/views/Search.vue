@@ -443,6 +443,9 @@
                       <div class="my-4 subtitle-1 result-type">
                         Auction Ends At: {{ showTime(item.endDate) }}
                       </div>
+                      <div class="my-4 subtitle-1 result-type">
+                        Attended Bidders: <b>{{item.bidderNum}}</b>
+                      </div>
                     </v-card-text>
 
                     <v-divider
@@ -470,6 +473,9 @@
                       </div>
                       <div class="my-4 subtitle-1 result-type">
                         Auction Starts At: {{ showTime(item.startDate) }}
+                      </div>
+                      <div class="my-4 subtitle-1 result-type">
+                        Try To Be The First Bidder!
                       </div>
                     </v-card-text>
 
@@ -618,6 +624,7 @@ export default {
           currentBid: 123123,
           startDate: new Date(2021, 10, 10, 12, 10),
           endDate: new Date(1995, 11, 17, 3, 24, 0),
+          bidderNum: 5,
         },
         {
           aid: 2,
@@ -636,6 +643,7 @@ export default {
           currentBid: 123123,
           startDate: new Date(2021, 10, 10, 12, 10),
           endDate: new Date(1995, 11, 17, 3, 24, 0),
+          bidderNum: 6,
         },
         {
           aid: 3,
@@ -654,6 +662,7 @@ export default {
           currentBid: 123123,
           startDate: new Date(2021, 10, 10, 12, 10),
           endDate: new Date(1995, 11, 17, 3, 24, 0),
+          bidderNum: 7,
         },
         {
           aid: 4,
@@ -672,6 +681,7 @@ export default {
           currentBid: 123123,
           startDate: new Date(2021, 10, 10, 12, 10),
           endDate: new Date(1995, 11, 17, 3, 24, 0),
+          bidderNum: 5,
         },
       ],
     };
