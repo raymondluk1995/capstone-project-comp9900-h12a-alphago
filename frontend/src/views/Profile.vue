@@ -15,12 +15,12 @@
             </el-col>
 
             <el-col :span="14" style="background-color:#fff;box-shadow: inset 0 15px 20px -15px rgba(70,92,132,0.45);">
-                <el-row tyle="flex" justify="center" style="text-align:center;margin-top:100px">
+                <el-row tyle="flex" justify="space-around" style="margin-top:100px">
 <!--                <el-col :span="15" >-->
 <!--&lt;!&ndash;                    <span style="font-size: 30px">Hello!    </span>&ndash;&gt;-->
 <!--                    <h3 class="title">{{form.username}}</h3>-->
 <!--                </el-col>-->
-                <el-col :span="20"  >
+                <el-col :span="24" >
                     <div class="user-avatar-container" >
                         <div class="user-avatar">
                             <el-upload
@@ -44,7 +44,7 @@
                             </div>
                         </template>
                     </div>
-                    <h3 class="title">{{form.username}}</h3>
+                    <h3 class="title" style="margin-top:20px">{{form.username}}</h3>
                 </el-col>
                 </el-row>
 
@@ -56,12 +56,12 @@
                                 label-width="100px"
                                 label-position="left"
                         >
-                        <el-col :span="20">
-                            <el-row tyle="flex" justify="center" style="margin-top:10px">
+                        <el-col :span="24">
+                            <el-row tyle="flex" justify="center" style="margin:10px 5%">
                             <el-form-item v-if="!canEditEmail" label="Email:" prop="email">
                                 <span> {{form.oldemail}} </span>
 <!--                                <el-input style="width:70%;float:left;" v-model="form.oldemail" :disabled="!canEditEmail"></el-input>-->
-                                <el-button round style="width:25%;float:right;" type="primary" @click="editE">Edit</el-button>
+                                <el-button round style="width:25%;float:right;" type="primary" @click="editE"><i class="el-icon-edit"></i> Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="Email:" prop="email">
                                 <el-input style="width:70%;float:left;" placeholder="Input your new email" v-model="form.email"></el-input>
@@ -80,7 +80,7 @@
                             <el-form-item v-if="!canEditFirstname" label="First Name:" prop="firstname">
                                 <span> {{form.ofirstname}} </span>
 <!--                                <el-input style="width:70%;float:left;" v-model="form.ofirstname" :disabled="!canEditFirstname"></el-input>-->
-                                <el-button round style="width:25%;float:right;" type="primary" @click="editF">Edit</el-button>
+                                <el-button round style="width:25%;float:right;" type="primary" @click="editF"><i class="el-icon-edit"></i> Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="First Name:" prop="firstname">
                                 <el-input style="width:70%;float:left;" placeholder="Change your first name" v-model="form.firstname"></el-input>
@@ -91,7 +91,7 @@
                             <el-form-item v-if="!canEditLastname" label="Last Name:" prop="lastname">
                                 <span> {{form.olastname}} </span>
 <!--                                <el-input style="width:70%;float:left;" v-model="form.olastname" :disabled="!canEditLastname"></el-input>-->
-                                <el-button round style="width:25%;float:right;" type="primary" @click="editL">Edit</el-button>
+                                <el-button round style="width:25%;float:right;" type="primary" @click="editL"><i class="el-icon-edit"></i> Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="Last Name:" prop="lastname">
                                 <el-input style="width:70%;float:left;" placeholder="Change your last name" v-model="form.lastname"></el-input>
@@ -184,32 +184,32 @@
             };
         },
         created(){
-                // this.username = localStorage.getItem("username");
-                // // this.username = this.$store.state.username;
-                // if (this.username !== null) {
-                //     this.hasLogin = true;
-                //     this.avatar = localStorage.getItem("avatar");
-                //     this.firstname = localStorage.getItem("firstname");
-                // }
-                // else{
-                //     this.$message.error("You should login first!");
-                //     this.$router.push("/login");
-                // }
+                this.username = localStorage.getItem("username");
+                // this.username = this.$store.state.username;
+                if (this.username !== null) {
+                    this.hasLogin = true;
+                    this.avatar = localStorage.getItem("avatar");
+                    this.firstname = localStorage.getItem("firstname");
+                }
+                else{
+                    this.$message.error("You should login first!");
+                    this.$router.push("/login");
+                }
 
             this.form.imageUrl = localStorage.getItem('avatar');
-            this.form.imageUrl = 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2931000230,881740929&fm=11&gp=0.jpg'
-            // this.$axios
-            //     .get('/user/information')
-            //     .then(response => {
-            //             this.form.username = response.data.result.username,
-            //             this.form.oldemail = response.data.result.email,
-            //             this.form.olastname = response.data.result.lastname,
-            //             this.form.ofirstname = response.data.result.firstname
-            //             this.form.imageUrl = response.data.result.avatar
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error)
-            //     })
+
+            this.$axios
+                .get('/user/information')
+                .then(response => {
+                        this.form.username = response.data.result.username,
+                        this.form.oldemail = response.data.result.email,
+                        this.form.olastname = response.data.result.lastname,
+                        this.form.ofirstname = response.data.result.firstname
+                        this.form.imageUrl = response.data.result.avatar
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
             let h = document.documentElement.clientHeight  || document.body.clientHeight;
             this.vdaH = h - 147 + 'px';
         },
@@ -237,6 +237,7 @@
             cancelA(){
                 this.form.imageUrl = localStorage.getItem('avatar')
                 this.changeA=false;
+                // this.form.imageUrl = 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2931000230,881740929&fm=11&gp=0.jpg'
             },
             cancelE(){
                 this.canEditEmail = false;
@@ -483,8 +484,8 @@
         border-radius: 50%;
         font-size: 28px;
         color: #8c939d;
-        width: 200px;
-        height: 200px;
+        width: 178px;
+        height: 178px;
         line-height: 178px;
         text-align: center;
     }
