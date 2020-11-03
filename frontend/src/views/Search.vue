@@ -376,7 +376,7 @@
                     padding: 5px 10px;
                     border-radius: 10px;
                   "
-                  @click="handlesearch"
+                  @click="handleSearch"
                   ><i class="el-icon-check" style="margin-right: 10px"></i>Apply
                 </el-button>
               </el-col>
@@ -686,6 +686,17 @@ export default {
     }
     this.firstname = localStorage.getItem("firstname");
 
+    if(this.$route.query.postcode===undefined){
+      this.address = this.$route.query.suburb;
+    }
+    else{
+      this.address = this.$route.query.postcode;
+    }
+
+
+
+
+
     this.showProperties(this.currentPage, this.pageSize);
   },
 
@@ -707,6 +718,9 @@ export default {
       $(this).stop().animate({ "margin-left": "0" }, 300);
       $(this).next(".bottom-line").stop().animate({ width: "0" }, 300);
     });
+
+    var addr = document.getElementById("address");
+    addr.value = this.address;
 
     if (this.propList.length == 1) {
       this.colNumObject.twoColUl = false;
@@ -798,7 +812,30 @@ export default {
     },
 
     toSearch() {
-      console.log("search");
+      var addr = document.getElementById("address").value;
+      if (isNaN(addr)) {
+        if (this.address.locality === undefined){
+          this.$message.error("Please validate the suburb name first!");
+          return;
+        }
+        addr = this.address.locality;
+        this.$router.push({
+          path: "/search",
+          query: {
+            suburb: addr,
+          },
+        });
+      } else {
+        if (addr.toString().length != 4) {
+          this.$message.error("Please input a valid postcode!");
+        }
+        this.$router.push({
+          path: "/search",
+          query: {
+            postcode: addr,
+          },
+        });
+      }
     },
 
     showFilter() {
@@ -858,15 +895,19 @@ export default {
       this.address = addressData;
     },
 
-    handlesearch() {
+    handleSearch() {
       this.filterFlag = true;
-      this.getProductBySearch;
+      this.getProductBySearch();
     },
 
     getProductBySearch() {
       // this.search = "suburb" this.address.locality;
       var addr = document.getElementById("address").value;
       if (isNaN(addr)) {
+        if(this.address.locality===undefined){
+          this.$message.error("Please validate the suburb first!");
+          return;
+        }
         addr = this.address.locality;
         this.search = "suburb=" + this.address.locality;
       } else {
@@ -912,15 +953,11 @@ export default {
       }
 
       this.$axios
-        .get("/api/search_property?" + this.search + "&page=" + this.page)
+        .get("/search?" + this.search)
         .then((res) => {
-          this.product = res.data.body;
-          this.product.forEach(function (item) {
-            if (item["rating"] === "5.00") {
-              item["rating"] = "5";
-            }
-          });
-          this.total = res.data.total;
+          this.propList = res.data.result.propList;
+          this.total = res.data.result.total;
+          this.currentPage = 1;
         })
         .catch(function (error) {
           console.log(error);

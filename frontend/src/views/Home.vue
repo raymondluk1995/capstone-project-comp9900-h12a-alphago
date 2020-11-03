@@ -257,16 +257,29 @@ export default {
     },
     toSearch() {
       var addr = document.getElementById("address").value;
-      if(isNaN(addr)){
+      if (isNaN(addr)) {
+        if (this.address.locality === undefined){
+          this.$message.error("Please validate the suburb name first!");
+          return;
+        }
         addr = this.address.locality;
-      }
-      else{
-        if(addr.toString().length!=4){
+        this.$router.push({
+          path: "/search",
+          query: {
+            suburb: addr,
+          },
+        });
+      } else {
+        if (addr.toString().length != 4) {
           this.$message.error("Please input a valid postcode!");
         }
+        this.$router.push({
+          path: "/search",
+          query: {
+            postcode: addr,
+          },
+        });
       }
-      console.log(addr);
-      console.log("search");
     },
     goto(name) {
       this.$router.push({ name: name });
@@ -298,7 +311,6 @@ export default {
     $("#main").mouseleave(function (event) {
       $(this).stop().animate({ opacity: "0.8" }, 300);
     });
-    
   },
 };
 </script>
