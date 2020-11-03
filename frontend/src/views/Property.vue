@@ -614,8 +614,9 @@
                 })
                 .catch(function (error) {
                     console.log(error)
+                    this.notFound = true;
                     console.log(error.response.status)
-                     if (error.response.status === '404') {
+                     if (error.response.status === 404) {
                         this.notFound = true;
                     }
                 });
