@@ -8,7 +8,7 @@
             <el-avatar :size="70" :src="avatar"></el-avatar>
               </el-badge>
             <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
-              
+
           </div>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>

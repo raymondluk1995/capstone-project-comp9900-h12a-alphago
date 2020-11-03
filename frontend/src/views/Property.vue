@@ -453,6 +453,7 @@
                 websock: null,
                 dis1:false,
                 dis2:true,
+                notFound:false,
 
                 id:'',
                 username:'',
