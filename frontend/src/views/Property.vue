@@ -613,6 +613,8 @@
                     }
                 })
                 .catch(function (error) {
+                    console.log(error)
+                    console.log(error.response.status)
                      if (error.response.status === 404) {
                         this.notFound = true;
                     }
