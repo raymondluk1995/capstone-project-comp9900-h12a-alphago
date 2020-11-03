@@ -16,8 +16,14 @@
                 </el-dropdown>
             </template>
             <template v-else>
-                <el-button round @click="goto('login')">Sign In</el-button>
-                <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
+                <div class="back-btn">
+                    <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="goto('login')">Sign In <i class="el-icon-check"></i></span>
+                    <div class="bottom-line"></div>
+                </div>
+                <div class="back-btn">
+                    <span  id="back-btn2" style="padding:2px 5px;font-size:20px;" @click="goto('register')">Sign Up <i class="el-icon-user"></i></span>
+                    <div class="bottom-line"></div>
+                </div>
             </template>
         </Header>
 
@@ -56,14 +62,28 @@
                 >
                     <el-row>
                         <div>
+                            <el-row>
+                                <el-col :span="20">
                             <h6>{{ item.address }}</h6>
+                                </el-col>
+
+                                <el-col :span="1" >
+                                <el-tooltip v-show="item.status === 'R'" class="item" effect="dark" content="Cancel" placement="right">
+                                <el-button v-show="item.status === 'R'" type="" plain circle="" icon="el-icon-close" @click="cancelAuc(item)"></el-button>
+                                </el-tooltip>
+
+                                <el-tooltip v-show="item.status === 'N'" class="item" effect="dark" content="Remove" placement="right">
+                                <el-button style="margin-left:0" v-show="item.status === 'N'" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
+                                </el-tooltip>
+                                </el-col>
+                            </el-row>
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
                             <el-button class="btn-long" v-show="item.status === 'R'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
                             <el-button v-show="item.status === 'N'" type="info"  round icon="el-icon-document" @click="aucreg">Register</el-button>
-                            <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item)">Remove</el-button>
-                            <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>
+<!--                            <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item.pid)">Remove</el-button>-->
+<!--                            <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>-->
                             <el-button v-show="item.status === 'A'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
                         </el-row>
                     </el-row>
@@ -72,7 +92,7 @@
             </el-col>
 
 
-            <el-col :span="18">
+            <el-col :span="18" style="padding: 0 50px">
                 <div v-show="this.isEmpty">
                     <el-alert
                             title="You haven't register any property!"
@@ -86,7 +106,7 @@
                     <el-row v-show='!this.isEmpty' class="property-item" style="margin-top:50px">
                         <section>
                             <h3>{{ propInfo.address }}</h3>
-                    <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 25% 0 25%">
+                    <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 15% 5% 0">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="pic">
                             <img :src="pic"  width="100%" height="100%" alt=""/>
                         </el-carousel-item>
@@ -94,50 +114,44 @@
 
                 </section>
 
-                <el-row type="flex" justify="end">
-<!--                    <el-button>Edit</el-button>-->
-                </el-row>
 
                 <section>
-                    <el-row class="mh20" type="flex">
-                        <el-col :span="7">
-                            <i class="el-icon-toilet-paper"> Bathroom Number: <span> {{ propInfo.bathroomNum}} </span></i>
+                    <el-row type="flex" justify="left" style="margin:10px 0;">
+                        <el-col :span="4">
+                            <i class="el-icon-toilet-paper"> Baths: {{ propInfo.bathroomNum}}</i>
                         </el-col>
-                        <el-col :span="7">
-                            <i class="el-icon-house"> Bedroom Number: <span> {{ propInfo.bedroomNum}} </span></i>
+                        <el-col :span="4">
+                            <i class="el-icon-house"> Beds: {{ propInfo.bedroomNum }}</i>
                         </el-col>
-                        <el-col :span="7">
-                            <i class="el-icon-truck"> Garage Number: <span> {{ propInfo.garageNum}} </span></i>
+                        <el-col :span="4">
+                            <i class="el-icon-truck"> Cars: {{ propInfo.garageNum }}</i>
                         </el-col>
-                    </el-row>
-                    <el-row class="mh20" type="flex">
-                        <el-col :span="7">
-                            <i class="el-icon-info"> Type: {{ propInfo.type }}</i>
-                        </el-col>
-                        <el-col :span="7">
+                        <el-col :span="4">
                             <i class="el-icon-full-screen"> Area: {{ propInfo.area }}</i>
                         </el-col>
+                        <el-col :span="8">
+                            <i class="el-icon-info"> Type: {{ propInfo.type }}</i>
+                        </el-col>
                     </el-row>
 
-                    <el-row type="flex" style="align-items:center">
-                        <h5>Keywords</h5>
-<!--                        <el-button>Edit</el-button>-->
-                    </el-row>
-
-                    <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in (propInfo.position||'').split(',')" effect="plain" :key="tag">{{ tag }}</el-tag>
-                    </el-row>
-
-                    <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in (propInfo.detail||'').split(',')" :key="tag">{{ tag }}</el-tag>
-                    </el-row>
-
-                    <el-row type="flex" style="margin-bottom: 10px;">
+                    <el-row type="flex" style="margin-bottom: 10px;margin-top:50px;">
                         <h5>Description</h5>
                     </el-row>
 
                     <el-row style="margin-bottom: 10px;">
                         <p style="word-wrap:break-word">{{ propInfo.description }}</p>
+                    </el-row>
+
+
+                    <el-row type="flex" style="align-items:center">
+                        <h5>Keywords</h5>
+                        <!--                        <el-button>Edit</el-button>-->
+                    </el-row>
+
+                    <el-row type="flex" style="margin-bottom: 10px;">
+                        <!--                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>-->
+                        <p class='tag-wrap' v-for="tag in (propInfo.position||'').split(',')" >{{ tag }}</p>
+                        <p class='tag-wrap3' v-for="tag in (propInfo.detail||'').split(',')" >{{ tag }}</p>
                     </el-row>
                 </section>
 
@@ -201,21 +215,19 @@
 <!--&lt;!&ndash;                    <el-input v-else type="textarea" v-model="desc"></el-input>&ndash;&gt;-->
 <!--                </el-card>-->
 
-                <section class="mh20" v-if="propInfo.status ==='A' || propInfo.status ==='R'">
-                    <h5>Auction</h5>
-<!--                    <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo)">Cancel</el-button>-->
-                    <p>Start Date: {{ showdate(propInfo.startDate) }}</p>
-                    <p>End Date: {{ showdate(propInfo.endDate) }}</p>
-                    <p>Reserved Price: ${{ propInfo.price }}</p>
+<!--                <section class="mh20" v-if="propInfo.status ==='A' || propInfo.status ==='R'">-->
+<!--                    <h5>Auction</h5>-->
+<!--&lt;!&ndash;                    <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo)">Cancel</el-button>&ndash;&gt;-->
+<!--                    <p>Start Date: {{ showdate(propInfo.startDate) }}</p>-->
+<!--                    <p>End Date: {{ showdate(propInfo.endDate) }}</p>-->
+<!--                    <p>Reserved Price: ${{ propInfo.price }}</p>-->
 
-                </section>
-                <section class="mh20" v-else>
-                    <h5>Auction</h5>
-                    <p> This property has not been registered for an Auction. </p>
-                    <el-row type="flex" justify="front" >
-<!--                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 20px" @click="aucreg">Register New Auction</el-button>-->
-                    </el-row>
-                </section>
+<!--                </section>-->
+<!--                <section class="mh20" v-else>-->
+<!--                    <h5>Auction</h5>-->
+<!--                    <p> This property has not been registered for an Auction. </p>-->
+
+<!--                </section>-->
              </el-row>
             </el-col>
         </el-row>
@@ -226,6 +238,7 @@
     import Header from "@/components/Header.vue";
     import { mapActions } from "vuex";
     import dayjs from "dayjs";
+    import $ from 'jquery'
 
 
     export default {
@@ -236,7 +249,7 @@
         props: {
             cheight: {
                 type: String,
-                default: '300px'
+                default: '500px'
             },
             cwidth:{
                 type: String,
@@ -278,25 +291,34 @@
                     //     pid:1,
                     //     status:'R',
                     //     address:'afdgdag',
+                    //     position:'apple,pear',
+                    //     detail:'bbq,ppol',
                     //     photos:['', '']
                     // }
                     // ,{
                     //     pid:2,
                     //     status: 'N',
                     //     address:'123asd',
+                    //     position:'apple,pear',
+                    //     detail:'bbq,ppol',
                     //     photos:['','']
                     // },
                     // {
                     //     pid:3,
                     //     aid:1,
                     //     auction:true,
+                    //     position:'apple,pear',
+                    //     detail:'bbq,ppol',
                     //     status: 'A',
                     //     address:'123asd',
                     //     photos:['','']
                     // }
                 ],
                 propList: [],
-                propInfo: {},
+                propInfo: {
+                    position:'',
+                    detail:''
+                },
                 rules: {
                 },
 
@@ -346,7 +368,26 @@
         },
 
 
+        mounted(){
+            $("#back-btn").hover(function(event) {
+                $(this).stop().animate({"margin-left": "10px"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+            });
 
+            $("#back-btn").mouseleave(function(event) {
+                $(this).stop().animate({"margin-left": "0"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+            });
+            $("#back-btn2").hover(function(event) {
+                $(this).stop().animate({"margin-left": "10px"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+            });
+
+            $("#back-btn2").mouseleave(function(event) {
+                $(this).stop().animate({"margin-left": "0"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+            });
+        },
 
         methods: {
             ...mapActions(["logout"]),
@@ -362,7 +403,7 @@
                         this.$router.push("/auctionmag");
                         break;
                     case "notification":
-                        this.$router.push("/notification");
+                        this.$router.push("/notice");
                         break;
                     case "logout":
                         this.logout();
@@ -493,16 +534,15 @@
                 this.isSelected = item.pid;
             },
 
-            removeItem(item) {
+            removeItem(pid) {
                     this.$confirm('Remove this property?', 'Alert', {
                         confirmButtonText: 'Confirm',
                         cancelButtonText: 'Cancel',
                         type: 'warning'
                     }).then(() => {
                         let data = new FormData();
-                        data.append('pid', item.pid);
-                        // data.append('aid', item.aid);
-                        this.$axios.post('/property/delete' + data)
+                        data.append('pid', pid);
+                        this.$axios.post('/property/delete', data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
@@ -534,7 +574,7 @@
     };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
     .mh20 {
         margin: 20px 0;
     }
@@ -594,9 +634,37 @@
         border-left: 15px solid #8a97a6;
     }
 
-
-    .btn-long{
+    .tag-wrap {
+        margin-right: 20px;
+        /*width: 150px;*/
+        /*height: 60px;*/
+        padding:0 20px;
+        color: #004e85;
+        border: 1px solid #c4ccd5;
+        border-radius: 3px;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
     }
+    .tag-wrap3 {
+        margin-right: 20px;
+        /*width: 150px;*/
+        /*height: 60px;*/
+        padding:0 20px;
+        background-color: rgba(0, 78, 133, 0.68);
+        color: white;
+        border: 1px solid #c4ccd5;
+        border-radius: 3px;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
 
 </style>

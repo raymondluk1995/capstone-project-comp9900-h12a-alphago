@@ -102,8 +102,8 @@
 
                         <el-row type="flex" style="margin-bottom: 10px;">
 <!--                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>-->
-                            <p class='tag-wrap' v-for="tag in propInfo.position.split(',')" >{{ tag }}</p>
-                            <p class='tag-wrap3' v-for="tag in propInfo.detail.split(',')" >{{ tag }}</p>
+                            <p class='tag-wrap' v-for="tag in (propInfo.position||'').split(',')" >{{ tag }}</p>
+                            <p class='tag-wrap3' v-for="tag in (propInfo.detail||'').split(',')" >{{ tag }}</p>
                         </el-row>
 
 <!--                        <el-row type="flex" style="margin: 20px 0;">-->
@@ -513,10 +513,10 @@
                     username:'',
                     address: '',
                     enddate:'',
-                    status:'A',
+                    status:'',
                     startdate:'',
                     avatar:'',
-                    bidderNum:'0',
+                    bidderNum:'',
                     latestPrice:'',
                     info: '',
                     bedroomNum:'',
@@ -610,12 +610,11 @@
                                 }]
                         }
                     }
-                    else if (response.status === 404) {
-                        this.notFound = true;
-                    }
                 })
                 .catch(function (error) {
-                    console.log(error)
+                     if (error.response.status === 404) {
+                        this.notFound = true;
+                    }
                 });
 
 
@@ -687,6 +686,7 @@
                         this.$router.push("/auctionmag");
                         break;
                     case "notification":
+                        this.$router.push("/notice");
                         break;
                     case "logout":
                         this.$axios.post('/user/logout')
