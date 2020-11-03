@@ -143,6 +143,7 @@
                     <el-table :data="propInfo.history"
                               :max-height="300"
                               border
+                              lazy
                               stripe
                               tooltip-effect="light"
                               style="overflow-y: scroll; "
