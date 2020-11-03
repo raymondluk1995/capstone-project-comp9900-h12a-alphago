@@ -492,7 +492,7 @@ export default {
         "Nov",
         "Dec",
       ];
-      let day = dayjs(time).day();
+      let day = dayjs(time).date();
       let mon = MONTH[dayjs(time).month()];
       let year = dayjs(time).year();
       let hour = dayjs(time).hour();
