@@ -72,6 +72,7 @@
                   v-on:placechanged="getAddressData"
                   country="au"
                   types="(cities)"
+                  @keyup.enter="toSearch"
                 >
                 </vue-google-autocomplete>
               </el-col>
