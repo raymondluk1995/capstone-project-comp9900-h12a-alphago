@@ -510,7 +510,6 @@
                     id: '',
                     aid:'',
                     rab:null,
-                    notFound:false,
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
