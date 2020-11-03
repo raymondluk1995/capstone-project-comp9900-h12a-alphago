@@ -3,7 +3,10 @@ package alphago.propertysale.service;
 import alphago.propertysale.entity.Auction;
 import alphago.propertysale.entity.AuctionStatus;
 import alphago.propertysale.entity.returnVO.AuctionVO;
+import alphago.propertysale.entity.returnVO.SearchVO;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 public interface AuctionService extends IService<Auction> {
 
@@ -18,4 +21,6 @@ public interface AuctionService extends IService<Auction> {
     void initHistory(long aid);
 
     void finishAuction(long aid);
+
+    SearchVO getSearchVO(boolean isAuthenticated);
 }
