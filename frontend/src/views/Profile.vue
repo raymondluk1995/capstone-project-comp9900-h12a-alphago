@@ -14,11 +14,13 @@
                 </div>
             </el-col>
 
-            <el-col :span="14" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
-                <el-row tyle="flex" justify="center" style="margin-top:100px">
-                <el-col :span="12" ><h1 class="title">{{form.username}}</h1></el-col>
-                <el-col :span="12">
-                <el-row tyle="flex" justify="center">
+            <el-col :span="14" style="background-color:#fff;box-shadow: inset 0 15px 20px -15px rgba(70,92,132,0.45);">
+                <el-row tyle="flex" justify="center" style="text-align:center;margin-top:100px">
+<!--                <el-col :span="15" >-->
+<!--&lt;!&ndash;                    <span style="font-size: 30px">Hello!    </span>&ndash;&gt;-->
+<!--                    <h3 class="title">{{form.username}}</h3>-->
+<!--                </el-col>-->
+                <el-col :span="20"  >
                     <div class="user-avatar-container" >
                         <div class="user-avatar">
                             <el-upload
@@ -42,11 +44,11 @@
                             </div>
                         </template>
                     </div>
-                </el-row>
+                    <h3 class="title">{{form.username}}</h3>
                 </el-col>
                 </el-row>
 
-                    <el-row  >
+                    <el-row type="flex" justify="center" >
                         <el-form
                                 class="form"
                                 ref="form"
@@ -54,8 +56,8 @@
                                 label-width="100px"
                                 label-position="left"
                         >
-                        <el-col :span="15">
-                            <el-row tyle="flex" justify="center" style="margin-top:200px">
+                        <el-col :span="20">
+                            <el-row tyle="flex" justify="center" style="margin-top:10px">
                             <el-form-item v-if="!canEditEmail" label="Email:" prop="email">
                                 <span> {{form.oldemail}} </span>
 <!--                                <el-input style="width:70%;float:left;" v-model="form.oldemail" :disabled="!canEditEmail"></el-input>-->
@@ -195,6 +197,7 @@
                 // }
 
             this.form.imageUrl = localStorage.getItem('avatar');
+            this.form.imageUrl = 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2931000230,881740929&fm=11&gp=0.jpg'
             // this.$axios
             //     .get('/user/information')
             //     .then(response => {
@@ -441,9 +444,9 @@
 
 <style scoped lang="scss">
     .title {
-        margin-top: 10%;
+        /*margin-top: 10%;*/
         width:100%;
-        text-align: center;
+        /*text-align: center;*/
     }
     .form {
         padding: 30px;
@@ -486,14 +489,17 @@
         text-align: center;
     }
     .avatar {
+        border-radius: 50%;
         width: 178px;
         height: 178px;
         display: block;
-        border-radius: 10%;
     }
     .user-avatar-container {
-        position: absolute;
-        /*top: 180px;*/
+        margin:0 auto ;
+        /*position: absolute;*/
+        /*top: 180px;*/display: flex;
+        justify-content: center;
+        text-align: center;
         /*left: 15%;*/
         width: 20%;
         border: 0;

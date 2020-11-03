@@ -18,16 +18,17 @@
                 <el-collapse class="notice">
                     <div v-for="(item,index) in Notice" @click="hasRead(item)">
                     <el-collapse-item
-                            :key="index"
+                            lazy
+                            :key="item.noti_id"
                             :title="getTitle(item)"
                             :name="index"
                             :class="item.read ?  '':'unread' "
                     >
                         <el-card style="overflow-y: scroll; " :class="item.read ? 'card' : 'card unread'">
-                            <div v-if="item.role ==='seller' && item.status ==='S'" style="padding:0 50px;">
-                                <p style="font-size: 18px;font-weight:bold">Dear {{item.sellername}}</p>
+                            <div v-if="item.message.seller && item.message.success" style="padding:0 50px;">
+                                <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <h6>Congratulations!</h6>
-                                <h6>Your Property[{{item.pid}}] has been sold. The highest bid is ${{item.latestPrice|numFormat}}.</h6>
+                                <h6>Your Property<span style="font-size:12px;color:#596c84">[PropertyId:{{item.message.pid}}]</span> has been sold. The highest bid is ${{item.message.bidPrice|numFormat}}.</h6>
                                 <h6 style="
                                 margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</h6>
 
@@ -37,7 +38,8 @@
                                 width:100%;
                                 font-size: 20px;
                                 font-weight:bold;
-                               ">{{item.address}}</span>
+                               ">{{item.message.address}} </span>
+                                <span style="font-size:12px;color:#596c84">[AuctionId:{{item.message.aid}}]</span>
                                 <el-form
                                         class="form1"
                                         ref="form2"
@@ -55,20 +57,20 @@
                                     <el-col :span="12" >
                                     <el-row tyle="flex" justify="left">
                                         <el-form-item label="Seller:" prop="bidder">
-                                            <span> {{item.sellername}} </span>
+                                            <span> {{item.message.sellerName}} </span>
                                         </el-form-item>
 
                                     </el-row>
                                     </el-col>
                                     <el-col :span="12" >
                                         <el-form-item label="Seller Name:" prop="bidder">
-                                            <span> {{item.sellerfirstname }} {{item.sellerlastname}} </span>
+                                            <span> {{item.message.sellerFullName }} </span>
                                         </el-form-item>
                                         <el-form-item label="Phone:" prop="bidder">
-                                            <span> {{item.sellerphonne}} </span>
+                                            <span> {{item.message.sellerPhone}} </span>
                                         </el-form-item>
                                         <el-form-item label="Email:" prop="bidder">
-                                            <span> {{item.selleremail}} </span>
+                                            <span> {{item.message.sellerEmail}} </span>
                                         </el-form-item>
 
                                     </el-col>
@@ -81,10 +83,10 @@
                                         <el-col :span="12">
                                             <el-row tyle="flex" justify="left">
                                                 <el-form-item label="Bid Winner:" prop="bidder">
-                                                    <span> {{item.username}} </span>
+                                                    <span> {{item.message.sellerName}} </span>
                                                 </el-form-item>
                                                 <el-form-item label="Highest Bid:" prop="bidder">
-                                                    <span> {{item.latestPrice |numFormat}} </span>
+                                                    <span> {{item.message.bidPrice |numFormat}} </span>
                                                 </el-form-item>
 
                                             </el-row>
@@ -92,13 +94,13 @@
                                         <el-col :span="12">
 
                                             <el-form-item label="Bider Name:" prop="bidder">
-                                                <span> {{item.firstname }} {{item.lastname}} </span>
+                                                <span> {{item.message.bidderFullName }} </span>
                                             </el-form-item>
                                             <el-form-item label="Phone:" prop="bidder">
-                                                <span> {{item.phone}} </span>
+                                                <span> {{item.message.bidderPhone}} </span>
                                             </el-form-item>
                                             <el-form-item label="Email:" prop="bidder">
-                                                <span> {{item.email}} </span>
+                                                <span> {{item.message.bidderEmail}} </span>
                                             </el-form-item>
                                         </el-col>
                                     </el-row>
@@ -107,7 +109,7 @@
                                     border-top:2px solid rgba(153,169,191,0.67);
                                    ">
                                         <h5 style="margin-top:10px">Bid History</h5>
-                                        <el-table :data="item.bidHistory"
+                                        <el-table :data="item.history"
                                                   border
                                                   stripe
                                                   tooltip-effect="light"
@@ -132,10 +134,10 @@
 
                             </div>
 
-                            <div v-if="item.role ==='seller' && item.status ==='F'" style="padding:0 50px;">
-                                <p style="font-size: 18px;font-weight:bold">Dear {{item.sellername}}</p>
+                            <div v-if="item.seller && !item.success" style="padding:0 50px;">
+                                <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <h6>Sorry.. </h6>
-                                <h6>Your Property[{{item.pid}}] has passed in. The highest bid is ${{item.latestPrice| numFormat }}.</h6>
+                                <h6>Your Property<span style="font-size:12px;color:#596c84">[PropertyId:{{item.message.pid}}]</span> has passed in. The highest bid is ${{item.message.bidPrice| numFormat }}.</h6>
                                 <h6 style="
                                 margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</h6>
 
@@ -145,7 +147,9 @@
                                 width:100%;
                                 font-size: 20px;
                                 font-weight:bold;
-                               ">{{item.address}}</span>
+                               ">{{item.message.address}}</span>
+                                <span style="font-size:12px;color:#596c84">[AuctionId:{{item.message.aid}}]</span>
+
                                 <el-form
                                         class="form1"
                                         ref="form2"
@@ -163,20 +167,20 @@
                                         <el-col :span="12" >
                                             <el-row tyle="flex" justify="left">
                                                 <el-form-item label="Seller:" prop="bidder">
-                                                    <span> {{item.username}} </span>
+                                                    <span> {{item.message.sellerName}} </span>
                                                 </el-form-item>
 
                                             </el-row>
                                         </el-col>
                                         <el-col :span="12" >
                                             <el-form-item label="Seller Name:" prop="bidder">
-                                                <span> {{item.sellerfirstname }} {{item.sellerlastname}} </span>
+                                                <span> {{item.message.sellerFullName }} </span>
                                             </el-form-item>
                                             <el-form-item label="Phone:" prop="bidder">
-                                                <span> {{item.sellerphonne}} </span>
+                                                <span> {{item.message.sellerPhone}} </span>
                                             </el-form-item>
                                             <el-form-item label="Email:" prop="bidder">
-                                                <span> {{item.selleremail}} </span>
+                                                <span> {{item.message.sellerEmail}} </span>
                                             </el-form-item>
 
                                         </el-col>
@@ -186,7 +190,7 @@
                                     border-top:2px solid rgba(153,169,191,0.67);
                                    ">
                                         <h5 style="margin-top:10px">Bid History</h5>
-                                        <el-table :data="item.bidHistory"
+                                        <el-table :data="item.message.history"
                                                   :max-height="300"
                                                   border
                                                   stripe
@@ -213,11 +217,11 @@
 
                             </div>
 
-                            <div v-if="item.role ==='bidder' && item.status ==='S'" style="padding:0 50px;">
-                                <p style="font-size: 18px;font-weight:bold">Dear {{item.sellername}}</p>
+                            <div v-if="!item.seller && item.success" style="padding:0 50px;">
+                                <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <h6>Congratulations!</h6>
-                                <h6>Your win the Property[{{item.pid}}].
-                                 Your highest bid is ${{item.latestPrice|numFormat}}.</h6>
+                                <h6>Your win the Property<span style="font-size:12px;color:#596c84">[PropertyId:{{item.message.pid}}]</span>.
+                                 Your highest bid is ${{item.message.bidPrice|numFormat}}.</h6>
                                 <h6 style="
                                 margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</h6>
 
@@ -227,7 +231,8 @@
                                 width:100%;
                                 font-size: 20px;
                                 font-weight:bold;
-                               ">{{item.address}}</span>
+                               ">{{item.message.address}}</span>
+                                <span style="font-size:12px;color:#596c84">[AuctionId:{{item.message.aid}}]</span>
                                 <el-form
                                         class="form1"
                                         ref="form2"
@@ -245,20 +250,20 @@
                                         <el-col :span="12" >
                                             <el-row tyle="flex" justify="left">
                                                 <el-form-item label="Seller:" prop="bidder">
-                                                    <span> {{item.sellername}} </span>
+                                                    <span> {{item.message.sellerName}} </span>
                                                 </el-form-item>
 
                                             </el-row>
                                         </el-col>
                                         <el-col :span="12" >
                                             <el-form-item label="Seller Name:" prop="bidder">
-                                                <span> {{item.sellerfirstname }} {{item.sellerlastname}} </span>
+                                                <span> {{item.message.sellerFullName }} </span>
                                             </el-form-item>
                                             <el-form-item label="Phone:" prop="bidder">
-                                                <span> {{item.sellerphonne}} </span>
+                                                <span> {{item.message.sellerPhone}} </span>
                                             </el-form-item>
                                             <el-form-item label="Email:" prop="bidder">
-                                                <span> {{item.selleremail}} </span>
+                                                <span> {{item.message.sellerEmail}} </span>
                                             </el-form-item>
 
                                         </el-col>
@@ -271,24 +276,24 @@
                                         <el-col :span="12">
                                             <el-row tyle="flex" justify="left">
                                                 <el-form-item label="Bid Winner:" prop="bidder">
-                                                    <span> {{item.username}} </span>
+                                                    <span> {{item.message.username}} </span>
                                                 </el-form-item>
                                                 <el-form-item label="Highest Bid:" prop="bidder">
-                                                    <span> {{item.latestPrice |numFormat}} </span>
+                                                    <span> {{item.message.bidPrice |numFormat}} </span>
                                                 </el-form-item>
 
                                             </el-row>
                                         </el-col>
                                         <el-col :span="12">
 
-                                            <el-form-item label="Bider Name:" prop="bidder">
-                                                <span> {{item.firstname }} {{item.lastname}} </span>
+                                            <el-form-item label="Bidder Name:" prop="bidder">
+                                                <span> {{item.message.bidderFullName }}</span>
                                             </el-form-item>
                                             <el-form-item label="Phone:" prop="bidder">
-                                                <span> {{item.phone}} </span>
+                                                <span> {{item.message.bidderPhone}} </span>
                                             </el-form-item>
                                             <el-form-item label="Email:" prop="bidder">
-                                                <span> {{item.email}} </span>
+                                                <span> {{item.message.bidderEmail}} </span>
                                             </el-form-item>
                                         </el-col>
                                     </el-row>
@@ -325,145 +330,59 @@
                     {prop: 'username', label: 'User', width: '300'},
                     {prop: 'price', label: 'Current Bid',formatter: this.formatPrice,sortable:true}
                 ],
-                unreadNum :'',
                 Notice: [
                     // {
-                    //     pid:'123',
-                    //     id:234,
-                    //     status:'F',
-                    //     role:'seller',
-                    //     title:'',
-                    //     username:'UMR',
-                    //     sellername:'TSF',
-                    //     sellerfirstname:'Tony',
-                    //     sellerlastname:'Stark',
-                    //     time:new Date(2020,10,10,10,10),
-                    //     email:'123@gmnail.com',
-                    //     firstname:'First',
-                    //     lastname:'Last',
-                    //     phone:'0412345678',
-                    //     bidHistory:[
-                    //         {
-                    //             time: 1603981349 ,
-                    //             uid:123,
-                    //             user:'UMR',
-                    //             price: '123123123',
-                    //         },
-                    //         {
-                    //             time: 160398890,
-                    //             user:'ooo',
-                    //             uid:345,
-                    //             price: '1110001',
-                    //         },
-                    //         {
-                    //             time: 1603890349,
-                    //             user:'TSF',
-                    //             uid:456,
-                    //             price: '123123',
-                    //         },
+                    //     createTime:new Date(2020,10,10,10,10),
+                    //     noti_id:'12',
+                    //     noti_type:'FINISH',
+                    //     read:false,
+                    //     uid:23,
+                    //     message: {
+                    //         aid:'0',
+                    //         pid: '123',
+                    //         success: true,
+                    //         seller: true,
+                    //         bidPrice:'1230000',
+                    //         address: '2 Gearin Alley, Mascot, NSW',
                     //
+                    //         sellerName: 'UMR',
+                    //         sellerFullName: 'Tony Stark',
+                    //         sellerPhone:'0123123',
+                    //         sellerEmail: '123@gmnail.com',
                     //
-                    //     ],
-                    //     address:'2 Gearin Alley, Mascot, NSW',
-                    //     read: false,
-                    //     latestPrice:'123000'
+                    //         bidderName: 'TSF',
+                    //         bidderFullName: 'First Last',
+                    //         bidderPhone: '0412345678',
+                    //         bidderEmail:'123123123.com',
+                    //
+                    //         history: [
+                    //             {
+                    //                 time: 1603981349,
+                    //                 uid: 123,
+                    //                 user: 'UMR',
+                    //                 price: '123123123',
+                    //             },
+                    //             {
+                    //                 time: 160398890,
+                    //                 user: 'ooo',
+                    //                 uid: 345,
+                    //                 price: '1110001',
+                    //             },
+                    //             {
+                    //                 time: 1603890349,
+                    //                 user: 'TSF',
+                    //                 uid: 456,
+                    //                 price: '123123',
+                    //             },
+                    //         ],
+
+                        // }
                     // },
-                    // {
-                    //     pid:'123',
-                    //     id:234,
-                    //     status:'S',
-                    //     role:'seller',
-                    //     title:'',
-                    //     username:'UMR',
-                    //     sellername:'TSF',
-                    //     sellerfirstname:'Tony',
-                    //     sellerlastname:'Stark',
-                    //     time:new Date(2020,10,10,10,10),
-                    //     email:'123@gmnail.com',
-                    //     firstname:'First',
-                    //     lastname:'Last',
-                    //     phone:'0412345678',
-                    //     bidHistory:[
-                    //         {
-                    //             time: 1603981349 ,
-                    //             uid:123,
-                    //             user:'UMR',
-                    //             price: '123123123',
-                    //         },
-                    //         {
-                    //             time: 160398890,
-                    //             user:'ooo',
-                    //             uid:345,
-                    //             price: '1110001',
-                    //         },
-                    //         {
-                    //             time: 1603890349,
-                    //             user:'TSF',
-                    //             uid:456,
-                    //             price: '123123',
-                    //         },
-                    //
-                    //
-                    //     ],
-                    //     address:'2 Gearin Alley, Mascot, NSW',
-                    //     read: false,
-                    //     latestPrice:'123000'
-                    // },
-                    // {
-                    //     pid:'123',
-                    //     id:234,
-                    //     status:'S',
-                    //     role:'bidder',
-                    //     username:'UMR',
-                    //     sellername:'TSF',
-                    //     sellerfirstname:'Tony',
-                    //     sellerlastname:'Stark',
-                    //     time:new Date(2020,10,10,10,10),
-                    //     email:'123@gmnail.com',
-                    //     firstname:'First',
-                    //     lastname:'Last',
-                    //     phone:'0412345678',
-                    //     bidHistory:[
-                    //         {
-                    //             time: 1603981349 ,
-                    //             uid:123,
-                    //             user:'UMR',
-                    //             price: '123123123',
-                    //         },
-                    //         {
-                    //             time: 160398890,
-                    //             user:'ooo',
-                    //             uid:345,
-                    //             price: '1110001',
-                    //         },
-                    //         {
-                    //             time: 1603890349,
-                    //             user:'TSF',
-                    //             uid:456,
-                    //             price: '123123',
-                    //         },
-                    //
-                    //
-                    //     ],
-                    //     address:'2 Gearin Alley, Mascot, NSW',
-                    //     read: false,
-                    //     latestPrice:'123000'
-                    // },
-                    // {
-                    //     role:'bidder',
-                    //     status:'S',
-                    //     title:'',
-                    //     read: true,
-                    // },
-                    // {
-                    //     role:'bidder',
-                    //     status:'S',
-                    //     title:'',
-                    //     read: true,
-                    // },
+
                 ],
             };
         },
+
         created() {
             this.username = localStorage.getItem("username");
             // this.username= '123';
@@ -471,9 +390,8 @@
             this.$axios
                 .get('/notification/all')
                 .then(response => {
-
                         if (response.data.code === 200) {
-                            this.Notice = response.data.notice;
+                            this.Notice = response.data.result;
                     }
                 })
                 .catch(function (error) {
@@ -496,13 +414,13 @@
         },
         methods: {
             getTitle(item){
-                let time = this.showTime(item.time);
+                let time = this.showTime(item.createTime);
                 console.log(time)
-                if(item.role ==='seller' && item.status ==='S' ){
+                if(item.message.seller && item.message.success){
                     return `[Success] Your property has been sold!    [${ time }]`;
-                }else if (item.role ==='seller' && item.status ==='F' ){
+                }else if (item.seller && !item.success){
                     return `[Failed] Your property has passed in! [${ time }]`
-                }else if(item.role==='bidder' && item.status==='S'){
+                }else if(!item.seller && item.success){
                     return `[Success] You win the property! [${ time }]`
                 }
             },
@@ -523,18 +441,18 @@
             },
 
             hasRead(item){
-                if(item.read ===false){
-                    let data = new FormData;
-                    data.append('nid', item.id);
-                    this.$axios.post('/notice/hasread',data)
-                        .then((response) => {
-                            if (response.data.code === 200) {}
-                    })
-                        .catch((res) => {
-                            this.$message.error('Error');
-                        });
-
-                }
+                // if(item.read ===false){
+                //     let data = new FormData;
+                //     data.append('nid', item.id);
+                //     this.$axios.post('/notice/hasread',data)
+                //         .then((response) => {
+                //             if (response.data.code === 200) {}
+                //     })
+                //         .catch((res) => {
+                //             this.$message.error('Error');
+                //         });
+                //
+                // }
             },
 
 
@@ -557,7 +475,7 @@
     }
     .card {
         margin: 20px;
-        height:400px;
+        height:500px;
         overflow-y: scroll;
         /*&:hover {*/
         /*    cursor: pointer;*/
