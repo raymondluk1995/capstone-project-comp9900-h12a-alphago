@@ -2,15 +2,23 @@
     <div class="auction">
         <Header>
             <template v-if="this.hasLogin">
-                <el-dropdown trigger="click" @command="handleCommand" style="align-items: center" placement="bottom">
-                    <div class="user">
-                        <el-avatar :size="70" :src="avatar"></el-avatar>
+                <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
+                    <div class="user" >
+                        <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
+                            <el-avatar :size="70" :src="avatar"></el-avatar>
+                        </el-badge>
+                        <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
+
                     </div>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
                         <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                         <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
-                        <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
+
+                        <el-dropdown-item command="notification"  icon="el-icon-bell">
+                            Notifications <el-badge v-show="parseInt(this.unread) !== 0" class="mark" :value="this.unread" style="padding:0;background-color: white"/>
+                        </el-dropdown-item>
+
                         <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -219,6 +227,8 @@
         data() {
             return {
                 id:'',
+                unread:'',
+
                 filter:'all',
                 isEmpty: false,
                 hasLogin: false,
@@ -333,33 +343,41 @@
         created(){
             this.username = localStorage.getItem("username");
 
-            // if (this.username !== null) {
-            //     this.hasLogin = true;
-            //     this.avatar = localStorage.getItem("avatar");
-            //     this.firstname = localStorage.getItem("firstname");
-            // }
-            // else{
-            //     this.$message.error("You should login first!");
-            //     this.$router.push("/login");
-            // }
-            this.$axios
-                .get('/auction/list/now')
-                .then(response => {
-                    if (response.data.code === 200) {
-                        this.originPropertyList = response.data.result;
-                        this.propList = response.data.result;
-                        // this.propInfo = this.originPropertyList[0];
-                        if(this.originPropertyList.length === 0){
-                            this.isEmpty = true;
-                            this.propList = this.originPropertyList;
+            if (this.username !== null) {
+                this.hasLogin = true;
+                this.avatar = localStorage.getItem("avatar");
+                this.$axios
+                    .get('/auction/list/now')
+                    .then(response => {
+                        if (response.data.code === 200) {
+                            this.originPropertyList = response.data.result;
+                            this.propList = response.data.result;
+                            // this.propInfo = this.originPropertyList[0];
+                            if(this.originPropertyList.length === 0){
+                                this.isEmpty = true;
+                                this.propList = this.originPropertyList;
+                            }
                         }
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
 
-
+                this.$axios
+                    .get('/notification/unread')
+                    .then(response => {
+                        if (response.data.code === 200) {
+                            this.unread = response.data.result;
+                        }
+                    })
+                    .catch(function (error) {
+                        this.$message.error(error);
+                    });
+            }
+            else{
+                this.$message.error("You should login first!");
+                this.$router.push("/login");
+            }
 
             // this.isEmpty = true;
         },

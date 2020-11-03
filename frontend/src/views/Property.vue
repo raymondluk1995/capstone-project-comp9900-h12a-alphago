@@ -2,15 +2,23 @@
     <div class="property">
         <Header>
             <template v-if="this.hasLogin">
-                <el-dropdown trigger="click" @command="handleCommand">
-                    <div class="user">
-                        <el-avatar :size="70" :src="avatar"></el-avatar>
+                <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
+                    <div class="user" >
+                        <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
+                            <el-avatar :size="70" :src="avatar"></el-avatar>
+                        </el-badge>
+                        <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
+
                     </div>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
                         <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                         <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
-                        <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
+
+                        <el-dropdown-item command="notification"  icon="el-icon-bell">
+                            Notifications <el-badge v-show="parseInt(this.unread) !== 0" class="mark" :value="this.unread" style="padding:0;background-color: white"/>
+                        </el-dropdown-item>
+
                         <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -452,6 +460,7 @@
 
 
             return {
+                unread:'',
                 activateIndex:'0',
                 websock: null,
                 dis1:false,
@@ -472,24 +481,24 @@
                 tipError: false,
                 time: '',
                 cards:[
-                    {
-                    paymentId:'12',
-                    name:'Tom',
-                    cardNumber:'4321432143214321',
-                    cvc:'123',
-                },
-                    {
-                        paymentId:'11',
-                        name:'Bob',
-                        cardNumber:'1234123412341234',
-                        cvc:'012',
-                    },
-                    {
-                        paymentId:'15',
-                        name:'Tom',
-                        cardNumber:'4321432143214321',
-                        cvc:'123',
-                    }
+                //     {
+                //     paymentId:'12',
+                //     name:'Tom',
+                //     cardNumber:'4321432143214321',
+                //     cvc:'123',
+                // },
+                //     {
+                //         paymentId:'11',
+                //         name:'Bob',
+                //         cardNumber:'1234123412341234',
+                //         cvc:'012',
+                //     },
+                //     {
+                //         paymentId:'15',
+                //         name:'Tom',
+                //         cardNumber:'4321432143214321',
+                //         cvc:'123',
+                //     }
                 ],
 
                 detail_tags:[],
@@ -584,12 +593,22 @@
 
         created() {
             this.username = localStorage.getItem("username");
-            this.username= '123';
+            // this.username= '123';
             this.id = this.$route.query.id;
             let h = document.documentElement.clientHeight  || document.body.clientHeight;
             this.vdaH = h - 147 + 'px';
-
-
+            if (this.username !== null) {
+                this.$axios
+                    .get('/notification/unread')
+                    .then(response => {
+                        if (response.data.code === 200) {
+                            this.unread = response.data.result;
+                        }
+                    })
+                    .catch(function (error) {
+                        this.$message.error(error);
+                    });
+            }
             var that = this;
             this.$axios
                 .get('/auction/information/' + this.id)
