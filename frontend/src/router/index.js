@@ -12,6 +12,7 @@ import Property from "../views/Property";
 import PropertyMag from "../views/PropertyMag";
 import AuctionHis from "../views/AuctionHis";
 import Notification from "../views/Notification";
+import Search from "../views/Search";
 
 Vue.use(VueRouter);
 
@@ -79,6 +80,12 @@ const routes = [
     path: '/notice',
     name: 'notice',
     component: Notification
+    ,
+  }, 
+  {
+    path: '/search',
+    name: 'search',
+    component: Search
     ,
   }
 
