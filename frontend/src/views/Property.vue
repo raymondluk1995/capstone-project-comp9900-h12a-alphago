@@ -586,6 +586,8 @@
             let h = document.documentElement.clientHeight  || document.body.clientHeight;
             this.vdaH = h - 147 + 'px';
 
+
+            var that = this;
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
@@ -613,11 +615,9 @@
                     }
                 })
                 .catch(function (error) {
-                    console.log(error)
-                    this.notFound = true;
-                    console.log(error.response.status)
-                     if (error.response.status === 404) {
-                        this.notFound = true;
+
+                     if (error.response.status ===404) {
+                        that.notFound = true;
                     }
                 });
 
