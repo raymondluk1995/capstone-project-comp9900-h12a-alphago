@@ -33,7 +33,6 @@
             >
               <h1 class="title">Sign In</h1>
 
-
               <div class="item" >
                   <el-form-item  class="father1" v-if="loginByuser" prop="username">
                   <span v-if="loginByuser" slot="label"></span>
@@ -70,13 +69,13 @@
                       @click="signInUser"
 
                       :style="active3">
-                    <i class="el-icon-check"></i> Sign in</span>
+                    <i class="el-icon-check"></i> Sign In</span>
 
                 <span class="button2"
                       v-else @click="signInEmail"
 
                       :style="active3">
-                    <i class="el-icon-check"></i> Sign in</span>
+                    <i class="el-icon-check"></i> Sign In</span>
                 </el-row>
 
 
