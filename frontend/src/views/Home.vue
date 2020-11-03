@@ -181,7 +181,7 @@ export default {
         this.firstname=  localStorage.getItem('firstname');
 
         this.$axios
-            .get('/unread')
+            .get('/notification/unread')
             .then(response => {
                 if (response.data.code === 200) {
                     this.unread = response.data.unread;

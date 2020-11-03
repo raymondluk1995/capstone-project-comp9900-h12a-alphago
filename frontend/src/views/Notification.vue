@@ -414,7 +414,6 @@
                     //     id:234,
                     //     status:'S',
                     //     role:'bidder',
-                    //     title:'',
                     //     username:'UMR',
                     //     sellername:'TSF',
                     //     sellerfirstname:'Tony',
@@ -470,11 +469,10 @@
             // this.username= '123';
 
             this.$axios
-                .get('/notice')
+                .get('/notification/all')
                 .then(response => {
 
                         if (response.data.code === 200) {
-                            this.unreadNum = response.data.unread;
                             this.Notice = response.data.notice;
                     }
                 })
