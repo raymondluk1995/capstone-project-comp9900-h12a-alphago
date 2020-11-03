@@ -3,7 +3,7 @@
     <Header>
       <template v-if="this.hasLogin">
         <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
-          <div class="user"  @click="openValue">
+          <div class="user" >
               <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
             <el-avatar :size="70" :src="avatar"></el-avatar>
               </el-badge>
@@ -33,7 +33,6 @@
           <span  id="back-btn2" style="padding:2px 5px;font-size:20px;" @click="goto('register')">Sign Up <i class="el-icon-user"></i></span>
           <div class="bottom-line"></div>
         </div>
-
       </template>
     </Header>
     <div class="main" id="main">

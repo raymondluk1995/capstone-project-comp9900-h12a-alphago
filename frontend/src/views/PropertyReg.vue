@@ -16,8 +16,14 @@
             </el-dropdown>
         </template>
       <template v-else>
-        <el-button round @click="goto('login')">Sign In</el-button>
-        <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
+          <div class="back-btn">
+              <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="goto('login')">Sign In <i class="el-icon-check"></i></span>
+              <div class="bottom-line"></div>
+          </div>
+          <div class="back-btn">
+              <span  id="back-btn2" style="padding:2px 5px;font-size:20px;" @click="goto('register')">Sign Up <i class="el-icon-user"></i></span>
+              <div class="bottom-line"></div>
+          </div>
       </template>
     </Header>
 
@@ -131,7 +137,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="Area:" prop="area" >
-                      <el-input v-model="form2.area" style="width:50%">
+                      <el-input v-model="form2.area"  maxlength="5" style="width:50%">
                           <i slot="suffix" class="input-slot">㎡</i>
                       </el-input>
 <!--                        <template>-->
@@ -146,6 +152,7 @@
                                   <el-input
                                           placeholder="Bathroom Num"
                                           suffix-icon="el-icon-toilet-paper"
+                                          maxlength="2"
                                           v-model="form2.bathroomNum">
                                   </el-input>
                               </el-col>
@@ -153,6 +160,7 @@
                                   <el-input
                                           placeholder="Bedroom Num"
                                           suffix-icon="el-icon-house"
+                                          maxlength="2"
                                           v-model="form2.bedroomNum">
                                   </el-input>
                               </el-col>
@@ -160,6 +168,7 @@
                                   <el-input
                                           placeholder="Garage Num"
                                           suffix-icon="el-icon-truck"
+                                          maxlength="2"
                                           v-model="form2.garageNum">
                                   </el-input>
                               </el-col>
@@ -232,12 +241,12 @@
 
                 <el-form-item label="Description:">
                     <el-input
-                            placeholder="Enter the description for your property. No more than 500 words."
+                            placeholder="Enter the description for your property. No more than 1000 words."
                             prefix-icon="el-icon-edit"
                             v-model="form3.description"
                             type="textarea"
                             :rows="5"
-                            maxlength="500">
+                            maxlength="1000">
                     </el-input>
                 </el-form-item>
 
@@ -331,13 +340,13 @@
           </el-form-item>
 
           <el-form-item v-if="form5.Auction" label="Reserved Price:" prop="price">
-            <el-input v-model="form5.price">
+            <el-input v-model="form5.price" maxlength="11" >
                 <i slot="suffix" class="input-slot">{{form5.price |numFormat}} A$</i>
             </el-input>
           </el-form-item>
 
           <el-form-item v-if="form5.Auction" label="Starting Price:" prop="minimumPrice">
-              <el-input v-model="form5.minimumPrice">
+              <el-input v-model="form5.minimumPrice"  maxlength="11" >
                   <i slot="suffix" class="input-slot">{{form5.minimumPrice|numFormat}} A$</i>
               </el-input>
           </el-form-item>
@@ -374,6 +383,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import { GooglePlacesAutocomplete } from "vue-better-google-places-autocomplete";
+import $ from 'jquery'
 
 import { mapActions } from "vuex";
 export default {
@@ -388,6 +398,28 @@ export default {
     Header,
     GooglePlacesAutocomplete,
   },
+    mounted(){
+        $("#back-btn").hover(function(event) {
+            $(this).stop().animate({"margin-left": "10px"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+        });
+
+        $("#back-btn").mouseleave(function(event) {
+            $(this).stop().animate({"margin-left": "0"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+        });
+
+        $("#back-btn2").hover(function(event) {
+            $(this).stop().animate({"margin-left": "10px"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+        });
+
+        $("#back-btn2").mouseleave(function(event) {
+            $(this).stop().animate({"margin-left": "0"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+        });
+    },
+
   data() {
     const checkInt = (rule, value, callback) => {
       const intReg = /^[0-9]+$/;
@@ -742,7 +774,40 @@ export default {
       this.$set(this.form1,'state',state.trim());
       this.$set(this.form1,'country',country.trim());
       return;
-    }
+    },
+
+      ['form2.area'](val) {
+          this.$nextTick(() => {
+              this.form2.area = val.replace(/\D/g,'');
+          });
+      },
+      ['form2.bedroomNum'](val) {
+          this.$nextTick(() => {
+              this.form2.bedroomNum = val.replace(/\D/g,'');
+          });
+      },
+      ['form2.bathroomNum'](val) {
+          this.$nextTick(() => {
+              this.form2.bathroomNum = val.replace(/\D/g,'');
+          });
+      },
+      ['form2.garageNum'](val) {
+          this.$nextTick(() => {
+              this.form2.garageNum = val.replace(/\D/g,'');
+          });
+      },
+      ['form5.price'](val) {
+          this.$nextTick(() => {
+              this.form5.price = val.replace(/\D/g,'');
+          });
+      },
+      ['form5.minimumPrice'](val) {
+          this.$nextTick(() => {
+              this.form5.minimumPrice = val.replace(/\D/g,'');
+          });
+      },
+
+
   },
 };
 </script>
