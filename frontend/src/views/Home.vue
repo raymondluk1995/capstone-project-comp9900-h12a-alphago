@@ -4,13 +4,19 @@
       <template v-if="this.hasLogin">
         <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
           <div class="user"  @click="openValue">
+              <el-badge :value="this.unread" :max="99" class="item">
             <el-avatar :size="70" :src="avatar"></el-avatar>
+              </el-badge>
           </div>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
                 <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                 <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
-                <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
+
+                <el-dropdown-item command="notification"  icon="el-icon-bell">
+                    Notifications <el-badge class="mark" :value="this.unread" style="padding:0;background-color: white"/>
+                </el-dropdown-item>
+
                 <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
@@ -131,11 +137,12 @@ export default {
   },
     data() {
       return {
-          hasLogin: false,
+          hasLogin: true,
           bathNum: 1,
           bedroomNum: 1,
           carNum: 1,
           serachKey: "",
+          unread:'',
 
         // 浏览器宽度
         screenWidth :0,
@@ -172,6 +179,18 @@ export default {
             this.avatar = localStorage.getItem('avatar');
         }
         this.firstname=  localStorage.getItem('firstname');
+
+        this.$axios
+            .get('/unread')
+            .then(response => {
+                if (response.data.code === 200) {
+                    this.unread = response.data.unread;
+                }
+            })
+            .catch(function (error) {
+                this.$message.error(error);
+            });
+
     },
 
     methods: {
@@ -198,6 +217,7 @@ export default {
             this.$router.push("/auctionmag");
             break;
           case "notification":
+              this.$router.push("/notice");
             break;
           case "logout":
             this.$axios.post('/user/logout')

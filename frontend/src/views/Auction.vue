@@ -378,6 +378,7 @@
                         this.$router.push("/propmag");
                         break;
                     case "notification":
+                        this.$router.push("/notice");
                         break;
                     case "logout":
                         this.$axios.post('/user/logout')
