@@ -4,9 +4,11 @@
       <template v-if="this.hasLogin">
         <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
           <div class="user"  @click="openValue">
-              <el-badge v-show="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
+              <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
             <el-avatar :size="70" :src="avatar"></el-avatar>
               </el-badge>
+            <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
+
           </div>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>

@@ -453,6 +453,7 @@
                 websock: null,
                 dis1:false,
                 dis2:true,
+                notFound:false,
 
                 id:'',
                 username:'',
@@ -509,7 +510,6 @@
                     id: '',
                     aid:'',
                     rab:null,
-                    notFound:false,
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
@@ -586,6 +586,8 @@
             let h = document.documentElement.clientHeight  || document.body.clientHeight;
             this.vdaH = h - 147 + 'px';
 
+
+            var that = this;
             this.$axios
                 .get('/auction/information/' + this.id)
                 .then(response => {
@@ -613,10 +615,9 @@
                     }
                 })
                 .catch(function (error) {
-                    console.log(error)
-                    console.log(error.response.status)
-                     if (error.response.status === '404') {
-                        this.notFound = true;
+
+                     if (error.response.status ===404) {
+                        that.notFound = true;
                     }
                 });
 
