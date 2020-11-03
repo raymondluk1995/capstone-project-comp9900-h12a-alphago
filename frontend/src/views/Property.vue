@@ -997,7 +997,7 @@
                 this.propInfo.latestPrice = res.price;
                 let Time = this.showTime(res.time);
                 this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
-                this.notice(res.username);
+                this.notice(res);
                 if(res.overtime === true){
                     clearInterval(this.timer);
                     this.propInfo.enddate = this.propInfo.enddate + 2*1000*60;
@@ -1014,11 +1014,11 @@
                 console.log('close',e);
             },
 
-            notice(user) {
+            notice(res) {
                 const h = this.$createElement;
                 this.$notify({
                     title: 'Bid Update!',
-                    message: h('i', { style: 'color: teal'},  `User ${user} becomes the winner!`)
+                    message: h('i', { style: 'color: teal'},  `User ${res.username} becomes the winner! Current bid is ${res.price}`)
                 });
             },
             showCard(card){
