@@ -16,6 +16,7 @@ import locale from 'element-ui/lib/locale/lang/en'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
 import numFormat from '@/utils/numFormat';
+import vuetify from './plugins/vuetify';
 // 注册金额格式化过滤器
 Vue.filter('numFormat', numFormat);
 
@@ -58,5 +59,6 @@ new Vue({
   router,
   store,
   axios,
+  vuetify,
   render: h => h(App)
 }).$mount('#app');
