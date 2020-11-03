@@ -137,7 +137,7 @@ export default {
   },
     data() {
       return {
-          hasLogin: true,
+          hasLogin: false,
           bathNum: 1,
           bedroomNum: 1,
           carNum: 1,
