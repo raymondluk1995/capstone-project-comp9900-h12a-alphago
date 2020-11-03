@@ -697,7 +697,13 @@ export default {
     this.firstname = localStorage.getItem("firstname");
 
     if(this.$route.query.postcode===undefined){
-      this.address = this.$route.query.suburb;
+      if (this.$route.query.suburb===undefined){
+        this.address = "";
+      }
+      else{
+        this.address = this.$route.query.suburb;
+      }
+      
     }
     else{
       this.address = this.$route.query.postcode;
