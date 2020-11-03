@@ -75,7 +75,7 @@
                 <li v-for="item in propList" :key="item.aid">
                   <div>
                     <el-row
-                      :class="addStatusColor(item.status)"
+                      :class="addStatusColor(item)"
                       style="height: 60px; padding: 0 10px"
                     >
                       <!--                                            <h5 >Stop At: {{ showTime(item.enddate) }}</h5>-->
@@ -245,7 +245,7 @@ export default {
         },
         {
             aid:3,
-            status: 'F',
+            status: 'S',
             address:'123asd',
             photos:['',''],
             startdate: new Date(2021,10,10,12,10),
@@ -405,6 +405,9 @@ export default {
     getStatus(item) {
       switch (item.status) {
         case "S":
+          if(item.highestPrice ===item.currentBid){
+            return 'Winner'
+          }
           return "Sold";
           break;
         case "F":
@@ -438,10 +441,15 @@ export default {
         return "user-bid-bg-above";
       }
     },
-    addStatusColor(status) {
-      switch (status) {
+    addStatusColor(item) {
+      switch (item.status) {
         case "S":
-          return "status-not-start1";
+          if(item.highestPrice === item.currentBid){
+            return "status-winner";
+          }else{
+            return "status-not-start1";
+          }
+
           break;
         case "F":
           return "status-process1";
@@ -492,7 +500,7 @@ export default {
         "Nov",
         "Dec",
       ];
-      let day = dayjs(time).day();
+      let day = dayjs(time).date();
       let mon = MONTH[dayjs(time).month()];
       let year = dayjs(time).year();
       let hour = dayjs(time).hour();
@@ -628,8 +636,12 @@ export default {
     }
 
     .status-process1 {
-        background-image: url("../assets/banner-bg-red.png");
+        background-image: url("../assets/banner-bg-grey.png");
         /*background-color: #89c668;*/
+    }
+    .status-winner {
+      background-image: url("../assets/banner-bg-yelo.png");
+      /*background-color: #89c668;*/
     }
 
     .status-not-start1 {

@@ -1,10 +1,39 @@
 <template>
     <div class="notification">
         <Header>
-            <div class="back-btn">
-                <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="back">Back <i class="el-icon-refresh-right"></i></span>
-                <div class="bottom-line"></div>
-            </div>
+            <template v-if="this.hasLogin">
+                <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
+                    <div class="user">
+                        <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
+                            <el-avatar :size="70" :src="avatar"></el-avatar>
+                        </el-badge>
+                        <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
+
+                    </div>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                        <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
+                        <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
+
+                        <el-dropdown-item command="notification"  icon="el-icon-bell">
+                            Notifications <el-badge v-show="parseInt(this.unread) <= 0" class="mark" :value="this.unread" style="padding:0;background-color: white"/>
+                        </el-dropdown-item>
+
+                        <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </template>
+            <template v-else >
+
+                <div class="back-btn">
+                    <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="goto('login')">Sign In <i class="el-icon-check"></i></span>
+                    <div class="bottom-line"></div>
+                </div>
+                <div class="back-btn">
+                    <span  id="back-btn2" style="padding:2px 5px;font-size:20px;" @click="goto('register')">Sign Up <i class="el-icon-user"></i></span>
+                    <div class="bottom-line"></div>
+                </div>
+            </template>
         </Header>
 
         <el-row type="flex" justify="center" style="background-color: #f1f1f1; min-height: calc(100vh - 170px);">
@@ -18,7 +47,6 @@
                 <el-collapse class="notice">
                     <div v-for="(item,index) in Notice" @click="hasRead(item)">
                     <el-collapse-item
-                            lazy
                             :key="item.noti_id"
                             :title="getTitle(item)"
                             :name="index"
@@ -42,9 +70,8 @@
                                 <span style="font-size:12px;color:#596c84">[AuctionId:{{item.message.aid}}]</span>
                                 <el-form
                                         class="form1"
-                                        ref="form2"
-                                        :model="form2"
-                                        :rules="rules"
+                                        ref="item.message"
+                                        :model="item.message"
                                         label-width="100px"
                                         label-position="left"
                                 >
@@ -235,9 +262,8 @@
                                 <span style="font-size:12px;color:#596c84">[AuctionId:{{item.message.aid}}]</span>
                                 <el-form
                                         class="form1"
-                                        ref="form2"
-                                        :model="form2"
-                                        :rules="rules"
+                                        ref="item.message"
+                                        :model="item.message"
                                         label-width="100px"
                                         label-position="left"
                                 >
@@ -330,55 +356,104 @@
                     {prop: 'username', label: 'User', width: '300'},
                     {prop: 'price', label: 'Current Bid',formatter: this.formatPrice,sortable:true}
                 ],
+                unread:12,
+                avatar:'',
+                hasLogin:true,
                 Notice: [
-                    // {
-                    //     createTime:new Date(2020,10,10,10,10),
-                    //     noti_id:'12',
-                    //     noti_type:'FINISH',
-                    //     read:false,
-                    //     uid:23,
-                    //     message: {
-                    //         aid:'0',
-                    //         pid: '123',
-                    //         success: true,
-                    //         seller: true,
-                    //         bidPrice:'1230000',
-                    //         address: '2 Gearin Alley, Mascot, NSW',
-                    //
-                    //         sellerName: 'UMR',
-                    //         sellerFullName: 'Tony Stark',
-                    //         sellerPhone:'0123123',
-                    //         sellerEmail: '123@gmnail.com',
-                    //
-                    //         bidderName: 'TSF',
-                    //         bidderFullName: 'First Last',
-                    //         bidderPhone: '0412345678',
-                    //         bidderEmail:'123123123.com',
-                    //
-                    //         history: [
-                    //             {
-                    //                 time: 1603981349,
-                    //                 uid: 123,
-                    //                 user: 'UMR',
-                    //                 price: '123123123',
-                    //             },
-                    //             {
-                    //                 time: 160398890,
-                    //                 user: 'ooo',
-                    //                 uid: 345,
-                    //                 price: '1110001',
-                    //             },
-                    //             {
-                    //                 time: 1603890349,
-                    //                 user: 'TSF',
-                    //                 uid: 456,
-                    //                 price: '123123',
-                    //             },
-                    //         ],
+                    {
+                        createTime:new Date(2020,10,10,10,10),
+                        noti_id:'12',
+                        noti_type:'FINISH',
+                        read:false,
+                        uid:23,
+                        message: {
+                            aid:'0',
+                            pid: '123',
+                            success: true,
+                            seller: true,
+                            bidPrice:'1230000',
+                            address: '2 Gearin Alley, Mascot, NSW',
 
-                        // }
-                    // },
+                            sellerName: 'UMR',
+                            sellerFullName: 'Tony Stark',
+                            sellerPhone:'0123123',
+                            sellerEmail: '123@gmnail.com',
 
+                            bidderName: 'TSF',
+                            bidderFullName: 'First Last',
+                            bidderPhone: '0412345678',
+                            bidderEmail:'123123123.com',
+
+                            history: [
+                                {
+                                    time: 1603981349,
+                                    uid: 123,
+                                    user: 'UMR',
+                                    price: '123123123',
+                                },
+                                {
+                                    time: 160398890,
+                                    user: 'ooo',
+                                    uid: 345,
+                                    price: '1110001',
+                                },
+                                {
+                                    time: 1603890349,
+                                    user: 'TSF',
+                                    uid: 456,
+                                    price: '123123',
+                                },
+                            ],
+
+                        }
+                    },
+                    {
+                        createTime:new Date(2020,10,10,10,10),
+                        noti_id:'12',
+                        noti_type:'FINISH',
+                        read:false,
+                        uid:23,
+                        message: {
+                            aid:'0',
+                            pid: '123',
+                            success: true,
+                            seller: true,
+                            bidPrice:'1230000',
+                            address: '2 Gearin Alley, Mascot, NSW',
+
+                            sellerName: 'UMR',
+                            sellerFullName: 'Tony Stark',
+                            sellerPhone:'0123123',
+                            sellerEmail: '123@gmnail.com',
+
+                            bidderName: 'TSF',
+                            bidderFullName: 'First Last',
+                            bidderPhone: '0412345678',
+                            bidderEmail:'123123123.com',
+
+                            history: [
+                                {
+                                    time: 1603981349,
+                                    uid: 123,
+                                    user: 'UMR',
+                                    price: '123123123',
+                                },
+                                {
+                                    time: 160398890,
+                                    user: 'ooo',
+                                    uid: 345,
+                                    price: '1110001',
+                                },
+                                {
+                                    time: 1603890349,
+                                    user: 'TSF',
+                                    uid: 456,
+                                    price: '123123',
+                                },
+                            ],
+
+                        }
+                    },
                 ],
             };
         },
@@ -387,18 +462,30 @@
             this.username = localStorage.getItem("username");
             // this.username= '123';
 
-            this.$axios
-                .get('/notification/all')
-                .then(response => {
+            if(this.username!==null){
+                this.hasLogin = true;
+                this.avatar = localStorage.getItem('avatar');
+                this.$axios
+                    .get('/notification/unread')
+                    .then(response => {
+                        if (response.data.code === 200) {
+                            this.unread = parseInt(response.data.result);
+                        }
+                    })
+                    .catch(function (error) {
+                        this.$message.error(error);
+                    });
+                this.$axios
+                    .get('/notification/all')
+                    .then(response => {
                         if (response.data.code === 200) {
                             this.Notice = response.data.result;
-                    }
-                })
-                .catch(function (error) {
-                    this.$message.error(error);
-                });
-
-
+                        }
+                    })
+                    .catch(function (error) {
+                        this.$message.error(error);
+                    });
+            }
             // this.notFound = true;
         },
         mounted(){
@@ -411,11 +498,53 @@
                 $(this).stop().animate({"margin-left": "0"}, 300);
                 $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
             });
+            $("#back-btn2").hover(function(event) {
+                $(this).stop().animate({"margin-left": "10px"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+            });
+
+            $("#back-btn2").mouseleave(function(event) {
+                $(this).stop().animate({"margin-left": "0"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+            });
         },
         methods: {
+            handleCommand(command) {
+                switch (command) {
+                    case "profile":
+                        this.$router.push("/profile");
+                        break;
+                    case "property":
+                        this.$router.push("/propmag");
+                        break;
+                    case "auction":
+                        this.$router.push("/auctionmag");
+                        break;
+                    case "notification":
+                        this.$router.push("/notice");
+                        break;
+                    case "logout":
+                        this.$axios.post('/user/logout')
+                            .then((response) => {
+                                if (response.status >= 200 && response.status < 300){
+                                    if (response.data.code === 200){
+                                        this.logout();
+                                        location.reload()
+                                    }else{
+                                        console.log(response.msg)
+                                    }
+                                }else{
+                                    console.log(response.msg)
+                                }
+                            })
+                        break;
+                    default:
+                        break;
+                }
+            },
             getTitle(item){
                 let time = this.showTime(item.createTime);
-                console.log(time)
+                // console.log(time)
                 if(item.message.seller && item.message.success){
                     return `[Success] Your property has been sold!    [${ time }]`;
                 }else if (item.seller && !item.success){
@@ -441,18 +570,20 @@
             },
 
             hasRead(item){
-                // if(item.read ===false){
-                //     let data = new FormData;
-                //     data.append('nid', item.id);
-                //     this.$axios.post('/notice/hasread',data)
-                //         .then((response) => {
-                //             if (response.data.code === 200) {}
-                //     })
-                //         .catch((res) => {
-                //             this.$message.error('Error');
-                //         });
-                //
-                // }
+                if(item.read ===false){
+                    let data = new FormData;
+                    data.append('nid', item.id);
+                    this.$axios.post('/notice/hasread',data)
+                        .then((response) => {
+                            if (response.data.code === 200) {
+                                this.unread = this.unread-1;
+                            }
+                    })
+                        .catch((res) => {
+                            this.$message.error('Error');
+                        });
+                    // this.unread = this.unread-1;
+                }
             },
 
 

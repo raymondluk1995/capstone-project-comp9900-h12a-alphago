@@ -240,25 +240,14 @@
                 >
             <template>
 
-<!--                <div style="height: 100px;">-->
-<!--                    <el-steps  :active="activateIndex - 0" align-center finish-status="success" >-->
-<!--                        <el-step title="Select Card"></el-step>-->
-<!--&lt;!&ndash;                        <el-step title="Add Card"></el-step>&ndash;&gt;-->
-<!--                        <el-step title="Submit"></el-step>-->
-<!--                    </el-steps>-->
-<!--                </div>-->
 
                 <el-form>
                     <el-tabs v-model="activateIndex" :tab-position="'left'" >
                         <el-tab-pane label="Select Card" name="0" >
-                            <el-row type="flex" justify="center">
+                            <el-row v-show="!addNewCard" type="flex" justify="center">
                                 <el-col :span="15">
                                         <el-row>
-                                            <div v-if="this.cards.length===0">
-<!--                                            <h6> You don't have any Card at this moment.</h6>-->
-<!--                                             <span>Please add a new card!</span>-->
-                                            </div>
-                                            <el-radio-group v-else v-model="selectCard" >
+                                            <el-radio-group v-model="selectCard" >
                                                 <el-radio
                                                         class="radio"
                                                         :label="item.paymentId"
@@ -274,10 +263,16 @@
                                         </el-row>
                                         <el-row>
                                             <div class="btns3">
-                                            <el-col >
-                                                <span style=";padding:5px 10px; border:2px solid #666666; border-radius: 5px" @click="checktable1">
+                                            <el-col class="el-radio" style="height:40px">
+                                                <span class="add-btn"
+                                                      @click="checktable1"
+                                                        >
+                                                    <div style="margin:12px 0;text-align: center">
                                                     <i class="el-icon-plus">
-                                                    </i> Add New Card</span>
+                                                    </i> Add New Card
+                                                    </div>
+
+                                                </span>
 
                                             </el-col>
                                             </div>
@@ -293,10 +288,8 @@
 
                                 </el-col>
                             </el-row>
-                        </el-tab-pane>
 
-                        <el-tab-pane label="Add New Card" name="1" >
-                            <el-row type="flex" justify="center">
+                            <el-row v-show="addNewCard" type="flex" justify="center">
                                 <el-col>
                                     <el-form
                                             class="form"
@@ -326,11 +319,18 @@
                                             <div class="btns2">
                                                 <span  style="padding:2px 5px;" @click="checktable3"><i class="el-icon-plus"></i> Add</span>
                                             </div>
+
+                                            <div class="btns2">
+                                                <span  style="padding:2px 5px;" @click="checktable4"><i class="el-icon-back"></i> Back</span>
+                                            </div>
                                         </el-row>
                                     </el-form>
                                 </el-col>
                             </el-row>
                         </el-tab-pane>
+
+
+
 
                         <el-tab-pane label="Submit" name="2" >
                             <el-col :span="20">
@@ -345,7 +345,7 @@
                                 >
                                     <el-form-item  prop="initPrice">
                                         <h6>Input your initial bid to proceed.</h6>
-                                        <el-input v-model="form3.initPrice" placeholder="Initial Price"></el-input>
+                                        <el-input v-model="form3.initPrice" maxlength="11"  placeholder="Initial Price"></el-input>
                                         <p>Your initial bid is ${{ form3.initPrice | numFormat }}.</p>
                                     </el-form-item>
                                 </el-form>
@@ -440,11 +440,14 @@
 
             const checkinit = (rule, value, callback) => {
                 let price = value.replace(/,/g, "");
-                if(parseInt(price) < parseInt(this.propInfo.latestPrice)){
-                    callback(new Error("Should larger than the latest price"));
-                }else{
-                    callback();
-                }
+                const pricereg = /^\d{11}$/;
+                    if (!pricereg.test(price)) {
+                        if (parseInt(price) < parseInt(this.propInfo.latestPrice)) {
+                            callback(new Error("Should larger than the latest price"));
+                        } else {
+                            callback();
+                        }
+                    }
             };
 
 
@@ -469,24 +472,24 @@
                 tipError: false,
                 time: '',
                 cards:[
-                //     {
-                //     paymentId:'12',
-                //     name:'Tom',
-                //     cardNumber:'4321432143214321',
-                //     cvc:'123',
-                // },
-                //     {
-                //         paymentId:'11',
-                //         name:'Bob',
-                //         cardNumber:'1234123412341234',
-                //         cvc:'012',
-                //     },
-                //     {
-                //         paymentId:'15',
-                //         name:'Tom',
-                //         cardNumber:'4321432143214321',
-                //         cvc:'123',
-                //     }
+                    {
+                    paymentId:'12',
+                    name:'Tom',
+                    cardNumber:'4321432143214321',
+                    cvc:'123',
+                },
+                    {
+                        paymentId:'11',
+                        name:'Bob',
+                        cardNumber:'1234123412341234',
+                        cvc:'012',
+                    },
+                    {
+                        paymentId:'15',
+                        name:'Tom',
+                        cardNumber:'4321432143214321',
+                        cvc:'123',
+                    }
                 ],
 
                 detail_tags:[],
@@ -569,19 +572,19 @@
                 },
 
                 rules: {
-
+                    initPrice:[{required: true, message: " Please enter init price", trigger: "blur",}, {validator:checkinit, trigger: "blur" }],
                     name: [{required: true, message: " Please enter name", trigger: "blur",},],
                     cardNumber: [{required: true, message: " Please enter cardNumber", trigger: "blur",}, {validator:checkCard, trigger: "blur" },],
                     expiredDate: [{required: true, message: " Please enter expired date", trigger: "blur"}, {validator:checkDate, trigger: "blur" },],
                     cvc: [{required: true, message: " Please enter cvc", trigger: "blur",},{validator:checkCVC, trigger: "blur" }],
-                    initPrice: [{required: true, message: " Please initial price", trigger: "blur",},{validator:checkinit, trigger: "blur" }],
+                    // initPrice: [{required: true, message: " Please initial price", trigger: "blur",},{validator:checkinit, trigger: "blur" }],
                 },
             };
         },
 
         created() {
             this.username = localStorage.getItem("username");
-            // this.username= '123';
+            this.username= '123';
             this.id = this.$route.query.id;
             let h = document.documentElement.clientHeight  || document.body.clientHeight;
             this.vdaH = h - 147 + 'px';
@@ -638,7 +641,7 @@
             },
             ['form3.initPrice'](val) {
                 this.$nextTick(() => {
-                    // this.form3.initPrice = val|numFormat;
+                    this.form3.initPrice = val.replace(/\D/g,'')
                 });
             },
         },
@@ -712,12 +715,19 @@
             },
 
             checktable1(){
-                this.activateIndex = '1';
-                this.dis1=true;
-                this.dis2=false;
+                this.addNewCard = true;
             },
+
             checktable2(){
                 this.activateIndex = '2';
+            },
+
+            checktable4(){
+                this.form2.cvc = '';
+                this.form2.name = '';
+                this.form2.cardNumber = '';
+                this.form2.expiredDate = '';
+                this.addNewCard = false;
             },
 
             checktable3(){
@@ -746,10 +756,13 @@
                             .catch(function (error) {
                                 console.log(error)
                             });
+                        this.form2.cvc = '';
+                        this.form2.name = '';
+                        this.form2.cardNumber = '';
+                        this.form2.expiredDate = '';
 
-                        this.addNewCard = true;
+                        this.addNewCard = false;
                         this.activateIndex = '0';
-                        this.dis2 = true;
                     }
                     else{
                         this.$message.error("Please complete the form.");
@@ -757,10 +770,8 @@
                 })
             },
             closedialog(){
-                this.dis1 = false;
                 this.bidderFlag = false;
                 this.addNewCard = false;
-                this.dis2 = true;
                 this.form2.cvc = '';
                 this.form2.name = '';
                 this.form2.cardNumber = '';
@@ -1222,10 +1233,10 @@
         /*width:150px;*/
         font-size:15px;
         /*float:right;*/
-        margin:10px 5px;
         /*border:1px solid #123123;*/
         &:hover{
-            transform:translateX(10px);
+            /*transform:translateX(10px);*/
+            color: #005b9a;
             transition-duration: 0.5s;
             /*border:2px solid #184080;*/
             /*color: rgba(83, 109, 155, 0.42);*/
@@ -1288,18 +1299,29 @@
         height: 60px;
         color: #004e85;
         border: 1px solid #c4ccd5;
-        border-top:10px solid rgba(0, 91, 154, 0.58);
+        border-top: 10px solid rgba(0, 91, 154, 0.58);
         /*border-radius: 3px;*/
         font-weight: bold;
         font-size: 24px;
         display: flex;
         justify-content: center;
         align-items: center;
+
         img {
             width: 25px;
             height: 25px;
             margin-right: 20px;
         }
+    }
+
+        .add-btn{
+            height:40px !important;
+            width:186px !important;
+            position:absolute;
+
+            border:2px solid rgba(218,218,218,0.62);
+            border-radius: 5px;
+
     }
 
 
