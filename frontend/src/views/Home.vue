@@ -4,7 +4,7 @@
       <template v-if="this.hasLogin">
         <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
           <div class="user"  @click="openValue">
-              <el-badge :value="this.unread" :max="99" class="item">
+              <el-badge v-show="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
             <el-avatar :size="70" :src="avatar"></el-avatar>
               </el-badge>
           </div>
@@ -14,7 +14,7 @@
                 <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
 
                 <el-dropdown-item command="notification"  icon="el-icon-bell">
-                    Notifications <el-badge class="mark" :value="this.unread" style="padding:0;background-color: white"/>
+                    Notifications <el-badge v-show="parseInt(this.unread) !== 0" class="mark" :value="this.unread" style="padding:0;background-color: white"/>
                 </el-dropdown-item>
 
                 <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
