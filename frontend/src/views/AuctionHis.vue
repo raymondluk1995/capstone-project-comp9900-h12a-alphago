@@ -2,31 +2,24 @@
   <div class="auction">
     <Header>
       <template v-if="this.hasLogin">
-        <el-dropdown
-          trigger="click"
-          @command="handleCommand"
-          style="align-items: center"
-          placement="bottom"
-        >
-          <div class="user">
-            <el-avatar :size="70" :src="avatar"></el-avatar>
+        <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
+          <div class="user" >
+            <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
+              <el-avatar :size="70" :src="avatar"></el-avatar>
+            </el-badge>
+            <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
+
           </div>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="profile" icon="el-icon-user-solid">
-              My profile</el-dropdown-item
-            >
-            <el-dropdown-item command="property" icon="el-icon-house">
-              My Properties</el-dropdown-item
-            >
-            <el-dropdown-item command="auction" icon="el-icon-s-home">
-              My Auctions</el-dropdown-item
-            >
-            <el-dropdown-item command="notification" icon="el-icon-bell">
-              Notifications</el-dropdown-item
-            >
-            <el-dropdown-item command="logout" icon="el-icon-turn-off">
-              Log out</el-dropdown-item
-            >
+            <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+            <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
+            <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
+
+            <el-dropdown-item command="notification"  icon="el-icon-bell">
+              Notifications <el-badge v-show="parseInt(this.unread) !== 0" class="mark" :value="this.unread" style="padding:0;background-color: white"/>
+            </el-dropdown-item>
+
+            <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </template>
@@ -175,7 +168,7 @@
         <template v-else>
           <div class="empty-label">
             <el-alert
-              title="You do not have any auction."
+              title="You do not have any auction history."
               type="info"
               center
               show-icon
@@ -209,64 +202,65 @@ export default {
   },
   data() {
     return {
+      unread:'',
       id: "",
       filter: "all",
       isEmpty: false,
       hasLogin: false,
       filterPropertyList: [],
       originPropertyList: [
-        {
-            aid:1,
-            status:'S',
-            bathroomNum:2,
-            bedroomNum:1,
-            garageNum:2,
-            type:'Apartment',
-            area:123,
-            address:'2 Gearin Alley, Mascot, NSW',
-            photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
-            highestPrice: 123123,
-            currentBid:123123,
-            startdate:'',
-            endddate:'',
-        }
-        ,{
-            aid:2,
-            status: 'F',
-            address:'123asd',
-            photos:['',''],
-            highestPrice: 123123,
-            currentBid:123123,
-            startdate: new Date(2019,10,10,12,10),
-            currentBid:123,
-            reservedPrice: 10000,
-            startdate:'',
-            endddate:'',
-        },
-        {
-            aid:3,
-            status: 'S',
-            address:'123asd',
-            photos:['',''],
-            startdate: new Date(2021,10,10,12,10),
-            enddate: new Date(2023,10,10,10,10),
-            highestPrice: 123123,
-            currentBid:123,
-            reservedPrice: 10000,
-            startdate:'',
-            endddate:'',
-        },
-
-        {
-            aid:5,
-            status: 'F',
-            address:'123asd',
-            photos:['',''],
-            highestPrice: 123123,
-            currentBid:22222,
-            startdate:'',
-            endddate:'',
-        },
+        // {
+        //     aid:1,
+        //     status:'S',
+        //     bathroomNum:2,
+        //     bedroomNum:1,
+        //     garageNum:2,
+        //     type:'Apartment',
+        //     area:123,
+        //     address:'2 Gearin Alley, Mascot, NSW',
+        //     photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
+        //     highestPrice: 123123,
+        //     currentBid:123123,
+        //     startdate:'',
+        //     endddate:'',
+        // }
+        // ,{
+        //     aid:2,
+        //     status: 'F',
+        //     address:'123asd',
+        //     photos:['',''],
+        //     highestPrice: 123123,
+        //     currentBid:123123,
+        //     startdate: new Date(2019,10,10,12,10),
+        //     currentBid:123,
+        //     reservedPrice: 10000,
+        //     startdate:'',
+        //     endddate:'',
+        // },
+        // {
+        //     aid:3,
+        //     status: 'S',
+        //     address:'123asd',
+        //     photos:['',''],
+        //     startdate: new Date(2021,10,10,12,10),
+        //     enddate: new Date(2023,10,10,10,10),
+        //     highestPrice: 123123,
+        //     currentBid:123,
+        //     reservedPrice: 10000,
+        //     startdate:'',
+        //     endddate:'',
+        // },
+        //
+        // {
+        //     aid:5,
+        //     status: 'F',
+        //     address:'123asd',
+        //     photos:['',''],
+        //     highestPrice: 123123,
+        //     currentBid:22222,
+        //     startdate:'',
+        //     endddate:'',
+        // },
         // {
         //     aid:6,
         //     status: 'S',
@@ -324,39 +318,48 @@ export default {
     };
   },
   created() {
-    // this.username = localStorage.getItem("username");
-    // // this.username = this.$store.state.username;
-    // if (this.username !== null) {
-    //     this.hasLogin = true;
-    //     this.avatar = localStorage.getItem("avatar");
-    //     this.firstname = localStorage.getItem("firstname");
-    // }
-    // else{
-    //     this.$message.error("You should login first!");
-    //     this.$router.push("/login");
-    // }
+    this.username = localStorage.getItem("username");
+    // this.username = this.$store.state.username;
+    if (this.username !== null) {
+        this.hasLogin = true;
+        this.avatar = localStorage.getItem("avatar");
+        this.$axios
+                .get("/auction/list/past")
+                .then((response) => {
+                  if (response.data.code === 200) {
+                    this.originPropertyList = response.data.result;
+                    this.propList = response.data.result;
+                    // this.propInfo = this.originPropertyList[0];
+                    if (this.originPropertyList.length === 0) {
+                      this.isEmpty = true;
+                      this.propList = this.originPropertyList;
+                    }
+                  } else if (response.data.code === 400) {
+                    this.isEmpty = true;
+                  }
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+        this.$axios
+                .get('/notification/unread')
+                .then(response => {
+                  if (response.data.code === 200) {
+                    this.unread = response.data.result;
+                  }
+                })
+                .catch(function (error) {
+                  this.$message.error(error);
+                });
 
-    this.$axios
-      .get("/auction/list/past")
-      .then((response) => {
-        if (response.data.code === 200) {
-          this.originPropertyList = response.data.result;
-          this.propList = response.data.result;
-          // this.propInfo = this.originPropertyList[0];
-          if (this.originPropertyList.length === 0) {
-            this.isEmpty = true;
-            this.propList = this.originPropertyList;
-          }
-        } else if (response.data.code === 400) {
-          this.isEmpty = true;
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    }
+    else{
+        this.$message.error("You should login first!");
+        this.$router.push("/login");
+    }
 
-    this.isEmpty = false;
-    this.propList = this.originPropertyList;
+    // this.isEmpty = false;
+    // this.propList = this.originPropertyList;
   },
   mounted() {
     $("#back-btn").hover(function (event) {
