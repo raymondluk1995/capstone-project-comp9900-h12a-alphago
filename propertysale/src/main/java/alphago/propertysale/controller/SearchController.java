@@ -1,9 +1,9 @@
 package alphago.propertysale.controller;
 
+import alphago.propertysale.entity.inVO.SearchModel;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.utils.Result;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 
 @RestController
-//@RequestMapping("/search")
 public class SearchController {
 
     @Autowired
     private AuctionService service;
 
     @RequestMapping("/search")
-    Result getRunningOrComingAuctions() {
+    Result getRunningOrComingAuctions(SearchModel model) {
+        // if you have no query types....
         Subject subject = SecurityUtils.getSubject();
         boolean isAuthenticated = subject.isAuthenticated();
         subject.getPrincipal();

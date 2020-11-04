@@ -8,6 +8,9 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class SearchResVO {
+
+    // select rab.aid, rab.status..., property.bathroom... from rab, property where (rab.pid = property.pid) and
+    // xxx like xxx
     // rab info
     private long aid;
     private String status;
