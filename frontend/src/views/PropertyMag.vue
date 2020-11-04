@@ -127,19 +127,19 @@
                 <section>
                     <el-row type="flex" justify="left" style="margin:10px 0;">
                         <el-col :span="4">
-                            <i class="el-icon-toilet-paper"> Baths: {{ propInfo.bathroomNum}}</i>
+                            <i class="fas fa-bath" style="margin-right: 5px"></i> Baths: {{ propInfo.bathroomNum}}
                         </el-col>
                         <el-col :span="4">
-                            <i class="el-icon-house"> Beds: {{ propInfo.bedroomNum }}</i>
+                            <i class="fas fa-bed" style="margin-right: 5px"></i> Beds: {{ propInfo.bedroomNum }}
                         </el-col>
                         <el-col :span="4">
-                            <i class="el-icon-truck"> Cars: {{ propInfo.garageNum }}</i>
+                            <i class="fas fa-car" style="margin-right: 5px"></i> Cars: {{ propInfo.garageNum }}
                         </el-col>
                         <el-col :span="4">
-                            <i class="el-icon-full-screen"> Area: {{ propInfo.area }}</i>
+                            <i class="fas fa-home" style="margin-right: 5px"></i> Area: {{ propInfo.area }}
                         </el-col>
                         <el-col :span="8">
-                            <i class="el-icon-info"> Type: {{ propInfo.type }}</i>
+                            <i class="fas fa-tags" style="margin-right: 5px"></i> Type: {{ propInfo.type }}
                         </el-col>
                     </el-row>
 
@@ -303,7 +303,11 @@
                     //     address:'afdgdag',
                     //     position:'apple,pear',
                     //     detail:'bbq,ppol',
-                    //     photos:['', '']
+                    //     photos:['', ''],
+                    //     bathroomNum:2,
+                    //     bedroomNum:1,
+                    //     garageNum:2,
+                    //
                     // }
                     // ,{
                     //     pid:2,
@@ -615,6 +619,8 @@
 </script>
 
 <style lang="scss">
+    @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap");
+
     .mh20 {
         margin: 20px 0;
     }

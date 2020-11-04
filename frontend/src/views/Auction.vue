@@ -115,23 +115,24 @@
                                     </el-carousel>
                                     <div style="padding: 20px;">
                                     <h5>{{ decapitateAddress(item.address) }}</h5>
-                                    <el-row type="flex" justify="left" style="margin:10px 5%;">
+                                    <el-row type="flex" justify="center" style="margin:10px 5%;">
                                         <el-col :span="4">
-                                        <i class="el-icon-toilet-paper"> Baths: {{ item.bathroomNum}}</i>
+                                            <i class="fas fa-bath" style="margin-right: 5px"></i> {{ item.bathroomNum}}
                                         </el-col>
                                         <el-col :span="4">
-                                        <i class="el-icon-house"> Beds: {{ item.bedroomNum }}</i>
+                                            <i class="fas fa-bed" style="margin-right: 5px"></i> {{ item.bedroomNum }}
                                         </el-col>
-                                            <el-col :span="4">
-                                        <i class="el-icon-truck"> Cars: {{ item.garageNum }}</i>
-                                            </el-col>
                                         <el-col :span="4">
-                                            <i class="el-icon-full-screen"> Area: {{ item.area }}</i>
+                                            <i class="fas fa-car" style="margin-right: 5px"></i> {{ item.garageNum }}
+                                        </el-col>
+
+                                        <el-col :span="4">
+                                            <i class="fas fa-home" style="margin-right: 5px"></i> {{ item.area }} ㎡
                                         </el-col>
                                         <el-col :span="8">
-                                            <i class="el-icon-info"> Type: {{ item.type }}</i>
+                                            <i class="fas fa-tags" style="margin-right: 5px"></i> {{ item.type }}
                                         </el-col>
-                                    </el-row>
+                                        </el-row>
                                         <el-row type="flex" justify="space-around">
 <!--                                            <div class="bid" v-if="item.status==='R'"> Guide ${{ getBidStatus(item)|numFormat }}</div>-->
 <!--                                            <div class="bid" v-else> ${{ getBidStatus(item)|numFormat }}</div>-->
@@ -541,7 +542,8 @@
 </script>
 
 <style scoped lang="scss">
-.user {
+
+    .user {
     display: flex;
     align-items: center;
     p {
@@ -624,7 +626,7 @@
 .items ul li {
     /*z-index: 1;*/
     width: 600px;
-    height: 550px;
+    height: 560px;
     /*padding: 10px 0;*/
     margin: 10px 20px;
     /*display: inline-block;*/
