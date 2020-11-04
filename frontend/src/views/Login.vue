@@ -67,15 +67,18 @@
                 <span class="button2"
                       v-if="loginByuser"
                       @click="signInUser"
-
-                      :style="active3">
+                      id="login-sign-in"
+                >
                     <i class="el-icon-check"></i> Sign In</span>
+<!--                    <div class="bottom-line"></div>-->
 
                 <span class="button2"
-                      v-else @click="signInEmail"
-
-                      :style="active3">
+                      v-if="!loginByuser"
+                      @click="signInEmail"
+                      id="login-sign-in2"
+                >
                     <i class="el-icon-check"></i> Sign In</span>
+<!--                    <div class="bottom-line"></div>-->
                 </el-row>
 
 
@@ -182,6 +185,16 @@
             //用div模拟的下边框缩回，其width动态恢复为默认宽度0
             $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
           }
+        });
+
+        $("#login-sign-in").hover(function(event) {
+            $(this).stop().animate({"margin-left": "10px"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "150px"}, 300);
+        });
+        $("#login-sign-in").mouseleave(function(event) {
+            console.log('123');
+            $(this).stop().animate({"margin-left": "0"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
         });
 
     },
