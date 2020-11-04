@@ -763,7 +763,6 @@ export default {
           this.$router.push("/propmag");
           break;
         case "notification":
-          this.$router.push("/notice");
           break;
         case "logout":
           this.$axios.post("/user/logout").then((response) => {
@@ -886,11 +885,7 @@ export default {
     },
 
     getBidStatus(item) {
-      if (item.status === "R") {
-        return item.currentBid;
-      } else {
-        return item.highestPrice;
-      }
+      return(item.currentBid);
     },
 
     checkPropList(val) {
