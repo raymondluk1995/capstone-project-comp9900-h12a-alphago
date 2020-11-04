@@ -192,7 +192,6 @@
             $(this).next(".bottom-line").stop().animate({"width": "150px"}, 300);
         });
         $("#login-sign-in").mouseleave(function(event) {
-            console.log('123');
             $(this).stop().animate({"margin-left": "0"}, 300);
             $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
         });

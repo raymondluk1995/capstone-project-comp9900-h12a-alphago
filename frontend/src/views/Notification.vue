@@ -11,7 +11,7 @@
 
                     </div>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                        <el-dropdown-item command="profile" icon="el-icon-user-solid"> My Profile</el-dropdown-item>
                         <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                         <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
 
@@ -108,7 +108,7 @@
                                     </el-row>
                                     </el-col>
                                     <el-col :span="12" >
-                                        <el-form-item label="Seller Name:" prop="bidder">
+                                        <el-form-item label="Name:" prop="bidder">
                                             <span> {{item.message.sellerFullName }} </span>
                                         </el-form-item>
                                         <el-form-item label="Phone:" prop="bidder">
@@ -127,18 +127,18 @@
                                         </el-row>
                                         <el-col :span="12">
                                             <el-row tyle="flex" justify="left">
-                                                <el-form-item label="Bid Winner:" prop="bidder">
+                                                <el-form-item label="Bidder:" prop="bidder">
                                                     <span> {{item.message.sellerName}} </span>
                                                 </el-form-item>
                                                 <el-form-item label="Highest Bid:" prop="bidder">
-                                                    <span> {{item.message.bidPrice |numFormat}} </span>
+                                                    <span> $ {{item.message.bidPrice |numFormat}} </span>
                                                 </el-form-item>
 
                                             </el-row>
                                         </el-col>
                                         <el-col :span="12">
 
-                                            <el-form-item label="Bider Name:" prop="bidder">
+                                            <el-form-item label="Name:" prop="bidder">
                                                 <span> {{item.message.bidderFullName }} </span>
                                             </el-form-item>
                                             <el-form-item label="Phone:" prop="bidder">
@@ -220,7 +220,7 @@
                                             </el-row>
                                         </el-col>
                                         <el-col :span="12" >
-                                            <el-form-item label="Seller Name:" prop="bidder">
+                                            <el-form-item label="Name:" prop="bidder">
                                                 <span> {{item.message.sellerFullName }} </span>
                                             </el-form-item>
                                             <el-form-item label="Phone:" prop="bidder">
@@ -302,7 +302,7 @@
                                             </el-row>
                                         </el-col>
                                         <el-col :span="12" >
-                                            <el-form-item label="Seller Name:" prop="bidder">
+                                            <el-form-item label="Name:" prop="bidder">
                                                 <span> {{item.message.sellerFullName }} </span>
                                             </el-form-item>
                                             <el-form-item label="Phone:" prop="bidder">
@@ -321,18 +321,18 @@
                                         </el-row>
                                         <el-col :span="12">
                                             <el-row tyle="flex" justify="left">
-                                                <el-form-item label="Bid Winner:" prop="bidder">
+                                                <el-form-item label="Bidder:" prop="bidder">
                                                     <span> {{item.message.username}} </span>
                                                 </el-form-item>
                                                 <el-form-item label="Highest Bid:" prop="bidder">
-                                                    <span> {{item.message.bidPrice |numFormat}} </span>
+                                                    <span>$ {{item.message.bidPrice |numFormat}} </span>
                                                 </el-form-item>
 
                                             </el-row>
                                         </el-col>
                                         <el-col :span="12">
 
-                                            <el-form-item label="Bidder Name:" prop="bidder">
+                                            <el-form-item label="Name:" prop="bidder">
                                                 <span> {{item.message.bidderFullName }}</span>
                                             </el-form-item>
                                             <el-form-item label="Phone:" prop="bidder">
