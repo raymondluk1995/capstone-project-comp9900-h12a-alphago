@@ -487,6 +487,10 @@
                         this.$message.error(error);
                     });
             }
+            else{
+                this.$message.error("You should login first!");
+                this.$router.push("/login");
+            }
 
         },
         mounted(){
