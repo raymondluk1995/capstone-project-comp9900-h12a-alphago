@@ -713,10 +713,7 @@ export default {
       this.address = this.$route.query.postcode;
     }
 
-
-
-
-
+    this.currentPage =1 ;
     this.showProperties(this.currentPage, this.pageSize);
   },
 
