@@ -342,7 +342,6 @@
     import dayjs from "dayjs";
     import { mapActions } from "vuex";
     import $ from 'jquery'
-    import { mapActions } from "vuex";
 
 
     export default {
