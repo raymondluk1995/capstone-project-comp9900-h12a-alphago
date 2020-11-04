@@ -902,13 +902,11 @@ export default {
         this.colNumObject.oneColUl = true;
         this.vcardObject.cardWidth60 = true;
         this.vcardObject.cardWidth = false;
-        console.log("here1");
       } else {
         this.colNumObject.twoColUl = true;
         this.colNumObject.oneColUl = false;
         this.vcardObject.cardWidth60 = false;
         this.vcardObject.cardWidth = true;
-        console.log("here2");
       }
       return;
     },
@@ -1026,11 +1024,11 @@ export default {
       });
     },
   },
-  watch: {
-    propList: function (val) {
-      this.checkPropList(val);
-    },
-  },
+  // watch: {
+  //   propList: function (val) {
+  //     this.checkPropList(val);
+  //   },
+  // },
 };
 </script>
 
