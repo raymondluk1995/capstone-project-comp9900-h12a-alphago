@@ -56,9 +56,10 @@ public class FileUtil {
         RestTemplate restTemplate = new RestTemplate();
         String[] names = restTemplate.getForObject(remote + "cover" + "/" + pid, String[].class);
         List<String> paths = new ArrayList<>();
-        Assert.notNull(names);
-        for(String name : names){
-            paths.add(remote + "property/"  + pid + "/" + name);
+        if(names !=null) {
+            for (String name : names) {
+                paths.add(remote + "property/" + pid + "/" + name);
+            }
         }
         return paths;
     }

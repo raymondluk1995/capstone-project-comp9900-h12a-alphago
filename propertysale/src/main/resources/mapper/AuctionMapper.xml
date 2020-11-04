@@ -3,4 +3,8 @@
 <mapper namespace="alphago.propertysale.mapper.AuctionMapper">
     <cache type="alphago.propertysale.redis.MybatisCache"/>
 
+<!--    <select id="getSearchResults" resultType="alphago.propertysale.entity.returnVO.SearchResVO">-->
+<!--        SELECT * FROM auction auc, property prop ${ew.customSqlSegment}-->
+<!--    </select>-->
+
 </mapper>

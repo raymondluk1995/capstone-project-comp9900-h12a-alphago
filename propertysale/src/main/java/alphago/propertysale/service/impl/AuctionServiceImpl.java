@@ -1,11 +1,14 @@
 package alphago.propertysale.service.impl;
 
 import alphago.propertysale.entity.*;
+import alphago.propertysale.entity.inVO.SearchModel;
 import alphago.propertysale.entity.notification.FinishMessage;
 import alphago.propertysale.entity.notification.Notification;
 import alphago.propertysale.entity.returnVO.AuctionVO;
 import alphago.propertysale.exception.AuctionFinishedException;
 import alphago.propertysale.exception.AuctionNotFoundException;
+import alphago.propertysale.entity.returnVO.SearchResVO;
+import alphago.propertysale.entity.returnVO.SearchVO;
 import alphago.propertysale.mapper.*;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.utils.FileUtil;
@@ -17,6 +20,8 @@ import alphago.propertysale.websocket.BidMsg;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +30,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 /**
  * @program: propertysale
  * @description:
- * @author: XIAO HAN
+ * @author: XIAO HAN, TAO XUE
  * @create: 2020-10-16 16:49
  **/
 @Service
 @Transactional
-public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> implements AuctionService {
+public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> implements AuctionService {
     @Autowired
     AuctionMapper auctionMapper;
     @Autowired
@@ -52,7 +58,6 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
     @Autowired
     NotificationMapper notificationMapper;
 
-
     @Override
     public AuctionVO getAuctionByAid(long aid) {
         Auction auction = auctionMapper.selectById(aid);
@@ -66,20 +71,20 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
         Address address = addressMapper.selectById(property.getPid());
         User user = userMapper.selectById(auction.getSeller());
         AuctionVO auctionVO = new AuctionVO();
-        BeanUtils.copyProperties(auction , auctionVO);
-        BeanUtils.copyProperties(property , auctionVO);
-        BeanUtils.copyProperties(user , auctionVO);
-        BeanUtils.copyProperties(address , auctionVO , "address");
+        BeanUtils.copyProperties(auction, auctionVO);
+        BeanUtils.copyProperties(property, auctionVO);
+        BeanUtils.copyProperties(user, auctionVO);
+        BeanUtils.copyProperties(address, auctionVO, "address");
         auctionVO.setAvatar(FileUtil.getUserAvatar(user));
         auctionVO.setPhotos(FileUtil.getImages(auction.getPid()));
         auctionVO.setAddress(address.getFullAddress());
         // get current bid price
-        if(auction.getCurrentBid() != 0){
+        if (auction.getCurrentBid() != 0) {
             long bid = auction.getCurrentBid();
             // get highest price
             Rab rab = rabMapper.selectById(auction.getCurrentBid());
             auctionVO.setLatestPrice(rab.getHighestPrice());
-        }else{
+        } else {
             auctionVO.setLatestPrice(auction.getMinimumPrice());
         }
         auctionVO.setStartdate(auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli());
@@ -91,7 +96,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
     @Override
     public AuctionVO getAuctionByProperty(long pid) {
         Auction auction = auctionMapper.selectOne(new QueryWrapper<Auction>()
-                .eq("pid" , pid).eq("status" , "R"));
+                .eq("pid", pid).eq("status", "R"));
         return getAuctionByAid(auction.getAid());
     }
 
@@ -108,16 +113,12 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
         // delete auction
         auctionMapper.deleteById(aid);
         // change property auction status
-        propertyMapper.update(new Property().setAuction(false),
-                new UpdateWrapper<Property>().eq("pid",pid)
-                .set("auction", false));
-        // delete start count down
-        RedisUtil.getRedis().delete("Start:"+aid);
+        propertyMapper.update(new Property().setAuction(false), new UpdateWrapper<Property>().eq("pid", pid));
     }
 
     /**
-    * @Description: Initialize auction bid history when auction start
-    */
+     * @Description: Initialize auction bid history when auction start
+     */
     @Override
     public void initHistory(long aid) {
         // get all rabs
@@ -210,5 +211,59 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
                 .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
                 .setMessage(ObjectUtil.serialize(message));
         notificationMapper.addMessage(notification);
+    }
+
+    @Override
+    public SearchVO getSearchVO(SearchModel model) {
+        SearchVO vo = new SearchVO();
+        Page<Auction> page = new Page<>(model.getCurrPage(), 6);
+        IPage<Auction> res = null;
+        res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R"));
+        List<Auction> runningOrComingAuctions = /* auctionMapper.getAllRunningOrComingAuction();*/ res.getRecords();
+
+        List<SearchResVO> ret = new ArrayList<>();
+        vo.setResVOList(ret);
+        if (model.isAllEmpty()) {
+            // if you are just a ranger.
+            for (Auction auction : runningOrComingAuctions) {
+                SearchResVO searchResVO = new SearchResVO();
+                searchResVO.setBidderNum(auction.getBidderNum());
+                if (auction.getStatus().equals("R")) {
+                    // registered bid.
+                    // set to minimum price
+                    searchResVO.setCurrentBid(auction.getMinimumPrice());
+                } else if (auction.getStatus().equals("A")) {
+                    // if you are coming bid.
+                    long currBid = auction.getCurrentBid();
+                    if (currBid == 0) {
+                        // set to Not bid
+
+                        searchResVO.setCurrentBid(auction.getMinimumPrice());
+                    } else {
+                        // set to rab.highest Price
+                        Rab rab = rabMapper.selectById(auction.getCurrentBid());
+                        searchResVO.setCurrentBid(rab.getHighestPrice());
+                    }
+                }
+                Property property = propertyMapper.selectOne(new QueryWrapper<Property>().eq("pid", auction.getPid()));
+                BeanUtils.copyProperties(property, searchResVO);
+                searchResVO.setPhotos(FileUtil.getImages(property.getPid()));
+                searchResVO.setStatus(auction.getStatus());
+                Address address = addressMapper.selectById(property.getPid());
+                searchResVO.setAddress(address.getFullAddress());
+                vo.getResVOList().add(searchResVO);
+            }
+
+            vo.setCurrPage(model.getCurrPage());
+            vo.setTotalPage(res.getTotal());
+        } else {
+            for (Auction auction : runningOrComingAuctions) {
+                // auction's address
+                Address address = addressMapper.selectById(auction.getPid());
+                // Auction's property
+                Property property = propertyMapper.selectById(auction.getPid());
+            }
+        }
+        return vo;
     }
 }
