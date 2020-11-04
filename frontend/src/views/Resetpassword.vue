@@ -166,15 +166,15 @@ export default {
                     if (response.data.code === 400) {
                       this.$message.error('Username does not exist!');
                       this.form.username = '';
-                    }else if(response.data.code ===200){
+                    }else if(response.data.code === 200){
                       this.timerstart = true;
-                      this.count = 60;
+                      this.count = 180;
                       this.show = false;
                       $(".validate").addClass("validate-disabled")
 
                       // document.getElementById('validate').style.cursor = 'not-allowed'
                       this.timer = setInterval(() => {
-                        if (this.count > 0 && this.count <= 60) {
+                        if (this.count > 0 && this.count <= 180) {
                           this.count--
                         } else {
                           this.show = true
