@@ -35,3 +35,6 @@ Moreover, I tested on changing different fonts and integrated a map display func
 
 Week 7
 In this week, I wrote the Retrospective A and start to write the final report. After discussion with the Scrum master, now my role would be report writing and code testing.
+
+Week 8
+In this week, I finished the "Search" page and cooperated with the back end. Also, I finished the background part and the majority parts of the Software Architecture in the final report except the back end design part.
