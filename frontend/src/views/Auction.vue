@@ -54,14 +54,15 @@
                                 </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :span="9" >
-                            <div class="reg-btn" style="float:right; margin-top:15px">
+                        <el-col :span="6" >
+                            <div class="reg-btn" style="margin-top:15px;">
                                 <span  id="reg-btn"
                                        style="
+
                                            color:white;
                                            padding:2px 5px;
                                            font-size:20px;
-                                            position:absolute;
+                                            /*position:absolute;*/
                                             "
                                        @click="goto('auchis')">
                                     <i class="el-icon-right"></i> View History</span>
@@ -113,7 +114,7 @@
                                         </el-carousel-item>
                                     </el-carousel>
                                     <div style="padding: 20px;">
-                                    <h5>{{ item.address }}</h5>
+                                    <h5>{{ decapitateAddress(item.address) }}</h5>
                                     <el-row type="flex" justify="left" style="margin:10px 5%;">
                                         <el-col :span="4">
                                         <i class="el-icon-toilet-paper"> Baths: {{ item.bathroomNum}}</i>
@@ -244,7 +245,7 @@
                     //     garageNum:2,
                     //     type:'Apartment',
                     //     area:123,
-                    //     address:'2 Gearin Alley, Mascot, NSW',
+                    //     address:'2 Gearin Alley, Mascot, NSW12312312312312312311231231231231223',
                     //     photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
                     //     highestPrice: 123123,
                     //     currentBid:123123,
@@ -515,6 +516,14 @@
                     }
                 )
             },
+            decapitateAddress(addr){
+                if (addr.length<50){
+                    return addr;
+                }
+                else{
+                    return (addr.slice(0,50)+"...");
+                }
+            },
             showTime(time){
                 // let time = dayjs(day).format("YYYY-MM-DD HH:mm:ss");
                 let MONTH =['Jan', 'Feb', 'Mar','Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -645,13 +654,13 @@
 .reg-btn{
     cursor: pointer;
     position:relative;
-    width:150px;
+    float:right;
     &:hover{
         transform:translateX(10px);
         transition-duration: 0.5s;
         border-bottom:1px solid white
     }
-    float:left;
+    /*float:left;*/
 }
 
 </style>

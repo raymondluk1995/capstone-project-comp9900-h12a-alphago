@@ -4,7 +4,7 @@
             <template v-if="this.hasLogin">
                 <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
                     <div class="user">
-                        <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
+                        <el-badge v-if="parseInt(this.unread) > 0" :value="this.unread" :max="99" class="item">
                             <el-avatar :size="70" :src="avatar"></el-avatar>
                         </el-badge>
                         <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
@@ -50,15 +50,15 @@
                             :key="item.notiId"
                             :title="getTitle(item)"
                             :name="index"
-                            :class="item.read ?  '':'unread' "
+                            :class="item.isRead ?  '':'unread' "
                     >
-                        <el-card style="overflow-y: scroll; " :class="item.read ? 'card' : 'card unread'">
+                        <el-card style="overflow-y: scroll; ">
                             <div v-if="item.message.seller && item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
-                                <h6>Congratulations!</h6>
-                                <h6>Your Property<span style="font-size:12px;color:#596c84">[pid:{{item.message.pid}}]</span> has been sold. The highest bid is ${{item.message.bidPrice|numFormat}}.</h6>
-                                <h6 style="
-                                margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</h6>
+                                <p>Congratulations!</p>
+                                <p>Your Property<span style="font-size:12px;color:#596c84">[PID:{{item.message.pid}}]</span> has been sold. The highest bid is ${{item.message.bidPrice|numFormat}}.</p>
+                                <p style="
+                                margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</p>
 
                                 <span
                                 style="
@@ -67,7 +67,7 @@
                                 font-size: 20px;
                                 font-weight:bold;
                                ">{{item.message.address}} </span>
-                                <span style="font-size:12px;color:#596c84">[aid:{{item.message.aid}}]</span>
+                                <span style="font-size:12px;color:#596c84">[AID:{{item.message.aid}}]</span>
                                 <el-form
                                         class="form1"
                                         ref="item.message"
@@ -163,10 +163,10 @@
 
                             <div v-if="item.message.seller && !item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
-                                <h6>Sorry.. </h6>
-                                <h6>Your Property<span style="font-size:12px;color:#596c84">[pid:{{item.message.pid}}]</span> has passed in. The highest bid is ${{item.message.bidPrice| numFormat }}.</h6>
-                                <h6 style="
-                                margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</h6>
+                                <p>Sorry.. </p>
+                                <p>Your Property<span style="font-size:12px;color:#596c84">[PID:{{item.message.pid}}]</span> has passed in. The highest bid is ${{item.message.bidPrice| numFormat }}.</p>
+                                <p style="
+                                margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</p>
 
                                 <span
                                         style="
@@ -175,7 +175,7 @@
                                 font-size: 20px;
                                 font-weight:bold;
                                ">{{item.message.address}}</span>
-                                <span style="font-size:12px;color:#596c84">[aid:{{item.message.aid}}]</span>
+                                <span style="font-size:12px;color:#596c84">[AID:{{item.message.aid}}]</span>
 
                                 <el-form
                                         class="form1"
@@ -246,11 +246,11 @@
 
                             <div v-if="!item.message.seller && item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
-                                <h6>Congratulations!</h6>
-                                <h6>Your win the Property<span style="font-size:12px;color:#596c84">[pid:{{item.message.pid}}]</span>.
-                                 Your highest bid is ${{item.message.bidPrice|numFormat}}.</h6>
-                                <h6 style="
-                                margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</h6>
+                                <p>Congratulations!</p>
+                                <p>Your win the Property<span style="font-size:12px;color:#596c84">[PID:{{item.message.pid}}]</span>.
+                                 Your highest bid is ${{item.message.bidPrice|numFormat}}.</p>
+                                <p style="
+                                margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</p>
 
                                 <span
                                         style="
@@ -259,7 +259,7 @@
                                 font-size: 20px;
                                 font-weight:bold;
                                ">{{item.message.address}}</span>
-                                <span style="font-size:12px;color:#596c84">[aid:{{item.message.aid}}]</span>
+                                <span style="font-size:12px;color:#596c84">[AID:{{item.message.aid}}]</span>
                                 <el-form
                                         class="form1"
                                         ref="item.message"
@@ -340,6 +340,7 @@
 <script>
     import Header from "@/components/Header.vue";
     import dayjs from "dayjs";
+    import { mapActions } from "vuex";
     import $ from 'jquery'
 
 
@@ -364,7 +365,7 @@
                     //     createTime:new Date(2020,10,10,10,10),
                     //     noti_id:'12',
                     //     noti_type:'FINISH',
-                    //     read:false,
+                    //     isRead:false,
                     //     uid:23,
                     //     message: {
                     //         aid:'0',
@@ -411,7 +412,7 @@
                         // createTime:new Date(2020,10,10,10,10),
                         // noti_id:'12',
                         // noti_type:'FINISH',
-                        // read:false,
+                        // isRead:false,
                         // uid:23,
                         // message: {
                         //     aid:'0',
@@ -486,6 +487,10 @@
                         this.$message.error(error);
                     });
             }
+            else{
+                this.$message.error("You should login first!");
+                this.$router.push("/login");
+            }
 
         },
         mounted(){
@@ -509,6 +514,7 @@
             });
         },
         methods: {
+            ...mapActions(["logout"]),
             handleCommand(command) {
                 switch (command) {
                     case "profile":
@@ -529,7 +535,7 @@
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
                                         this.logout();
-                                        location.reload()
+                                        this.$router.replace("/");
                                     }else{
                                         console.log(response.msg)
                                     }
@@ -570,14 +576,14 @@
             },
 
             hasRead(item){
-                if(item.read ===false){
+                if(item.isRead ===false){
                     let data = new FormData;
                     data.append('notiId', item.notiId);
                     this.$axios.post('/notification/isRead',data)
                         .then((response) => {
                             if (response.data.code === 200) {
                                 this.unread = this.unread-1;
-                                item.read = true;
+                                item.isRead = true;
                             }
                     })
                         .catch((res) => {
@@ -589,7 +595,7 @@
 
 
             read(item) {
-                item.read = true;
+                item.isRead = true;
             },
             back() {
                 this.$router.go(-1);

@@ -73,7 +73,7 @@
                         <div>
                             <el-row>
                                 <el-col :span="20">
-                            <h6>{{ item.address }}</h6>
+                            <h6>{{ decapitateAddress(item.address) }}</h6>
                                 </el-col>
 
                                 <el-col :span="1" >
@@ -308,7 +308,7 @@
                     // ,{
                     //     pid:2,
                     //     status: 'N',
-                    //     address:'123asd',
+                    //     address:'123asd1231231231231231321231231312313',
                     //     position:'apple,pear',
                     //     detail:'bbq,ppol',
                     //     photos:['','']
@@ -425,10 +425,31 @@
                         this.$router.push("/notice");
                         break;
                     case "logout":
-                        this.logout();
+                        this.$axios.post('/user/logout')
+                            .then((response) => {
+                                if (response.status >= 200 && response.status < 300){
+                                    if (response.data.code === 200){
+                                        this.logout();
+                                        this.$router.replace("/");
+                                    }else{
+                                        console.log(response.msg)
+                                    }
+                                }else{
+                                    console.log(response.msg)
+                                }
+                            })
                         break;
                     default:
                         break;
+                }
+            },
+
+            decapitateAddress(addr){
+                if (addr.length<30){
+                    return addr;
+                }
+                else{
+                    return (addr.slice(0,30)+"...");
                 }
             },
 

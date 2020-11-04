@@ -830,9 +830,15 @@ export default {
 
     toSearch() {
       var addr = document.getElementById("address").value;
+      if (addr===""){
+        this.$router.push({
+          path:"/search",
+        });
+        return ;
+      }
       if (isNaN(addr)) {
         if (this.address.locality === undefined){
-          this.$message.error("Please validate the suburb name first!");
+          this.$message.error("Please validate the suburb name by Google Map first!");
           return;
         }
         addr = this.address.locality;
@@ -845,6 +851,7 @@ export default {
       } else {
         if (addr.toString().length != 4) {
           this.$message.error("Please input a valid postcode!");
+          return;
         }
         this.$router.push({
           path: "/search",

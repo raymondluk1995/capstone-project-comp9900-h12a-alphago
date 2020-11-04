@@ -726,7 +726,7 @@
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
                                         this.logout();
-                                        this.$router.replace("/");
+                                        // this.$router.replace("/");
                                     }else{
                                         console.log(response.msg)
                                     }
@@ -1056,7 +1056,8 @@
                 const h = this.$createElement;
                 this.$notify({
                     title: 'Bid Update!',
-                    message: h('i', { style: 'color: teal'},  `User UMR becomes the winner!\nCurrent bid is ${ 123123123 | numFormat()}`)
+                    dangerouslyUseHTMLString: true,
+                    message:`User <strong>UMR</strong> becomes the winner! \nCurrent bid is ${ 123123123 | numFormat()}\nBid Time: ${this.showTime(dayjs().valueOf())}`
                 });
             },
 
@@ -1064,7 +1065,9 @@
                 const h = this.$createElement;
                 this.$notify({
                     title: 'Bid Update!',
-                    message: h('i', { style: 'color: teal'},  `User ${res.username} becomes the winner!\nCurrent bid is ${res.price | numFormat()}`)
+                    dangerouslyUseHTMLString: true,
+                    message:`User <strong>${res.username}</strong> becomes the winner!\n <strong>Current bid:</strong> ${res.price | numFormat()}.\n
+                                <strong>Bid Time:</strong> ${showTime(dayjs())}`
                 });
             },
             showCard(card){
@@ -1358,6 +1361,7 @@
             border-radius: 5px;
 
     }
+    .el-notification {white-space:pre-wrap !important; }
 
 
 
