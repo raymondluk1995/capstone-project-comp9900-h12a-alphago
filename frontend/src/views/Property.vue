@@ -474,7 +474,6 @@
                 bidderFlag: false,
                 timeFlag: false,
                 addNewCard:false,
-                currentBid:'',
                 rabId:'',
                 newBid: '',
                 newPlacedBid:'',
@@ -914,7 +913,7 @@
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
-                                        this.currentBid = this.newBid;
+                                        this.propInfo.highestPrice = this.newBid;
                                         // this.newPlacedBid = this.newBid;
                                         this.newBid='';
                                         this.$message({
@@ -1051,7 +1050,8 @@
                 const h = this.$createElement;
                 this.$notify({
                     title: 'Bid Update!',
-                    message: h('i', { style: 'color: teal'},  `User ${res.username} becomes the winner! Current bid is ${res.price}`)
+                    message: h('i', { style: 'color: teal'},  `User ${res.username} becomes the winner!\n
+                    Current bid is ${res.price | numFormat()}`)
                 });
             },
             showCard(card){
