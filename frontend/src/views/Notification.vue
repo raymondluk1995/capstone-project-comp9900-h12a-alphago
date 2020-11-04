@@ -16,7 +16,7 @@
                         <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
 
                         <el-dropdown-item command="notification"  icon="el-icon-bell">
-                            Notifications <el-badge v-show="parseInt(this.unread) <= 0" class="mark" :value="this.unread" style="padding:0;background-color: white"/>
+                            Notifications <el-badge v-show="parseInt(this.unread) > 0" class="mark" :value="this.unread" style="padding:0;background-color: white"/>
                         </el-dropdown-item>
 
                         <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
@@ -356,104 +356,104 @@
                     {prop: 'username', label: 'User', width: '300'},
                     {prop: 'price', label: 'Current Bid',formatter: this.formatPrice,sortable:true}
                 ],
-                unread:12,
+                unread:0,
                 avatar:'',
-                hasLogin:true,
+                hasLogin:false,
                 Notice: [
-                    {
-                        createTime:new Date(2020,10,10,10,10),
-                        noti_id:'12',
-                        noti_type:'FINISH',
-                        read:false,
-                        uid:23,
-                        message: {
-                            aid:'0',
-                            pid: '123',
-                            success: true,
-                            seller: true,
-                            bidPrice:'1230000',
-                            address: '2 Gearin Alley, Mascot, NSW',
+                    // {
+                    //     createTime:new Date(2020,10,10,10,10),
+                    //     noti_id:'12',
+                    //     noti_type:'FINISH',
+                    //     read:false,
+                    //     uid:23,
+                    //     message: {
+                    //         aid:'0',
+                    //         pid: '123',
+                    //         success: true,
+                    //         seller: true,
+                    //         bidPrice:'1230000',
+                    //         address: '2 Gearin Alley, Mascot, NSW',
+                    //
+                    //         sellerName: 'UMR',
+                    //         sellerFullName: 'Tony Stark',
+                    //         sellerPhone:'0123123',
+                    //         sellerEmail: '123@gmnail.com',
+                    //
+                    //         bidderName: 'TSF',
+                    //         bidderFullName: 'First Last',
+                    //         bidderPhone: '0412345678',
+                    //         bidderEmail:'123123123.com',
+                    //
+                    //         history: [
+                    //             {
+                    //                 time: 1603981349,
+                    //                 uid: 123,
+                    //                 user: 'UMR',
+                    //                 price: '123123123',
+                    //             },
+                    //             {
+                    //                 time: 160398890,
+                    //                 user: 'ooo',
+                    //                 uid: 345,
+                    //                 price: '1110001',
+                    //             },
+                    //             {
+                    //                 time: 1603890349,
+                    //                 user: 'TSF',
+                    //                 uid: 456,
+                    //                 price: '123123',
+                    //             },
+                    //         ],
+                    //
+                    //     }
+                    // },
+                    // {
+                        // createTime:new Date(2020,10,10,10,10),
+                        // noti_id:'12',
+                        // noti_type:'FINISH',
+                        // read:false,
+                        // uid:23,
+                        // message: {
+                        //     aid:'0',
+                        //     pid: '123',
+                        //     success: true,
+                        //     seller: true,
+                        //     bidPrice:'1230000',
+                        //     address: '2 Gearin Alley, Mascot, NSW',
+                        //
+                        //     sellerName: 'UMR',
+                        //     sellerFullName: 'Tony Stark',
+                        //     sellerPhone:'0123123',
+                        //     sellerEmail: '123@gmnail.com',
+                        //
+                        //     bidderName: 'TSF',
+                        //     bidderFullName: 'First Last',
+                        //     bidderPhone: '0412345678',
+                        //     bidderEmail:'123123123.com',
+                        //
+                        //     history: [
+                        //         {
+                        //             time: 1603981349,
+                        //             uid: 123,
+                        //             user: 'UMR',
+                        //             price: '123123123',
+                        //         },
+                        //         {
+                        //             time: 160398890,
+                        //             user: 'ooo',
+                        //             uid: 345,
+                        //             price: '1110001',
+                        //         },
+                        //         {
+                        //             time: 1603890349,
+                        //             user: 'TSF',
+                        //             uid: 456,
+                        //             price: '123123',
+                        //         },
+                        //     ],
 
-                            sellerName: 'UMR',
-                            sellerFullName: 'Tony Stark',
-                            sellerPhone:'0123123',
-                            sellerEmail: '123@gmnail.com',
-
-                            bidderName: 'TSF',
-                            bidderFullName: 'First Last',
-                            bidderPhone: '0412345678',
-                            bidderEmail:'123123123.com',
-
-                            history: [
-                                {
-                                    time: 1603981349,
-                                    uid: 123,
-                                    user: 'UMR',
-                                    price: '123123123',
-                                },
-                                {
-                                    time: 160398890,
-                                    user: 'ooo',
-                                    uid: 345,
-                                    price: '1110001',
-                                },
-                                {
-                                    time: 1603890349,
-                                    user: 'TSF',
-                                    uid: 456,
-                                    price: '123123',
-                                },
-                            ],
-
-                        }
-                    },
-                    {
-                        createTime:new Date(2020,10,10,10,10),
-                        noti_id:'12',
-                        noti_type:'FINISH',
-                        read:false,
-                        uid:23,
-                        message: {
-                            aid:'0',
-                            pid: '123',
-                            success: true,
-                            seller: true,
-                            bidPrice:'1230000',
-                            address: '2 Gearin Alley, Mascot, NSW',
-
-                            sellerName: 'UMR',
-                            sellerFullName: 'Tony Stark',
-                            sellerPhone:'0123123',
-                            sellerEmail: '123@gmnail.com',
-
-                            bidderName: 'TSF',
-                            bidderFullName: 'First Last',
-                            bidderPhone: '0412345678',
-                            bidderEmail:'123123123.com',
-
-                            history: [
-                                {
-                                    time: 1603981349,
-                                    uid: 123,
-                                    user: 'UMR',
-                                    price: '123123123',
-                                },
-                                {
-                                    time: 160398890,
-                                    user: 'ooo',
-                                    uid: 345,
-                                    price: '1110001',
-                                },
-                                {
-                                    time: 1603890349,
-                                    user: 'TSF',
-                                    uid: 456,
-                                    price: '123123',
-                                },
-                            ],
-
-                        }
-                    },
+                        // }
+                    // },
                 ],
             };
         },
@@ -486,7 +486,7 @@
                         this.$message.error(error);
                     });
             }
-            // this.notFound = true;
+
         },
         mounted(){
             $("#back-btn").hover(function(event) {
@@ -572,11 +572,12 @@
             hasRead(item){
                 if(item.read ===false){
                     let data = new FormData;
-                    data.append('nid', item.id);
-                    this.$axios.post('/notice/hasread',data)
+                    data.append('noti_id', item.noti_id);
+                    this.$axios.post('/notification/isRead',data)
                         .then((response) => {
                             if (response.data.code === 200) {
                                 this.unread = this.unread-1;
+                                item.read = true;
                             }
                     })
                         .catch((res) => {

@@ -598,6 +598,8 @@
             let h = document.documentElement.clientHeight  || document.body.clientHeight;
             this.vdaH = h - 147 + 'px';
             if (this.username !== null) {
+                this.hasLogin = true;
+                this.avatar = localStorage.getItem('avatar');
                 this.$axios
                     .get('/notification/unread')
                     .then(response => {
@@ -978,6 +980,7 @@
                                                 this.propInfo.rab = response.data.result;
                                                 this.$message.success("Register successful!");
                                                 // location.reload();
+                                                this.currentBid = price;
                                             }
                                         } else if (response.data.code === 400) {
                                             this.$message.error(response.msg);
