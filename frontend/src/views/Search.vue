@@ -506,7 +506,7 @@
         <div class="pagination">
           <el-pagination
             background
-            layout="prev, pager, next,total"
+            layout="prev, pager, next"
             :page-size="pageSize"
             :total="total"
             @current-change="handleCurrentChange"
@@ -969,7 +969,7 @@ export default {
         .get("/search?" + this.search)
         .then((res) => {
           this.propList = res.data.result.resVoList;
-          this.total = res.data.result.totalProp;
+          this.total = res.data.result.totalPage * this.pageSize;
           this.currentPage = 1;
         })
         .catch(function (error) {
