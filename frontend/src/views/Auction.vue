@@ -74,7 +74,7 @@
                             <li  v-for="item in propList" :key="item.aid " @click="goDetails(item)">
                                 <div class="item">
                                     <el-row  v-if="item.status === 'R'"
-                                             :class="addStatusColor(item.status)"
+                                             :class="addStatusColor(item)"
                                              style="height:60px;padding:0 10px;">
                                         <div style="color:#2e2a10;float:left;font-weight: bold;margin-top:15px;">
                                             <span style="font-size:15px;">Auction:</span>
@@ -91,7 +91,7 @@
                                     </el-row>
 
                                     <el-row v-else
-                                            :class="addStatusColor(item.status)"
+                                            :class="addStatusColor(item)"
                                             style="height:60px;padding:0 10px;">
                                         <div style="float:left;font-weight: bold;margin-top:15px;">
                                         <span style="font-size:15px;">End at:</span>
@@ -380,6 +380,7 @@
             }
 
             // this.isEmpty = true;
+            // this.propList = this.originPropertyList;
         },
 
         methods: {
@@ -463,17 +464,35 @@
                 }
                 if(lp>up){
                     return 'user-bid-bg-under';
-                }else{
-                    return 'user-bid-bg-above';
+                }else if(lp === up){
+                    return 'user-bid-winner'
                 }
             },
-            addStatusColor(status) {
-                const colors = new Map([
-                    ["R", "status-not-start1"],
-                    ["A", "status-process1"],
-                ]);
-                return colors.get(status);
+
+            addStatusColor(item) {
+                switch (item.status) {
+                    case "A":
+                        if(item.highestPrice === item.currentBid){
+                            return "status-winner";
+                        }else{
+                            return "status-process1";
+                        }
+
+                        break;
+                    case "R":
+                        return "status-not-start1";
+                        break;
+                    default:
+                        break;
+                }
             },
+            // addStatusColor(status) {
+            //     const colors = new Map([
+            //         ["R", "status-not-start1"],
+            //         ["A", "status-process1"],
+            //     ]);
+            //     return colors.get(status);
+            // },
 
             goto(name) {
                 console.log(name);
@@ -484,7 +503,6 @@
             },
 
             goDetails (item) {
-                console.log('here')
                 this.$router.push(
                     {
                         path: '/auction',
@@ -564,7 +582,11 @@
 }
 
 .user-bid-bg-under{
-    background: rgba(206, 58, 49, 0.68);
+    /*background: rgba(206, 58, 49, 0.68);*/
+    background-color: #133264;
+}
+.user-bid-winner{
+    background: rgba(222, 213, 78, 0.76);
 }
 .user-bid-bg-above{
     background-color: rgba(16, 160, 112, 0.75);
@@ -611,6 +633,9 @@
 }
 
 .status-not-start1 {
+    background-image: url("../assets/banner-bg-grey.png");
+}
+.status-winner {
     background-image: url("../assets/banner-bg-yelo.png");
 }
 
