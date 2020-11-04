@@ -1053,7 +1053,11 @@
             },
 
             test(){
-
+                const h = this.$createElement;
+                this.$notify({
+                    title: 'Bid Update!',
+                    message: h('i', { style: 'color: teal'},  `User UMR becomes the winner!\nCurrent bid is ${ 123123123 | numFormat()}`)
+                });
             },
 
             notice(res) {
