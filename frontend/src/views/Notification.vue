@@ -4,7 +4,7 @@
             <template v-if="this.hasLogin">
                 <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
                     <div class="user">
-                        <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
+                        <el-badge v-if="parseInt(this.unread) > 0" :value="this.unread" :max="99" class="item">
                             <el-avatar :size="70" :src="avatar"></el-avatar>
                         </el-badge>
                         <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
@@ -50,9 +50,9 @@
                             :key="item.notiId"
                             :title="getTitle(item)"
                             :name="index"
-                            :class="item.read ?  '':'unread' "
+                            :class="item.isRead ?  '':'unread' "
                     >
-                        <el-card style="overflow-y: scroll; " :class="item.read ? 'card' : 'card unread'">
+                        <el-card style="overflow-y: scroll; ">
                             <div v-if="item.message.seller && item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <h6>Congratulations!</h6>
@@ -364,7 +364,7 @@
                     //     createTime:new Date(2020,10,10,10,10),
                     //     noti_id:'12',
                     //     noti_type:'FINISH',
-                    //     read:false,
+                    //     isRead:false,
                     //     uid:23,
                     //     message: {
                     //         aid:'0',
@@ -411,7 +411,7 @@
                         // createTime:new Date(2020,10,10,10,10),
                         // noti_id:'12',
                         // noti_type:'FINISH',
-                        // read:false,
+                        // isRead:false,
                         // uid:23,
                         // message: {
                         //     aid:'0',
@@ -570,14 +570,14 @@
             },
 
             hasRead(item){
-                if(item.read ===false){
+                if(item.isRead ===false){
                     let data = new FormData;
                     data.append('notiId', item.notiId);
                     this.$axios.post('/notification/isRead',data)
                         .then((response) => {
                             if (response.data.code === 200) {
                                 this.unread = this.unread-1;
-                                item.read = true;
+                                item.isRead = true;
                             }
                     })
                         .catch((res) => {
@@ -589,7 +589,7 @@
 
 
             read(item) {
-                item.read = true;
+                item.isRead = true;
             },
             back() {
                 this.$router.go(-1);
