@@ -694,11 +694,16 @@ export default {
           data.append('detail', this.form3.kw_details);
           data.append('description', this.form3.description);
 
-          data.append('startdate', this.form5.daterange[0]);
-          data.append('enddate', this.form5.daterange[1]);
-          data.append('price', this.form5.price);
-          data.append('minimumPrice', this.form5.minimumPrice);
-          data.append('auction', this.form5.Auction);
+          if(!this.form5.Auction){
+              data.append('auction', this.form5.Auction);
+          }else{
+              data.append('startdate', this.form5.daterange[0]);
+              data.append('enddate', this.form5.daterange[1]);
+              data.append('price', this.form5.price);
+              data.append('minimumPrice', this.form5.minimumPrice);
+              data.append('auction', this.form5.Auction);
+          }
+        
             // console.log(data);
             // added by Raymond
             data.append("lat", this.place.geometry.location.lat(this.place));
