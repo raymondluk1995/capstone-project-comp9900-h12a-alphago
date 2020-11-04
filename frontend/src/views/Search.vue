@@ -383,7 +383,7 @@
         <el-row type="flex" justify="center" class="result-rows">
           <div class="items">
             <ul :class="colNumObject">
-              <li v-for="item in showPropList" :key="item.aid">
+              <li v-for="item in propList" :key="item.aid">
                 <v-card :class="vcardObject" max-width="2000" @click.native="goDetails(item)">
                   <div
                     style="
