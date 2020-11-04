@@ -1022,7 +1022,7 @@ export default {
   },
   watch: {
     propList: function (val) {
-      checkPropList(val);
+      this.checkPropList(val);
     },
   },
 };
