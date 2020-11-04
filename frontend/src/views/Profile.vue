@@ -164,11 +164,11 @@
                 avatarOriginal:'',
                 timerstart:false,
                 form: {
-                    username: "Umaru",
+                    username: "",
                     firstname: "",
                     lastname: "",
-                    ofirstname:'U',
-                    olastname:'maru',
+                    ofirstname:'',
+                    olastname:'',
                     email: "",
                     oldemail:'',
                     imageRaw:'',
@@ -193,7 +193,7 @@
                 }
                 else{
                     this.$message.error("You should login first!");
-                    this.$router.push("/login");
+                    // this.$router.push("/login");
                 }
 
             this.form.imageUrl = localStorage.getItem('avatar');

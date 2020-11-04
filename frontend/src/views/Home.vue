@@ -68,11 +68,18 @@
       </template>
     </Header>
     <div class="main" id="main">
-            <el-row type="flex" justify="center" class="search">
+       <el-row type="flex" justify="center" class="search">
         <el-col :span="15">
           <div class="input">
-            <el-col :span="22">
-              <div style="border:1px solid black; background-color: white;border-radius:50px 0 0 50px  ">
+            <el-col :span="24">
+<!--              <div style="background-color: white;border-radius:50px 0 0 50px  ">-->
+              <el-row type="flex" justify="center" >
+              <el-col :span="1" style="z-index: 5;">
+                <div style="background-color: white; z-index: 5; height:49px; border-radius:50px 0 0 50px;">
+
+                </div>
+              </el-col>
+              <el-col :span="21">
               <vue-google-autocomplete
                 class="auto-input"
                 ref="address"
@@ -82,26 +89,28 @@
                 v-on:placechanged="getAddressData"
                 @keyup.enter="toSearch"
                 country="au"
-                style="border:0; height:50px;width:95%;margin-left: 5%;"
+                style="border:0; height:49px;z-index: 2; border-radius: 0"
                 types="(cities)"
               >
               </vue-google-autocomplete>
-              </div>
-            </el-col>
-            <el-col  :span="2" id="search-btn">
-              <el-button
-                style="
+              </el-col>
+                <el-col  :span="2" id="search-btn">
+                  <el-button
+                          style="
                   border-radius:0 50px 50px 0;
-                  height:50px;
+                  height:49px;
                   color: white;
                   border:0;
                   background-color: rgb(20, 60, 127);
                 "
-                icon="el-icon-search"
-                @click="toSearch"
-              >
-                Search
-              </el-button>
+                          icon="el-icon-search"
+                          @click="toSearch"
+                  >
+                    Search
+                  </el-button>
+                </el-col>
+              </el-row>
+<!--              </div>-->
             </el-col>
           </div>
         </el-col>
@@ -342,6 +351,7 @@ export default {
   .el-col {
     display: flex;
     align-items: center;
+    text-align: center;
   }
   img {
     width: 35px;

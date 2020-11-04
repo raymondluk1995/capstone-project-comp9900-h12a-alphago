@@ -626,7 +626,6 @@
                     .get('/notification/unread')
                     .then(response => {
                         if (response.data.code === 200) {
-                            this.startTimer = true;
                             this.unread = response.data.result;
                         }
                     })
@@ -658,6 +657,7 @@
                                         lng: this.lng
                                     },
                                 }]
+                            this.startTimer = true;
                         }
                     }
                 })
@@ -699,7 +699,6 @@
         },
 
         mounted() {
-            if(this.startTimer){
                 this.timer = setInterval(() => {
                     // if (this.timeFlag === true) {
                     //     clearInterval(this.timer);
@@ -711,7 +710,6 @@
                     }
 
                 }, 1000);
-            }
 
 
             $("#back-btn").hover(function(event) {

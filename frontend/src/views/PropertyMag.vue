@@ -461,7 +461,7 @@
                 const colors = new Map([
                     ["N", "Auction not register"],
                     ["A", "Auction in process"],
-                    ["R", `Auction will start at ${item.startdate}`],
+                    ["R", `Auction has not started`],
                 ]);
                 return colors.get(item);
             },
