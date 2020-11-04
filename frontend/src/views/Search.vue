@@ -581,6 +581,8 @@ export default {
         vcard:true,
       },
 
+      propList:[],
+
       // propList: [
       //   {
       //     aid: 1,
@@ -659,7 +661,6 @@ export default {
       //     bidderNum: 5,
       //   },
       // ],
-      propList:[],
     };
   },
 
@@ -968,7 +969,7 @@ export default {
       this.$axios
         .get("/search?" + this.search)
         .then((res) => {
-          this.propList = res.data.result.resVoList;
+          this.propList = res.data.result.resVOList;
           console.log("propList is "+this.propList);
           this.total = res.data.result.totalProp;
           console.log("total is  ",this.total);
