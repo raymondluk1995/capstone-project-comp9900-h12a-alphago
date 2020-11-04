@@ -1000,6 +1000,8 @@ export default {
 
     showProperties() {
       this.showPropList = this.propList;
+      console.log("showPropList.length is "+ this.showPropList.length);
+      console.log("showPropList[0].address is "+ this.showPropList[0].address);
     },
 
     decapitateAddress(addr){
