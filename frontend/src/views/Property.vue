@@ -726,6 +726,7 @@
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
                                         this.logout();
+                                        location.reload();
                                         // this.$router.replace("/");
                                     }else{
                                         console.log(response.msg)
@@ -1067,7 +1068,7 @@
                     title: 'Bid Update!',
                     dangerouslyUseHTMLString: true,
                     message:`User <strong>${res.username}</strong> becomes the winner!\n <strong>Current bid:</strong> ${res.price | numFormat()}.\n
-                                <strong>Bid Time:</strong> ${showTime(dayjs())}`
+                                <strong>Bid Time:</strong> ${this.showTime(res.time)}`
                 });
             },
             showCard(card){
