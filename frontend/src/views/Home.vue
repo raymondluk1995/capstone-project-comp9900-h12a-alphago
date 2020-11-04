@@ -72,7 +72,9 @@
         <el-col :span="15">
           <div class="input">
             <el-col :span="22">
+              <div style="border:1px solid black; margin:0 0 0 20px; ">
               <vue-google-autocomplete
+                class="auto-input"
                 ref="address"
                 id="address"
                 classname="form-control"
@@ -80,12 +82,12 @@
                 v-on:placechanged="getAddressData"
                 @keyup.enter="toSearch"
                 country="au"
-                style="border-radius:50px 0 0 50px;border:0; text-indent:20px;height:50px"
+                style="border-radius:50px 0 0 50px;border:0; text-indent:20px;height:50px;"
                 types="(cities)"
               >
               </vue-google-autocomplete>
+              </div>
             </el-col>
-
             <el-col  :span="2" id="search-btn">
               <el-button
                 style="
@@ -300,20 +302,20 @@ export default {
   align-items: center;
 }
 .main {
-  height: 600px;
+  height: calc(100vh - 165px);
   opacity: 0.8;
   z-index: -3;
   /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
-  background-image: url("../assets/main-bg-3.png");
+  background-image: url("../assets/bg.png");
 }
 
 @media only screen and (max-width: 1300px) and (min-width: 1100px) {
   .main {
-    height: 600px;
+    height: calc(100vh - 165px);
     opacity: 0.8;
     z-index: -3;
     /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
-    background-image: url("../assets/main-bg-3.png");
+    background-image: url("../assets/bg.png");
   }
 }
 
@@ -392,4 +394,6 @@ export default {
     color: #143469 !important;
   }
 }
+
+
 </style>
