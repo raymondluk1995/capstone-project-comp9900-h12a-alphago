@@ -235,6 +235,12 @@ export default {
     },
     toSearch() {
       var addr = document.getElementById("address").value;
+      if (addr===""){
+        this.$router.push({
+          path:"/search",
+        });
+        return ;
+      }
       if (isNaN(addr)) {
         if (this.address.locality === undefined){
           this.$message.error("Please validate the suburb name by Google Map first!");
