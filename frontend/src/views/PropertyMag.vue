@@ -2,31 +2,47 @@
     <div class="propmag">
         <Header>
             <template v-if="this.hasLogin">
-                <el-dropdown trigger="click" @command="handleCommand">
-                    <div class="user">
-                        <el-avatar :size="70" :src="avatar"></el-avatar>
+                <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
+                    <div class="user" >
+                        <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
+                            <el-avatar :size="70" :src="avatar"></el-avatar>
+                        </el-badge>
+                        <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
+
                     </div>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
                         <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                         <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
-                        <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
+
+                        <el-dropdown-item command="notification"  icon="el-icon-bell">
+                            Notifications <el-badge v-show="parseInt(this.unread) !== 0" class="mark" :value="this.unread" style="padding:0;background-color: white"/>
+                        </el-dropdown-item>
+
                         <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </template>
+
             <template v-else>
-                <el-button round @click="goto('login')">Sign In</el-button>
-                <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
+                <div class="back-btn">
+                    <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="goto('login')">Sign In <i class="el-icon-check"></i></span>
+                    <div class="bottom-line"></div>
+                </div>
+                <div class="back-btn">
+                    <span  id="back-btn2" style="padding:2px 5px;font-size:20px;" @click="goto('register')">Sign Up <i class="el-icon-user"></i></span>
+                    <div class="bottom-line"></div>
+                </div>
             </template>
         </Header>
 
         <el-row class="win" type="flex" justify="center">
             <el-col :span="6">
-                <el-row style="background-color: #e4e9f3">
+                <el-row type="flex" justify="space-around" style="background-color: #e4e9f3">
+                    <el-col>
                     <el-select
                             v-model="filter"
-                            style="float:right;margin:10px 30px"
+                            style="margin:10px 0 10px 30px"
                             placeholder="Select"
                             @change="changeSearch"
                     >
@@ -38,22 +54,46 @@
                         >
                         </el-option>
                     </el-select>
+                    </el-col>
+                    <el-col>
+
+                    <el-button type="primary" icon="el-icon-plus"  plain style="float:right;margin:10px 30px" @click="goto('propreg')">New</el-button>
+                    </el-col>
                 </el-row>
                 <el-row class="property-list">
                 <el-card
-                        class="card"
+                        class="card2"
                         :class="addStatusColor(item.status)"
                         v-for="item in propList"
                         @click.native="selectItem(item)"
                         :key="item.pid"
+                        :style="{'background-color' : item.pid === isSelected ? 'rgba(154,174,195,0.45)' : ''}"
                 >
                     <el-row>
                         <div>
-                            <h4>{{ item.address }}</h4>
+                            <el-row>
+                                <el-col :span="20">
+                            <h6>{{ item.address }}</h6>
+                                </el-col>
+
+                                <el-col :span="1" >
+                                <el-tooltip v-show="item.status === 'R'" class="item" effect="dark" content="Cancel" placement="right">
+                                <el-button v-show="item.status === 'R'" type="" plain circle="" icon="el-icon-close" @click="cancelAuc(item)"></el-button>
+                                </el-tooltip>
+
+                                <el-tooltip v-show="item.status === 'N'" class="item" effect="dark" content="Remove" placement="right">
+                                <el-button style="margin-left:0" v-show="item.status === 'N'" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
+                                </el-tooltip>
+                                </el-col>
+                            </el-row>
                             <p>{{ getlabel(item.status) }}</p>
                         </div>
                         <el-row type="flex" justify="end">
-                            <el-button type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
+                            <el-button class="btn-long" v-show="item.status === 'R'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
+                            <el-button v-show="item.status === 'N'" type="info"  round icon="el-icon-document" @click="aucreg">Register</el-button>
+<!--                            <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item.pid)">Remove</el-button>-->
+<!--                            <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>-->
+                            <el-button v-show="item.status === 'A'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
                         </el-row>
                     </el-row>
                 </el-card>
@@ -61,7 +101,7 @@
             </el-col>
 
 
-            <el-col :span="18">
+            <el-col :span="18" style="padding: 0 50px">
                 <div v-show="this.isEmpty">
                     <el-alert
                             title="You haven't register any property!"
@@ -72,60 +112,38 @@
                     </el-alert>
                     <!--                        <el-button type="primary" icon="el-icon-right" round plain @click="goto('propreg')">Register New Auction</el-button>-->
                 </div>
-                    <el-row type="flex" justify="end" >
-                        <el-button type="primary" icon="el-icon-right" round  plain style="float:right;margin:10px 30px" @click="goto('propreg')">Register New Auction</el-button>
-                    </el-row>
-<!--                    <h3>{{ // propInfo.address }}</h3>-->
-
-                    <el-row v-show='!this.isEmpty' class="property-item">
+                    <el-row v-show='!this.isEmpty' class="property-item" style="margin-top:50px">
                         <section>
-                    <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 50% 0 0">
-                        <el-carousel-item v-for="pic in propInfo.photos" :key="propInfo.pid">
+                            <h3>{{ propInfo.address }}</h3>
+                    <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 15% 5% 0">
+                        <el-carousel-item v-for="pic in propInfo.photos" :key="pic">
                             <img :src="pic"  width="100%" height="100%" alt=""/>
                         </el-carousel-item>
                     </el-carousel>
 
                 </section>
 
-                <el-row type="flex" justify="end">
-<!--                    <el-button>Edit</el-button>-->
-                </el-row>
 
                 <section>
-                    <el-row class="mh20" type="flex">
-                        <el-col :span="7">
-                            <i class="el-icon-toilet-paper"> Bathroom Number: <span> {{ propInfo.bathroomNum}} </span></i>
+                    <el-row type="flex" justify="left" style="margin:10px 0;">
+                        <el-col :span="4">
+                            <i class="el-icon-toilet-paper"> Baths: {{ propInfo.bathroomNum}}</i>
                         </el-col>
-                        <el-col :span="7">
-                            <i class="el-icon-house"> Bedroom Number: <span> {{ propInfo.bedroomNum}} </span></i>
+                        <el-col :span="4">
+                            <i class="el-icon-house"> Beds: {{ propInfo.bedroomNum }}</i>
                         </el-col>
-                        <el-col :span="7">
-                            <i class="el-icon-truck"> Garage Number: <span> {{ propInfo.garageNum}} </span></i>
+                        <el-col :span="4">
+                            <i class="el-icon-truck"> Cars: {{ propInfo.garageNum }}</i>
                         </el-col>
-                    </el-row>
-                    <el-row class="mh20" type="flex">
-                        <el-col :span="7">
-                            <i class="el-icon-info"> Type: {{ propInfo.type }}</i>
-                        </el-col>
-                        <el-col :span="7">
+                        <el-col :span="4">
                             <i class="el-icon-full-screen"> Area: {{ propInfo.area }}</i>
                         </el-col>
+                        <el-col :span="8">
+                            <i class="el-icon-info"> Type: {{ propInfo.type }}</i>
+                        </el-col>
                     </el-row>
 
-                    <el-row type="flex" style="align-items:center">
-                        <h5>Keywords</h5>
-<!--                        <el-button>Edit</el-button>-->
-                    </el-row>
-
-                    <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in (propInfo.position||'').split(',')" effect="plain" :key="tag">{{ tag }}</el-tag>
-                    </el-row>
-
-                    <el-row type="flex" style="margin-bottom: 10px;">
-                        <el-tag v-for="tag in (propInfo.detail||'').split(',')" :key="tag">{{ tag }}</el-tag>
-                    </el-row>
-
-                    <el-row type="flex" style="margin-bottom: 10px;">
+                    <el-row type="flex" style="margin-bottom: 10px;margin-top:50px;">
                         <h5>Description</h5>
                     </el-row>
 
@@ -134,9 +152,68 @@
                     </el-row>
 
 
+                    <el-row type="flex" style="align-items:center">
+                        <h5>Keywords</h5>
+                        <!--                        <el-button>Edit</el-button>-->
+                    </el-row>
+
+                    <el-row type="flex" style="margin-bottom: 10px;">
+                        <!--                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>-->
+                        <p class='tag-wrap' v-for="tag in (propInfo.position||'').split(',')" >{{ tag }}</p>
+                        <p class='tag-wrap3' v-for="tag in (propInfo.detail||'').split(',')" >{{ tag }}</p>
+                    </el-row>
                 </section>
 
-<!--                <el-row class="mh20" type="flex" style="align-items:center">-->
+
+                        <el-dialog title="Register New Auction:" :visible.sync="Aucreg">
+                            <el-form
+                                    class="form"
+                                    ref="form"
+                                    :model="form"
+                                    :rules="rules"
+                                    label-width="150px"
+                                    label-position="left"
+                            >
+                                <el-row :gutter="50">
+                                    <el-col :span="24">
+                                        <el-form-item label="Time Range:" prop="daterange">
+                                            <el-date-picker style="width:100%"
+                                                            v-model="form.daterange"
+                                                            type="datetimerange"
+                                                            range-separator="-"
+                                                            start-placeholder="Auction Start Time"
+                                                            end-placeholder="Auction End Time"
+                                                            value-format="timestamp"
+                                                            :picker-options="pickerOptions">
+                                            </el-date-picker>
+
+                                        </el-form-item>
+
+                                        <el-form-item label="Reserved Price:" prop="price">
+                                            <el-input v-model="form.price">
+                                                <i slot="suffix" class="input-slot">{{form.price|numFormat}} A$</i>
+                                            </el-input>
+                                        </el-form-item>
+
+                                        <el-form-item label="Minimum Price:" prop="minimumPrice">
+                                            <el-input v-model="form.minimumPrice">
+                                                <i slot="suffix" class="input-slot">{{form.minimumPrice|numFormat}} A$</i>
+                                            </el-input>
+                                        </el-form-item>
+
+
+                                    </el-col>
+                                </el-row>
+                            </el-form>
+                                <div slot="footer" class="dialog-footer">
+<!--                                    <el-button @click="backAuc">Back</el-button>-->
+                                    <el-button type="primary" @click="submitReg(propInfo.pid)">Submit</el-button>
+                                </div>
+                        </el-dialog>
+
+
+
+                        <!--                <el-row class="mh20" type="flex" style="align-items:center">-->
 <!--                    <span class="mr20">Description </span>-->
 <!--&lt;!&ndash;                    <el-button v-if="!canEditDesc" @click="editDesc">Edit</el-button>&ndash;&gt;-->
 <!--&lt;!&ndash;                    <el-button v-else @click="saveDesc">Save</el-button>&ndash;&gt;-->
@@ -147,12 +224,19 @@
 <!--&lt;!&ndash;                    <el-input v-else type="textarea" v-model="desc"></el-input>&ndash;&gt;-->
 <!--                </el-card>-->
 
-                <section class="mh20" v-if="propInfo.auction">
-                    <h5>Auction</h5>
-                    <p>Start Date: {{ showdate(propInfo.startDate) }}</p>
-                    <p>End Date: {{ showdate(propInfo.endDate) }}</p>
-                    <p>Reserved Price: ${{ propInfo.price }}</p>
-                </section>
+<!--                <section class="mh20" v-if="propInfo.status ==='A' || propInfo.status ==='R'">-->
+<!--                    <h5>Auction</h5>-->
+<!--&lt;!&ndash;                    <el-button v-if="propInfo.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(propInfo)">Cancel</el-button>&ndash;&gt;-->
+<!--                    <p>Start Date: {{ showdate(propInfo.startDate) }}</p>-->
+<!--                    <p>End Date: {{ showdate(propInfo.endDate) }}</p>-->
+<!--                    <p>Reserved Price: ${{ propInfo.price }}</p>-->
+
+<!--                </section>-->
+<!--                <section class="mh20" v-else>-->
+<!--                    <h5>Auction</h5>-->
+<!--                    <p> This property has not been registered for an Auction. </p>-->
+
+<!--                </section>-->
              </el-row>
             </el-col>
         </el-row>
@@ -163,6 +247,8 @@
     import Header from "@/components/Header.vue";
     import { mapActions } from "vuex";
     import dayjs from "dayjs";
+    import $ from 'jquery'
+
 
     export default {
         name: "Auction",
@@ -172,7 +258,7 @@
         props: {
             cheight: {
                 type: String,
-                default: '300px'
+                default: '500px'
             },
             cwidth:{
                 type: String,
@@ -182,11 +268,15 @@
 
         data() {
             return {
+                unread:'',
+                Aucreg:false,
                 active:'',
                 isEmpty:false,
                 hasLogin:false,
                 filter: "all",
+                isSelected: '',
                 photos:[],
+                canCancel :true,
                 options: [
                     {
                         value: "all",
@@ -206,42 +296,117 @@
                     },
                 ],
                 urlObjImg:{},
-                originPropertyList: [],
+                originPropertyList: [
+                    // {
+                    //     pid:1,
+                    //     status:'R',
+                    //     address:'afdgdag',
+                    //     position:'apple,pear',
+                    //     detail:'bbq,ppol',
+                    //     photos:['', '']
+                    // }
+                    // ,{
+                    //     pid:2,
+                    //     status: 'N',
+                    //     address:'123asd',
+                    //     position:'apple,pear',
+                    //     detail:'bbq,ppol',
+                    //     photos:['','']
+                    // },
+                    // {
+                    //     pid:3,
+                    //     aid:1,
+                    //     auction:true,
+                    //     position:'apple,pear',
+                    //     detail:'bbq,ppol',
+                    //     status: 'A',
+                    //     address:'123asd',
+                    //     photos:['','']
+                    // }
+                ],
                 propList: [],
-                propInfo: {},
+                propInfo: {
+                    position:'',
+                    detail:''
+                },
                 rules: {
+                },
+
+                form:{
+                    daterange:'',
+                    price:'',
+                    minimumPrice:'',
+                },
+                pickerOptions: {
+                    // disabledDate(time) {
+                    //     return parseInt(time.getTime()) < Date.now()
+                    // }
                 },
             };
         },
-        created(){
-            // this.username = localStorage.getItem("username");
-            // // this.username = this.$store.state.username;
-            // if (this.username !== null) {
-            //     this.hasLogin = true;
-            //     this.avatar = localStorage.getItem("avatar");
-            //     this.firstname = localStorage.getItem("firstname");
-            // }
-            // else{
-            //     this.$message.error("You should login first!");
-            //     this.$router.push("/login");
-            // }
 
-            this.$axios
-                .get('/property/propties')
-                .then(response => {
-                    if (response.data.code === 200) {
-                        this.originPropertyList = response.data.result;
-                        this.propList = response.data.result;
-                        this.propInfo = this.originPropertyList[0];
-                    }else if(response.data.code === 400){
-                        this.isEmpty = true;
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
+        created(){
+            this.username = localStorage.getItem("username");
+            // this.username = this.$store.state.username;
+            if (this.username !== null) {
+                this.hasLogin = true;
+                this.avatar = localStorage.getItem("avatar");
+                this.$axios
+                    .get('/property/propties')
+                    .then(response => {
+                        if (response.data.code === 200) {
+                            this.originPropertyList = response.data.result;
+                            this.propList = response.data.result;
+                            this.propInfo = this.originPropertyList[0];
+                        }else if(response.data.code === 400){
+                            this.isEmpty = true;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                this.$axios
+                    .get('/notification/unread')
+                    .then(response => {
+                        if (response.data.code === 200) {
+                            this.unread = response.data.result;
+                        }
+                    })
+                    .catch(function (error) {
+                        this.$message.error(error);
+                    });
+            }
+            else{
+                this.$message.error("You should login first!");
+                this.$router.push("/login");
+            }
+
+            // this.isEmpty = false;
+            // this.propList = this.originPropertyList;
+            // this.propInfo = this.originPropertyList[0];
         },
 
+
+        mounted(){
+            $("#back-btn").hover(function(event) {
+                $(this).stop().animate({"margin-left": "10px"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+            });
+
+            $("#back-btn").mouseleave(function(event) {
+                $(this).stop().animate({"margin-left": "0"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+            });
+            $("#back-btn2").hover(function(event) {
+                $(this).stop().animate({"margin-left": "10px"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+            });
+
+            $("#back-btn2").mouseleave(function(event) {
+                $(this).stop().animate({"margin-left": "0"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+            });
+        },
 
         methods: {
             ...mapActions(["logout"]),
@@ -254,10 +419,10 @@
                         this.$router.push("/propmag");
                         break;
                     case "auction":
-                        this.$router.push("/auction");
+                        this.$router.push("/auctionmag");
                         break;
                     case "notification":
-                        this.$router.push("/notification");
+                        this.$router.push("/notice");
                         break;
                     case "logout":
                         this.logout();
@@ -271,9 +436,84 @@
                 const colors = new Map([
                     ["N", "Auction not register"],
                     ["A", "Auction in process"],
-                    ["R", "Auction not start"],
+                    ["R", `Auction will start at ${item.startdate}`],
                 ]);
                 return colors.get(item);
+            },
+
+            cancelAuc(item){
+                this.$confirm('Cancel this Auction?', 'Alert', {
+                    confirmButtonText: 'Confirm',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+                let data = new FormData();
+                data.append('pid', item.pid);
+                data.append('aid', item.aid);
+                this.$axios.post('/property/cancel', data)
+                    .then((response) => {
+                        if (response.status >= 200 && response.status < 300) {
+                            if(response.data.code === 200){
+                                this.$message.success("Cancel successful!");
+                                location.reload();
+                            }
+                        } else if(response.data.code === 400){
+                            this.$message.error(response.msg);
+                        }else{
+                            console.log(response.msg);
+                        }
+                    })
+                    .catch((res) => {
+                        console.log('error', res);
+                        this.$message.error('New Auction Register Error');
+                    });
+                })
+            },
+            goDetails (item) {
+                this.$router.push(
+                    {
+                        path: '/auction',
+                        query:
+                            {
+                                id: item.aid,
+                            }
+                    }
+                )
+            },
+            submitReg(pid){
+                this.$refs["form"].validate((valid) => {
+                    if (valid) {
+                        let data = new FormData();
+                        data.append('pid', pid);
+                        data.append('startdate', this.form.daterange[0]);
+                        data.append('enddate', this.form.daterange[1]);
+                        data.append('price', this.form.price);
+                        data.append('minimumPrice', this.form.minimumPrice);
+
+                        this.$axios.post('/property/newAuction', data)
+                            .then((response) => {
+                                if (response.status >= 200 && response.status < 300) {
+                                    if(response.data.code === 200){
+                                        this.$message.success("Register successful!");
+                                        // this.propInfo.auction = true;
+                                        this.Aucreg = false;
+                                        location.reload()
+                                    }
+                                } else if(response.data.code === 400){
+                                    this.Aucreg = false;
+                                    this.$message.error(response.msg);
+                                }else{
+                                    console.log(response.msg);
+                                }
+                            })
+                            .catch((res) => {
+                                console.log('error', res);
+                                this.$message.error('New Auction Register Error');
+                            });
+                    } else {
+                        return false;
+                    }
+                });
             },
 
             addStatusColor(status) {
@@ -285,30 +525,43 @@
                 return colors.get(status);
             },
 
+            aucreg(){
+                this.form.minimumPrice = '';
+                this.form.price = '';
+                this.form.daterange = '';
+                this.Aucreg = true;
+            },
+
             showdate(t){
                 return dayjs(t).format("YYYY-MM-DD HH:mm:ss")
             },
 
             changeSearch(value) {
-                console.log(value);
-                let filterPropertyList = this.originPropertyList.filter((e) => {
-                    return e.status === value;
-                });
+                let filterPropertyList = [];
+                if(value === 'all'){
+                    filterPropertyList = this.originPropertyList;
+                }else{
+                    filterPropertyList = this.originPropertyList.filter((e) => {
+                        return e.status === value;
+                    });
+                }
                 this.propList = filterPropertyList;
             },
 
             selectItem(item) {
                 this.propInfo = item;
+                this.isSelected = item.pid;
             },
 
             removeItem(pid) {
-                    console.log(pid);
                     this.$confirm('Remove this property?', 'Alert', {
                         confirmButtonText: 'Confirm',
                         cancelButtonText: 'Cancel',
                         type: 'warning'
                     }).then(() => {
-                        this.$axios.delete('/property/delete/' + pid)
+                        let data = new FormData();
+                        data.append('pid', pid);
+                        this.$axios.post('/property/delete', data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
@@ -316,9 +569,10 @@
                                             type: 'success',
                                             message: 'Remove!'
                                         });
-                                        location.reload()
+                                        location.reload();
                                     }else{
-                                        console.log(response.msg)
+                                        console.log(response.msg);
+                                        location.reload()
                                     }
                                 }else{
                                     console.log(response.msg)
@@ -327,45 +581,6 @@
                     })
             },
 
-            editphoto(){
-                this.propInfo.photos.forEach(val => { // 通过遍历得到数据库中的照片并进行照片回显
-                    this.photos=[];
-                    this.urlObjImg.url = val;
-                    this.photos.push(this.urlObjImg) // 把数据库中的照片添加到fileListImg里面
-                })
-            },
-
-            beforeAvatarUpload(file) {
-                const isLt2M = file.size / 1024 / 1024 < 2;
-                let types = ["image/jpeg", "image/jpg", "image/png"];
-                const isImage = types.includes(file.type);
-                if (!isImage) {
-                    this.$message.error("上传图片只能是 JPG、JPEG、PNG 格式!");
-                }
-                if (!isLt2M) {
-                    this.$message.error("Image size can not larger than 2MB!");
-                }
-                return isImage && isLt2M;
-            },
-
-            handleRemove(file, fileList) {
-                const IMG = file.raw;
-                const INDEX = this.form4.imageRaw.indexOf(IMG);
-                this.form4.imageRaw.splice(INDEX, 1);
-                this.form4.imageUrl.splice(INDEX, 1);
-                this.form4.hasupload = this.form4.hasupload - 1;
-                console.log(file, fileList);
-            },
-
-            imgBroadcastChange(file) {
-                this.form4.hasupload = this.form4.hasupload + 1;
-                this.form4.imageRaw.push(file.raw);
-                this.form4.imageUrl.push(URL.createObjectURL(file.raw));
-            },
-
-            exceedTips: function () {
-                this.$message.error("Maximum 10 photos.");
-            },
 
             goto(name) {
                 console.log(name);
@@ -378,7 +593,7 @@
     };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
     .mh20 {
         margin: 20px 0;
     }
@@ -415,13 +630,7 @@
         margin-left:50px;
         /*box-shadow: 2px 1px 5px 4px #d5dbea;*/
     }
-    .click-bg{
-        background-color: #99a9bf;
-    }
-    .empty-bg{
-        background-color:#475669;
-    }
-    .card {
+    .card2 {
         margin: 20px 20px;
         &:hover {
             cursor: pointer;
@@ -444,7 +653,37 @@
         border-left: 15px solid #8a97a6;
     }
 
-    .swiper-slide {
-        height: 500px;
+    .tag-wrap {
+        margin-right: 20px;
+        /*width: 150px;*/
+        /*height: 60px;*/
+        padding:0 20px;
+        color: #004e85;
+        border: 1px solid #c4ccd5;
+        border-radius: 3px;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
     }
+    .tag-wrap3 {
+        margin-right: 20px;
+        /*width: 150px;*/
+        /*height: 60px;*/
+        padding:0 20px;
+        background-color: rgba(0, 78, 133, 0.68);
+        color: white;
+        border: 1px solid #c4ccd5;
+        border-radius: 3px;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+
 </style>

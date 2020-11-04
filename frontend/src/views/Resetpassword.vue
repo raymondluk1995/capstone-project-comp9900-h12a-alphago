@@ -1,36 +1,54 @@
 <template>
   <div class="resetpassword">
     <Header>
-      <el-button round type="primary" @click="back">Back</el-button>
+      <div class="back-btn">
+        <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="back">Back <i class="el-icon-refresh-right"></i></span>
+        <div class="bottom-line"></div>
+      </div>
     </Header>
     <el-row type="flex" justify="center">
-      <el-col :span="12">
+      <el-col :span="13" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
         <h1 class="title">Reset Password</h1>
         <el-form
           class="form"
           ref="form"
           :model="form"
           :rules="rules"
-          label-width="150px"
-          label-position="left"
         >
-          <el-form-item label="Username:" prop="username">
-            <el-input v-model="form.username"></el-input>
+          <el-row  type="flex" justify="center">
+            <el-col :span="12" >
+          <el-form-item label="" prop="username">
+            <el-input v-model="form.username" placeholder="* Username"></el-input>
           </el-form-item>
-          <el-form-item label="Password:" prop="password">
-            <el-input type="password" v-model="form.password" show-password></el-input>
+          <el-form-item label="" prop="password">
+            <el-input type="password" v-model="form.password" placeholder="* Password" show-password></el-input>
           </el-form-item>
-          <el-form-item label="Password Again:" prop="passwordAgain">
-            <el-input type="password" v-model="form.passwordAgain" show-password></el-input>
+          <el-form-item label="" prop="passwordAgain">
+            <el-input type="password" v-model="form.passwordAgain" placeholder="* Password Again" show-password></el-input>
           </el-form-item>
-          <el-form-item label="Validate:" prop="validate">
-            <el-input  style="width:70%;float:left;" v-model="form.validate" placeholder="Press the Validate button to get the code"></el-input>
-              <el-button round style="width:25%;float:right;" type="info" v-show="show" @click="validate">Validate</el-button>
-              <el-button round  style="width:25%;float:right;" type="ordinary" v-show="!show">{{ count }} s</el-button>
+          <el-form-item label="" prop="validate">
+            <el-input  style="width:70%;float:left;" v-model="form.validate" placeholder="* Verify your Validate code here"></el-input>
+            <el-button  style="width:30%;float:right;" v-show="show" type="" @click="validate"> <i class="el-icon-s-promotion"></i> Validate</el-button>
+            <el-button  style="width:30%;float:right;" v-show="!show" type="ordinary">{{ count }} s</el-button>
           </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <div class="btns-reset">
+            <span class="button"
+                  @click="resetPassword"
+                  id="btns">
+                    <i class="el-icon-right"></i> Submit</span>
+            <div class="bottom-line"></div>
+            </div>
+          </el-row>
         </el-form>
-        <div class="btns">
-          <el-button round type="primary" @click="resetPassword">Submit</el-button>
+
+      </el-col>
+
+      <el-col :span="11" >
+        <div class="img-size-reg" :style={height:vdaH}>
+          <img src="../assets/reset-bg-2.png" alt="" >
         </div>
       </el-col>
     </el-row>
@@ -45,6 +63,10 @@ export default {
   title: "Reset Password",
   components: {
     Header,
+  },
+  created(){
+    let h = document.documentElement.clientHeight  || document.body.clientHeight;
+    this.vdaH = h - 147 + 'px';
   },
   data() {
     const validatePasswordAgain = (rule, value, callback) => {
@@ -74,6 +96,27 @@ export default {
         validate: [{required: true, message: "Please enter validate code", trigger: "blur",},],
       },
     };
+  },
+  mounted(){
+    $("#back-btn").hover(function(event) {
+      $(this).stop().animate({"margin-left": "10px"}, 300);
+      $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+    });
+    $("#back-btn").mouseleave(function(event) {
+      $(this).stop().animate({"margin-left": "0"}, 300);
+      $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+    });
+
+    $("#btns").hover(function(event) {
+      $(this).stop().animate({"margin-left": "10px"}, 300);
+      $(this).next(".bottom-line").stop().animate({"width": "150px"}, 300);
+    });
+    $("#btns").mouseleave(function(event) {
+      console.log('123');
+      $(this).stop().animate({"margin-left": "0"}, 300);
+      $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+    });
+
   },
   methods: {
     resetPassword() {
@@ -148,22 +191,6 @@ export default {
                   });
           ;
         }
-        // if (!this.timer) {
-        //   this.count = 60;
-        //   this.show = false;
-        //   $(".validate").addClass("validate-disabled")
-        //
-        //   // document.getElementById('validate').style.cursor = 'not-allowed'
-        //   this.timer = setInterval(() => {
-        //     if (this.count > 0 && this.count <= 60) {
-        //       this.count--
-        //     } else {
-        //       this.show = true
-        //       clearInterval(this.timer)
-        //       this.timer = null
-        //     }
-        //   }, 1000)
-        // }
       }
     },
   },
@@ -179,22 +206,46 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.title {
-  margin: 30px;
-  text-align: center;
-}
+  .title {
+    margin-top: 20%;
+    width:100%;
+    text-align: center;
+    /*border:1px solid #133264;*/
+  }
 .form {
   padding: 30px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
+  /*border: 1px solid #ccc;*/
+  /*height: 60%;*/
 }
-.btns {
-  margin-top: 30px;
-  display: flex;
-  justify-content: flex-end;
-}
+  .btns-reset {
+    /*border:1px solid #333;*/
+    margin:30% auto 0 auto;
+    margin-top: 75px;
+    position: relative;
+    text-align: center;
+    width:150px;
+    font-size:20px;
+  }
+
+  .btns-reset .bottom-line{
+    position: absolute;
+    /*margin-left:40px;*/
+    width: 0;
+    height: 1px;
+    left:2px;
+    bottom: -1px;
+    background-color: #3b4c73;
+  }
+
+
 .validate-disabled{
   /*background-color: #dcdcdc !important;*/
   color: black;
 }
+
+.img-size-reg img{
+  width:100%;
+  height:100%;
+}
+
 </style>

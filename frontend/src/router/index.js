@@ -10,6 +10,9 @@ import Profile from "../views/Profile";
 import Auction from "../views/Auction";
 import Property from "../views/Property";
 import PropertyMag from "../views/PropertyMag";
+import AuctionHis from "../views/AuctionHis";
+import Notification from "../views/Notification";
+import Search from "../views/Search";
 
 Vue.use(VueRouter);
 
@@ -52,13 +55,13 @@ const routes = [
     component: Profile,
     },
    {
-    path: '/auction',
-    name: 'auction',
+    path: '/auctionmag',
+    name: 'auctionmag',
     component: Auction,
   },
   {
-    path: '/property',
-    name: 'property',
+    path: '/auction',
+    name: 'auction',
     component: Property,
   },
   {
@@ -66,7 +69,26 @@ const routes = [
     name: 'propmag',
     component: PropertyMag
     ,
+  },
+  {
+    path: '/auchis',
+    name: 'auchis',
+    component: AuctionHis
+    ,
+  },
+  {
+    path: '/notice',
+    name: 'notice',
+    component: Notification
+    ,
+  }, 
+  {
+    path: '/search',
+    name: 'search',
+    component: Search
+    ,
   }
+
 ];
 
 const router = new VueRouter({

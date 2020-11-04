@@ -1,21 +1,23 @@
-// Add the following code on the line 442 in the "index.js"
-// file in vue-better-google-places-autocomplete package
-// style:{
-//     listStyleType:"none"
-//                   },
-
 <template>
   <div class="home">
     <Header>
       <template v-if="this.hasLogin">
         <el-dropdown
-          trigger="click"
+          trigger="hover"
           @command="handleCommand"
           style="align-items: center"
           placement="bottom"
         >
           <div class="user">
-            <el-avatar :size="70" :src="avatar"></el-avatar>
+            <el-badge
+              v-if="parseInt(this.unread) !== 0"
+              :value="this.unread"
+              :max="99"
+              class="item"
+            >
+              <el-avatar :size="70" :src="avatar"></el-avatar>
+            </el-badge>
+            <el-avatar v-else :size="70" :src="avatar"></el-avatar>
           </div>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="profile" icon="el-icon-user-solid">
@@ -27,9 +29,17 @@
             <el-dropdown-item command="auction" icon="el-icon-s-home">
               My Auctions</el-dropdown-item
             >
+
             <el-dropdown-item command="notification" icon="el-icon-bell">
-              Notifications</el-dropdown-item
-            >
+              Notifications
+              <el-badge
+                v-show="parseInt(this.unread) !== 0"
+                class="mark"
+                :value="this.unread"
+                style="padding: 0; background-color: white"
+              />
+            </el-dropdown-item>
+
             <el-dropdown-item command="logout" icon="el-icon-turn-off">
               Log out</el-dropdown-item
             >
@@ -37,157 +47,101 @@
         </el-dropdown>
       </template>
       <template v-else>
-        <el-button round @click="goto('login')">Sign In</el-button>
-        <el-button round type="primary" @click="goto('register')"
-          >Sign Up</el-button
-        >
+        <div class="back-btn">
+          <span
+            id="back-btn"
+            style="padding: 2px 5px; font-size: 20px"
+            @click="goto('login')"
+            >Sign In <i class="el-icon-check"></i
+          ></span>
+          <div class="bottom-line"></div>
+        </div>
+        <div class="back-btn">
+          <span
+            id="back-btn2"
+            style="padding: 2px 5px; font-size: 20px"
+            @click="goto('register')"
+            >Sign Up <i class="el-icon-user"></i
+          ></span>
+          <div class="bottom-line"></div>
+        </div>
       </template>
     </Header>
-
-    <el-carousel :interval="5000" type="card" height="1000">
-      <el-carousel-item
-        v-for="item in bigScreen.images"
-        :key="item.name"
-        :name="item.name"
-      >
-        <img style="width: 100%; height: 100%" :src="item.url" />
-      </el-carousel-item>
-    </el-carousel>
-
-    <el-row type="flex" justify="center" style="margin: 40px 0">
-      <el-col :span="12">
-        <el-row type="flex" justify="space-between" class="search-criteria">
-          <el-col :span="6">
-            <img src="@/assets/bath.png" alt="" />
-            <el-select v-model="bathNum" placeholder="Select">
-              <el-option
-                v-for="item in nums"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+    <div class="main" id="main">
+            <el-row type="flex" justify="center" class="search">
+        <el-col :span="15">
+          <div class="input">
+            <el-col :span="22">
+              <vue-google-autocomplete
+                ref="address"
+                id="address"
+                classname="form-control"
+                placeholder="Please search suburb name or postcode here"
+                v-on:placechanged="getAddressData"
+                @keyup.enter="toSearch"
+                country="au"
+                style="border-radius:50px 0 0 50px;border:0; text-indent:20px;height:50px"
+                types="(cities)"
               >
-              </el-option>
-            </el-select>
-          </el-col>
+              </vue-google-autocomplete>
+            </el-col>
 
-          <el-col :span="6">
-            <img src="@/assets/bed.png" alt="" />
-            <el-select v-model="bedroomNum" placeholder="Select">
-              <el-option
-                v-for="item in nums"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+            <el-col  :span="2" id="search-btn">
+              <el-button
+                style="
+                  border-radius:0 50px 50px 0;
+                  height:50px;
+                  color: white;
+                  border:0;
+                  background-color: rgb(20, 60, 127);
+                "
+                icon="el-icon-search"
+                @click="toSearch"
               >
-              </el-option>
-            </el-select>
-          </el-col>
-
-          <el-col :span="6">
-            <img src="@/assets/parking.png" alt="" />
-            <el-select v-model="carNum" placeholder="Select">
-              <el-option
-                v-for="item in nums"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </el-col>
-
-          <!--          <el-col :span="3">-->
-          <!--            <el-select v-model="value" placeholder="Select">-->
-          <!--              <el-option-->
-          <!--                      v-for="item in options"-->
-          <!--                      :key="item.value"-->
-          <!--                      :label="item.label"-->
-          <!--                      :value="item.value">-->
-          <!--              </el-option>-->
-          <!--            </el-select>-->
-          <!--          </el-col>-->
-        </el-row>
-      </el-col>
-    </el-row>
-
-    <el-row type="flex" justify="center" style="margin: 40px 0">
-      <el-col :span="15">
-        <!-- <el-input
-                class="input"
-                placeholder="Search by address/suburb/others"
-                prefix-icon="el-icon-search"
-                v-model="serachKey"
-        > -->
-        <div style="display: inline-block; width: 100%">
-          <vue-google-autocomplete
-            ref="address"
-            id="map"
-            classname="form-control"
-            placeholder="Please search postcode or suburb name"
-            v-on:placechanged="getAddressData"
-            country="au"
-            types="(cities)"
-          >
-          </vue-google-autocomplete>
-        </div>
-        <!-- </el-input> -->
-      </el-col>
-
-      <el-col :span="1">
-        <el-button style="height: 38px" icon="el-icon-search" @click="toSearch">
-        </el-button>
-      </el-col>
-    </el-row>
+                Search
+              </el-button>
+            </el-col>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="center">
+        <el-col :span="6"> </el-col>
+        <el-col :span="6"> </el-col>
+        <el-col :span="6"> </el-col>
+      </el-row>
+    </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
-import VueGoogleAutocomplete from "vue-google-autocomplete";
 // @ is an alias to /src
 import Header from "@/components/Header.vue";
 import { mapActions } from "vuex";
+import $ from "jquery";
+import Canvas from "@/utils/canvas-nest.min.js";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
+
 
 export default {
   name: "Home",
   title: "AlphaGo Home",
   components: {
     Header,
-    VueGoogleAutocomplete 
+    VueGoogleAutocomplete,
+    // Canvas
   },
   data() {
     return {
-      address:'',
-      // address has the following properties:
-      // street_number, route, locality, administrative_area_level_1, country, postal_code, latitude, longitude.
       hasLogin: false,
       bathNum: 1,
       bedroomNum: 1,
       carNum: 1,
-      serachKey: "",
-      bigScreen: {
-        images: [
-          {
-            name: "bigScreen01",
-            url:
-              "https://www.armourcomms.com/wp-content/uploads/2017/10/company-main-banner.jpg",
-          },
-          {
-            name: "bigScreen02",
-            url:
-              "https://www.centurybizsolutions.net/wp-content/uploads/2016/01/Banner-Buildings-1.png",
-          },
-          {
-            name: "bigScreen03",
-            url:
-              "http://cdn26.us1.fansshare.com/photo/buildingconstruction/banner-building-construction-1958425491.jpg",
-          },
-        ],
-      },
-      // 图片父容器高度
-      bannerHeight: 1000,
+      address:"",
+      unread: "",
+
       // 浏览器宽度
       screenWidth: 0,
-
       nums: [
         {
           value: 1,
@@ -210,12 +164,6 @@ export default {
           label: 5,
         },
       ],
-      // options: [
-      //   {
-      //     value: 1,
-      //     label: "others",
-      //   },
-      // ]
     };
   },
   created() {
@@ -224,14 +172,35 @@ export default {
     if (this.username !== null) {
       this.hasLogin = true;
       this.avatar = localStorage.getItem("avatar");
+      this.$axios
+        .get("/notification/unread")
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.unread = response.data.result;
+          }
+        })
+        .catch(function (error) {
+          this.$message.error(error);
+        });
     }
     this.firstname = localStorage.getItem("firstname");
   },
-  // computed: {
-  //   ...mapState(["firstname"]),
-  // },
+
   methods: {
     ...mapActions(["logout"]),
+
+    openValue() {
+      this.show = !this.show;
+    },
+    getvalue(index, item) {
+      this.value = item.name;
+      this.show = false;
+    },
+
+    getAddressData: function (addressData, placeResultData, id) {
+      this.address = addressData;
+    },
+
     handleCommand(command) {
       switch (command) {
         case "profile":
@@ -241,9 +210,10 @@ export default {
           this.$router.push("/propmag");
           break;
         case "auction":
-          this.$router.push("/auction");
+          this.$router.push("/auctionmag");
           break;
         case "notification":
+          this.$router.push("/notice");
           break;
         case "logout":
           this.$axios.post("/user/logout").then((response) => {
@@ -263,41 +233,109 @@ export default {
           break;
       }
     },
-    getAddressData: function (addressData, placeResultData, id) {
-      this.address = addressData;
+    toSearch() {
+      var addr = document.getElementById("address").value;
+      if (isNaN(addr)) {
+        if (this.address.locality === undefined){
+          this.$message.error("Please validate the suburb name by Google Map first!");
+          return;
+        }
+        addr = this.address.locality;
+        this.$router.push({
+          path: "/search",
+          query: {
+            suburb: addr,
+          },
+        });
+      } else {
+        if (addr.toString().length != 4) {
+          this.$message.error("Please input a valid postcode!");
+          return;
+        }
+        this.$router.push({
+          path: "/search",
+          query: {
+            postcode: addr,
+          },
+        });
+      }
     },
-    toSearch() {},
     goto(name) {
       this.$router.push({ name: name });
     },
-    setSize: function () {
-      // 通过浏览器宽度(图片宽度)计算高度
-      this.bannerHeight = (400 / 1920) * this.screenWidth;
-    },
   },
+
   mounted() {
-    // 首次加载时,需要调用一次
-    this.screenWidth = window.innerWidth;
-    this.setSize();
-    // 窗口大小发生改变时,调用一次
-    window.onresize = () => {
-      this.screenWidth = window.innerWidth;
-      this.setSize();
-    };
-    this.$refs.address.focus();
+    $("#back-btn").hover(function (event) {
+      $(this).stop().animate({ "margin-left": "10px" }, 300);
+      $(this).next(".bottom-line").stop().animate({ width: "100px" }, 300);
+    });
+    $("#back-btn").mouseleave(function (event) {
+      $(this).stop().animate({ "margin-left": "0" }, 300);
+      $(this).next(".bottom-line").stop().animate({ width: "0" }, 300);
+    });
+
+    $("#back-btn2").hover(function (event) {
+      $(this).stop().animate({ "margin-left": "10px" }, 300);
+      $(this).next(".bottom-line").stop().animate({ width: "100px" }, 300);
+    });
+    $("#back-btn2").mouseleave(function (event) {
+      $(this).stop().animate({ "margin-left": "0" }, 300);
+      $(this).next(".bottom-line").stop().animate({ width: "0" }, 300);
+    });
+
+    $("#main").hover(function (event) {
+      $(this).stop().animate({ opacity: "0.9" }, 300);
+    });
+    $("#main").mouseleave(function (event) {
+      $(this).stop().animate({ opacity: "0.8" }, 300);
+    });
   },
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .user {
   display: flex;
   align-items: center;
 }
+.main {
+  height: 600px;
+  opacity: 0.8;
+  z-index: -3;
+  /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
+  background-image: url("../assets/main-bg-3.png");
+}
+
+@media only screen and (max-width: 1300px) and (min-width: 1100px) {
+  .main {
+    height: 600px;
+    opacity: 0.8;
+    z-index: -3;
+    /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
+    background-image: url("../assets/main-bg-3.png");
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .main {
+    background-image: url("../assets/main-bg_copy.png");
+  }
+}
+
 
 .el-input--prefix .el-input__inner {
-  border-radius: 20px !important;
+  border-radius: 50px !important;
+  height: 50px;
+  font-size: 15px;
 }
+
+.search {
+  .input {
+    margin: 20% auto;
+  }
+}
+
 .search-criteria {
   .el-col {
     display: flex;
@@ -325,22 +363,33 @@ export default {
   background-color: #d3dce6;
 }
 
-.btn-default:hover {
-  background-color: rgba(69, 95, 147, 0.8);
+.back-btn {
+  cursor: pointer;
+  position: relative;
+  width: 150px;
+  /*border:1px solid #123123;*/
+}
+.back-btn .bottom-line {
+  position: absolute;
+  /*margin-left:40px;*/
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -1px;
+  background-color: #3b4c73;
+}
+.el-dropdown-menu {
+  padding: 25px 20px 25px 10px !important;
+  border-radius: 0 !important;
 }
 
-.search-span {
-  width: 100%;
-  background-color: rgba(200, 213, 249, 0.4);
-}
-
-span {
-  border: 1px solid rgba(138, 138, 138, 0.4);
-}
-
-li {
-  list-style: none;
-  list-style-type: none;
-  display: inline-block;
+.el-dropdown-menu__item {
+  &:hover {
+    transform: translateX(10px);
+    transition-duration: 0.5s;
+    border-bottom: 2px solid rgba(4, 10, 30, 0.96);
+    background-color: white !important;
+    color: #143469 !important;
+  }
 }
 </style>

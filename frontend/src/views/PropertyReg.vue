@@ -2,22 +2,37 @@
   <div class="propreg">
     <Header>
         <template v-if="this.hasLogin">
-            <el-dropdown trigger="click" @command="handleCommand" style="align-items: center" placement="bottom">
-                <div class="user">
-                    <el-avatar :size="70" :src="avatar"></el-avatar>
+            <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
+                <div class="user" >
+                    <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
+                        <el-avatar :size="70" :src="avatar"></el-avatar>
+                    </el-badge>
+                    <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
+
                 </div>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
                     <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                     <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
-                    <el-dropdown-item command="notification"  icon="el-icon-bell"> Notifications</el-dropdown-item>
+
+                    <el-dropdown-item command="notification"  icon="el-icon-bell">
+                        Notifications <el-badge v-show="parseInt(this.unread) !== 0" class="mark" :value="this.unread" style="padding:0;background-color: white"/>
+                    </el-dropdown-item>
+
                     <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </template>
+
       <template v-else>
-        <el-button round @click="goto('login')">Sign In</el-button>
-        <el-button round type="primary" @click="goto('register')">Sign Up</el-button>
+          <div class="back-btn">
+              <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="goto('login')">Sign In <i class="el-icon-check"></i></span>
+              <div class="bottom-line"></div>
+          </div>
+          <div class="back-btn">
+              <span  id="back-btn2" style="padding:2px 5px;font-size:20px;" @click="goto('register')">Sign Up <i class="el-icon-user"></i></span>
+              <div class="bottom-line"></div>
+          </div>
       </template>
     </Header>
 
@@ -36,7 +51,7 @@
     <el-form  label-width="80px" label-position="left">
       <el-tabs v-model="activateIndex" :tab-position="'left'" style="margin:0 20%" >
         <el-tab-pane label="Basic" name="0" >
-          <div>
+          <div class="google-map">
             <google-places-autocomplete
                     @resultChanged="(placeDetail) => (place = placeDetail)"
                     @resultCleared="() => (place = null)"
@@ -109,7 +124,7 @@
 
         <el-tab-pane label="Interior" name="1" :disabled="dis1">
           <el-row type="flex" justify="center">
-            <el-col :span="20">
+            <el-col :span="23">
               <el-form
                       class="form"
                       ref="form2"
@@ -131,7 +146,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="Area:" prop="area" >
-                      <el-input v-model="form2.area">
+                      <el-input v-model="form2.area"  maxlength="5" style="width:50%">
                           <i slot="suffix" class="input-slot">㎡</i>
                       </el-input>
 <!--                        <template>-->
@@ -146,6 +161,7 @@
                                   <el-input
                                           placeholder="Bathroom Num"
                                           suffix-icon="el-icon-toilet-paper"
+                                          maxlength="2"
                                           v-model="form2.bathroomNum">
                                   </el-input>
                               </el-col>
@@ -153,6 +169,7 @@
                                   <el-input
                                           placeholder="Bedroom Num"
                                           suffix-icon="el-icon-house"
+                                          maxlength="2"
                                           v-model="form2.bedroomNum">
                                   </el-input>
                               </el-col>
@@ -160,6 +177,7 @@
                                   <el-input
                                           placeholder="Garage Num"
                                           suffix-icon="el-icon-truck"
+                                          maxlength="2"
                                           v-model="form2.garageNum">
                                   </el-input>
                               </el-col>
@@ -232,12 +250,12 @@
 
                 <el-form-item label="Description:">
                     <el-input
-                            placeholder="Enter the description for your property. No more than 500 words."
+                            placeholder="Enter the description for your property. No more than 1000 words."
                             prefix-icon="el-icon-edit"
                             v-model="form3.description"
                             type="textarea"
                             :rows="5"
-                            maxlength="500">
+                            maxlength="1000">
                     </el-input>
                 </el-form-item>
 
@@ -323,21 +341,22 @@
                     type="datetimerange"
                     range-separator="To"
                     start-placeholder="Auction Start Time"
-                    end-placeholder="Auction Start Time"
-                            :picker-options="pickerOptions">
+                    end-placeholder="Auction End Time"
+                    value-format="timestamp"
+                    :picker-options="pickerOptions">
             </el-date-picker>
 
           </el-form-item>
 
           <el-form-item v-if="form5.Auction" label="Reserved Price:" prop="price">
-            <el-input v-model="form5.price">
-                <i slot="suffix" class="input-slot">A$</i>
+            <el-input v-model="form5.price" maxlength="11" >
+                <i slot="suffix" class="input-slot">{{form5.price |numFormat}} A$</i>
             </el-input>
           </el-form-item>
 
-          <el-form-item v-if="form5.Auction" label="Minimum Price:" prop="minimumPrice">
-              <el-input v-model="form5.minimumPrice">
-                  <i slot="suffix" class="input-slot">A$</i>
+          <el-form-item v-if="form5.Auction" label="Starting Price:" prop="minimumPrice">
+              <el-input v-model="form5.minimumPrice"  maxlength="11" >
+                  <i slot="suffix" class="input-slot">{{form5.minimumPrice|numFormat}} A$</i>
               </el-input>
           </el-form-item>
 
@@ -373,6 +392,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import { GooglePlacesAutocomplete } from "vue-better-google-places-autocomplete";
+import $ from 'jquery'
 
 import { mapActions } from "vuex";
 export default {
@@ -387,6 +407,28 @@ export default {
     Header,
     GooglePlacesAutocomplete,
   },
+    mounted(){
+        $("#back-btn").hover(function(event) {
+            $(this).stop().animate({"margin-left": "10px"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+        });
+
+        $("#back-btn").mouseleave(function(event) {
+            $(this).stop().animate({"margin-left": "0"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+        });
+
+        $("#back-btn2").hover(function(event) {
+            $(this).stop().animate({"margin-left": "10px"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+        });
+
+        $("#back-btn2").mouseleave(function(event) {
+            $(this).stop().animate({"margin-left": "0"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+        });
+    },
+
   data() {
     const checkInt = (rule, value, callback) => {
       const intReg = /^[0-9]+$/;
@@ -434,11 +476,15 @@ export default {
         }, {
             value: 'Studio',
             label: 'Studio'
-        }],
+        },
+           { value: 'Commercial',
+          label: 'Commercial'
+           }
+        ],
         pickerOptions: {
-            disabledDate(time) {
-                return parseInt(time.getTime()) < Date.now()
-            }
+            // disabledDate(time) {
+            //     return parseInt(time.getTime()) < Date.now()
+            // }
         },
         form:{},
         form1:{
@@ -494,17 +540,27 @@ export default {
   },
 
   created() {
-    // this.username = localStorage.getItem("username");
-    // // this.username = this.$store.state.username;
-    // if (this.username !== null) {
-    //   this.hasLogin = true;
-    //   this.avatar = localStorage.getItem("avatar");
-    //   this.firstname = localStorage.getItem("firstname");
-    // }
-    // else{
-    //     this.$message.error("You should login first!");
-    //     this.$router.push("/login");
-    // }
+    this.username = localStorage.getItem("username");
+    // this.username = this.$store.state.username;
+    if (this.username !== null) {
+      this.hasLogin = true;
+      this.avatar = localStorage.getItem("avatar");
+        this.$axios
+            .get('/notification/unread')
+            .then(response => {
+                if (response.data.code === 200) {
+                    this.unread = response.data.result;
+                }
+            })
+            .catch(function (error) {
+                this.$message.error(error);
+            });
+
+    }
+    else{
+        this.$message.error("You should login first!");
+        this.$router.push("/login");
+    }
 
   },
   methods: {
@@ -521,6 +577,7 @@ export default {
           this.$router.push("/auction");
           break;
         case "notification":
+            this.$router.push("/notice");
           break;
         case "logout":
           this.$axios.post('/user/logout')
@@ -618,6 +675,8 @@ export default {
       },
 
     submit() {
+        // console.log(this.form5.daterange[0]);
+        // console.log(this.form5.daterange[0]/1000);
           let data = new FormData();
             data.append('address', this.form1.address);
             data.append('suburb', this.form1.suburb);
@@ -640,7 +699,7 @@ export default {
           data.append('price', this.form5.price);
           data.append('minimumPrice', this.form5.minimumPrice);
           data.append('auction', this.form5.Auction);
-
+            // console.log(data);
             // added by Raymond
             data.append("lat", this.place.geometry.location.lat(this.place));
             data.append("lng", this.place.geometry.location.lng(this.place));
@@ -656,7 +715,7 @@ export default {
                       if(response.data.code === 200){
                         console.log(response.data);
                         this.$message.success("Property register successful");
-                        this.$router.replace("/auction");
+                        this.$router.replace("/propmag");
                       }
                     } else if(response.data.code === 400){
                       console.log(response.data);
@@ -706,7 +765,7 @@ export default {
 
       let country = place_info[place_info.length-1].trim();
 
-      if(country!="Australia"){
+      if(country!=="Australia"){
         this.$message.error("Propery for registration must locate in Australia!!");
         setTimeout(function(){
           // location.reload();
@@ -734,7 +793,40 @@ export default {
       this.$set(this.form1,'state',state.trim());
       this.$set(this.form1,'country',country.trim());
       return;
-    }
+    },
+
+      ['form2.area'](val) {
+          this.$nextTick(() => {
+              this.form2.area = val.replace(/\D/g,'');
+          });
+      },
+      ['form2.bedroomNum'](val) {
+          this.$nextTick(() => {
+              this.form2.bedroomNum = val.replace(/\D/g,'');
+          });
+      },
+      ['form2.bathroomNum'](val) {
+          this.$nextTick(() => {
+              this.form2.bathroomNum = val.replace(/\D/g,'');
+          });
+      },
+      ['form2.garageNum'](val) {
+          this.$nextTick(() => {
+              this.form2.garageNum = val.replace(/\D/g,'');
+          });
+      },
+      ['form5.price'](val) {
+          this.$nextTick(() => {
+              this.form5.price = val.replace(/\D/g,'');
+          });
+      },
+      ['form5.minimumPrice'](val) {
+          this.$nextTick(() => {
+              this.form5.minimumPrice = val.replace(/\D/g,'');
+          });
+      },
+
+
   },
 };
 </script>
@@ -840,6 +932,10 @@ li {
   list-style-type: none;
 }
 
+.btn{
+  color:black;
+}
+
 .btn-default:hover {
   background-color: rgba(69, 95, 147, 0.8);
 }
@@ -875,13 +971,17 @@ li {
     background-color: rgba(200, 213, 249, 0.4);
 }
 
-span {
-  border: 1px solid rgba(138, 138, 138, 0.4);
+.google-map {
+    span {
+        color:black;
+        border: 1px solid rgba(138, 138, 138, 0.4);
+    }
 }
 
 
-.el-checkbox {
-  display: block;
-}
+    .el-checkbox {
+        display: block;
+    }
+
 
 </style>

@@ -1,27 +1,67 @@
 <template>
     <div class="profile">
         <Header>
-            <el-button round type="primary" @click="back">Back</el-button>
+            <div class="back-btn">
+                <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="back">Back <i class="el-icon-refresh-right"></i></span>
+                <div class="bottom-line"></div>
+            </div>
         </Header>
-        <el-row type="flex" justify="center">
-            <el-col :span="15">
-                <h1 class="title">My Profile</h1>
-                <el-form
-                        class="form"
-                        ref="form"
-                        :model="form"
-                        label-width="100px"
-                        label-position="left"
-                >
-                    <el-row :gutter="50">
-                        <el-col :span="14">
-                            <el-form-item label="Username:" prop="username">
-                                <el-input v-model="form.username" disabled></el-input>
-                            </el-form-item>
 
+        <el-row type="flex" justify="center">
+            <el-col :span="10" >
+                <div class="img-size" :style={height:vdaH}>
+                    <img src="../assets/profile-bg.png" alt="" >
+                </div>
+            </el-col>
+
+            <el-col :span="14" style="background-color:#fff;box-shadow: inset 0 15px 20px -15px rgba(70,92,132,0.45);">
+                <el-row tyle="flex" justify="space-around" style="margin-top:100px">
+<!--                <el-col :span="15" >-->
+<!--&lt;!&ndash;                    <span style="font-size: 30px">Hello!    </span>&ndash;&gt;-->
+<!--                    <h3 class="title">{{form.username}}</h3>-->
+<!--                </el-col>-->
+                <el-col :span="24" >
+                    <div class="user-avatar-container" >
+                        <div class="user-avatar">
+                            <el-upload
+                                    class="avatar-uploader"
+                                    action="upload"
+                                    :auto-upload="false"
+                                    :show-file-list="false"
+                                    :on-change="imgBroadcastChange"
+                                    :before-upload="beforeAvatarUpload"
+                            >
+                                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </el-upload>
+                        </div>
+                        <template v-if="changeA">
+                            <div class="user-avatar-button">
+                                <el-row type="flex" justify="space-around" style="align-items: center;">
+                                    <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>
+                                    <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>
+                                </el-row>
+                            </div>
+                        </template>
+                    </div>
+                    <h3 class="title" style="margin-top:20px">{{form.username}}</h3>
+                </el-col>
+                </el-row>
+
+                    <el-row type="flex" justify="center" >
+                        <el-form
+                                class="form"
+                                ref="form"
+                                :model="form"
+                                label-width="100px"
+                                label-position="left"
+                        >
+                        <el-col :span="24">
+                            <el-row tyle="flex" justify="center" style="margin:10px 5%">
                             <el-form-item v-if="!canEditEmail" label="Email:" prop="email">
-                                <el-input style="width:70%;float:left;" v-model="form.oldemail" :disabled="!canEditEmail"></el-input>
-                                <el-button round style="width:25%;float:right;" type="primary" @click="editE">Edit</el-button>
+                                <span> {{form.oldemail}} </span>
+<!--                                <el-input style="width:70%;float:left;" v-model="form.oldemail" :disabled="!canEditEmail"></el-input>-->
+                                <el-button round style="width:25%;float:right;" type="primary" @click="editE"><i class="el-icon-edit"></i> Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="Email:" prop="email">
                                 <el-input style="width:70%;float:left;" placeholder="Input your new email" v-model="form.email"></el-input>
@@ -38,8 +78,9 @@
                             </el-form-item>
 
                             <el-form-item v-if="!canEditFirstname" label="First Name:" prop="firstname">
-                                <el-input style="width:70%;float:left;" v-model="form.ofirstname" :disabled="!canEditFirstname"></el-input>
-                                <el-button round style="width:25%;float:right;" type="primary" @click="editF">Edit</el-button>
+                                <span> {{form.ofirstname}} </span>
+<!--                                <el-input style="width:70%;float:left;" v-model="form.ofirstname" :disabled="!canEditFirstname"></el-input>-->
+                                <el-button round style="width:25%;float:right;" type="primary" @click="editF"><i class="el-icon-edit"></i> Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="First Name:" prop="firstname">
                                 <el-input style="width:70%;float:left;" placeholder="Change your first name" v-model="form.firstname"></el-input>
@@ -48,43 +89,45 @@
                             </el-form-item>
 
                             <el-form-item v-if="!canEditLastname" label="Last Name:" prop="lastname">
-                                <el-input style="width:70%;float:left;" v-model="form.olastname" :disabled="!canEditLastname"></el-input>
-                                <el-button round style="width:25%;float:right;" type="primary" @click="editL">Edit</el-button>
+                                <span> {{form.olastname}} </span>
+<!--                                <el-input style="width:70%;float:left;" v-model="form.olastname" :disabled="!canEditLastname"></el-input>-->
+                                <el-button round style="width:25%;float:right;" type="primary" @click="editL"><i class="el-icon-edit"></i> Edit</el-button>
                             </el-form-item>
                             <el-form-item v-else label="Last Name:" prop="lastname">
                                 <el-input style="width:70%;float:left;" placeholder="Change your last name" v-model="form.lastname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelL">Cancel</el-button>
                                 <el-button round style="width:25%;float:right;margin-top:10px;" type="success" @click="submitL">Submit</el-button>
                             </el-form-item>
+                            </el-row>
+                        </el-col>
 
-                        </el-col>
-                        <el-col :span="6" :offset="1" >
-                            <div class="user-avatar-container">
-                            <div class="user-avatar">
-                            <el-upload
-                                    class="avatar-uploader"
-                                    action="upload"
-                                    :auto-upload="false"
-                                    :show-file-list="false"
-                                    :on-change="imgBroadcastChange"
-                                    :before-upload="beforeAvatarUpload"
-                            >
-                                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                            </div>
-                                <template v-if="changeA">
-                                <div class="user-avatar-button">
-                                    <el-row type="flex" justify="space-around" style="align-items: center;">
-                                        <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>
-                                        <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>
-                                    </el-row>
-                            </div>
-                                </template>
-                            </div>
-                        </el-col>
+<!--                        <el-col :span="6" :offset="1" >-->
+<!--                            <div class="user-avatar-container" >-->
+<!--                            <div class="user-avatar">-->
+<!--                            <el-upload-->
+<!--                                    class="avatar-uploader"-->
+<!--                                    action="upload"-->
+<!--                                    :auto-upload="false"-->
+<!--                                    :show-file-list="false"-->
+<!--                                    :on-change="imgBroadcastChange"-->
+<!--                                    :before-upload="beforeAvatarUpload"-->
+<!--                            >-->
+<!--                                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />-->
+<!--                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                            </el-upload>-->
+<!--                            </div>-->
+<!--                                <template v-if="changeA">-->
+<!--                                <div class="user-avatar-button">-->
+<!--                                    <el-row type="flex" justify="space-around" style="align-items: center;">-->
+<!--                                        <el-button icon="el-icon-close" circle plain  @click="cancelA" ></el-button>-->
+<!--                                        <el-button icon="el-icon-check" type="success"  circle @click="submitA"></el-button>-->
+<!--                                    </el-row>-->
+<!--                            </div>-->
+<!--                                </template>-->
+<!--                            </div>-->
+<!--                        </el-col>-->
+                        </el-form>
                     </el-row>
-                </el-form>
             </el-col>
         </el-row>
     </div>
@@ -94,6 +137,7 @@
     import Header from "@/components/Header.vue";
     import { mapMutations } from "vuex";
     import $ from 'jquery'
+
 
     export default {
         title: 'My Profile',
@@ -120,11 +164,11 @@
                 avatarOriginal:'',
                 timerstart:false,
                 form: {
-                    username: "",
+                    username: "Umaru",
                     firstname: "",
                     lastname: "",
-                    ofirstname:'',
-                    olastname:'',
+                    ofirstname:'U',
+                    olastname:'maru',
                     email: "",
                     oldemail:'',
                     imageRaw:'',
@@ -153,6 +197,7 @@
                 }
 
             this.form.imageUrl = localStorage.getItem('avatar');
+
             this.$axios
                 .get('/user/information')
                 .then(response => {
@@ -165,6 +210,18 @@
                 .catch(function (error) {
                     console.log(error)
                 })
+            let h = document.documentElement.clientHeight  || document.body.clientHeight;
+            this.vdaH = h - 147 + 'px';
+        },
+        mounted(){
+            $("#back-btn").hover(function(event) {
+                $(this).stop().animate({"margin-left": "10px"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "100px"}, 300);
+            });
+            $("#back-btn").mouseleave(function(event) {
+                $(this).stop().animate({"margin-left": "0"}, 300);
+                $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+            });
         },
         methods: {
             ...mapMutations(["setFirstname", "setAvatar"]),
@@ -180,6 +237,7 @@
             cancelA(){
                 this.form.imageUrl = localStorage.getItem('avatar')
                 this.changeA=false;
+                // this.form.imageUrl = 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2931000230,881740929&fm=11&gp=0.jpg'
             },
             cancelE(){
                 this.canEditEmail = false;
@@ -387,13 +445,14 @@
 
 <style scoped lang="scss">
     .title {
-        margin: 30px;
-        text-align: center;
+        /*margin-top: 10%;*/
+        width:100%;
+        /*text-align: center;*/
     }
     .form {
         padding: 30px;
-        border: 1px solid #ccc;
-        border-radius: 15px;
+        /*border: 1px solid #ccc;*/
+        /*border-radius: 15px;*/
     }
     .el-input.is-disabled .el-input__inner {
         background-color: #fff !important;
@@ -403,7 +462,7 @@
         text-align: center;
     }
     .user-avatar{
-        margin-top: 20px;
+        /*margin-top: 20px;*/
         text-align: center;
     }
     .avatar-uploader .el-upload {
@@ -422,7 +481,7 @@
     .avatar-uploader-icon {
         border: 1px dashed #d9d9d9 !important;
         /*border-radius: 50%;*/
-        border-radius: 10%;
+        border-radius: 50%;
         font-size: 28px;
         color: #8c939d;
         width: 178px;
@@ -431,14 +490,17 @@
         text-align: center;
     }
     .avatar {
+        border-radius: 50%;
         width: 178px;
         height: 178px;
         display: block;
-        border-radius: 10%;
     }
     .user-avatar-container {
-        position: absolute;
-        /*top: 180px;*/
+        margin:0 auto ;
+        /*position: absolute;*/
+        /*top: 180px;*/display: flex;
+        justify-content: center;
+        text-align: center;
         /*left: 15%;*/
         width: 20%;
         border: 0;
@@ -446,5 +508,35 @@
     .huise{
         background-color: #dcdcdc !important;
         color: black;
+    }
+
+    .back-btn{
+        cursor: pointer;
+        position:relative;
+        /*border:1px solid #123123;*/
+    }
+    .back-btn .bottom-line{
+        position: absolute;
+        /*margin-left:40px;*/
+        width: 0;
+        height: 2px;
+        left:0;
+        bottom: -1px;
+        background-color: #3b4c73;
+    }
+    .form input{
+        border-radius:0;
+        padding: 5px;
+        /*width:400px;*/
+        height: 40px;
+        font-size: 15px;
+        /*border:none;*/
+        /*outline: none;*/
+        /*border-bottom: 1px solid #c3c3c3;*/
+    }
+    .img-size img{
+        width: 41.667%;
+        height: 100%;
+        /*position:absolute;*/
     }
 </style>
