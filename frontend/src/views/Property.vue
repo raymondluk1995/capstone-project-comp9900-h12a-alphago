@@ -34,7 +34,7 @@
                 </div>
             </template>
         </Header>
-        <template v-if="!this.notFound">
+        <template v-if="!this.notFound && !this.hasEnded">
         <el-row type="flex" justify="center" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
             <el-col :span="16" style="margin: 0 50px 20px 30px; border:1px solid #ccc">
                 <h1 style="margin: 50px 50px 0 50px">{{ propInfo.address }}</h1>
@@ -374,7 +374,7 @@
         </el-dialog>
         </template>
 
-        <template v-if="this.notFound">
+        <template v-if="this.notFound && !this.hasEnded">
             <div >
 
                 <div class="img-404">
@@ -1403,7 +1403,10 @@
             border-radius: 5px;
 
     }
-    .el-notification {white-space:pre-wrap !important; }
+    .el-notification {
+        white-space:pre-wrap !important;
+    }
+
 
 
 

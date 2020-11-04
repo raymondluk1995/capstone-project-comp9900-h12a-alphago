@@ -11,7 +11,7 @@
 
                 </div>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                    <el-dropdown-item command="profile" icon="el-icon-user-solid"> My Profile</el-dropdown-item>
                     <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                     <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
 
@@ -703,7 +703,7 @@ export default {
               data.append('minimumPrice', this.form5.minimumPrice);
               data.append('auction', this.form5.Auction);
           }
-        
+
             // console.log(data);
             // added by Raymond
             data.append("lat", this.place.geometry.location.lat(this.place));
