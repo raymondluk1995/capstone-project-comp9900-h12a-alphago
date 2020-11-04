@@ -554,7 +554,7 @@ export default {
       suburb:"",
       postcode:"",
       //pagination starts
-      total: 4,
+      total: 0,
       pageSize: 6,
       currentPage: 1,
       showPropList: [],
