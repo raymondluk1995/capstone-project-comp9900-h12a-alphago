@@ -726,7 +726,7 @@
                                 if (response.status >= 200 && response.status < 300){
                                     if (response.data.code === 200){
                                         this.logout();
-                                        this.$router.replace("/");
+                                        // this.$router.replace("/");
                                     }else{
                                         console.log(response.msg)
                                     }
