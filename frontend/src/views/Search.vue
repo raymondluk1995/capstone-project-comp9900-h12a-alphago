@@ -507,7 +507,6 @@
           <el-pagination
             background
             layout="prev, pager, next,total"
-            @size-change="handleSizeChange"
             :page-size="pageSize"
             :total="total"
             @current-change="handleCurrentChange"
@@ -552,6 +551,8 @@ export default {
       bathrooms: 1,
       garages: 1,
       order: "",
+      suburb:"",
+      postcode:"",
       //pagination starts
       total: 4,
       pageSize: 2,
@@ -706,15 +707,17 @@ export default {
       }
       else{
         this.address = this.$route.query.suburb;
+        this.suburb = this.$route.query.suburb;
       }
       
     }
     else{
       this.address = this.$route.query.postcode;
+      this.postcode = this.$router.query.postcode;
     }
 
     this.currentPage =1 ;
-    this.showProperties(this.currentPage, this.pageSize);
+    this.showProperties();
   },
 
   mounted() {
@@ -910,11 +913,13 @@ export default {
         this.colNumObject.oneColUl = true;
         this.vcardObject.cardWidth60 = true;
         this.vcardObject.cardWidth = false;
+        console.log("here1");
       } else {
         this.colNumObject.twoColUl = true;
         this.colNumObject.oneColUl = false;
         this.vcardObject.cardWidth60 = false;
         this.vcardObject.cardWidth = true;
+        console.log("here2");
       }
       return;
     },
@@ -927,22 +932,14 @@ export default {
       this.getProductBySearch();
     },
 
-    getProductBySearch() {
-      // this.search = "suburb" this.address.locality;
-      var addr = document.getElementById("address").value;
-      if (isNaN(addr)) {
-        if(this.address.locality===undefined){
-          this.$message.error("Please validate the suburb first!");
-          return;
-        }
-        addr = this.address.locality;
-        this.search = "suburb=" + this.address.locality;
-      } else {
-        if (addr.toString().length != 4) {
-          this.$message.error("Please input a valid postcode!");
-        } else {
-          this.search = "postcode=" + addr;
-        }
+    createNewSearch(){
+      this.search = "";
+      if(this.suburb!=""){
+        this.search = "suburb=" + this.suburb;
+      }
+      
+      if(this.postcode!=""){
+        this.search = "postcode=" + this.postcode;
       }
 
       if (this.filterFlag) {
@@ -978,12 +975,17 @@ export default {
           this.search = this.search + "&maxArea=" + this.maxArea;
         }
       }
-
+    },
+    
+    // Apply filter now, current page goes back to 1
+    getProductBySearch() {
+      this.createNewSearch();
+      this.search = this.search + "&currPage=1";
       this.$axios
         .get("/search?" + this.search)
         .then((res) => {
           this.propList = res.data.result.propList;
-          this.total = res.data.result.total;
+          this.total = res.data.result.totalProp;
           this.currentPage = 1;
         })
         .catch(function (error) {
@@ -991,18 +993,26 @@ export default {
         });
     },
 
-    handleSizeChange: function (size) {
-      this.pageSize = size;
-      this.showProperties(this.currentPage, this.pageSize);
-    },
+
 
     handleCurrentChange: function (currentPage) {
       this.currentPage = currentPage;
-      this.showProperties(this.currentPage, this.pageSize);
+      this.createNewSearch();
+      this.search = this.search+"&currPage="+this.currentPage;
+      this.$axios
+        .get("/search?" + this.search)
+        .then((res) => {
+          this.propList = res.data.result.propList;
+          this.total = res.data.result.total;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      this.showProperties();
     },
 
-    showProperties(currentPage, pageSize) {
-      
+    showProperties() {
+      this.showPropList = this.propList;
     },
 
     decapitateAddress(addr){
@@ -1024,7 +1034,7 @@ export default {
     },
   },
   watch: {
-    showPropList: function (val) {
+    propList: function (val) {
       checkPropList(val);
     },
   },
