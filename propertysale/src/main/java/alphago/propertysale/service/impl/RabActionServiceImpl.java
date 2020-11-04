@@ -8,6 +8,7 @@ import alphago.propertysale.mapper.RabActionMapper;
 import alphago.propertysale.mapper.RabMapper;
 import alphago.propertysale.mapper.UserMapper;
 import alphago.propertysale.service.RabActionService;
+import alphago.propertysale.utils.PriceUtil;
 import alphago.propertysale.utils.RedisUtil;
 import alphago.propertysale.utils.TimeUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
@@ -60,7 +61,7 @@ public class RabActionServiceImpl extends ServiceImpl<RabActionMapper, RabAction
         // Check highest price
         long bidId = auction.getCurrentBid();
         Rab bid = rabMapper.selectById(bidId);
-        if(bid.getHighestPrice().compareTo(rabAction.getBidPrice()) >= 0){
+        if(PriceUtil.priceCompare(bid.getHighestPrice(), rabAction.getBidPrice()) >= 0){
             throw new RuntimeException("The bid price is smaller than current highest price!");
         }
         // add bid

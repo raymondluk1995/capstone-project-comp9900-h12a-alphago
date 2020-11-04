@@ -15,10 +15,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class NotificationVO {
 
-    private long noti_id;
-    private String noti_type;
+    private long notiId;
+    private String notiType;
     private long createTime;
-    private boolean isRead;
+    private Boolean isRead;
     private Object message;
     private long uid;
 }

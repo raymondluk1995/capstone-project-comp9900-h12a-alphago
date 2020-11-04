@@ -4,10 +4,12 @@ import alphago.propertysale.entity.*;
 import alphago.propertysale.entity.notification.FinishMessage;
 import alphago.propertysale.entity.notification.Notification;
 import alphago.propertysale.entity.returnVO.AuctionVO;
+import alphago.propertysale.exception.AuctionFinishedException;
 import alphago.propertysale.exception.AuctionNotFoundException;
 import alphago.propertysale.mapper.*;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.utils.FileUtil;
+import alphago.propertysale.utils.PriceUtil;
 import alphago.propertysale.utils.RedisUtil;
 import alphago.propertysale.utils.TimeUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
@@ -55,7 +57,10 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
     public AuctionVO getAuctionByAid(long aid) {
         Auction auction = auctionMapper.selectById(aid);
         if(auction == null) {
-            throw new AuctionNotFoundException("Auction " + aid + "is Not Found");
+            throw new AuctionNotFoundException("Auction " + aid + " is Not Found");
+        }
+        if(auction.isFinish()){
+            throw new AuctionFinishedException("Auction " + aid + " is Finished");
         }
         Property property = propertyMapper.selectById(auction.getPid());
         Address address = addressMapper.selectById(property.getPid());
@@ -121,23 +126,28 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
         rabList.sort(Comparator.comparing(Rab::getInitPrice));
         // bid
         BidHistoryPush.initHistory(aid);
-        rabList.forEach(
-                rab -> {
-                    RabAction bid = new RabAction().setRabId(rab.getRabId()).
-                            setBidPrice(rab.getInitPrice())
-                            .setBidTime(rab.getRegisterTime());
+        Rab currentRab = null;
+        for(Rab rab : rabList){
+            currentRab = rab;
 
-                    BidMsg msg = new BidMsg().setUid(rab.getUid())
-                                .setUsername(userMapper.selectById(rab.getUid()).getUsername())
-                                .setPrice(rab.getInitPrice())
-                                .setTime(bid.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
-                                .setOvertime(false);
+            RabAction bid = new RabAction().setRabId(rab.getRabId()).
+                    setBidPrice(rab.getInitPrice())
+                    .setBidTime(rab.getRegisterTime());
 
-                    BidHistoryPush.addBidHistory(aid, msg);
+            BidMsg msg = new BidMsg().setUid(rab.getUid())
+                        .setUsername(userMapper.selectById(rab.getUid()).getUsername())
+                        .setPrice(rab.getInitPrice())
+                        .setTime(bid.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
+                        .setOvertime(false);
 
-                    rabActionMapper.insert(bid);
-                }
-        );
+            BidHistoryPush.addBidHistory(aid, msg);
+
+            rabActionMapper.insert(bid);
+        }
+        // set current rab
+        if(currentRab != null) {
+            auctionMapper.update(null, new UpdateWrapper<Auction>().set("current_bid", currentRab.getUid()));
+        }
     }
 
     @Override
@@ -161,7 +171,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
             Rab rab = rabMapper.selectById(auction.getCurrentBid());
             message.setBidPrice(rab.getHighestPrice());
             // Auction Success
-            if(rab.getHighestPrice().compareTo(auction.getPrice())>=0){
+            if(PriceUtil.priceCompare(rab.getHighestPrice(), auction.getPrice()) >=0){
                 auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "S"));
                 propertyMapper.update(null, new UpdateWrapper<Property>()
                         .eq("pid", auction.getPid())
@@ -187,7 +197,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper , Auction> imp
                 return;
             }
         }else{
-            message.setBidPrice("No bid!");
+            message.setBidPrice("No Bid!");
         }
         // Auction Fail
         auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "F"));
