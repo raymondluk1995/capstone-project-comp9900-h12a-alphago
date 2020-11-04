@@ -833,6 +833,9 @@ export default {
       if (addr===""){
         this.$router.push({
           path:"/search",
+          query:{
+            currPage:1,
+          },
         });
         return ;
       }
@@ -846,6 +849,7 @@ export default {
           path: "/search",
           query: {
             suburb: addr,
+            currPage:1,
           },
         });
       } else {
@@ -857,6 +861,7 @@ export default {
           path: "/search",
           query: {
             postcode: addr,
+            currPage: 1,
           },
         });
       }
@@ -905,13 +910,11 @@ export default {
         this.colNumObject.oneColUl = true;
         this.vcardObject.cardWidth60 = true;
         this.vcardObject.cardWidth = false;
-        console.log("here1");
       } else {
         this.colNumObject.twoColUl = true;
         this.colNumObject.oneColUl = false;
         this.vcardObject.cardWidth60 = false;
         this.vcardObject.cardWidth = true;
-        console.log("here2");
       }
       return;
     },
@@ -999,10 +1002,7 @@ export default {
     },
 
     showProperties(currentPage, pageSize) {
-      this.showPropList = this.propList.slice(
-        (currentPage - 1) * pageSize,
-        currentPage * pageSize
-      );
+      
     },
 
     decapitateAddress(addr){
@@ -1024,7 +1024,7 @@ export default {
     },
   },
   watch: {
-    propList: function (val) {
+    showPropList: function (val) {
       checkPropList(val);
     },
   },

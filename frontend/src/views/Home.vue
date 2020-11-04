@@ -238,6 +238,9 @@ export default {
       if (addr===""){
         this.$router.push({
           path:"/search",
+          query:{
+            currPage:1,
+          },
         });
         return ;
       }
@@ -251,6 +254,7 @@ export default {
           path: "/search",
           query: {
             suburb: addr,
+            currPage:1,
           },
         });
       } else {
@@ -262,6 +266,7 @@ export default {
           path: "/search",
           query: {
             postcode: addr,
+            currPage: 1,
           },
         });
       }
