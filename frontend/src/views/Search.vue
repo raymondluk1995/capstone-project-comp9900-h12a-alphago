@@ -969,7 +969,9 @@ export default {
         .get("/search?" + this.search)
         .then((res) => {
           this.propList = res.data.result.resVoList;
+          console.log("propList is "+this.propList);
           this.total = res.data.result.totalProp;
+          console.log("total is  ",this.total);
           this.currentPage = 1;
         })
         .catch(function (error) {
