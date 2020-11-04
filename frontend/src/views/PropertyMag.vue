@@ -425,7 +425,19 @@
                         this.$router.push("/notice");
                         break;
                     case "logout":
-                        this.logout();
+                        this.$axios.post('/user/logout')
+                            .then((response) => {
+                                if (response.status >= 200 && response.status < 300){
+                                    if (response.data.code === 200){
+                                        this.logout();
+                                        this.$router.replace("/");
+                                    }else{
+                                        console.log(response.msg)
+                                    }
+                                }else{
+                                    console.log(response.msg)
+                                }
+                            })
                         break;
                     default:
                         break;
