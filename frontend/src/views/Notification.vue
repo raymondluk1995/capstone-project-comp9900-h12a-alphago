@@ -161,7 +161,7 @@
 
                             </div>
 
-                            <div v-if="item.seller && !item.success" style="padding:0 50px;">
+                            <div v-if="item.seller && !item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <h6>Sorry.. </h6>
                                 <h6>Your Property<span style="font-size:12px;color:#596c84">[PropertyId:{{item.message.pid}}]</span> has passed in. The highest bid is ${{item.message.bidPrice| numFormat }}.</h6>
@@ -244,7 +244,7 @@
 
                             </div>
 
-                            <div v-if="!item.seller && item.success" style="padding:0 50px;">
+                            <div v-if="!item.seller && item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <h6>Congratulations!</h6>
                                 <h6>Your win the Property<span style="font-size:12px;color:#596c84">[PropertyId:{{item.message.pid}}]</span>.

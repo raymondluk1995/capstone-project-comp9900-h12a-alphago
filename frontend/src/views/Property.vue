@@ -206,7 +206,7 @@
                     <div v-if="this.propInfo.rab !== null">
     <!--                    <h3>Place new bid</h3>-->
                         <div class="new-bid-wrap">
-                            <el-input v-model="newBid" :disabled="timeFlag" placeholder="Place New Bid">
+                            <el-input v-model="newBid" :disabled="timeFlag" maxlength="11" placeholder="Place New Bid">
                                 <i slot="suffix" class="input-slot">{{newBid | numFormat }} A$</i>
                             </el-input>
                             <el-button class='wrap-button' type="primary" icon="el-icon-plus"  @click="addNewBid"></el-button>
@@ -233,6 +233,7 @@
 
                 <template v-else>
                     <el-button style="width:100%" @click="goto('login')">Login to Bid</el-button>
+                    <el-button style="width:100%" @click="test">test</el-button>
                 </template>
 
             </el-col>
@@ -664,6 +665,11 @@
                     this.form3.initPrice = val.replace(/\D/g,'')
                 });
             },
+            ['newBid'](val) {
+                this.$nextTick(() => {
+                    this.newBid = val.replace(/\D/g,'')
+                });
+            },
         },
 
         mounted() {
@@ -1046,12 +1052,15 @@
                 console.log('close',e);
             },
 
+            test(){
+
+            },
+
             notice(res) {
                 const h = this.$createElement;
                 this.$notify({
                     title: 'Bid Update!',
-                    message: h('i', { style: 'color: teal'},  `User ${res.username} becomes the winner!\n
-                    Current bid is ${res.price | numFormat()}`)
+                    message: h('i', { style: 'color: teal'},  `User ${res.username} becomes the winner!\nCurrent bid is ${res.price | numFormat()}`)
                 });
             },
             showCard(card){
