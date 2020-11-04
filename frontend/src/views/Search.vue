@@ -968,7 +968,7 @@ export default {
       this.$axios
         .get("/search?" + this.search)
         .then((res) => {
-          this.propList = res.data.result.propList;
+          this.propList = res.data.result.resVoList;
           this.total = res.data.result.totalProp;
           this.currentPage = 1;
         })
