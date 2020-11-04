@@ -56,7 +56,7 @@
                             <div v-if="item.message.seller && item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <h6>Congratulations!</h6>
-                                <h6>Your Property<span style="font-size:12px;color:#596c84">[PropertyId:{{item.message.pid}}]</span> has been sold. The highest bid is ${{item.message.bidPrice|numFormat}}.</h6>
+                                <h6>Your Property<span style="font-size:12px;color:#596c84">[pid:{{item.message.pid}}]</span> has been sold. The highest bid is ${{item.message.bidPrice|numFormat}}.</h6>
                                 <h6 style="
                                 margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</h6>
 
@@ -67,7 +67,7 @@
                                 font-size: 20px;
                                 font-weight:bold;
                                ">{{item.message.address}} </span>
-                                <span style="font-size:12px;color:#596c84">[AuctionId:{{item.message.aid}}]</span>
+                                <span style="font-size:12px;color:#596c84">[aid:{{item.message.aid}}]</span>
                                 <el-form
                                         class="form1"
                                         ref="item.message"
@@ -164,7 +164,7 @@
                             <div v-if="item.message.seller && !item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <h6>Sorry.. </h6>
-                                <h6>Your Property<span style="font-size:12px;color:#596c84">[PropertyId:{{item.message.pid}}]</span> has passed in. The highest bid is ${{item.message.bidPrice| numFormat }}.</h6>
+                                <h6>Your Property<span style="font-size:12px;color:#596c84">[pid:{{item.message.pid}}]</span> has passed in. The highest bid is ${{item.message.bidPrice| numFormat }}.</h6>
                                 <h6 style="
                                 margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</h6>
 
@@ -175,7 +175,7 @@
                                 font-size: 20px;
                                 font-weight:bold;
                                ">{{item.message.address}}</span>
-                                <span style="font-size:12px;color:#596c84">[AuctionId:{{item.message.aid}}]</span>
+                                <span style="font-size:12px;color:#596c84">[aid:{{item.message.aid}}]</span>
 
                                 <el-form
                                         class="form1"
@@ -247,7 +247,7 @@
                             <div v-if="!item.message.seller && item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <h6>Congratulations!</h6>
-                                <h6>Your win the Property<span style="font-size:12px;color:#596c84">[PropertyId:{{item.message.pid}}]</span>.
+                                <h6>Your win the Property<span style="font-size:12px;color:#596c84">[pid:{{item.message.pid}}]</span>.
                                  Your highest bid is ${{item.message.bidPrice|numFormat}}.</h6>
                                 <h6 style="
                                 margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</h6>
@@ -259,7 +259,7 @@
                                 font-size: 20px;
                                 font-weight:bold;
                                ">{{item.message.address}}</span>
-                                <span style="font-size:12px;color:#596c84">[AuctionId:{{item.message.aid}}]</span>
+                                <span style="font-size:12px;color:#596c84">[aid:{{item.message.aid}}]</span>
                                 <el-form
                                         class="form1"
                                         ref="item.message"
@@ -547,9 +547,9 @@
                 // console.log(time)
                 if(item.message.seller && item.message.success){
                     return `[Success] Your property has been sold!    [${ time }]`;
-                }else if (item.seller && !item.success){
+                }else if (item.message.seller && !item.message.success){
                     return `[Failed] Your property has passed in! [${ time }]`
-                }else if(!item.seller && item.success){
+                }else if(!item.message.seller && item.message.success){
                     return `[Success] You win the property! [${ time }]`
                 }
             },
