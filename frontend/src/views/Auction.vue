@@ -54,8 +54,8 @@
                                 </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :span="9" >
-                            <div class="reg-btn" style="float:right; margin-top:15px">
+                        <el-col :span="6" >
+                            <div class="reg-btn" style="margin-top:15px">
                                 <span  id="reg-btn"
                                        style="
                                            color:white;
