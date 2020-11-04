@@ -340,6 +340,7 @@
 <script>
     import Header from "@/components/Header.vue";
     import dayjs from "dayjs";
+    import { mapActions } from "vuex";
     import $ from 'jquery'
 
 
