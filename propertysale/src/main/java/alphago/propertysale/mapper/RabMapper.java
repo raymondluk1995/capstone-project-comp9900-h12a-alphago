@@ -17,6 +17,6 @@ public interface RabMapper extends BaseMapper<Rab> {
 
     @Select("SELECT * FROM rab r , auction a WHERE r.uid = #{uid} AND r.aid = a.aid AND (a.status = 'R' OR a.status = 'A')")
     List<Rab> getRunningAuctions(long uid);
-    @Select("SELECT * FROM rab r , auction a WHERE r.uid = #{uid} AND r.aid = a.aid AND (a.status = 'R' OR a.status = 'A')")
+    @Select("SELECT * FROM rab r , auction a WHERE r.uid = #{uid} AND r.aid = a.aid AND (a.status = 'S' OR a.status = 'F')")
     List<Rab> getPastAuctions(long uid);
 }

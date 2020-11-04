@@ -1,7 +1,9 @@
 package alphago.propertysale.websocket;
 
-import alphago.propertysale.entity.RabAction;
+import alphago.propertysale.utils.RedisUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -10,6 +12,7 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,21 +28,17 @@ import java.util.concurrent.ConcurrentSkipListSet;
 public class BidHistoryPush {
 
     private static ConcurrentHashMap<String , ConcurrentSkipListSet<Session>> map = new ConcurrentHashMap<>();
-    private static ConcurrentHashMap<String , List<RabAction>> history = new ConcurrentHashMap<>();
     private static ObjectMapper jsonMapper = new ObjectMapper();
     private String auctionId;
 
     @OnOpen
     public void onOpen(Session session , @PathParam(value = "aid") String aid) throws IOException {
         auctionId = aid;
-        ConcurrentSkipListSet<Session> set = null;
         if(!map.containsKey(aid))
             map.put(aid , new ConcurrentSkipListSet<>(Comparator.comparing(Session::getId)));
-        set = map.get(aid);
-        set.add(session);
-        // send history
-        String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(history.get(aid));
-        session.getBasicRemote().sendText(msg);
+        map.get(aid).add(session);
+
+        System.out.println(map);
     }
 
     @OnClose
@@ -47,15 +46,45 @@ public class BidHistoryPush {
         map.get(auctionId).remove(session);
     }
 
-    public static void bidPush(String aid , RabAction bid){
-        map.get(aid).forEach(session -> {
-            try {
-                history.get(aid).add(bid);
-                String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(bid);
-                session.getBasicRemote().sendText(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    public static void bidPush(long aid , BidMsg bidMsg) {
+        try {
+            addBidHistory(aid, bidMsg);
+
+            String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(bidMsg);
+            map.get(String.valueOf(aid)).forEach(session -> {
+                try {
+                    session.getBasicRemote().sendText(msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void initHistory(long aid){
+        RedisTemplate redis = RedisUtil.getRedis();
+        redis.opsForValue().set("History:"+aid, new ArrayList<BidMsg>());
+    }
+
+    public static List<BidMsg> getAuctionHistory(long aid){
+        RedisTemplate redis = RedisUtil.getRedis();
+        Object history = redis.opsForValue().get("History:" + aid);
+        return history == null ? new ArrayList<BidMsg>() : (List<BidMsg>)history;
+    }
+
+    public static void addBidHistory(long aid, BidMsg bidMsg){
+        List<BidMsg> auctionHistory = getAuctionHistory(aid);
+        auctionHistory.add(bidMsg);
+        RedisTemplate redis = RedisUtil.getRedis();
+        redis.opsForValue().set("History:"+aid, auctionHistory);
+    }
+
+    public static List<BidMsg> removeAuctionHistory(long aid){
+        RedisTemplate redis = RedisUtil.getRedis();
+        List<BidMsg> auctionHistory = getAuctionHistory(aid);
+        redis.delete("History:"+aid);
+        return auctionHistory;
     }
 }

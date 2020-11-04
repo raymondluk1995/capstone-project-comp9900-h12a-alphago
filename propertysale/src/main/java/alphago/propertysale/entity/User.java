@@ -40,4 +40,8 @@ public class User implements Serializable {
     private String email;
 
     private String avatarType;
+
+    public String getFullName(){
+        return firstname + " " + lastname;
+    }
 }

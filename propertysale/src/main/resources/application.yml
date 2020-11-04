@@ -6,8 +6,8 @@ server:
 spring:
   datasource:
     username: root
-    password: root
-    url: jdbc:mysql://13.239.120.231:3306/property_sale?serverTimezone=UTC&&useUnicode=true&characterEncoding=UTF-8&&useSSL=true
+    password: znx5201314
+    url: jdbc:mysql://13.239.120.231:3306/property_sale?serverTimezone=Australia/Sydney&&useUnicode=true&characterEncoding=UTF-8&&useSSL=true
     driver-class-name: com.mysql.cj.jdbc.Driver
 # redis
   redis:
@@ -51,6 +51,7 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     cache-enabled: true
+
 
 
 remote:

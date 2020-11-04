@@ -37,7 +37,7 @@ public class RedisUtil {
 
     public static RedisTemplate getRedis(){
         RedisTemplate redisTemplate = (RedisTemplate) ApplicationContextUtil.getApplicationContext().getBean("redisTemplate");
-        redisTemplate.setKeySerializer(new JdkSerializationRedisSerializer());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
         return redisTemplate;
     }

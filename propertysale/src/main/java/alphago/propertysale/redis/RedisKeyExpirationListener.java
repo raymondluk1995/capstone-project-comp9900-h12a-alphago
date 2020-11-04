@@ -4,6 +4,9 @@ import alphago.propertysale.entity.Auction;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.utils.ApplicationContextUtil;
 import alphago.propertysale.utils.RedisUtil;
+import alphago.propertysale.utils.TimeUtil;
+import alphago.propertysale.websocket.BidHistoryPush;
+import alphago.propertysale.websocket.BidMsg;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -14,6 +17,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -40,19 +44,20 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
         String key = message.toString();
         if(key.startsWith("Start:")){
             long aid = getAuctionId(key);
-            Auction auction = new Auction().setAid(aid).setStatus("A");
+            Auction auction = auctionService.getById(aid);
             auctionService.update(new UpdateWrapper<Auction>().eq("aid" , aid).set("status" , Auction.AUCTION));
             RedisTemplate redis = RedisUtil.getRedis();
 
+
             auctionService.initHistory(aid);
 
-            long expr = auction.getEnddate().toInstant(ZoneOffset.UTC).toEpochMilli() - System.currentTimeMillis();
+            System.out.println(auction.getEnddate());
+            long expr = auction.getEnddate().toInstant(TimeUtil.getMyZone()).toEpochMilli() - System.currentTimeMillis();
             redis.opsForValue().set("End:"+aid,"", expr, TimeUnit.MILLISECONDS);
         }else if(key.startsWith("End:")){
             long aid = getAuctionId(key);
             // update status
             auctionService.finishAuction(aid);
-            // send message
         }
     }
 }

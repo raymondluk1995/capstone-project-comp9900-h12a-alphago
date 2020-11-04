@@ -36,5 +36,5 @@ public class Rab implements Serializable {
 
     private String highestPrice;
 
-
+    private long paymentId;
 }
