@@ -555,7 +555,7 @@ export default {
       postcode:"",
       //pagination starts
       total: 0,
-      pageSize: 8,
+      pageSize: 6,
       currentPage: 1,
       showPropList: [],
       // pagination ends
@@ -568,8 +568,10 @@ export default {
       filterFlag: false,
       address: "",
       colNumObject: {
-        twoColUl: true,
-        oneColUl: false,
+        // twoColUl: true,
+        twoColUl: false,
+        // oneColUl: false,
+        oneColUl: true,
       },
       showFilterFlag: false,
 
@@ -727,17 +729,22 @@ export default {
     var addr = document.getElementById("address");
     addr.value = this.address;
 
-    if (this.propList.length == 1) {
-      this.colNumObject.twoColUl = false;
-      this.colNumObject.oneColUl = true;
-      this.vcardObject.cardWidth40 = true;
-      this.vcardObject.cardWidth = false;
-    } else {
-      this.colNumObject.twoColUl = true;
-      this.colNumObject.oneColUl = false;
-      this.vcardObject.cardWidth60 = false;
-      this.vcardObject.cardWidth = true;
-    }
+    // if (this.propList.length == 1) {
+    //   this.colNumObject.twoColUl = false;
+    //   this.colNumObject.oneColUl = true;
+    //   this.vcardObject.cardWidth40 = true;
+    //   this.vcardObject.cardWidth = false;
+    // } else {
+    //   this.colNumObject.twoColUl = true;
+    //   this.colNumObject.oneColUl = false;
+    //   this.vcardObject.cardWidth60 = false;
+    //   this.vcardObject.cardWidth = true;
+    // }
+
+    this.colNumObject.twoColUl = false;
+    this.colNumObject.oneColUl = true;
+    this.vcardObject.cardWidth40 = true;
+    this.vcardObject.cardWidth = false;
   },
 
   methods: {
