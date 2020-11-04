@@ -388,7 +388,7 @@
                 font-weight: bold">404</span>
             </el-row>
             <el-row type="flex" justify="center">
-                <span style="font-size:20px;color:rgba(89,108,132,0.88);">Oops..This auction has ended.</span>
+                <span style="font-size:20px;color:rgba(89,108,132,0.88);">Oops..This auction can not be found.</span>
             </el-row>
             </div>
         </template>

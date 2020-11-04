@@ -71,7 +71,7 @@
             <el-row type="flex" justify="center" class="search">
         <el-col :span="15">
           <div class="input">
-            <el-col :span="20">
+            <el-col :span="22">
               <vue-google-autocomplete
                 ref="address"
                 id="address"
@@ -80,16 +80,19 @@
                 v-on:placechanged="getAddressData"
                 @keyup.enter="toSearch"
                 country="au"
+                style="border-radius:50px 0 0 50px;border:0; text-indent:20px;height:50px"
                 types="(cities)"
               >
               </vue-google-autocomplete>
             </el-col>
 
-            <el-col style="margin-left: 2px" :span="2" id="search-btn">
+            <el-col  :span="2" id="search-btn">
               <el-button
                 style="
-                  height: 38px;
+                  border-radius:0 50px 50px 0;
+                  height:50px;
                   color: white;
+                  border:0;
                   background-color: rgb(20, 60, 127);
                 "
                 icon="el-icon-search"
