@@ -112,27 +112,20 @@
                         style="margin: 10px 5%"
                       >
                         <el-col :span="4">
-                          <i class="el-icon-toilet-paper">
-                            Baths: {{ item.bathroomNum }}</i
-                          >
+                          <i class="fas fa-bath" style="margin-right: 5px"></i> {{ item.bathroomNum}}
                         </el-col>
                         <el-col :span="4">
-                          <i class="el-icon-house">
-                            Beds: {{ item.bedroomNum }}</i
-                          >
+                          <i class="fas fa-bed" style="margin-right: 5px"></i> {{ item.bedroomNum }}
                         </el-col>
                         <el-col :span="4">
-                          <i class="el-icon-truck">
-                            Cars: {{ item.garageNum }}</i
-                          >
+                          <i class="fas fa-car" style="margin-right: 5px"></i> {{ item.garageNum }}
                         </el-col>
+
                         <el-col :span="4">
-                          <i class="el-icon-full-screen">
-                            Area: {{ item.area }}</i
-                          >
+                          <i class="fas fa-home" style="margin-right: 5px"></i> {{ item.area }} ㎡
                         </el-col>
                         <el-col :span="8">
-                          <i class="el-icon-info"> Type: {{ item.type }}</i>
+                          <i class="fas fa-tags" style="margin-right: 5px"></i> {{ item.type }}
                         </el-col>
                       </el-row>
                       <el-row>
