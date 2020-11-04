@@ -555,7 +555,7 @@ export default {
       postcode:"",
       //pagination starts
       total: 4,
-      pageSize: 2,
+      pageSize: 6,
       currentPage: 1,
       showPropList: [],
       // pagination ends
