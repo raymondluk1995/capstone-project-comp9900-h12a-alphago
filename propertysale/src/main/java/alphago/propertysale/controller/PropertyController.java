@@ -7,10 +7,7 @@ import alphago.propertysale.service.AddressService;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.service.PropertyService;
 import alphago.propertysale.shiro.JwtInfo;
-import alphago.propertysale.utils.CheckCode;
-import alphago.propertysale.utils.FileUtil;
-import alphago.propertysale.utils.RedisUtil;
-import alphago.propertysale.utils.Result;
+import alphago.propertysale.utils.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.shiro.SecurityUtils;
@@ -26,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +81,7 @@ public class PropertyController {
             registerNewAuction(auction, property.getOwner());
         }
         Thread.sleep(1500);
-        return Result.fail("success");
+        return Result.success("success");
     }
 
     @RequiresAuthentication
@@ -173,7 +171,7 @@ public class PropertyController {
         // Set count down
         RedisTemplate redisTemplate = RedisUtil.valueRedis();
         redisTemplate.opsForValue().set("Start:" + auction.getAid() , ""
-                , auction.getStartdate().toInstant(ZoneOffset.UTC).toEpochMilli() -
+                , auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
                         System.currentTimeMillis() , TimeUnit.MILLISECONDS);
     }
 }

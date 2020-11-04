@@ -1,12 +1,17 @@
 package alphago.propertysale.controller;
 
-import alphago.propertysale.entity.*;
+import alphago.propertysale.entity.Address;
+import alphago.propertysale.entity.Auction;
+import alphago.propertysale.entity.Property;
+import alphago.propertysale.entity.Rab;
 import alphago.propertysale.entity.returnVO.AuctionVO;
 import alphago.propertysale.entity.returnVO.RabVO;
 import alphago.propertysale.service.*;
 import alphago.propertysale.shiro.JwtInfo;
 import alphago.propertysale.utils.FileUtil;
 import alphago.propertysale.utils.Result;
+import alphago.propertysale.utils.TimeUtil;
+import alphago.propertysale.websocket.BidHistoryPush;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -19,9 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @program: propertysale
@@ -81,10 +84,13 @@ public class AuctionController {
                     .eq("uid", uid).eq("aid", aid));
             if(rab != null) {
                 auctionVO.setRab(String.valueOf(rab.getRabId()));
+                auctionVO.setHighestPrice(rab.getHighestPrice());
             }else{
                 auctionVO.setRab(null);
             }
         }
+
+        auctionVO.setHistory(BidHistoryPush.getAuctionHistory(aid));
         return Result.success(auctionVO);
     }
 
@@ -99,21 +105,24 @@ public class AuctionController {
 
             RabVO rabVO = new RabVO();
             BeanUtils.copyProperties(auction, rabVO, "startdate" , "enddate");
-            rabVO.setStartdate(auction.getStartdate().toEpochSecond(ZoneOffset.UTC));
-            rabVO.setEnddate(auction.getEnddate().toEpochSecond(ZoneOffset.UTC));
+            rabVO.setStartdate(auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli());
+            rabVO.setEnddate(auction.getEnddate().toInstant(TimeUtil.getMyZone()).toEpochMilli());
             BeanUtils.copyProperties(property, rabVO);
             rabVO.setAddress(address.getFullAddress());
             rabVO.setPhotos(photos);
             rabVO.setHighestPrice(rab.getHighestPrice());
 
-            if(auction.getStatus().equals("A")){
-                rabVO.setCurrentBid(actionService.getOne(new QueryWrapper<RabAction>()
-                        .eq("rab_id", auction.getCurrentBid()))
-                        .getBidPrice());
+            if(auction.getStatus().equals("A")||auction.getStatus().equals("S") || auction.getStatus().equals("F")){
+                if(auction.getCurrentBid() == 0){
+                    rabVO.setCurrentBid("NO BID");
+                }else {
+                    rabVO.setCurrentBid(rabService.getOne(new QueryWrapper<Rab>()
+                            .eq("rab_id", auction.getCurrentBid()))
+                            .getHighestPrice());
+                }
             }else{
                 rabVO.setCurrentBid(auction.getMinimumPrice());
             }
-
             ret.add(rabVO);
         }
         return ret;

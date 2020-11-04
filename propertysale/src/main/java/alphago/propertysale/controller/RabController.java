@@ -51,7 +51,7 @@ public class RabController {
 
         rabService.rabRegister(rab);
 
-        return Result.success("Register successful! id: " + rab.getRabId());
+        return Result.success(rab.getRabId());
     }
 }
 

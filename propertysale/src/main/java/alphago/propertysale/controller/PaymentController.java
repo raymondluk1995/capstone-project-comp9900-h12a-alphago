@@ -43,9 +43,9 @@ public class PaymentController {
         JwtInfo info = (JwtInfo) SecurityUtils.getSubject().getPrincipal();
         long uid = info.getUid();
         List<Payment> list = paymentService.list(new QueryWrapper<Payment>().eq("uid", uid));
-        if (list.size() == 0) {
-            return Result.fail("You have no card(s)!");
-        }
+//        if (list.size() == 0) {
+//            return Result.fail("You have no card(s)!");
+//        }
         return Result.success(list);
     }
 
@@ -67,6 +67,6 @@ public class PaymentController {
         }
         payment.setUid(uid);
         paymentService.save(payment);
-        return Result.success("Add card successfully!");
+        return Result.success(payment);
     }
 }

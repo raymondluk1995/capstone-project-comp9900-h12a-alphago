@@ -1,5 +1,6 @@
 package alphago.propertysale.entity.returnVO;
 
+import alphago.propertysale.websocket.BidMsg;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,12 +21,13 @@ public class AuctionVO {
     // auction information
     private long aid;
     private String Rab;
+    private List<BidMsg> history;
 
     private String status;
     private long startdate;
     private long enddate;
     private String latestPrice;
-    private long bidderNum = 0;
+    private long bidderNum;
     // owner information
     private long uid;
     private String username;
@@ -47,4 +49,6 @@ public class AuctionVO {
     private String detail;
     private String description;
     private List<String> photos;
+
+    private String highestPrice;
 }

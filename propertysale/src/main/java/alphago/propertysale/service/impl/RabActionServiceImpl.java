@@ -6,8 +6,12 @@ import alphago.propertysale.entity.RabAction;
 import alphago.propertysale.mapper.AuctionMapper;
 import alphago.propertysale.mapper.RabActionMapper;
 import alphago.propertysale.mapper.RabMapper;
+import alphago.propertysale.mapper.UserMapper;
 import alphago.propertysale.service.RabActionService;
 import alphago.propertysale.utils.RedisUtil;
+import alphago.propertysale.utils.TimeUtil;
+import alphago.propertysale.websocket.BidHistoryPush;
+import alphago.propertysale.websocket.BidMsg;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,9 +43,15 @@ public class RabActionServiceImpl extends ServiceImpl<RabActionMapper, RabAction
     @Autowired
     private RabMapper rabMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public boolean bid(RabAction rabAction) {
-        Long aid = rabAction.getActionId();
+        Long rabId = rabAction.getRabId();
+        Rab rab = rabMapper.selectById(rabId);
+        long aid = rab.getAid();
+        long uid = rab.getUid();
         Auction auction = auctionMapper.selectById(aid);
         // Check auction status
         if(!auction.getStatus().equals("A")){
@@ -48,8 +59,8 @@ public class RabActionServiceImpl extends ServiceImpl<RabActionMapper, RabAction
         }
         // Check highest price
         long bidId = auction.getCurrentBid();
-        RabAction bid = rabActionMapper.selectById(bidId);
-        if(bid.getBidPrice().compareTo(rabAction.getBidPrice()) > 0){
+        Rab bid = rabMapper.selectById(bidId);
+        if(bid.getHighestPrice().compareTo(rabAction.getBidPrice()) >= 0){
             throw new RuntimeException("The bid price is smaller than current highest price!");
         }
         // add bid
@@ -59,16 +70,21 @@ public class RabActionServiceImpl extends ServiceImpl<RabActionMapper, RabAction
                                             .eq("rab_id", rabAction.getRabId())
                                             .set("highest_price", rabAction.getBidPrice()));
         // update auction's current bid
-        auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("current_bid", rabAction.getActionId()));
+        auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("current_bid", rab.getRabId()));
 
-        RedisTemplate redis = RedisUtil.valueRedis();
-        String key = "End:"+aid;
-        long expr = redis.getExpire(key);
-        if(expr < 5 * 60 * 1000){
-            redis.expire(key, expr + 2 * 60 * 1000 , TimeUnit.MILLISECONDS);
-            return true;
-        }else{
-            return false;
+        boolean overtime = Auction.isExpr(aid);
+        if(overtime){
+            auctionMapper.update(null, new UpdateWrapper<Auction>()
+                .eq("aid", aid)
+                .setSql("end_date = date_add(end_date, INTERVAL 2 MINUTE)")
+            );
         }
+
+        BidHistoryPush.bidPush(aid,
+                new BidMsg().setUid(uid).setTime(rabAction.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
+                        .setUsername(userMapper.selectById(uid).getUsername())
+                        .setPrice(rabAction.getBidPrice())
+                        .setOvertime(overtime));
+        return true;
     }
 }

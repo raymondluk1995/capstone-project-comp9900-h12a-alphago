@@ -53,6 +53,7 @@ mybatis-plus:
     cache-enabled: true
 
 
+
 remote:
   url: http://localhost:8060/img/
 

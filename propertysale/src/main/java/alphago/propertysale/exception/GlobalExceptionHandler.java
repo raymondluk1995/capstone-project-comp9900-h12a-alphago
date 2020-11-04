@@ -24,15 +24,17 @@ import java.io.IOException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     // 捕捉shiro的异常
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ShiroException.class)
     public Result handle401(ShiroException e) {
+        e.printStackTrace();
         return Result.fail(HttpStatus.BAD_REQUEST.value() , e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthenticatedException.class)
     public Result unauthorized(UnauthenticatedException e) {
+        e.printStackTrace();
         return Result.fail(HttpStatus.UNAUTHORIZED.value() , HttpStatus.UNAUTHORIZED.getReasonPhrase());
     }
 
@@ -48,12 +50,28 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JWTDecodeException.class)
     public Result handler(JWTDecodeException e){
 //        log.error("解码错误",e);
+        e.printStackTrace();
         return Result.fail(e.getMessage());
     }
 
     @ExceptionHandler(FileSizeLimitExceededException.class)
     public Result handler(FileSizeLimitExceededException e){
         log.error("文件过大",e);
+        return Result.fail(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(value = RuntimeException.class)
+    public Result handler(RuntimeException e) {
+        e.printStackTrace();
+        log.error("Assert异常:-------------->{}",e.getMessage());
+        return Result.fail(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = AuctionNotFoundException.class)
+    public Result handler(AuctionNotFoundException e) {
+        log.error("Assert异常:-------------->{}",e.getMessage());
         return Result.fail(e.getMessage());
     }
 }
