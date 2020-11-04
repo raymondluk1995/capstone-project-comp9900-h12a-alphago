@@ -697,6 +697,9 @@ export default {
       this.postcode = this.$router.query.postcode;
     }
 
+    this.getProductBySearch();
+
+
     this.currentPage =1 ;
     this.showProperties();
   },
