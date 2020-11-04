@@ -233,7 +233,7 @@
 
                 <template v-else>
                     <el-button style="width:100%" @click="goto('login')">Login to Bid</el-button>
-                    <el-button style="width:100%" @click="test">test</el-button>
+<!--                    <el-button style="width:100%" @click="test">test</el-button>-->
                 </template>
 
             </el-col>
@@ -374,7 +374,7 @@
         </el-dialog>
         </template>
 
-        <template v-else>
+        <template v-if="this.notFound">
             <div >
 
                 <div class="img-404">
@@ -391,6 +391,26 @@
             <el-row type="flex" justify="center">
                 <span style="font-size:20px;color:rgba(89,108,132,0.88);">Oops..This auction can not be found.</span>
             </el-row>
+            </div>
+        </template>
+
+        <template v-if="this.hasEnded">
+            <div >
+
+                <div class="img-404">
+                    <img src="../assets/sad.png" alt="" >
+                </div>
+
+                <el-row type="flex" justify="center">
+                <span style="
+                margin-top:10px;
+                font-size: 100px;
+               color:#475669;
+                font-weight: bold">403</span>
+                </el-row>
+                <el-row type="flex" justify="center">
+                    <span style="font-size:20px;color:rgba(89,108,132,0.88);">Oops..This auction has ended.</span>
+                </el-row>
             </div>
         </template>
 
@@ -480,6 +500,7 @@
                 newPlacedBid:'',
                 tipError: false,
                 time: '',
+                hasEnded:false,
                 cards:[
                 //     {
                 //     paymentId:'12',
@@ -510,6 +531,7 @@
                 center: {},
                 initialBid:'',
                 vdaH:'',
+                startTimer:false,
                 // markers:[{position:{lat:-33.9175679,lng:151.2255712}}],
                 markers:[{position:{},}],
                 columns: [
@@ -604,6 +626,7 @@
                     .get('/notification/unread')
                     .then(response => {
                         if (response.data.code === 200) {
+                            this.startTimer = true;
                             this.unread = response.data.result;
                         }
                     })
@@ -643,6 +666,9 @@
                      if (error.response.status ===404) {
                         that.notFound = true;
                     }
+                    if (error.response.status ===403) {
+                        that.hasEnded = true;
+                    }
                 });
 
             // this.notFound = true;
@@ -673,12 +699,20 @@
         },
 
         mounted() {
-            this.timer = setInterval(() => {
-                if (this.timeFlag === true) {
-                    clearInterval(this.timer);
-                }
-                this.countDown(this.propInfo.enddate,this.propInfo.startdate);
-            }, 1000);
+            if(this.startTimer){
+                this.timer = setInterval(() => {
+                    // if (this.timeFlag === true) {
+                    //     clearInterval(this.timer);
+                    // }
+                    if(this.propInfo.status==='R'){
+                        this.countDown(this.propInfo.startdate, dayjs().valueOf());
+                    }else if(this.propInfo.status==='A'){
+                        this.countDown(this.propInfo.enddate,this.propInfo.startdate);
+                    }
+
+                }, 1000);
+            }
+
 
             $("#back-btn").hover(function(event) {
                 $(this).stop().animate({"margin-left": "10px"}, 300);
@@ -823,18 +857,20 @@
             },
 
 
-            countDown(time,startime) {
-                let expiredTime = dayjs(time);
+            countDown(endtime,startime) {
+                let expiredTime = dayjs(endtime);
                 let startTime = dayjs(startime);
                 // console.log(expiredTime.format("YYYY-MM-DD HH:mm:ss"));
                 // console.log(startTime.format("YYYY-MM-DD HH:mm:ss"));
                 // let startTime = dayjs(new Date(2020, 11, 24, 17, 1));
                 // let expiredTime = dayjs(new Date(2020, 11, 31, 17, 1));
-                let nowTime = dayjs();
+                let nowTime = dayjs().valueOf();
 
                 let diff = expiredTime.diff(nowTime) / 1000;
-                let diff2 = startTime.diff(nowTime) / 1000;
+                let diff2 = expiredTime.diff(startTime) / 1000;
                 // console.log(diff);
+                // console.log(nowTime);
+                // console.log(startTime);
                 // console.log(diff2);
 
                 let day = parseInt(diff / 3600 / 24);
@@ -846,17 +882,25 @@
 
                 // if (diff2 > 0) {
                 if(this.propInfo.status === 'R'){
-                    this.timeFlag = true;
+                    // this.timeFlag = true;
                     let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
                     this.time = `Will start at ${ this.showTime2(st) }`;
+                    if(diff2<=0){
+                        // this.timeFlag = false;
+                        clearInterval(this.timer);
+                        // console.log('over');
+                        // this.time = `This auction is Over!`;
+                        location.reload()
+                    }
                 }
                 else{
                     if(diff>0){
                         this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
                     }else{
-                        this.timeFlag = false;
+                        // this.timeFlag = false;
                         // console.log('over');
                         this.time = `This auction is Over!`;
+                        location.reload()
                     }
                 }
 
@@ -1058,7 +1102,7 @@
                 this.$notify({
                     title: 'Bid Update!',
                     dangerouslyUseHTMLString: true,
-                    message:`User <strong>UMR</strong> becomes the winner! \nCurrent bid is ${ 123123123 | numFormat()}\nBid Time: ${this.showTime(dayjs().valueOf())}`
+                    message:`User <strong>umr</strong> becomes the winner!\n<strong>Current bid:</strong> $123123123.\n<strong>Bid Time:</strong> ${this.showTime(dayjs().valueOf())}`
                 });
             },
 
@@ -1067,8 +1111,7 @@
                 this.$notify({
                     title: 'Bid Update!',
                     dangerouslyUseHTMLString: true,
-                    message:`User <strong>${res.username}</strong> becomes the winner!\n <strong>Current bid:</strong> ${res.price | numFormat()}.\n
-                                <strong>Bid Time:</strong> ${this.showTime(res.time)}`
+                    message:`User <strong>${res.username}</strong> becomes the winner!\n<strong>Current bid:</strong> ${res.price | numFormat()}.\n<strong>Bid Time:</strong> ${this.showTime(res.time)}`
                 });
             },
             showCard(card){

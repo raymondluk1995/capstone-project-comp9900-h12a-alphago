@@ -40,12 +40,30 @@
 
             <el-col :span="16" style="border-top:40px solid rgba(35,61,112,0.44);box-shadow: 10px 10px 15px -15px rgba(70,92,132,0.45);padding:50px;background-color:white">
                 <el-row >
-                <h5 style="color:rgba(41,48,62,0.69);margin-bottom:50px">
+                    <el-col :span="19">
+                <h5 style="color:rgba(41,48,62,0.69); margin-bottom:0;padding:0">
                     <i class="el-icon-document-copy"></i>
                     My Notifications</h5>
+            </el-col>
+                    <el-col :span="5">
+                        <el-select
+                                v-model="filter"
+                                style="margin:0 0 10px 30px"
+                                placeholder="Select"
+                                @change="changeSearch"
+                        >
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                            >
+                            </el-option>
+                        </el-select>
+                    </el-col>
                 </el-row>
                 <el-collapse class="notice">
-                    <div v-for="(item,index) in Notice" @click="hasRead(item)">
+                    <div v-for="(item,index) in NoticeShow" @click="hasRead(item)">
                     <el-collapse-item
                             :key="item.notiId"
                             :title="getTitle(item)"
@@ -164,7 +182,9 @@
                             <div v-if="item.message.seller && !item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <p>Sorry.. </p>
-                                <p>Your Property<span style="font-size:12px;color:#596c84">[PID:{{item.message.pid}}]</span> has passed in. The highest bid is ${{item.message.bidPrice| numFormat }}.</p>
+                                <p v-if="item.message.bidPrice!==''">Your Property<span style="font-size:12px;color:#596c84">[PID:{{item.message.pid}}]</span> has passed in. The highest bid is ${{item.message.bidPrice| numFormat }}.</p>
+                                <p v-else>Your Property<span style="font-size:12px;color:#596c84">[PID:{{item.message.pid}}]</span> has passed in. No bidders have participated in this auction.</p>
+
                                 <p style="
                                 margin-bottom:50px;">Here is the details. Thank you for using AlphaGo Auction.</p>
 
@@ -359,103 +379,119 @@
                 ],
                 unread:0,
                 avatar:'',
+                options: [
+                    {
+                        value: "all",
+                        label: "All",
+                    },
+                    {
+                        value: true,
+                        label: "Read",
+                    },
+                    {
+                        value: false,
+                        label: "Unread",
+                    },
+                ],
+                filter: "all",
                 hasLogin:false,
                 Notice: [
-                    // {
-                    //     createTime:new Date(2020,10,10,10,10),
-                    //     noti_id:'12',
-                    //     noti_type:'FINISH',
-                    //     isRead:false,
-                    //     uid:23,
-                    //     message: {
-                    //         aid:'0',
-                    //         pid: '123',
-                    //         success: true,
-                    //         seller: true,
-                    //         bidPrice:'1230000',
-                    //         address: '2 Gearin Alley, Mascot, NSW',
-                    //
-                    //         sellerName: 'UMR',
-                    //         sellerFullName: 'Tony Stark',
-                    //         sellerPhone:'0123123',
-                    //         sellerEmail: '123@gmnail.com',
-                    //
-                    //         bidderName: 'TSF',
-                    //         bidderFullName: 'First Last',
-                    //         bidderPhone: '0412345678',
-                    //         bidderEmail:'123123123.com',
-                    //
-                    //         history: [
-                    //             {
-                    //                 time: 1603981349,
-                    //                 uid: 123,
-                    //                 user: 'UMR',
-                    //                 price: '123123123',
-                    //             },
-                    //             {
-                    //                 time: 160398890,
-                    //                 user: 'ooo',
-                    //                 uid: 345,
-                    //                 price: '1110001',
-                    //             },
-                    //             {
-                    //                 time: 1603890349,
-                    //                 user: 'TSF',
-                    //                 uid: 456,
-                    //                 price: '123123',
-                    //             },
-                    //         ],
-                    //
-                    //     }
-                    // },
-                    // {
-                        // createTime:new Date(2020,10,10,10,10),
-                        // noti_id:'12',
-                        // noti_type:'FINISH',
-                        // isRead:false,
-                        // uid:23,
-                        // message: {
-                        //     aid:'0',
-                        //     pid: '123',
-                        //     success: true,
-                        //     seller: true,
-                        //     bidPrice:'1230000',
-                        //     address: '2 Gearin Alley, Mascot, NSW',
-                        //
-                        //     sellerName: 'UMR',
-                        //     sellerFullName: 'Tony Stark',
-                        //     sellerPhone:'0123123',
-                        //     sellerEmail: '123@gmnail.com',
-                        //
-                        //     bidderName: 'TSF',
-                        //     bidderFullName: 'First Last',
-                        //     bidderPhone: '0412345678',
-                        //     bidderEmail:'123123123.com',
-                        //
-                        //     history: [
-                        //         {
-                        //             time: 1603981349,
-                        //             uid: 123,
-                        //             user: 'UMR',
-                        //             price: '123123123',
-                        //         },
-                        //         {
-                        //             time: 160398890,
-                        //             user: 'ooo',
-                        //             uid: 345,
-                        //             price: '1110001',
-                        //         },
-                        //         {
-                        //             time: 1603890349,
-                        //             user: 'TSF',
-                        //             uid: 456,
-                        //             price: '123123',
-                        //         },
-                        //     ],
+                    {
+                        createTime:new Date(2020,10,10,10,10),
+                        noti_id:'12',
+                        noti_type:'FINISH',
+                        isRead:false,
+                        uid:23,
+                        message: {
+                            aid:'0',
+                            pid: '123',
+                            success: true,
+                            seller: true,
+                            bidPrice:'1230000',
+                            address: '2 Gearin Alley, Mascot, NSW',
 
-                        // }
-                    // },
+                            sellerName: 'UMR',
+                            sellerFullName: 'Tony Stark',
+                            sellerPhone:'0123123',
+                            sellerEmail: '123@gmnail.com',
+
+                            bidderName: 'TSF',
+                            bidderFullName: 'First Last',
+                            bidderPhone: '0412345678',
+                            bidderEmail:'123123123.com',
+
+                            history: [
+                                {
+                                    time: 1603981349,
+                                    uid: 123,
+                                    user: 'UMR',
+                                    price: '123123123',
+                                },
+                                {
+                                    time: 160398890,
+                                    user: 'ooo',
+                                    uid: 345,
+                                    price: '1110001',
+                                },
+                                {
+                                    time: 1603890349,
+                                    user: 'TSF',
+                                    uid: 456,
+                                    price: '123123',
+                                },
+                            ],
+
+                        }
+                    },
+                    {
+                        createTime:new Date(2020,10,10,10,10),
+                        noti_id:'12',
+                        noti_type:'FINISH',
+                        isRead:true,
+                        uid:23,
+                        message: {
+                            aid:'0',
+                            pid: '123',
+                            success: true,
+                            seller: true,
+                            bidPrice:'1230000',
+                            address: '2 Gearin Alley, Mascot, NSW',
+
+                            sellerName: 'UMR',
+                            sellerFullName: 'Tony Stark',
+                            sellerPhone:'0123123',
+                            sellerEmail: '123@gmnail.com',
+
+                            bidderName: 'TSF',
+                            bidderFullName: 'First Last',
+                            bidderPhone: '0412345678',
+                            bidderEmail:'123123123.com',
+
+                            history: [
+                                {
+                                    time: 1603981349,
+                                    uid: 123,
+                                    user: 'UMR',
+                                    price: '123123123',
+                                },
+                                {
+                                    time: 160398890,
+                                    user: 'ooo',
+                                    uid: 345,
+                                    price: '1110001',
+                                },
+                                {
+                                    time: 1603890349,
+                                    user: 'TSF',
+                                    uid: 456,
+                                    price: '123123',
+                                },
+                            ],
+
+                        }
+                    },
                 ],
+                NoticeShow:[]
             };
         },
 
@@ -481,6 +517,7 @@
                     .then(response => {
                         if (response.data.code === 200) {
                             this.Notice = response.data.result;
+                            this.NoticeShow = response.data.result;
                         }
                     })
                     .catch(function (error) {
@@ -489,7 +526,7 @@
             }
             else{
                 this.$message.error("You should login first!");
-                this.$router.push("/login");
+                // this.$router.push("/login");
             }
 
         },
@@ -548,6 +585,18 @@
                         break;
                 }
             },
+            changeSearch(value) {
+                let filterNotice = [];
+                if(value === 'all'){
+                    filterNotice = this.Notice;
+                }else{
+                    filterNotice = this.Notice.filter((e) => {
+                        return e.isRead === value;
+                    });
+                }
+                this.NoticeShow = filterNotice;
+            },
+
             getTitle(item){
                 let time = this.showTime(item.createTime);
                 // console.log(time)
