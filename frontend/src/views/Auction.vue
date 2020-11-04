@@ -60,7 +60,9 @@
                                        style="
                                            color:white;
                                            padding:2px 5px;
-                                           font-size:20px;"
+                                           font-size:20px;
+                                            position:absolute;
+                                            "
                                        @click="goto('auchis')">
                                     <i class="el-icon-right"></i> View History</span>
                             </div>
