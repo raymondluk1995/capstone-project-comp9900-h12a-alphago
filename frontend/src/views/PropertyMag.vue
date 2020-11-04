@@ -127,19 +127,19 @@
                 <section>
                     <el-row type="flex" justify="left" style="margin:10px 0;">
                         <el-col :span="4">
-                            <i class="el-icon-toilet-paper"> Baths: {{ propInfo.bathroomNum}}</i>
+                            <i class="fas fa-bath" style="margin-right: 5px"> Baths: {{ propInfo.bathroomNum}}</i>
                         </el-col>
                         <el-col :span="4">
-                            <i class="el-icon-house"> Beds: {{ propInfo.bedroomNum }}</i>
+                            <i class="fas fa-bed" style="margin-right: 5px"> Beds: {{ propInfo.bedroomNum }}</i>
                         </el-col>
                         <el-col :span="4">
-                            <i class="el-icon-truck"> Cars: {{ propInfo.garageNum }}</i>
+                            <i class="fas fa-car" style="margin-right: 5px"> Cars: {{ propInfo.garageNum }}</i>
                         </el-col>
                         <el-col :span="4">
-                            <i class="el-icon-full-screen"> Area: {{ propInfo.area }}</i>
+                            <i class="fas fa-home" style="margin-right: 5px"> Area: {{ propInfo.area }}</i>
                         </el-col>
                         <el-col :span="8">
-                            <i class="el-icon-info"> Type: {{ propInfo.type }}</i>
+                            <i class="fas fa-tags" style="margin-right: 5px"> Type: {{ propInfo.type }}</i>
                         </el-col>
                     </el-row>
 
@@ -297,14 +297,18 @@
                 ],
                 urlObjImg:{},
                 originPropertyList: [
-                    // {
-                    //     pid:1,
-                    //     status:'R',
-                    //     address:'afdgdag',
-                    //     position:'apple,pear',
-                    //     detail:'bbq,ppol',
-                    //     photos:['', '']
-                    // }
+                    {
+                        pid:1,
+                        status:'R',
+                        address:'afdgdag',
+                        position:'apple,pear',
+                        detail:'bbq,ppol',
+                        photos:['', ''],
+                        bathroomNum:2,
+                        bedroomNum:1,
+                        garageNum:2,
+
+                    }
                     // ,{
                     //     pid:2,
                     //     status: 'N',
@@ -378,12 +382,12 @@
             }
             else{
                 this.$message.error("You should login first!");
-                this.$router.push("/login");
+                // this.$router.push("/login");
             }
 
             // this.isEmpty = false;
-            // this.propList = this.originPropertyList;
-            // this.propInfo = this.originPropertyList[0];
+            this.propList = this.originPropertyList;
+            this.propInfo = this.originPropertyList[0];
         },
 
 
@@ -615,6 +619,8 @@
 </script>
 
 <style lang="scss">
+    @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap");
+
     .mh20 {
         margin: 20px 0;
     }

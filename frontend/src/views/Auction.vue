@@ -115,23 +115,25 @@
                                     </el-carousel>
                                     <div style="padding: 20px;">
                                     <h5>{{ decapitateAddress(item.address) }}</h5>
-                                    <el-row type="flex" justify="left" style="margin:10px 5%;">
-                                        <el-col :span="4">
-                                        <i class="el-icon-toilet-paper"> Baths: {{ item.bathroomNum}}</i>
-                                        </el-col>
-                                        <el-col :span="4">
-                                        <i class="el-icon-house"> Beds: {{ item.bedroomNum }}</i>
-                                        </el-col>
-                                            <el-col :span="4">
-                                        <i class="el-icon-truck"> Cars: {{ item.garageNum }}</i>
-                                            </el-col>
-                                        <el-col :span="4">
-                                            <i class="el-icon-full-screen"> Area: {{ item.area }}</i>
+                                    <el-row type="flex" justify="center" style="margin:10px 5%;">
+                                        <el-col :span="8">
+                                            <i class="fas fa-bath" style="margin-right: 5px"> Baths: {{ item.bathroomNum}}</i>
                                         </el-col>
                                         <el-col :span="8">
-                                            <i class="el-icon-info"> Type: {{ item.type }}</i>
+                                            <i class="fas fa-bed" style="margin-right: 5px"> Beds: {{ item.bedroomNum }}</i>
+                                        </el-col>
+                                        <el-col :span="8">
+                                            <i class="fas fa-car" style="margin-right: 5px"> Cars: {{ item.garageNum }}</i>
                                         </el-col>
                                     </el-row>
+                                        <el-row type="flex" justify="center" style="margin:10px 5%;">
+                                            <el-col :span="12">
+                                                <i class="fas fa-home" style="margin-right: 5px"> Area: {{ item.area }}</i>
+                                            </el-col>
+                                            <el-col :span="12">
+                                                <i class="fas fa-tags" style="margin-right: 5px"> Type: {{ item.type }}</i>
+                                            </el-col>
+                                        </el-row>
                                         <el-row type="flex" justify="space-around">
 <!--                                            <div class="bid" v-if="item.status==='R'"> Guide ${{ getBidStatus(item)|numFormat }}</div>-->
 <!--                                            <div class="bid" v-else> ${{ getBidStatus(item)|numFormat }}</div>-->
@@ -237,31 +239,31 @@
                 hasLogin: false,
                 filterPropertyList:[],
                 originPropertyList:[
-                    // {
-                    //     aid:1,
-                    //     status:'A',
-                    //     bathroomNum:2,
-                    //     bedroomNum:1,
-                    //     garageNum:2,
-                    //     type:'Apartment',
-                    //     area:123,
-                    //     address:'2 Gearin Alley, Mascot, NSW12312312312312312311231231231231223',
-                    //     photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
-                    //     highestPrice: 123123,
-                    //     currentBid:123123,
-                    //     startdate:'',
-                    //     endddate:'',
-                    // }
-                    // ,{
-                    //     aid:2,
-                    //     status: 'A',
-                    //     address:'123asd',
-                    //     photos:['',''],
-                    //     highestPrice: 123123,
-                    //     startdate: new Date(2019,10,10,12,10),
-                    //     currentBid:123,
-                    //     reservedPrice: 10000,
-                    // },
+                    {
+                        aid:1,
+                        status:'A',
+                        bathroomNum:2,
+                        bedroomNum:1,
+                        garageNum:2,
+                        type:'Apartment',
+                        area:123,
+                        address:'2 Gearin Alley, Mascot, NSW12312312312312312311231231231231223',
+                        photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
+                        highestPrice: 123123,
+                        currentBid:123123,
+                        startdate:'',
+                        endddate:'',
+                    }
+                    ,{
+                        aid:2,
+                        status: 'A',
+                        address:'123asd',
+                        photos:['',''],
+                        highestPrice: 123123,
+                        startdate: new Date(2019,10,10,12,10),
+                        currentBid:123,
+                        reservedPrice: 10000,
+                    },
                     // {
                     //     aid:3,
                     //     status: 'R',
@@ -379,11 +381,11 @@
             }
             else{
                 this.$message.error("You should login first!");
-                this.$router.push("/login");
+                // this.$router.push("/login");
             }
 
             // this.isEmpty = true;
-            // this.propList = this.originPropertyList;
+            this.propList = this.originPropertyList;
         },
 
         methods: {
@@ -541,7 +543,9 @@
 </script>
 
 <style scoped lang="scss">
-.user {
+    @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap");
+
+    .user {
     display: flex;
     align-items: center;
     p {
