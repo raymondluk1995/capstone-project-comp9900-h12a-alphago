@@ -22,5 +22,4 @@ public interface AuctionMapper extends BaseMapper<Auction> {
     @Select("SELECT * FROM auction WHERE (status = 'R' OR status = 'A')")
     List<Auction> getAllRunningOrComingAuction();
 
-    IPage<SearchVO> getSearchResults(SearchModel model);
 }

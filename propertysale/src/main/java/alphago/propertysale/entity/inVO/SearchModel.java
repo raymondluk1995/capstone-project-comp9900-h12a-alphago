@@ -9,24 +9,28 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class SearchModel {
+    // address table
     private String suburb;
     private String postcode;
-
+    // auction
     private Long startDate;
     private Long endDate;
 
     private String minPrice;
     private String maxPrice;
 
-
+    //
     private Integer bedRooms;
     private Integer bathRooms;
     private Integer garages;
 
-    private String order; // desc or asc
     private String propertyType;
     private Integer minArea;
     private Integer maxArea;
+    private Integer currPage;
+
+
+    private String order; // desc or asc
 
 
     public boolean isAllEmpty() {

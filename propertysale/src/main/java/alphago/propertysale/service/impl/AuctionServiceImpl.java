@@ -1,6 +1,7 @@
 package alphago.propertysale.service.impl;
 
 import alphago.propertysale.entity.*;
+import alphago.propertysale.entity.inVO.SearchModel;
 import alphago.propertysale.entity.returnVO.AuctionVO;
 import alphago.propertysale.entity.returnVO.SearchResVO;
 import alphago.propertysale.entity.returnVO.SearchVO;
@@ -10,6 +11,8 @@ import alphago.propertysale.utils.FileUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,6 @@ import java.util.List;
  * @description:
  * @author: XIAO HAN, TAO XUE
  * @create: 2020-10-16 16:49
- *
  **/
 @Service
 @Transactional
@@ -131,12 +133,16 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
     }
 
     @Override
-    public SearchVO getSearchVO(boolean isAuthenticated) {
+    public SearchVO getSearchVO(SearchModel model) {
         SearchVO vo = new SearchVO();
-        List<Auction> runningOrComingAuctions = auctionMapper.getAllRunningOrComingAuction();
+        Page<Auction> page = new Page<>(model.getCurrPage(), 6);
+        IPage<Auction> res = null;
+        res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R"));
+        List<Auction> runningOrComingAuctions = /* auctionMapper.getAllRunningOrComingAuction();*/ res.getRecords();
+
         List<SearchResVO> ret = new ArrayList<>();
         vo.setResVOList(ret);
-        if (!isAuthenticated) {
+        if (model.isAllEmpty()) {
             // if you are just a ranger.
             for (Auction auction : runningOrComingAuctions) {
                 SearchResVO searchResVO = new SearchResVO();
@@ -154,7 +160,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                         searchResVO.setCurrentBid(auction.getMinimumPrice());
                     } else {
                         // set to rab.highest Price
-                        Rab rab = rabMapper.selectOne(new QueryWrapper<Rab>().eq("aid", auction.getAid()));
+                        Rab rab = rabMapper.selectById(auction.getCurrentBid());
                         searchResVO.setCurrentBid(rab.getHighestPrice());
                     }
                 }
@@ -166,8 +172,17 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 searchResVO.setAddress(address.getFullAddress());
                 vo.getResVOList().add(searchResVO);
             }
-        }
 
+            vo.setCurrPage(model.getCurrPage());
+            vo.setTotalPage(res.getTotal());
+        } else {
+            for (Auction auction : runningOrComingAuctions) {
+                // auction's address
+                Address address = addressMapper.selectById(auction.getPid());
+                // Auction's property
+                Property property = propertyMapper.selectById(auction.getPid());
+            }
+        }
         return vo;
     }
 }

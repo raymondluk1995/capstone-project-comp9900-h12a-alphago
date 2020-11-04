@@ -8,7 +8,8 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class SearchVO {
-    private boolean isRab;// if user login -> rab?
+    private Integer currPage;
+    private Long totalPage;
     private List<SearchResVO> resVOList;
 
 }

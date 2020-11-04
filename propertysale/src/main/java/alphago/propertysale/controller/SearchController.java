@@ -28,7 +28,7 @@ public class SearchController {
         Subject subject = SecurityUtils.getSubject();
         boolean isAuthenticated = subject.isAuthenticated();
         subject.getPrincipal();
-        return Result.success(service.getSearchVO(isAuthenticated));
+        return Result.success(service.getSearchVO(model));
     }
 
 

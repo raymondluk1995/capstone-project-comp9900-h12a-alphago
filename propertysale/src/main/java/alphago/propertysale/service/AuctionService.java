@@ -2,6 +2,7 @@ package alphago.propertysale.service;
 
 import alphago.propertysale.entity.Auction;
 import alphago.propertysale.entity.AuctionStatus;
+import alphago.propertysale.entity.inVO.SearchModel;
 import alphago.propertysale.entity.returnVO.AuctionVO;
 import alphago.propertysale.entity.returnVO.SearchVO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -22,5 +23,5 @@ public interface AuctionService extends IService<Auction> {
 
     void finishAuction(long aid);
 
-    SearchVO getSearchVO(boolean isAuthenticated);
+    SearchVO getSearchVO(SearchModel model);
 }
