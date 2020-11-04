@@ -72,7 +72,7 @@
         <el-col :span="15">
           <div class="input">
             <el-col :span="22">
-              <div style="border:1px solid black; margin:0 0 0 20px; ">
+              <div style="border:1px solid black; background-color: white;border-radius:50px 0 0 50px  ">
               <vue-google-autocomplete
                 class="auto-input"
                 ref="address"
@@ -82,7 +82,7 @@
                 v-on:placechanged="getAddressData"
                 @keyup.enter="toSearch"
                 country="au"
-                style="border-radius:50px 0 0 50px;border:0; text-indent:20px;height:50px;"
+                style="border:0; height:50px;width:95%;margin-left: 5%;"
                 types="(cities)"
               >
               </vue-google-autocomplete>
@@ -394,6 +394,10 @@ export default {
     color: #143469 !important;
   }
 }
+  .auto-input{
+    outline:none !important;
+  }
+
 
 
 </style>
