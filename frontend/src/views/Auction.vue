@@ -173,7 +173,7 @@
                 <template v-else>
                     <div class="empty-label" >
                         <el-alert
-                                title="You do not have any auction."
+                                title="You have not participate in any auctions yet."
                                 type="info"
                                 center
                                 show-icon
