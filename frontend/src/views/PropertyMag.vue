@@ -196,13 +196,13 @@
                                         </el-form-item>
 
                                         <el-form-item label="Reserved Price:" prop="price">
-                                            <el-input v-model="form.price">
+                                            <el-input v-model="form.price"  maxlength="11">
                                                 <i slot="suffix" class="input-slot">{{form.price|numFormat}} A$</i>
                                             </el-input>
                                         </el-form-item>
 
                                         <el-form-item label="Minimum Price:" prop="minimumPrice">
-                                            <el-input v-model="form.minimumPrice">
+                                            <el-input v-model="form.minimumPrice"  maxlength="11">
                                                 <i slot="suffix" class="input-slot">{{form.minimumPrice|numFormat}} A$</i>
                                             </el-input>
                                         </el-form-item>
@@ -273,6 +273,25 @@
         },
 
         data() {
+            const checkInt = (rule, value, callback) => {
+                const intReg = /^[0-9]+$/;
+                if (!intReg.test(value)) {
+                    callback(new Error("Please input an integer"));
+                } else {
+                    callback();
+                }
+            };
+            const checkStart = (rule, value, callback) => {
+                const intReg = /^[0-9]+$/;
+                if (!intReg.test(value)) {
+                    callback(new Error("Please input an integer"));
+                } else if(value > parseInt(this.form.price)) {
+                    callback(new Error("Minimum price should smaller than reserved price!"));
+                }
+                else{
+                    callback();
+                }
+            };
             return {
                 unread:'',
                 Aucreg:false,
@@ -314,8 +333,8 @@
                     //     bedroomNum:1,
                     //     garageNum:2,
                     //
-                    // }
-                    // ,{
+                    // },
+                    // {
                     //     pid:2,
                     //     status: 'N',
                     //     address:'123asd1231231231231231321231231312313',
@@ -340,6 +359,8 @@
                     detail:''
                 },
                 rules: {
+                    price: [{required: true, message: " Please enter price", trigger: "blur"}, {validator: checkInt,trigger: "blur" },],
+                    minimumPrice: [{required: true, message: " Please enter start price", trigger: "blur"}, {validator: checkStart,trigger: "blur" },],
                 },
 
                 form:{
@@ -393,7 +414,7 @@
 
             // this.isEmpty = false;
             // this.propList = this.originPropertyList;
-            // this.thispropInfo = this.originPropertyList[0];
+            // this.propInfo = this.originPropertyList[0];
         },
 
 
@@ -617,6 +638,18 @@
                 this.$router.go(-1);
             },
         },
+        watch:{
+            ['form.price'](val) {
+                this.$nextTick(() => {
+                    this.form.price = val.replace(/\D/g,'');
+                });
+            },
+            ['form.minimumPrice'](val) {
+                this.$nextTick(() => {
+                    this.form.minimumPrice = val.replace(/\D/g,'');
+                });
+            },
+        }
     };
 </script>
 

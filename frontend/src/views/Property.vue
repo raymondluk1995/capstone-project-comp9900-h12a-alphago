@@ -205,11 +205,21 @@
                 <template v-if="username !== propInfo.username">
                     <div v-if="this.propInfo.rab !== null">
     <!--                    <h3>Place new bid</h3>-->
-                        <div class="new-bid-wrap">
-                            <el-input v-model="newBid" :disabled="timeFlag" maxlength="11" placeholder="Place New Bid">
-                                <i slot="suffix" class="input-slot">{{newBid | numFormat }} A$</i>
+                        <div class="new-bid-wrap" >
+<!--                            <el-form-item  prop="newBid">-->
+<!--                            <el-form-->
+<!--                                    class="form9"-->
+<!--                                    ref="form"-->
+<!--                                    :model="form"-->
+<!--                                    :rules="rules"-->
+<!--                            >-->
+<!--                                <el-form-item>-->
+                            <el-input v-model="newBid" :disabled="timeFlag" maxlength="11" placeholder="Place New Bid" prop="newBid">
+                                <i slot="suffix" class="input-slot">{{ newBid | numFormat }} A$</i>
                             </el-input>
                             <el-button class='wrap-button' type="primary" icon="el-icon-plus"  @click="addNewBid"></el-button>
+<!--                            </el-form-item>-->
+<!--                            </el-form>-->
                         </div>
 
                         <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
@@ -609,6 +619,7 @@
                     expiredDate: [{required: true, message: " Please enter expired date", trigger: "blur"}, {validator:checkDate, trigger: "blur" },],
                     cvc: [{required: true, message: " Please enter cvc", trigger: "blur",},{validator:checkCVC, trigger: "blur" }],
                     // initPrice: [{required: true, message: " Please initial price", trigger: "blur",},{validator:checkinit, trigger: "blur" }],
+                    newBid: [{required: true, message: " Please enter new bid price", trigger: "blur"}, {validator: checkinit,trigger: "blur" },],
                 },
             };
         },
@@ -972,9 +983,11 @@
                                     }else if(response.data.code === 400){
                                         this.$message.error(response.msg);
                                     }else{
+                                        this.$message.error(response.msg);
                                         console.log(response.msg);
                                     }
                                 } else {
+                                    this.$message.error(response.msg);
                                     console.log(response.msg);
                                 }
                             })
@@ -1028,7 +1041,7 @@
                                                 this.propInfo.rab = response.data.result;
                                                 this.$message.success("Register successful!");
                                                 // location.reload();
-                                                this.currentBid = price;
+                                                this.highestPrice = price;
                                             }
                                         } else if (response.data.code === 400) {
                                             this.$message.error(response.msg);
