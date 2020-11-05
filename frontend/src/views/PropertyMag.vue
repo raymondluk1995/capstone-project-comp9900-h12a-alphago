@@ -38,7 +38,7 @@
 
         <el-row class="win" type="flex" justify="center">
             <el-col :span="6">
-                <el-row type="flex" justify="space-around" style="background-color: #e4e9f3">
+                <el-row type="flex" justify="space-around" style="background-color: rgba(38,66,123,0.8)">
                     <el-col>
                     <el-select
                             v-model="filter"
@@ -57,47 +57,53 @@
                     </el-col>
                     <el-col>
 
-                    <el-button type="primary" icon="el-icon-plus"  plain style="float:right;margin:10px 30px" @click="goto('propreg')">New</el-button>
+                    <el-button type="primary" icon="el-icon-plus"  plain style="float:right; margin:10px 30px" @click="goto('propreg')">New</el-button>
                     </el-col>
                 </el-row>
                 <el-row class="property-list">
+                 <div  v-for="item in propList"  :key="item.pid" :class="addStatusColor(item.status)">
                 <el-card
                         class="card2"
-                        :class="addStatusColor(item.status)"
-                        v-for="item in propList"
-                        @click.native="selectItem(item)"
-                        :key="item.pid"
                         :style="{'background-color' : item.pid === isSelected ? 'rgba(154,174,195,0.45)' : ''}"
+                        @click.native="selectItem(item)"
                 >
                     <el-row>
-                        <div>
-                            <el-row>
+                        <div >
+                            <el-row >
                                 <el-col :span="20">
                             <h6>{{ decapitateAddress(item.address) }}</h6>
                                 </el-col>
 
-                                <el-col :span="1" >
-                                <el-tooltip v-show="item.status === 'R'" class="item" effect="dark" content="Cancel" placement="right">
-                                <el-button v-show="item.status === 'R'" type="" plain circle="" icon="el-icon-close" @click="cancelAuc(item)"></el-button>
-                                </el-tooltip>
-
-                                <el-tooltip v-show="item.status === 'N'" class="item" effect="dark" content="Remove" placement="right">
-                                <el-button style="margin-left:0" v-show="item.status === 'N'" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
-                                </el-tooltip>
-                                </el-col>
                             </el-row>
-                            <p>{{ getlabel(item.status) }}</p>
+                           <el-row>
+                               <el-col :span="17">
+                                     <p>{{ getlabel(item.status) }}</p>
+                                </el-col>
+
+                               <el-col :span="3" >
+                                   <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>
+                                   <el-button style="margin-left:0" v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item.pid)">Remove</el-button>
+                               </el-col>
+                           </el-row>
+
                         </div>
-                        <el-row type="flex" justify="end">
-                            <el-button class="btn-long" v-show="item.status === 'R'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
-                            <el-button v-show="item.status === 'N'" type="info"  round icon="el-icon-document" @click="aucreg">Register</el-button>
+
+                        <el-row type="flex" justify="right">
+                            <el-col :span="17">
+                            </el-col>
+                            <el-col :span="3" >
+                            <el-button v-show="item.status === 'R'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
+                            <el-button v-show="item.status === 'N'" type="info"  style="margin-left:0"  round icon="el-icon-document" @click="aucreg">Register</el-button>
 <!--                            <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item.pid)">Remove</el-button>-->
 <!--                            <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>-->
-                            <el-button v-show="item.status === 'A'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
+                            <el-button v-show="item.status === 'A'" type="success" style="margin-left:0"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
+                            </el-col>
                         </el-row>
                     </el-row>
                 </el-card>
+                 </div>
                 </el-row>
+
             </el-col>
 
 
@@ -387,7 +393,7 @@
 
             // this.isEmpty = false;
             // this.propList = this.originPropertyList;
-            // this.propInfo = this.originPropertyList[0];
+            // this.thispropInfo = this.originPropertyList[0];
         },
 
 
@@ -557,10 +563,6 @@
                 this.Aucreg = true;
             },
 
-            showdate(t){
-                return dayjs(t).format("YYYY-MM-DD HH:mm:ss")
-            },
-
             changeSearch(value) {
                 let filterPropertyList = [];
                 if(value === 'all'){
@@ -658,7 +660,7 @@
         /*box-shadow: 2px 1px 5px 4px #d5dbea;*/
     }
     .card2 {
-        margin: 20px 20px;
+        margin: 20px 0;
         &:hover {
             cursor: pointer;
             background-color: #d6e2e7;
@@ -670,10 +672,11 @@
         }
     }
     .status-not-start {
-        border-left: 15px solid #e7b993;
+        border-left: 15px solid #e77d6d;
+        /*border : 10px solid black;*/
     }
     .status-process {
-        border-left: 15px solid #aed991;
+        border-left: 15px solid rgba(102, 199, 91, 0.92);
     }
 
     .status-not-register {
