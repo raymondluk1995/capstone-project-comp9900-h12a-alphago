@@ -9,6 +9,7 @@ import alphago.propertysale.shiro.JwtInfo;
 import alphago.propertysale.utils.Result;
 import alphago.propertysale.utils.TimeUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,13 @@ public class NotificationController {
         JwtInfo info = (JwtInfo) SecurityUtils.getSubject().getPrincipal();
         long uid = info.getUid();
         return Result.success(notificationService.countUnread(uid));
+    }
+
+    @RequestMapping("/isRead")
+    @RequiresAuthentication
+    public Result isRead(long notiId){
+        notificationService.update(new UpdateWrapper<Notification>().eq("noti_id", notiId).set("is_read", true));
+        return Result.success("");
     }
 
     /**

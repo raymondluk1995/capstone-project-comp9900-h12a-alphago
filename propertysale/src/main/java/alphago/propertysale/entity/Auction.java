@@ -56,4 +56,8 @@ public class Auction {
             return false;
         }
     }
+
+    public boolean isFinish(){
+        return status.equals(SUCCESS) || status.equals(FAIL);
+    }
 }

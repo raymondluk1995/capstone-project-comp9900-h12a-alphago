@@ -2,13 +2,18 @@ package alphago.propertysale.service.impl;
 
 import alphago.propertysale.entity.*;
 import alphago.propertysale.entity.inVO.SearchModel;
+import alphago.propertysale.entity.notification.FinishMessage;
+import alphago.propertysale.entity.notification.Notification;
 import alphago.propertysale.entity.returnVO.AuctionVO;
+import alphago.propertysale.exception.AuctionFinishedException;
+import alphago.propertysale.exception.AuctionNotFoundException;
 import alphago.propertysale.entity.returnVO.SearchResVO;
 import alphago.propertysale.entity.returnVO.SearchVO;
 import alphago.propertysale.exception.AuctionNotFoundException;
 import alphago.propertysale.mapper.*;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.utils.FileUtil;
+import alphago.propertysale.utils.PriceUtil;
 import alphago.propertysale.utils.RedisUtil;
 import alphago.propertysale.utils.TimeUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
@@ -51,12 +56,17 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
     RabMapper rabMapper;
     @Autowired
     RabActionMapper rabActionMapper;
+    @Autowired
+    NotificationMapper notificationMapper;
 
     @Override
     public AuctionVO getAuctionByAid(long aid) {
         Auction auction = auctionMapper.selectById(aid);
-        if (auction == null) {
-            throw new AuctionNotFoundException("Auction " + aid + "is Not Found");
+        if(auction == null) {
+            throw new AuctionNotFoundException("Auction " + aid + " is Not Found");
+        }
+        if(auction.isFinish()){
+            throw new AuctionFinishedException("Auction " + aid + " is Finished");
         }
         Property property = propertyMapper.selectById(auction.getPid());
         Address address = addressMapper.selectById(property.getPid());
@@ -118,69 +128,90 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         rabList.sort(Comparator.comparing(Rab::getInitPrice));
         // bid
         BidHistoryPush.initHistory(aid);
-        rabList.forEach(
-                rab -> {
-                    RabAction bid = new RabAction().setRabId(rab.getRabId()).
-                            setBidPrice(rab.getInitPrice())
-                            .setBidTime(rab.getRegisterTime());
+        Rab currentRab = null;
+        for(Rab rab : rabList){
+            currentRab = rab;
 
-                    BidMsg msg = new BidMsg().setUid(rab.getUid())
-                            .setUsername(userMapper.selectById(rab.getUid()).getUsername())
-                            .setPrice(rab.getInitPrice())
-                            .setTime(bid.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
-                            .setOvertime(false);
+            RabAction bid = new RabAction().setRabId(rab.getRabId()).
+                    setBidPrice(rab.getInitPrice())
+                    .setBidTime(rab.getRegisterTime());
 
-                    BidHistoryPush.addBidHistory(aid, msg);
+            BidMsg msg = new BidMsg().setUid(rab.getUid())
+                        .setUsername(userMapper.selectById(rab.getUid()).getUsername())
+                        .setPrice(rab.getInitPrice())
+                        .setTime(bid.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
+                        .setOvertime(false);
 
-                    rabActionMapper.insert(bid);
-                }
-        );
+            BidHistoryPush.addBidHistory(aid, msg);
+
+            rabActionMapper.insert(bid);
+        }
+        // set current rab
+        if(currentRab != null) {
+            auctionMapper.update(null, new UpdateWrapper<Auction>().set("current_bid", currentRab.getUid()));
+        }
     }
 
     @Override
     public void finishAuction(long aid) {
-//        Auction auction = auctionMapper.selectById(aid);
-//        if (auction.getCurrentBid() != 0) {
-//            RabAction bid = rabActionMapper.selectById(auction.getCurrentBid());
-//            if (bid.getBidPrice().compareTo(auction.getPrice()) >= 0) {
-//                auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "S"));
-//                propertyMapper.update(null, new UpdateWrapper<Property>()
-//                        .eq("pid", auction.getPid())
-//                        .set("auction", false)
-//                        .set("owner", rab.getUid()));
-//
-//                User bidder = userMapper.selectById(rab.getUid());
-//
-//                message.setBidderName(bidder.getUsername())
-//                        .setBidderFullName(bidder.getFullName())
-//                        .setSellerPhone(bidder.getPhone())
-//                        .setSellerEmail(bidder.getEmail());
-//
-//                Notification notification = new Notification().setNotiType(Notification.FINISH)
-//                        .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
-//                        .setMessage(ObjectUtil.serialize(message));
-//                notificationMapper.addMessage(notification);
-//
-//                message.setSeller(false);
-//                notification.setUid(bidder.getUid()).setMessage(ObjectUtil.serialize(message));
-//                notificationMapper.addMessage(notification);
-//
-//                return;
-//            }
-//        }else{
-//            message.setBidPrice("No bid!");
-//        }
-//        // Auction Fail
-//        auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "F"));
-//        propertyMapper.update(null, new UpdateWrapper<Property>()
-//                .eq("pid", auction.getPid())
-//                .set("auction", false));
-//
-//        message.setSuccess(false);
-//        Notification notification = new Notification().setNotiType(Notification.FINISH)
-//                .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
-//                .setMessage(ObjectUtil.serialize(message));
-//        notificationMapper.addMessage(notification);
+        Auction auction = auctionMapper.selectById(aid);
+        Property property = propertyMapper.selectById(auction.getPid());
+        Address address = addressMapper.selectById(property.getPid());
+        User seller = userMapper.selectById(auction.getSeller());
+
+        FinishMessage message = new FinishMessage().setSuccess(true).setSeller(true)
+                .setAid(aid)
+                .setPid(auction.getPid())
+                .setAddress(address.getFullAddress())
+                .setSellerName(seller.getUsername())
+                .setSellerFullName(seller.getFullName())
+                .setSellerPhone(seller.getPhone())
+                .setSellerEmail(seller.getEmail())
+                .setHistory(BidHistoryPush.removeAuctionHistory(aid));
+
+        if(auction.getCurrentBid() != 0) {
+            Rab rab = rabMapper.selectById(auction.getCurrentBid());
+            message.setBidPrice(rab.getHighestPrice());
+            // Auction Success
+            if(PriceUtil.priceCompare(rab.getHighestPrice(), auction.getPrice()) >=0){
+                auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "S"));
+                propertyMapper.update(null, new UpdateWrapper<Property>()
+                        .eq("pid", auction.getPid())
+                        .set("auction", false)
+                        .set("owner", rab.getUid()));
+
+                User bidder = userMapper.selectById(rab.getUid());
+
+                message.setBidderName(bidder.getUsername())
+                        .setBidderFullName(bidder.getFullName())
+                        .setSellerPhone(bidder.getPhone())
+                        .setSellerEmail(bidder.getEmail());
+
+                Notification notification = new Notification().setNotiType(Notification.FINISH)
+                        .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
+                        .setMessage(ObjectUtil.serialize(message));
+                notificationMapper.addMessage(notification);
+
+                message.setSeller(false);
+                notification.setUid(bidder.getUid()).setMessage(ObjectUtil.serialize(message));
+                notificationMapper.addMessage(notification);
+
+                return;
+            }
+        }else{
+            message.setBidPrice("No Bid!");
+        }
+        // Auction Fail
+        auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "F"));
+        propertyMapper.update(null, new UpdateWrapper<Property>()
+                .eq("pid", auction.getPid())
+                .set("auction", false));
+
+        message.setSuccess(false);
+        Notification notification = new Notification().setNotiType(Notification.FINISH)
+                .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
+                .setMessage(ObjectUtil.serialize(message));
+        notificationMapper.addMessage(notification);
     }
 
     @Override

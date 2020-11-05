@@ -8,6 +8,7 @@ import alphago.propertysale.mapper.RabActionMapper;
 import alphago.propertysale.mapper.RabMapper;
 import alphago.propertysale.mapper.UserMapper;
 import alphago.propertysale.service.RabService;
+import alphago.propertysale.utils.PriceUtil;
 import alphago.propertysale.utils.TimeUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
 import alphago.propertysale.websocket.BidMsg;
@@ -52,7 +53,7 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
         if(auction.getStatus().equals("A")){
             long bidId = auction.getCurrentBid();
             String price = bidId == 0 ? "0" : rabMapper.selectById(bidId).getHighestPrice();
-            if(price.compareTo(rab.getInitPrice())<0){
+            if(PriceUtil.priceCompare(price, rab.getInitPrice())<0){
                 rabMapper.insert(rab);
                 RabAction bid = new RabAction();
                 bid.setBidTime(rab.getRegisterTime()).setBidPrice(rab.getInitPrice()).setRabId(rab.getRabId());

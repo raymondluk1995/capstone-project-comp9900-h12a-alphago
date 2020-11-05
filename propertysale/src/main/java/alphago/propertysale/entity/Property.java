@@ -3,6 +3,7 @@ package alphago.propertysale.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -47,4 +48,6 @@ public class Property implements Serializable {
 
     private boolean publicAccess;
 
+    @TableLogic
+    private Integer deleted;
 }

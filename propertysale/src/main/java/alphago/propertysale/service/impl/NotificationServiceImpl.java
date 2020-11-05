@@ -36,7 +36,7 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
         return notificationMapper.selectCount(
                 new QueryWrapper<Notification>()
                 .eq("uid", uid)
-                .eq("is_read", true)
+                .eq("is_read", false)
         );
     }
 
@@ -51,6 +51,7 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
         List<Notification> notifications = notificationMapper.selectList(new QueryWrapper<Notification>().eq("uid", uid));
 
         for(Notification notification : notifications){
+            System.out.println(notification.getIsRead());
             NotificationVO notificationVO = new NotificationVO();
             BeanUtils.copyProperties(notification, notificationVO, "message", "createTime");
             notificationVO.setMessage(ObjectUtil.deserialize(notification.getMessage()));

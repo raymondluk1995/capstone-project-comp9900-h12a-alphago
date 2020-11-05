@@ -74,4 +74,11 @@ public class GlobalExceptionHandler {
         log.error("Assert异常:-------------->{}",e.getMessage());
         return Result.fail(e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = AuctionFinishedException.class)
+    public Result handler(AuctionFinishedException e) {
+        log.error("Assert异常:-------------->{}",e.getMessage());
+        return Result.fail(e.getMessage());
+    }
 }

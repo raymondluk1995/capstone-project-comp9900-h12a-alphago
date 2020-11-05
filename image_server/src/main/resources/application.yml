@@ -3,7 +3,7 @@ server:
 
 spring:
   rabbitmq:
-    host: 13.239.120.231
+    host: 13.238.115.166
     username: admin
     password: admin
     myExchange: alpha.go.sender

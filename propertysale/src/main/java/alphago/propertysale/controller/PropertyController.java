@@ -136,7 +136,6 @@ public class PropertyController {
     public Result deleteProperty(String pid){
         if(propertyService.getById(pid) == null) return Result.fail("Already deleted!");
 
-        addressService.removeById(pid);
         propertyService.removeById(pid);
         // Delete property photos;
         messageProducer.sendMsg(pid, CheckCode.REMOVE);
