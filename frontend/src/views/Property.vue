@@ -207,14 +207,7 @@
     <!--                    <h3>Place new bid</h3>-->
                         <div class="new-bid-wrap" >
 <!--                            <el-form-item  prop="newBid">-->
-<!--                            <el-form-->
-<!--                                    class="form9"-->
-<!--                                    ref="form"-->
-<!--                                    :model="form"-->
-<!--                                    :rules="rules"-->
-<!--                            >-->
-<!--                                <el-form-item>-->
-                            <el-input v-model="newBid" :disabled="timeFlag" maxlength="11" placeholder="Place New Bid" prop="newBid">
+                            <el-input v-model="newBid" :disabled="this.propInfo.status==='R'" maxlength="11" placeholder="Place New Bid" >
                                 <i slot="suffix" class="input-slot">{{ newBid | numFormat }} A$</i>
                             </el-input>
                             <el-button class='wrap-button' type="primary" icon="el-icon-plus"  @click="addNewBid"></el-button>
@@ -611,6 +604,7 @@
                 form3:{
                     initPrice:'',
                 },
+                form:{},
 
                 rules: {
                     initPrice:[{required: true, message: " Please enter init price", trigger: "blur",}, {validator:checkinit, trigger: "blur" }],
