@@ -224,7 +224,7 @@
                                    @click="Bidreg"
                                    icon="el-icon-right"
 
-                        >Register as RAB</el-button>
+                        >Register as a bidder</el-button>
                     </div>
                     </template>
                 <template v-else>
