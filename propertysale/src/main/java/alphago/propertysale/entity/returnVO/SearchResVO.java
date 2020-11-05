@@ -3,6 +3,7 @@ package alphago.propertysale.entity.returnVO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -12,21 +13,22 @@ public class SearchResVO {
     // select rab.aid, rab.status..., property.bathroom... from rab, property where (rab.pid = property.pid) and
     // xxx like xxx
     // rab info
-    private long aid;
+    private Long pid;
+    private Long aid;
     private String status;
     private String currentBid; // R -> minimumprice A -> 0?"Not bid" : rab.highestPrice
-    private long startdate;
-    private long enddate;
+    private LocalDateTime startdate;
+    private LocalDateTime enddate;
 
 
-    private long bidderNum;
+    private Long bidderNum;
 
 
     // property info
-    private int bathroomNum;
-    private int bedroomNum;
-    private int garageNum;
-    private int area;
+    private Integer bathroomNum;
+    private Integer bedroomNum;
+    private Integer garageNum;
+    private Integer area;
     private String address;
     private List<String> photos;
     private String type;

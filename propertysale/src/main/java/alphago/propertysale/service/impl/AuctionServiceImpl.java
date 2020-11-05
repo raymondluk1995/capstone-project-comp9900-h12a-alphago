@@ -5,6 +5,7 @@ import alphago.propertysale.entity.inVO.SearchModel;
 import alphago.propertysale.entity.returnVO.AuctionVO;
 import alphago.propertysale.entity.returnVO.SearchResVO;
 import alphago.propertysale.entity.returnVO.SearchVO;
+import alphago.propertysale.exception.AuctionNotFoundException;
 import alphago.propertysale.mapper.*;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.utils.FileUtil;
@@ -54,7 +55,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
     @Override
     public AuctionVO getAuctionByAid(long aid) {
         Auction auction = auctionMapper.selectById(aid);
-        if(auction == null) {
+        if (auction == null) {
             throw new AuctionNotFoundException("Auction " + aid + "is Not Found");
         }
         Property property = propertyMapper.selectById(auction.getPid());
@@ -124,10 +125,10 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                             .setBidTime(rab.getRegisterTime());
 
                     BidMsg msg = new BidMsg().setUid(rab.getUid())
-                                .setUsername(userMapper.selectById(rab.getUid()).getUsername())
-                                .setPrice(rab.getInitPrice())
-                                .setTime(bid.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
-                                .setOvertime(false);
+                            .setUsername(userMapper.selectById(rab.getUid()).getUsername())
+                            .setPrice(rab.getInitPrice())
+                            .setTime(bid.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
+                            .setOvertime(false);
 
                     BidHistoryPush.addBidHistory(aid, msg);
 
@@ -138,48 +139,48 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
 
     @Override
     public void finishAuction(long aid) {
-        Auction auction = auctionMapper.selectById(aid);
-        if (auction.getCurrentBid() != 0) {
-            RabAction bid = rabActionMapper.selectById(auction.getCurrentBid());
-            if (bid.getBidPrice().compareTo(auction.getPrice()) >= 0) {
-                auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "S"));
-                propertyMapper.update(null, new UpdateWrapper<Property>()
-                        .eq("pid", auction.getPid())
-                        .set("auction", false)
-                        .set("owner", rab.getUid()));
-
-                User bidder = userMapper.selectById(rab.getUid());
-
-                message.setBidderName(bidder.getUsername())
-                        .setBidderFullName(bidder.getFullName())
-                        .setSellerPhone(bidder.getPhone())
-                        .setSellerEmail(bidder.getEmail());
-
-                Notification notification = new Notification().setNotiType(Notification.FINISH)
-                        .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
-                        .setMessage(ObjectUtil.serialize(message));
-                notificationMapper.addMessage(notification);
-
-                message.setSeller(false);
-                notification.setUid(bidder.getUid()).setMessage(ObjectUtil.serialize(message));
-                notificationMapper.addMessage(notification);
-
-                return;
-            }
-        }else{
-            message.setBidPrice("No bid!");
-        }
-        // Auction Fail
-        auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "F"));
-        propertyMapper.update(null, new UpdateWrapper<Property>()
-                .eq("pid", auction.getPid())
-                .set("auction", false));
-
-        message.setSuccess(false);
-        Notification notification = new Notification().setNotiType(Notification.FINISH)
-                .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
-                .setMessage(ObjectUtil.serialize(message));
-        notificationMapper.addMessage(notification);
+//        Auction auction = auctionMapper.selectById(aid);
+//        if (auction.getCurrentBid() != 0) {
+//            RabAction bid = rabActionMapper.selectById(auction.getCurrentBid());
+//            if (bid.getBidPrice().compareTo(auction.getPrice()) >= 0) {
+//                auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "S"));
+//                propertyMapper.update(null, new UpdateWrapper<Property>()
+//                        .eq("pid", auction.getPid())
+//                        .set("auction", false)
+//                        .set("owner", rab.getUid()));
+//
+//                User bidder = userMapper.selectById(rab.getUid());
+//
+//                message.setBidderName(bidder.getUsername())
+//                        .setBidderFullName(bidder.getFullName())
+//                        .setSellerPhone(bidder.getPhone())
+//                        .setSellerEmail(bidder.getEmail());
+//
+//                Notification notification = new Notification().setNotiType(Notification.FINISH)
+//                        .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
+//                        .setMessage(ObjectUtil.serialize(message));
+//                notificationMapper.addMessage(notification);
+//
+//                message.setSeller(false);
+//                notification.setUid(bidder.getUid()).setMessage(ObjectUtil.serialize(message));
+//                notificationMapper.addMessage(notification);
+//
+//                return;
+//            }
+//        }else{
+//            message.setBidPrice("No bid!");
+//        }
+//        // Auction Fail
+//        auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "F"));
+//        propertyMapper.update(null, new UpdateWrapper<Property>()
+//                .eq("pid", auction.getPid())
+//                .set("auction", false));
+//
+//        message.setSuccess(false);
+//        Notification notification = new Notification().setNotiType(Notification.FINISH)
+//                .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
+//                .setMessage(ObjectUtil.serialize(message));
+//        notificationMapper.addMessage(notification);
     }
 
     @Override
@@ -226,12 +227,71 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             vo.setCurrPage(model.getCurrPage());
             vo.setTotalPage(res.getTotal());
         } else {
-            for (Auction auction : runningOrComingAuctions) {
-                // auction's address
-                Address address = addressMapper.selectById(auction.getPid());
-                // Auction's property
-                Property property = propertyMapper.selectById(auction.getPid());
+            QueryWrapper<SearchResVO> voQueryWrapper = new QueryWrapper<>();
+            if (model.getSuburb() != null) {
+                voQueryWrapper.eq("a.suburb", model.getSuburb());
             }
+            if (model.getPostcode() != null) {
+                voQueryWrapper.eq("a.postcode", model.getPostcode());
+            }
+
+            if (model.getStartDate() != null) {
+                voQueryWrapper.eq("auc.start_date", model.getStartDate());
+            }
+            if (model.getEndDate() != null) {
+                voQueryWrapper.eq("auc.end_date", model.getEndDate());
+            }
+            if (model.getMinPrice() != null) {
+                voQueryWrapper.eq("auc.minimum_price", model.getMinPrice());
+            }
+            if (model.getMaxPrice() != null) {
+                voQueryWrapper.eq("rab.highest_price", model.getMaxPrice());
+            }
+
+            if (model.getBedRooms() != null) {
+                voQueryWrapper.eq("prop.bedroom_num", model.getBedRooms());
+            }
+            if (model.getBathRooms() != null) {
+                voQueryWrapper.eq("prop.bathroom_num", model.getBathRooms());
+            }
+            if (model.getGarages() != null) {
+                voQueryWrapper.eq("prop.garage_num", model.getGarages());
+            }
+            if (model.getPropertyType() != null) {
+                voQueryWrapper.eq("prop.type", model.getPropertyType());
+            }
+
+            if (model.getMinArea() != null) {
+                voQueryWrapper.ge("prop.area", model.getMinArea());
+            }
+            if (model.getMaxArea() != null) {
+                voQueryWrapper.le("prop.area", model.getMaxArea());
+            }
+            if (model.getOrder() != null) {
+                if (model.getOrder().equals("price")) {
+                    // asc
+                    voQueryWrapper.orderByAsc("");
+                } else if (model.getOrder().equals("-price")) {
+                    voQueryWrapper.orderByDesc("");
+                }
+            }
+            Page<SearchResVO> searchResVOPage = new Page<SearchResVO>(model.getCurrPage(), 6);
+
+            IPage<SearchResVO> searchResVOS = auctionMapper.getAllRunningOrComingRes(searchResVOPage, voQueryWrapper);
+
+            // get their address.
+            List<SearchResVO> resVOS = searchResVOS.getRecords();
+            for (SearchResVO searchResVO: resVOS) {
+                // set their full address.
+                Address address = addressMapper.selectById(searchResVO.getPid());
+                searchResVO.setAddress(address.getFullAddress());
+                // photos
+                searchResVO.setPhotos(FileUtil.getImages(searchResVO.getPid()));
+            }
+
+            vo.setResVOList(searchResVOS.getRecords());
+            vo.setCurrPage(model.getCurrPage());
+            vo.setTotalPage(searchResVOS.getTotal());
         }
         return vo;
     }
