@@ -301,9 +301,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             if (model.getOrder() != null) {
                 if (model.getOrder().equals("price")) {
                     // asc
-                    voQueryWrapper.orderByAsc("");
+                    voQueryWrapper.orderByAsc("rab.highest_price");
                 } else if (model.getOrder().equals("-price")) {
-                    voQueryWrapper.orderByDesc("");
+                    voQueryWrapper.orderByDesc("rab.highest_price");
                 }
             }
             Page<SearchResVO> searchResVOPage = new Page<SearchResVO>(model.getCurrPage(), 6);
