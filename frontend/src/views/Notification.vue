@@ -104,8 +104,8 @@
                                         <el-form-item label="Seller:" prop="bidder">
                                             <span> {{item.message.sellerName}} </span>
                                         </el-form-item>
-
                                     </el-row>
+
                                     </el-col>
                                     <el-col :span="12" >
                                         <el-form-item label="Name:" prop="bidder">
@@ -128,7 +128,7 @@
                                         <el-col :span="12">
                                             <el-row tyle="flex" justify="left">
                                                 <el-form-item label="Bidder:" prop="bidder">
-                                                    <span> {{item.message.sellerName}} </span>
+                                                    <span> {{item.message.bidderName}} </span>
                                                 </el-form-item>
                                                 <el-form-item label="Highest Bid:" prop="bidder">
                                                     <span> $ {{item.message.bidPrice |numFormat}} </span>
@@ -322,7 +322,7 @@
                                         <el-col :span="12">
                                             <el-row tyle="flex" justify="left">
                                                 <el-form-item label="Bidder:" prop="bidder">
-                                                    <span> {{item.message.username}} </span>
+                                                    <span> {{item.message.bidderName}} </span>
                                                 </el-form-item>
                                                 <el-form-item label="Highest Bid:" prop="bidder">
                                                     <span>$ {{item.message.bidPrice |numFormat}} </span>
