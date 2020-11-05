@@ -215,7 +215,7 @@
 <!--                            </el-form>-->
                         </div>
 
-                        <p style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
+                        <p v-show="propInfo.status ==='A'" style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
                     </div>
 
                     <div v-else style="margin-top: 2px">
