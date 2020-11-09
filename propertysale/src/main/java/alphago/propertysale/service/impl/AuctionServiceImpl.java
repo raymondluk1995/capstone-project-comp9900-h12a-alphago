@@ -290,12 +290,71 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             vo.setCurrPage(model.getCurrPage());
             vo.setTotalProp(res.getTotal());
         } else {
-            for (Auction auction : runningOrComingAuctions) {
-                // auction's address
-                Address address = addressMapper.selectById(auction.getPid());
-                // Auction's property
-                Property property = propertyMapper.selectById(auction.getPid());
+            QueryWrapper<SearchResVO> voQueryWrapper = new QueryWrapper<>();
+            if (model.getSuburb() != null) {
+                voQueryWrapper.eq("a.suburb", model.getSuburb());
             }
+            if (model.getPostcode() != null) {
+                voQueryWrapper.eq("a.postcode", model.getPostcode());
+            }
+
+            if (model.getStartDate() != null) {
+                voQueryWrapper.eq("auc.start_date", model.getStartDate());
+            }
+            if (model.getEndDate() != null) {
+                voQueryWrapper.eq("auc.end_date", model.getEndDate());
+            }
+            if (model.getMinPrice() != null) {
+                voQueryWrapper.eq("auc.minimum_price", model.getMinPrice());
+            }
+            if (model.getMaxPrice() != null) {
+                voQueryWrapper.eq("rab.highest_price", model.getMaxPrice());
+            }
+
+            if (model.getBedRooms() != null) {
+                voQueryWrapper.eq("prop.bedroom_num", model.getBedRooms());
+            }
+            if (model.getBathRooms() != null) {
+                voQueryWrapper.eq("prop.bathroom_num", model.getBathRooms());
+            }
+            if (model.getGarages() != null) {
+                voQueryWrapper.eq("prop.garage_num", model.getGarages());
+            }
+            if (model.getPropertyType() != null) {
+                voQueryWrapper.eq("prop.type", model.getPropertyType());
+            }
+
+            if (model.getMinArea() != null) {
+                voQueryWrapper.ge("prop.area", model.getMinArea());
+            }
+            if (model.getMaxArea() != null) {
+                voQueryWrapper.le("prop.area", model.getMaxArea());
+            }
+            if (model.getOrder() != null) {
+                if (model.getOrder().equals("price")) {
+                    // asc
+                    voQueryWrapper.orderByAsc("rab.highest_price");
+                } else if (model.getOrder().equals("-price")) {
+                    voQueryWrapper.orderByDesc("rab.highest_price");
+                }
+            }
+            Page<SearchResVO> searchResVOPage = new Page<SearchResVO>(model.getCurrPage(), 6);
+
+            IPage<SearchResVO> searchResVOS = auctionMapper.getAllRunningOrComingRes(searchResVOPage, voQueryWrapper);
+
+            // get their address.
+            List<SearchResVO> resVOS = searchResVOS.getRecords();
+            for (SearchResVO searchResVO: resVOS) {
+                // set their full address.
+                Address address = addressMapper.selectById(searchResVO.getPid());
+                searchResVO.setAddress(address.getFullAddress());
+                // photos
+                searchResVO.setPhotos(FileUtil.getImages(searchResVO.getPid()));
+            }
+
+            vo.setResVOList(searchResVOS.getRecords());
+            vo.setCurrPage(model.getCurrPage());
+            vo.setTotalProp(searchResVOS.getTotal());
         }
         return vo;
     }
