@@ -247,14 +247,14 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         SearchVO vo = new SearchVO();
         Page<Auction> page = new Page<>(model.getCurrPage(), 6);
         IPage<Auction> res = null;
-        res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
-        .orderByDesc("aid"));
-        List<Auction> runningOrComingAuctions = /* auctionMapper.getAllRunningOrComingAuction();*/ res.getRecords();
 
         List<SearchResVO> ret = new ArrayList<>();
         vo.setResVOList(ret);
         if (model.isAllEmpty()) {
             // if you are just a ranger.
+            res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
+                    .orderByDesc("aid"));
+            List<Auction> runningOrComingAuctions = /* auctionMapper.getAllRunningOrComingAuction();*/ res.getRecords();
             for (Auction auction : runningOrComingAuctions) {
                 SearchResVO searchResVO = new SearchResVO();
                 searchResVO.setBidderNum(auction.getBidderNum());
@@ -299,16 +299,16 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             }
 
             if (model.getStartDate() != null) {
-                voQueryWrapper.eq("auc.start_date", model.getStartDate());
+                voQueryWrapper.ge("auc.start_date", model.getStartDate());
             }
             if (model.getEndDate() != null) {
-                voQueryWrapper.eq("auc.end_date", model.getEndDate());
+                voQueryWrapper.le("auc.end_date", model.getEndDate());
             }
             if (model.getMinPrice() != null) {
-                voQueryWrapper.eq("auc.minimum_price", model.getMinPrice());
+                voQueryWrapper.ge("auc.minimum_price", model.getMinPrice());
             }
             if (model.getMaxPrice() != null) {
-                voQueryWrapper.eq("rab.highest_price", model.getMaxPrice());
+                voQueryWrapper.le("rab.highest_price", model.getMaxPrice());
             }
 
             if (model.getBedRooms() != null) {

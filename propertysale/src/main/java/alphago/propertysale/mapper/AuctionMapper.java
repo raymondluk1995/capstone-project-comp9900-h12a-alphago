@@ -32,8 +32,8 @@ public interface AuctionMapper extends BaseMapper<Auction> {
             "AND p.pid = ad.pid ;")
     List<RunningAuctionAddress> getRunningAuctionAddress();
     @Select("SELECT auc.pid, auc.aid, auc.status, auc.current_bid, auc.start_date, auc.end_date, auc.bidder_num," +
-            "prop.bathroom_num, prop.bedroom_num, prop.garage_num, prop.area, prop.type  FROM address a, auction auc, property prop, rab r  ${ew.customSqlSegment}  AND (auc.pid = a.pid)" +
-            "and (auc.pid = prop.pid) and (r.rab_id = auc.current_bid) and (auc.status = 'R' or auc.status = 'A') ")
+            "prop.bathroom_num, prop.bedroom_num, prop.garage_num, prop.area, prop.type  FROM address a, auction auc, property prop ${ew.customSqlSegment}  AND (auc.pid = a.pid)" +
+            "and (auc.pid = prop.pid)  and (auc.status = 'R' or auc.status = 'A') ")
     IPage<SearchResVO> getAllRunningOrComingRes(IPage<SearchResVO> page, @Param(Constants.WRAPPER) Wrapper<SearchResVO> wrapper);
 
 }
