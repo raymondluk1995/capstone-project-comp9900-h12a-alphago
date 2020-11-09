@@ -46,6 +46,9 @@ public class AuctionController {
     @Autowired
     RabActionService actionService;
 
+    @Autowired
+    HistoryService historyService;
+
     // get rab's auction information
     @RequiresAuthentication
     @RequestMapping("/list/now")
@@ -75,11 +78,11 @@ public class AuctionController {
     @RequestMapping("/information/{aid}")
     public Result auctionInformation(@PathVariable long aid){
         AuctionVO auctionVO = auctionService.getAuctionByAid(aid);
-
         Subject subject = SecurityUtils.getSubject();
         if(subject.isAuthenticated()) {
             JwtInfo info = (JwtInfo) subject.getPrincipal();
             long uid = info.getUid();
+
             Rab rab = rabService.getOne(new QueryWrapper<Rab>()
                     .eq("uid", uid).eq("aid", aid));
             if(rab != null) {
@@ -89,7 +92,6 @@ public class AuctionController {
                 auctionVO.setRab(null);
             }
         }
-
         auctionVO.setHistory(BidHistoryPush.getAuctionHistory(aid));
         return Result.success(auctionVO);
     }

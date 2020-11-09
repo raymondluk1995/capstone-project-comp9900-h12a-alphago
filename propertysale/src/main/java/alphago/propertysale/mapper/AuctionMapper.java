@@ -3,6 +3,7 @@ package alphago.propertysale.mapper;
 import alphago.propertysale.entity.Auction;
 import alphago.propertysale.entity.RabAction;
 import alphago.propertysale.entity.inVO.SearchModel;
+import alphago.propertysale.entity.returnVO.RunningAuctionAddress;
 import alphago.propertysale.entity.returnVO.SearchResVO;
 import alphago.propertysale.entity.returnVO.SearchVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -22,4 +23,10 @@ public interface AuctionMapper extends BaseMapper<Auction> {
     @Select("SELECT * FROM auction WHERE (status = 'R' OR status = 'A')")
     List<Auction> getAllRunningOrComingAuction();
 
+    @Select("SELECT au.aid, p.bathroom_num , p.bedroom_num , p.garage_num , ad.lat , ad.lng , ad.address ,ad.state ,ad.postcode,ad.suburb \n" +
+            "FROM auction au , property p , address ad \n" +
+            "WHERE (au.status = 'A' OR au.status = 'R') \n" +
+            "AND au.pid = p.pid \n" +
+            "AND p.pid = ad.pid ;")
+    List<RunningAuctionAddress> getRunningAuctionAddress();
 }

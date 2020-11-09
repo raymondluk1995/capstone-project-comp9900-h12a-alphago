@@ -1,5 +1,6 @@
 package alphago.propertysale.entity.returnVO;
 
+import alphago.propertysale.entity.RecVO;
 import alphago.propertysale.websocket.BidMsg;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -51,4 +52,6 @@ public class AuctionVO {
     private List<String> photos;
 
     private String highestPrice;
+
+    private List<RecVO> recommendations;
 }

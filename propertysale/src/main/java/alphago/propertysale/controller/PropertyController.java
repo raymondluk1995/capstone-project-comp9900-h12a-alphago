@@ -22,9 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -56,6 +53,9 @@ public class PropertyController {
         Subject subject = SecurityUtils.getSubject();
         JwtInfo info = (JwtInfo) subject.getPrincipal();
         long ownerId = info.getUid();
+
+        if(property.isAuction() && auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
+                System.currentTimeMillis() < 0) return Result.fail("Start Time Wrong!");
 
         // Register Property
         property.setOwner(ownerId);
@@ -138,7 +138,7 @@ public class PropertyController {
 
         propertyService.removeById(pid);
         // Delete property photos;
-        messageProducer.sendMsg(pid, CheckCode.REMOVE);
+//        messageProducer.sendMsg(pid, CheckCode.REMOVE);
 
         return Result.success("Remove Property: " + pid);
     }

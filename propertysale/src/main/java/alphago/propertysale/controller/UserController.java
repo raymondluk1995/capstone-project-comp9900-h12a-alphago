@@ -65,7 +65,7 @@ public class UserController {
         // Register
         if(avatar != null)
             user.setAvatarType(FileUtil.getType(avatar.getOriginalFilename()));
-        userService.save(user);
+        userService.userRegister(user);
         // upload avatar
         if(user.getAvatarType() != null) {
             AvatarPorter porter = new AvatarPorter()

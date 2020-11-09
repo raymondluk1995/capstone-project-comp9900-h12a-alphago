@@ -3,6 +3,7 @@ package alphago.propertysale.entity.returnVO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -15,8 +16,8 @@ public class SearchResVO {
     private long aid;
     private String status;
     private String currentBid; // R -> minimumprice A -> 0?"Not bid" : rab.highestPrice
-    private long startdate;
-    private long enddate;
+    private LocalDateTime startdate;
+    private LocalDateTime enddate;
 
 
     private long bidderNum;

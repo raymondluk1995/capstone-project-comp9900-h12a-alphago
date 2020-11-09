@@ -5,15 +5,16 @@ import alphago.propertysale.entity.inVO.SearchModel;
 import alphago.propertysale.entity.notification.FinishMessage;
 import alphago.propertysale.entity.notification.Notification;
 import alphago.propertysale.entity.returnVO.AuctionVO;
-import alphago.propertysale.exception.AuctionFinishedException;
-import alphago.propertysale.exception.AuctionNotFoundException;
+import alphago.propertysale.entity.returnVO.RunningAuctionAddress;
 import alphago.propertysale.entity.returnVO.SearchResVO;
 import alphago.propertysale.entity.returnVO.SearchVO;
+import alphago.propertysale.exception.AuctionFinishedException;
+import alphago.propertysale.exception.AuctionNotFoundException;
 import alphago.propertysale.mapper.*;
 import alphago.propertysale.service.AuctionService;
+import alphago.propertysale.shiro.JwtInfo;
 import alphago.propertysale.utils.FileUtil;
 import alphago.propertysale.utils.PriceUtil;
-import alphago.propertysale.utils.RedisUtil;
 import alphago.propertysale.utils.TimeUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
 import alphago.propertysale.websocket.BidMsg;
@@ -23,13 +24,14 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -57,6 +59,11 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
     RabActionMapper rabActionMapper;
     @Autowired
     NotificationMapper notificationMapper;
+
+    @Autowired
+    HistoryMapper historyMapper;
+
+    private static final int TOP = 3;
 
     @Override
     public AuctionVO getAuctionByAid(long aid) {
@@ -89,6 +96,28 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         }
         auctionVO.setStartdate(auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli());
         auctionVO.setEnddate(auction.getEnddate().toInstant(TimeUtil.getMyZone()).toEpochMilli());
+        // Update History
+        Subject subject = SecurityUtils.getSubject();
+        List<RunningAuctionAddress> list = auctionMapper.getRunningAuctionAddress();
+        RunningAuctionAddress rec = new RunningAuctionAddress();
+        if(subject.isAuthenticated()){
+            JwtInfo info = (JwtInfo) subject.getPrincipal();
+            long uid = info.getUid();
+            historyMapper.update(null, new UpdateWrapper<History>().eq("uid", uid)
+                    .setSql("bedroom_num = bedroom_num + " + auctionVO.getBedroomNum())
+                    .setSql("bathroom_num = bathroom_num + " + auctionVO.getBathroomNum())
+                    .setSql("garage_num = garage_num + " + auctionVO.getGarageNum())
+                    .setSql("lat = lat + " + auctionVO.getLat())
+                    .setSql("lng = lng + " + auctionVO.getLng())
+                    .setSql("cnt = cnt + 1"));
+            History history = historyMapper.selectById(uid);
+            BeanUtils.copyProperties(history, rec);
+        }else{
+            rec.setBathroomNum(property.getBathroomNum()).setBedroomNum(property.getBedroomNum())
+                    .setGarageNum(property.getGarageNum()).setLat(Double.valueOf(address.getLat())).setLng(Double.valueOf(address.getLng()));
+        }
+        rec.setAid(aid);
+        auctionVO.setRecommendations(HistoryServiceImpl.recommendations(rec, list));
         return auctionVO;
     }
 
@@ -147,7 +176,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         }
         // set current rab
         if(currentRab != null) {
-            auctionMapper.update(null, new UpdateWrapper<Auction>().set("current_bid", currentRab.getUid()));
+            auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid",aid).set("current_bid", currentRab.getRabId()));
         }
     }
 
@@ -183,8 +212,8 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
 
                 message.setBidderName(bidder.getUsername())
                         .setBidderFullName(bidder.getFullName())
-                        .setSellerPhone(bidder.getPhone())
-                        .setSellerEmail(bidder.getEmail());
+                        .setBidderPhone(bidder.getPhone())
+                        .setBidderEmail(bidder.getEmail());
 
                 Notification notification = new Notification().setNotiType(Notification.FINISH)
                         .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
@@ -218,7 +247,8 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         SearchVO vo = new SearchVO();
         Page<Auction> page = new Page<>(model.getCurrPage(), 6);
         IPage<Auction> res = null;
-        res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R"));
+        res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
+        .orderByDesc("aid"));
         List<Auction> runningOrComingAuctions = /* auctionMapper.getAllRunningOrComingAuction();*/ res.getRecords();
 
         List<SearchResVO> ret = new ArrayList<>();
@@ -247,15 +277,18 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 }
                 Property property = propertyMapper.selectOne(new QueryWrapper<Property>().eq("pid", auction.getPid()));
                 BeanUtils.copyProperties(property, searchResVO);
+                searchResVO.setAid(auction.getAid());
                 searchResVO.setPhotos(FileUtil.getImages(property.getPid()));
                 searchResVO.setStatus(auction.getStatus());
+                searchResVO.setStartdate(auction.getStartdate());
+                searchResVO.setEnddate(auction.getEnddate());
                 Address address = addressMapper.selectById(property.getPid());
                 searchResVO.setAddress(address.getFullAddress());
                 vo.getResVOList().add(searchResVO);
             }
 
             vo.setCurrPage(model.getCurrPage());
-            vo.setTotalPage(res.getTotal());
+            vo.setTotalProp(res.getTotal());
         } else {
             for (Auction auction : runningOrComingAuctions) {
                 // auction's address

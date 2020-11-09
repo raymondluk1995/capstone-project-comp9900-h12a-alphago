@@ -1,6 +1,8 @@
 package alphago.propertysale.service.impl;
 
+import alphago.propertysale.entity.History;
 import alphago.propertysale.entity.User;
+import alphago.propertysale.mapper.HistoryMapper;
 import alphago.propertysale.mapper.UserMapper;
 import alphago.propertysale.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -19,10 +21,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
-    UserMapper mapper;
+    UserMapper userMapper;
+
+    @Autowired
+    HistoryMapper historyMapper;
+
+    @Override
+    public void userRegister(User user) {
+        userMapper.insert(user);
+        historyMapper.insert(History.emptyHistory().setUid(user.getUid()));
+    }
+
     @Override
     public boolean emailExist(String email) {
-        User user = mapper.selectOne(new QueryWrapper<User>().eq("email", email));
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("email", email));
         return user != null;
     }
 }

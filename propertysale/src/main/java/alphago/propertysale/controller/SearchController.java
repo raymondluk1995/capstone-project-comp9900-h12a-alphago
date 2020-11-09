@@ -24,10 +24,8 @@ public class SearchController {
 
     @RequestMapping("/search")
     Result getRunningOrComingAuctions(SearchModel model) {
+        System.out.println(model);
         // if you have no query types....
-        Subject subject = SecurityUtils.getSubject();
-        boolean isAuthenticated = subject.isAuthenticated();
-        subject.getPrincipal();
         return Result.success(service.getSearchVO(model));
     }
 

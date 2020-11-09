@@ -48,7 +48,8 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
     @Override
     public List<NotificationVO> getAllMessage(long uid) {
         List<NotificationVO> ret = new ArrayList<>();
-        List<Notification> notifications = notificationMapper.selectList(new QueryWrapper<Notification>().eq("uid", uid));
+        List<Notification> notifications = notificationMapper.selectList(new QueryWrapper<Notification>().eq("uid", uid)
+        .orderByDesc("create_time"));
 
         for(Notification notification : notifications){
             System.out.println(notification.getIsRead());
