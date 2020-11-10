@@ -824,7 +824,7 @@ export default {
       });
     },
 
-    toSearch() {
+        toSearch() {
       var addr = document.getElementById("address").value;
       if (addr===""){
         this.$router.push({
@@ -840,11 +840,13 @@ export default {
           this.$message.error("Please validate the suburb name by Google Map first!");
           return;
         }
+        let state = this.address.administrative_area_level_1;
         addr = this.address.locality;
         this.$router.push({
           path: "/search",
           query: {
             suburb: addr,
+            state: state,
             currPage:1,
           },
         });
@@ -862,7 +864,6 @@ export default {
         });
       }
     },
-
     showFilter() {
       this.showFilterFlag = !this.showFilterFlag;
     },
