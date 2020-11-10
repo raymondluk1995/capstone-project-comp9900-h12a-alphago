@@ -26,3 +26,15 @@ Finished a route reset password and debug it. Discuss some details about our dem
 Week 5
 
 In this week, I am also focusing on learning Spring Boot. It's feature are a little bit complex and complicated. Also, I expect how is the demo goes.
+
+
+Week 6
+This is a flexiable week. So I just focus on some debug and prepare for demo in Week 7. 
+
+Week 7
+There is a bug in our search functionality. I disscussed this issue with XiaoHan. Also, I disscussed some other like recommendation system in our comming released version. The team will keep on development and prepare for report.
+
+Week 8
+We released a version 1 app and started to test everything. The frontend team and backend team are preparing for the retro-related report.
+Also, we are ready to coherent for Week 9's demo and for final demonstration.
+
