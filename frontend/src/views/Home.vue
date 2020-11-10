@@ -260,7 +260,6 @@ export default {
           this.$message.error("Please validate the suburb name by Google Map first!");
           return;
         }
-        // console.log(this.address.administrative_area_level_1);
         let state = this.address.administrative_area_level_1;
         addr = this.address.locality;
         this.$router.push({
