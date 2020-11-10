@@ -90,9 +90,9 @@
 
             </el-col>
           </el-row>
-          <el-row>
-            <div class="btns">
-                <span class="button"
+          <el-row type="flex" justify="center">
+            <div class="btns2" >
+                <span class="button5"
                       @click="register"
                       id="btns">
                     <i class="el-icon-right"></i> Submit</span>
@@ -221,13 +221,13 @@ export default {
                           this.form.email = '';
                         }else if(response.data.code ===200) {
                           this.timerstart = true;
-                          this.count = 60;
+                          this.count = 180;
                           this.show = false;
                           $(".validate").addClass("huise")
 
                           // document.getElementById('validate').style.cursor = 'not-allowed'
                           this.timer = setInterval(() => {
-                            if (this.count > 0 && this.count <= 60) {
+                            if (this.count > 0 && this.count <= 180) {
                               this.count--
                             } else {
                               this.show = true
@@ -331,7 +331,7 @@ export default {
     border-radius: 0;
     /*margin-bottom: 50px;*/
   }
-  .btns {
+  .btns2 {
     /*border:1px solid #333;*/
     margin:5% auto 0 auto;
     /*margin-top: 75px;*/
@@ -340,7 +340,7 @@ export default {
     width:150px;
     font-size:20px;
   }
-  .btns .bottom-line{
+  .btns2 .bottom-line{
     position: absolute;
     width: 0;
     height: 1px;
@@ -425,6 +425,9 @@ export default {
     /*outline: none;*/
     /*border-bottom: 1px solid #c3c3c3;*/
   }
+    .button5{
+      font-size:20px;
+    }
 
   .el-button{
     &:hover{

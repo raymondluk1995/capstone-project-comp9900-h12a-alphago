@@ -11,7 +11,7 @@
 
                 </div>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                    <el-dropdown-item command="profile" icon="el-icon-user-solid"> My Profile</el-dropdown-item>
                     <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                     <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
 
@@ -250,12 +250,12 @@
 
                 <el-form-item label="Description:">
                     <el-input
-                            placeholder="Enter the description for your property. No more than 1000 words."
+                            placeholder="Enter the description for your property. No more than 500 words."
                             prefix-icon="el-icon-edit"
                             v-model="form3.description"
                             type="textarea"
                             :rows="5"
-                            maxlength="1000">
+                            maxlength="500">
                     </el-input>
                 </el-form-item>
 
@@ -349,13 +349,13 @@
           </el-form-item>
 
           <el-form-item v-if="form5.Auction" label="Reserved Price:" prop="price">
-            <el-input v-model="form5.price" maxlength="11" >
+            <el-input v-model="form5.price" maxlength="10" >
                 <i slot="suffix" class="input-slot">{{form5.price |numFormat}} A$</i>
             </el-input>
           </el-form-item>
 
           <el-form-item v-if="form5.Auction" label="Starting Price:" prop="minimumPrice">
-              <el-input v-model="form5.minimumPrice"  maxlength="11" >
+              <el-input v-model="form5.minimumPrice"  maxlength="10" >
                   <i slot="suffix" class="input-slot">{{form5.minimumPrice|numFormat}} A$</i>
               </el-input>
           </el-form-item>
@@ -694,11 +694,16 @@ export default {
           data.append('detail', this.form3.kw_details);
           data.append('description', this.form3.description);
 
-          data.append('startdate', this.form5.daterange[0]);
-          data.append('enddate', this.form5.daterange[1]);
-          data.append('price', this.form5.price);
-          data.append('minimumPrice', this.form5.minimumPrice);
-          data.append('auction', this.form5.Auction);
+          if(!this.form5.Auction){
+              data.append('auction', this.form5.Auction);
+          }else{
+              data.append('startdate', this.form5.daterange[0]);
+              data.append('enddate', this.form5.daterange[1]);
+              data.append('price', this.form5.price);
+              data.append('minimumPrice', this.form5.minimumPrice);
+              data.append('auction', this.form5.Auction);
+          }
+
             // console.log(data);
             // added by Raymond
             data.append("lat", this.place.geometry.location.lat(this.place));

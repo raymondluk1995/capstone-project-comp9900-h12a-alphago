@@ -21,7 +21,7 @@
           </div>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="profile" icon="el-icon-user-solid">
-              My profile</el-dropdown-item
+              My Profile</el-dropdown-item
             >
             <el-dropdown-item command="property" icon="el-icon-house">
               My Properties</el-dropdown-item
@@ -68,11 +68,20 @@
       </template>
     </Header>
     <div class="main" id="main">
-            <el-row type="flex" justify="center" class="search">
+       <el-row type="flex" justify="center" class="search">
         <el-col :span="15">
           <div class="input">
-            <el-col :span="22">
+            <el-col :span="24">
+<!--              <div style="background-color: white;border-radius:50px 0 0 50px  ">-->
+              <el-row type="flex" justify="center" >
+              <el-col :span="1" style="z-index: 5;">
+                <div style="background-color: white; z-index: 5; height:49px; border-radius:50px 0 0 50px;">
+
+                </div>
+              </el-col>
+              <el-col :span="21">
               <vue-google-autocomplete
+                class="auto-input"
                 ref="address"
                 id="address"
                 classname="form-control"
@@ -80,26 +89,28 @@
                 v-on:placechanged="getAddressData"
                 @keyup.enter="toSearch"
                 country="au"
-                style="border-radius:50px 0 0 50px;border:0; text-indent:20px;height:50px"
+                style="border:0; height:49px;z-index: 2; border-radius: 0"
                 types="(cities)"
               >
               </vue-google-autocomplete>
-            </el-col>
-
-            <el-col  :span="2" id="search-btn">
-              <el-button
-                style="
+              </el-col>
+                <el-col  :span="2" id="search-btn">
+                  <el-button
+                          style="
                   border-radius:0 50px 50px 0;
-                  height:50px;
+                  height:49px;
                   color: white;
                   border:0;
                   background-color: rgb(20, 60, 127);
                 "
-                icon="el-icon-search"
-                @click="toSearch"
-              >
-                Search
-              </el-button>
+                          icon="el-icon-search"
+                          @click="toSearch"
+                  >
+                    Search
+                  </el-button>
+                </el-col>
+              </el-row>
+<!--              </div>-->
             </el-col>
           </div>
         </el-col>
@@ -238,6 +249,9 @@ export default {
       if (addr===""){
         this.$router.push({
           path:"/search",
+          query:{
+            currPage:1,
+          },
         });
         return ;
       }
@@ -246,11 +260,14 @@ export default {
           this.$message.error("Please validate the suburb name by Google Map first!");
           return;
         }
+        let state = this.address.administrative_area_level_1;
         addr = this.address.locality;
         this.$router.push({
           path: "/search",
           query: {
             suburb: addr,
+            state: state,
+            currPage:1,
           },
         });
       } else {
@@ -262,6 +279,7 @@ export default {
           path: "/search",
           query: {
             postcode: addr,
+            currPage: 1,
           },
         });
       }
@@ -306,20 +324,20 @@ export default {
   align-items: center;
 }
 .main {
-  height: 600px;
+  height: calc(100vh - 165px);
   opacity: 0.8;
   z-index: -3;
   /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
-  background-image: url("../assets/main-bg-3.png");
+  background-image: url("../assets/bg.png");
 }
 
 @media only screen and (max-width: 1300px) and (min-width: 1100px) {
   .main {
-    height: 600px;
+    height: calc(100vh - 165px);
     opacity: 0.8;
     z-index: -3;
     /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
-    background-image: url("../assets/main-bg-3.png");
+    background-image: url("../assets/bg.png");
   }
 }
 
@@ -346,6 +364,7 @@ export default {
   .el-col {
     display: flex;
     align-items: center;
+    text-align: center;
   }
   img {
     width: 35px;
@@ -398,4 +417,10 @@ export default {
     color: #143469 !important;
   }
 }
+  .auto-input{
+    outline:none !important;
+  }
+
+
+
 </style>

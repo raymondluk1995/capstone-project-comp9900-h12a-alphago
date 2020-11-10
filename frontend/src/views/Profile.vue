@@ -164,11 +164,11 @@
                 avatarOriginal:'',
                 timerstart:false,
                 form: {
-                    username: "Umaru",
+                    username: "",
                     firstname: "",
                     lastname: "",
-                    ofirstname:'U',
-                    olastname:'maru',
+                    ofirstname:'',
+                    olastname:'',
                     email: "",
                     oldemail:'',
                     imageRaw:'',
@@ -193,7 +193,7 @@
                 }
                 else{
                     this.$message.error("You should login first!");
-                    this.$router.push("/login");
+                    // this.$router.push("/login");
                 }
 
             this.form.imageUrl = localStorage.getItem('avatar');
@@ -407,13 +407,13 @@
                                     this.form.email = '';
                                 }else if(response.data.code ===200){
                                     this.timerstart = true;
-                                    this.count = 60;
+                                    this.count = 180;
                                     this.show = false;
                                     $(".validate").addClass("huise")
 
                                     // document.getElementById('validate').style.cursor = 'not-allowed'
                                     this.timer = setInterval(() => {
-                                        if (this.count > 0 && this.count <= 60) {
+                                        if (this.count > 0 && this.count <= 180) {
                                             this.count--
                                         } else {
                                             this.show = true

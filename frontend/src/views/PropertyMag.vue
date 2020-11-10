@@ -11,7 +11,7 @@
 
                     </div>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="profile" icon="el-icon-user-solid"> My profile</el-dropdown-item>
+                        <el-dropdown-item command="profile" icon="el-icon-user-solid"> My Profile</el-dropdown-item>
                         <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
                         <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
 
@@ -38,7 +38,7 @@
 
         <el-row class="win" type="flex" justify="center">
             <el-col :span="6">
-                <el-row type="flex" justify="space-around" style="background-color: #e4e9f3">
+                <el-row type="flex" justify="space-around" style="background-color: rgba(38,66,123,0.8)">
                     <el-col>
                     <el-select
                             v-model="filter"
@@ -57,47 +57,53 @@
                     </el-col>
                     <el-col>
 
-                    <el-button type="primary" icon="el-icon-plus"  plain style="float:right;margin:10px 30px" @click="goto('propreg')">New</el-button>
+                    <el-button type="primary" icon="el-icon-plus"  plain style="float:right; margin:10px 30px" @click="goto('propreg')">New</el-button>
                     </el-col>
                 </el-row>
                 <el-row class="property-list">
+                 <div  v-for="item in propList"  :key="item.pid" :class="addStatusColor(item.status)">
                 <el-card
                         class="card2"
-                        :class="addStatusColor(item.status)"
-                        v-for="item in propList"
-                        @click.native="selectItem(item)"
-                        :key="item.pid"
                         :style="{'background-color' : item.pid === isSelected ? 'rgba(154,174,195,0.45)' : ''}"
+                        @click.native="selectItem(item)"
                 >
                     <el-row>
-                        <div>
-                            <el-row>
+                        <div >
+                            <el-row >
                                 <el-col :span="20">
                             <h6>{{ decapitateAddress(item.address) }}</h6>
                                 </el-col>
 
-                                <el-col :span="1" >
-                                <el-tooltip v-show="item.status === 'R'" class="item" effect="dark" content="Cancel" placement="right">
-                                <el-button v-show="item.status === 'R'" type="" plain circle="" icon="el-icon-close" @click="cancelAuc(item)"></el-button>
-                                </el-tooltip>
-
-                                <el-tooltip v-show="item.status === 'N'" class="item" effect="dark" content="Remove" placement="right">
-                                <el-button style="margin-left:0" v-show="item.status === 'N'" type="" plain circle icon="el-icon-close" @click="removeItem(item.pid)"></el-button>
-                                </el-tooltip>
-                                </el-col>
                             </el-row>
-                            <p>{{ getlabel(item.status) }}</p>
+                           <el-row>
+                               <el-col :span="17">
+                                     <p>{{ getlabel(item.status) }}</p>
+                                </el-col>
+
+                               <el-col :span="3" >
+                                   <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>
+                                   <el-button style="margin-left:0" v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item.pid)">Remove</el-button>
+                               </el-col>
+                           </el-row>
+
                         </div>
-                        <el-row type="flex" justify="end">
-                            <el-button class="btn-long" v-show="item.status === 'R'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
-                            <el-button v-show="item.status === 'N'" type="info"  round icon="el-icon-document" @click="aucreg">Register</el-button>
+
+                        <el-row type="flex" justify="right">
+                            <el-col :span="17">
+                            </el-col>
+                            <el-col :span="3" >
+                            <el-button v-show="item.status === 'R'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
+                            <el-button v-show="item.status === 'N'" type="info"  style="margin-left:0"  round icon="el-icon-document" @click="aucreg">Register</el-button>
 <!--                            <el-button v-show="item.status === 'N'" type="" plain round icon="el-icon-close" @click="removeItem(item.pid)">Remove</el-button>-->
 <!--                            <el-button v-show="item.status === 'R'" type="" plain round icon="el-icon-close" @click="cancelAuc(item)">Cancel</el-button>-->
-                            <el-button v-show="item.status === 'A'" type="success"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
+                            <el-button v-show="item.status === 'A'" type="success" style="margin-left:0"  round icon="el-icon-right" @click="goDetails(item)">Details</el-button>
+                            </el-col>
                         </el-row>
                     </el-row>
                 </el-card>
+                 </div>
                 </el-row>
+
             </el-col>
 
 
@@ -127,19 +133,19 @@
                 <section>
                     <el-row type="flex" justify="left" style="margin:10px 0;">
                         <el-col :span="4">
-                            <i class="el-icon-toilet-paper"> Baths: {{ propInfo.bathroomNum}}</i>
+                            <i class="fas fa-bath" style="margin-right: 5px"></i> Baths: {{ propInfo.bathroomNum}}
                         </el-col>
                         <el-col :span="4">
-                            <i class="el-icon-house"> Beds: {{ propInfo.bedroomNum }}</i>
+                            <i class="fas fa-bed" style="margin-right: 5px"></i> Beds: {{ propInfo.bedroomNum }}
                         </el-col>
                         <el-col :span="4">
-                            <i class="el-icon-truck"> Cars: {{ propInfo.garageNum }}</i>
+                            <i class="fas fa-car" style="margin-right: 5px"></i> Cars: {{ propInfo.garageNum }}
                         </el-col>
                         <el-col :span="4">
-                            <i class="el-icon-full-screen"> Area: {{ propInfo.area }}</i>
+                            <i class="fas fa-home" style="margin-right: 5px"></i> Area: {{ propInfo.area }}
                         </el-col>
                         <el-col :span="8">
-                            <i class="el-icon-info"> Type: {{ propInfo.type }}</i>
+                            <i class="fas fa-tags" style="margin-right: 5px"></i> Type: {{ propInfo.type }}
                         </el-col>
                     </el-row>
 
@@ -190,13 +196,13 @@
                                         </el-form-item>
 
                                         <el-form-item label="Reserved Price:" prop="price">
-                                            <el-input v-model="form.price">
+                                            <el-input v-model="form.price"  maxlength="11">
                                                 <i slot="suffix" class="input-slot">{{form.price|numFormat}} A$</i>
                                             </el-input>
                                         </el-form-item>
 
                                         <el-form-item label="Minimum Price:" prop="minimumPrice">
-                                            <el-input v-model="form.minimumPrice">
+                                            <el-input v-model="form.minimumPrice"  maxlength="11">
                                                 <i slot="suffix" class="input-slot">{{form.minimumPrice|numFormat}} A$</i>
                                             </el-input>
                                         </el-form-item>
@@ -267,6 +273,25 @@
         },
 
         data() {
+            const checkInt = (rule, value, callback) => {
+                const intReg = /^[0-9]+$/;
+                if (!intReg.test(value)) {
+                    callback(new Error("Please input an integer"));
+                } else {
+                    callback();
+                }
+            };
+            const checkStart = (rule, value, callback) => {
+                const intReg = /^[0-9]+$/;
+                if (!intReg.test(value)) {
+                    callback(new Error("Please input an integer"));
+                } else if(value > parseInt(this.form.price)) {
+                    callback(new Error("Minimum price should smaller than reserved price!"));
+                }
+                else{
+                    callback();
+                }
+            };
             return {
                 unread:'',
                 Aucreg:false,
@@ -303,9 +328,13 @@
                     //     address:'afdgdag',
                     //     position:'apple,pear',
                     //     detail:'bbq,ppol',
-                    //     photos:['', '']
-                    // }
-                    // ,{
+                    //     photos:['', ''],
+                    //     bathroomNum:2,
+                    //     bedroomNum:1,
+                    //     garageNum:2,
+                    //
+                    // },
+                    // {
                     //     pid:2,
                     //     status: 'N',
                     //     address:'123asd1231231231231231321231231312313',
@@ -330,6 +359,8 @@
                     detail:''
                 },
                 rules: {
+                    price: [{required: true, message: " Please enter price", trigger: "blur"}, {validator: checkInt,trigger: "blur" },],
+                    minimumPrice: [{required: true, message: " Please enter start price", trigger: "blur"}, {validator: checkStart,trigger: "blur" },],
                 },
 
                 form:{
@@ -457,7 +488,7 @@
                 const colors = new Map([
                     ["N", "Auction not register"],
                     ["A", "Auction in process"],
-                    ["R", `Auction will start at ${item.startdate}`],
+                    ["R", `Auction has not started`],
                 ]);
                 return colors.get(item);
             },
@@ -553,10 +584,6 @@
                 this.Aucreg = true;
             },
 
-            showdate(t){
-                return dayjs(t).format("YYYY-MM-DD HH:mm:ss")
-            },
-
             changeSearch(value) {
                 let filterPropertyList = [];
                 if(value === 'all'){
@@ -611,10 +638,24 @@
                 this.$router.go(-1);
             },
         },
+        watch:{
+            ['form.price'](val) {
+                this.$nextTick(() => {
+                    this.form.price = val.replace(/\D/g,'');
+                });
+            },
+            ['form.minimumPrice'](val) {
+                this.$nextTick(() => {
+                    this.form.minimumPrice = val.replace(/\D/g,'');
+                });
+            },
+        }
     };
 </script>
 
 <style lang="scss">
+    @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap");
+
     .mh20 {
         margin: 20px 0;
     }
@@ -652,7 +693,7 @@
         /*box-shadow: 2px 1px 5px 4px #d5dbea;*/
     }
     .card2 {
-        margin: 20px 20px;
+        margin: 20px 0;
         &:hover {
             cursor: pointer;
             background-color: #d6e2e7;
@@ -664,10 +705,11 @@
         }
     }
     .status-not-start {
-        border-left: 15px solid #e7b993;
+        border-left: 15px solid #e77d6d;
+        /*border : 10px solid black;*/
     }
     .status-process {
-        border-left: 15px solid #aed991;
+        border-left: 15px solid rgba(102, 199, 91, 0.92);
     }
 
     .status-not-register {
