@@ -882,7 +882,7 @@
             },
 
             goDetails (item) {
-                console.log('yes')
+                // console.log('yes')
                 this.$router.replace(
                     {
                         path: '/auction',
