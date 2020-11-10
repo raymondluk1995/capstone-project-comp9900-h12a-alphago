@@ -16,6 +16,17 @@ import Search from "../views/Search";
 
 Vue.use(VueRouter);
 
+// const originalPush = VueRouter.prototype.push
+// VueRouter.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.replace = function replace(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
+
 const routes = [
     {
   path: '/',
@@ -81,7 +92,7 @@ const routes = [
     name: 'notice',
     component: Notification
     ,
-  }, 
+  },
   {
     path: '/search',
     name: 'search',
