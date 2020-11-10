@@ -120,8 +120,8 @@
                 </div>
                     <el-row v-show='!this.isEmpty' class="property-item" style="margin-top:50px">
                         <section>
-                            <h3>{{ propInfo.address }}</h3>
-                    <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 15% 5% 0">
+                            <h3 style="padding:20px;height:60px ;margin: 0 15% 0 0;background-color: rgba(67,139,191,0.19)">{{ propInfo.address }}</h3>
+                    <el-carousel :interval="5000" arrow="always" :width="cwidth" :height="cheight" style="margin: 0 15% 3% 0">
                         <el-carousel-item v-for="pic in propInfo.photos" :key="pic">
                             <img :src="pic"  width="100%" height="100%" alt=""/>
                         </el-carousel-item>
@@ -322,18 +322,18 @@
                 ],
                 urlObjImg:{},
                 originPropertyList: [
-                    // {
-                    //     pid:1,
-                    //     status:'R',
-                    //     address:'afdgdag',
-                    //     position:'apple,pear',
-                    //     detail:'bbq,ppol',
-                    //     photos:['', ''],
-                    //     bathroomNum:2,
-                    //     bedroomNum:1,
-                    //     garageNum:2,
-                    //
-                    // },
+                    {
+                        pid:1,
+                        status:'R',
+                        address:'2 Gearin Alley, Mascot, NSW, 2020',
+                        position:'apple,pear',
+                        detail:'bbq,ppol',
+                        photos:['', ''],
+                        bathroomNum:2,
+                        bedroomNum:1,
+                        garageNum:2,
+
+                    },
                     // {
                     //     pid:2,
                     //     status: 'N',
@@ -409,12 +409,12 @@
             }
             else{
                 this.$message.error("You should login first!");
-                this.$router.push("/login");
+                // this.$router.push("/login");
             }
 
             // this.isEmpty = false;
-            // this.propList = this.originPropertyList;
-            // this.propInfo = this.originPropertyList[0];
+            this.propList = this.originPropertyList;
+            this.propInfo = this.originPropertyList[0];
         },
 
 

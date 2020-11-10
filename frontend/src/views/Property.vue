@@ -614,7 +614,7 @@
                 ],
                 propInfo: {
                     id: '',
-                    aid:'',
+                    aid:'12',
                     rab:null,
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
@@ -1172,7 +1172,16 @@
 
             goto(name) {
                 console.log(name);
-                this.$router.push({ name: name });
+                // this.$router.push({ name: name });
+                this.$router.push(
+                    {
+                        name: name,
+                        query:
+                            {
+                                id: this.propInfo.aid,
+                            }
+                    }
+                )
             },
 
             // to update the highest bid
