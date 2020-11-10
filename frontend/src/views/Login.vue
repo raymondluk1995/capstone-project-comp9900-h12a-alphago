@@ -75,10 +75,7 @@
                           id="sign-btn"
                     >
                     <i class="el-icon-check"></i> Sign In</span>
-                    <div class="bottom-line"></div>
-                </div>
 
-                 <div class="sign-btn">
                     <span class="button2"
                           v-if="!loginByuser"
                           @click="signInEmail"
@@ -350,6 +347,7 @@
       },
 
     },
+
   };
 </script>
 
