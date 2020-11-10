@@ -810,10 +810,9 @@
                     // if (this.timeFlag === true) {
                     //     clearInterval(this.timer);
                     // }
-                    // if(this.propInfo.status==='R'){
-                    //     this.countDown(this.propInfo.startdate, dayjs().valueOf());
-                    // }else
-                    if(this.propInfo.status==='A'){
+                    if(this.propInfo.status==='R'){
+                        this.countDown(this.propInfo.startdate, dayjs().valueOf());
+                    }else if(this.propInfo.status==='A'){
                         this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                     }
 
@@ -1005,13 +1004,13 @@
                     // this.timeFlag = true;
                     let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
                     this.time = `Will start at ${ this.showTime2(st) }`;
-                    if(diff2<=0){
-                        // this.timeFlag = false;
-                        clearInterval(this.timer);
-                        // console.log('over');
-                        // this.time = `This auction is Over!`;
-                        location.reload()
-                    }
+                    // if(diff2<=0){
+                    //     // this.timeFlag = false;
+                    //     clearInterval(this.timer);
+                    //     // console.log('over');
+                    //     // this.time = `This auction is Over!`;
+                    //     location.reload()
+                    // }
                 }
                 else{
                     if(diff>0){
