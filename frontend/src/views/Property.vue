@@ -256,12 +256,12 @@
                         <el-col  v-for="item in propInfo.recommendations" :key="item.aid " @click="goDetails(item)">
                             <div class="recomd">
                                 <el-row :gutter="20">
-                                    <el-col :span="8" style="border:1px solid black; padding:0;margin:10px 0">
-                                        <el-image
-                                                style=" "
+                                    <el-col :span="8" style="border:1px solid red; padding:0;margin:0">
+                                        <img
+                                                style="height:80px;width:100%;"
                                                 :src="item.photo"
-                                                :fit="fit">
-                                        </el-image>
+                                                >
+                                        </img>
                                     </el-col>
 
                                     <el-col  :span="16">
