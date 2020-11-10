@@ -357,7 +357,7 @@
           <el-form-item v-if="form5.Auction" label="Starting Price:" prop="minimumPrice">
               <el-input v-model="form5.minimumPrice"  maxlength="10" >
                   <i slot="suffix" class="input-slot">{{form5.minimumPrice|numFormat}} A$</i>
-              </el-input\
+              </el-input>
           </el-form-item>
 
 
