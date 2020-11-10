@@ -19,6 +19,8 @@
             </el-badge>
             <el-avatar v-else :size="70" :src="avatar"></el-avatar>
           </div>
+
+<!--            <div class="drop">-->
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="profile" icon="el-icon-user-solid">
               My Profile</el-dropdown-item
@@ -44,6 +46,7 @@
               Log out</el-dropdown-item
             >
           </el-dropdown-menu>
+<!--            </div>-->
         </el-dropdown>
       </template>
       <template v-else>
@@ -67,6 +70,7 @@
         </div>
       </template>
     </Header>
+
     <div class="main" id="main">
        <el-row type="flex" justify="center" class="search">
         <el-col :span="15">
@@ -153,33 +157,13 @@ export default {
 
       // 浏览器宽度
       screenWidth: 0,
-      nums: [
-        {
-          value: 1,
-          label: 1,
-        },
-        {
-          value: 2,
-          label: 2,
-        },
-        {
-          value: 3,
-          label: 3,
-        },
-        {
-          value: 4,
-          label: 4,
-        },
-        {
-          value: 5,
-          label: 5,
-        },
-      ],
+
     };
   },
   created() {
     this.username = localStorage.getItem("username");
     // this.username = this.$store.state.username;
+    //   this.username='123'
     if (this.username !== null) {
       this.hasLogin = true;
       this.avatar = localStorage.getItem("avatar");
@@ -335,12 +319,6 @@ export default {
 }
 
 
-.el-input--prefix .el-input__inner {
-  border-radius: 50px !important;
-  height: 50px;
-  font-size: 15px;
-}
-
 .search {
   .input {
     margin: 20% auto;
@@ -395,7 +373,7 @@ export default {
   border-radius: 0 !important;
 }
 
-.el-dropdown-menu__item {
+ .el-dropdown-menu__item {
   &:hover {
     transform: translateX(10px);
     transition-duration: 0.5s;
