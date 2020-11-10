@@ -256,7 +256,7 @@
                         <el-col  v-for="item in propInfo.recommendations" :key="item.aid ">
                             <div class="recomd"  @click="goDetails(item)">
                                 <el-row :gutter="20">
-                                    <el-col :span="8" style="border:1px solid red; padding:0;margin:0">
+                                    <el-col :span="8" style="padding:0;margin:0">
                                         <img
                                                 style="height:80px;width:100%;"
                                                 :src="item.photo"
@@ -880,9 +880,10 @@
                         break;
                 }
             },
+
             goDetails (item) {
                 console.log('yes')
-                this.$router.push(
+                this.$router.replace(
                     {
                         path: '/auction',
                         query:
@@ -891,6 +892,7 @@
                             }
                     }
                 )
+                location.reload()
             },
 
             checktable1(){
