@@ -291,7 +291,20 @@
                           this.$store.commit('setUserName', this.form.username);
                           this.$store.commit('setAvatar', response.data.result.avatar);
                           this.$store.commit('setFirstName', response.data.result.firstname);
-                          this.$router.push({name: 'home'});
+                            if(this.goback === true){
+                                this.$router.push(
+                                    {
+                                        path: '/auction',
+                                        query:
+                                            {
+                                                id: this.id,
+                                            }
+                                    }
+                                )
+                            }
+                            else{
+                                this.$router.push({name: 'home'});
+                            }
                           console.log(response.data);
                         }else if(response.data.code === 400){
                           this.$message.error(response.data.msg);
