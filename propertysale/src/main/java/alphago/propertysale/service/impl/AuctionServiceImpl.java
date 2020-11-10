@@ -68,10 +68,10 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
     @Override
     public AuctionVO getAuctionByAid(long aid) {
         Auction auction = auctionMapper.selectById(aid);
-        if(auction == null) {
+        if (auction == null) {
             throw new AuctionNotFoundException("Auction " + aid + " is Not Found");
         }
-        if(auction.isFinish()){
+        if (auction.isFinish()) {
             throw new AuctionFinishedException("Auction " + aid + " is Finished");
         }
         Property property = propertyMapper.selectById(auction.getPid());
@@ -100,7 +100,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         Subject subject = SecurityUtils.getSubject();
         List<RunningAuctionAddress> list = auctionMapper.getRunningAuctionAddress();
         RunningAuctionAddress rec = new RunningAuctionAddress();
-        if(subject.isAuthenticated()){
+        if (subject.isAuthenticated()) {
             JwtInfo info = (JwtInfo) subject.getPrincipal();
             long uid = info.getUid();
             historyMapper.update(null, new UpdateWrapper<History>().eq("uid", uid)
@@ -112,7 +112,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                     .setSql("cnt = cnt + 1"));
             History history = historyMapper.selectById(uid);
             BeanUtils.copyProperties(history, rec);
-        }else{
+        } else {
             rec.setBathroomNum(property.getBathroomNum()).setBedroomNum(property.getBedroomNum())
                     .setGarageNum(property.getGarageNum()).setLat(Double.valueOf(address.getLat())).setLng(Double.valueOf(address.getLng()));
         }
@@ -157,7 +157,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         // bid
         BidHistoryPush.initHistory(aid);
         Rab currentRab = null;
-        for(Rab rab : rabList){
+        for (Rab rab : rabList) {
             currentRab = rab;
 
             RabAction bid = new RabAction().setRabId(rab.getRabId()).
@@ -165,18 +165,18 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                     .setBidTime(rab.getRegisterTime());
 
             BidMsg msg = new BidMsg().setUid(rab.getUid())
-                        .setUsername(userMapper.selectById(rab.getUid()).getUsername())
-                        .setPrice(rab.getInitPrice())
-                        .setTime(bid.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
-                        .setOvertime(false);
+                    .setUsername(userMapper.selectById(rab.getUid()).getUsername())
+                    .setPrice(rab.getInitPrice())
+                    .setTime(bid.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
+                    .setOvertime(false);
 
             BidHistoryPush.addBidHistory(aid, msg);
 
             rabActionMapper.insert(bid);
         }
         // set current rab
-        if(currentRab != null) {
-            auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid",aid).set("current_bid", currentRab.getRabId()));
+        if (currentRab != null) {
+            auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("current_bid", currentRab.getRabId()));
         }
     }
 
@@ -197,11 +197,11 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 .setSellerEmail(seller.getEmail())
                 .setHistory(BidHistoryPush.removeAuctionHistory(aid));
 
-        if(auction.getCurrentBid() != 0) {
+        if (auction.getCurrentBid() != 0) {
             Rab rab = rabMapper.selectById(auction.getCurrentBid());
             message.setBidPrice(rab.getHighestPrice());
             // Auction Success
-            if(PriceUtil.priceCompare(rab.getHighestPrice(), auction.getPrice()) >=0){
+            if (PriceUtil.priceCompare(rab.getHighestPrice(), auction.getPrice()) >= 0) {
                 auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "S"));
                 propertyMapper.update(null, new UpdateWrapper<Property>()
                         .eq("pid", auction.getPid())
@@ -226,7 +226,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
 
                 return;
             }
-        }else{
+        } else {
             message.setBidPrice("No Bid!");
         }
         // Auction Fail
@@ -294,6 +294,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             if (model.getSuburb() != null) {
                 voQueryWrapper.eq("a.suburb", model.getSuburb());
             }
+            if (model.getState() != null) {
+                voQueryWrapper.eq("a.state", model.getState());
+            }
             if (model.getPostcode() != null) {
                 voQueryWrapper.eq("a.postcode", model.getPostcode());
             }
@@ -344,7 +347,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
 
             // get their address.
             List<SearchResVO> resVOS = searchResVOS.getRecords();
-            for (SearchResVO searchResVO: resVOS) {
+            for (SearchResVO searchResVO : resVOS) {
                 // set their full address.
                 Address address = addressMapper.selectById(searchResVO.getPid());
                 searchResVO.setAddress(address.getFullAddress());
