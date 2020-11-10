@@ -62,24 +62,29 @@
 <!--                =================-->
 
 
-            <div class="item" style="margin-top:40px">
+            <div style="margin-top:40px">
                 <el-row tyle="flex" style="text-align:center;">
+                <div class="sign-btn">
                 <span class="button2"
                       v-if="loginByuser"
                       @click="signInUser"
                       id="login-sign-in"
                 >
                     <i class="el-icon-check"></i> Sign In</span>
-<!--                    <div class="bottom-line"></div>-->
+                    <div class="bottom-line"></div>
+                </div>
 
+                 <div class="sign-btn">
                 <span class="button2"
                       v-if="!loginByuser"
                       @click="signInEmail"
                       id="login-sign-in2"
                 >
                     <i class="el-icon-check"></i> Sign In</span>
-<!--                    <div class="bottom-line"></div>-->
+                    <div class="bottom-line"></div>
+                </div>
                 </el-row>
+
 
 
                 <el-row tyle="flex" justify="center" style="text-align:center;margin-top:30px;">
@@ -187,14 +192,6 @@
           }
         });
 
-        $("#login-sign-in").hover(function(event) {
-            $(this).stop().animate({"margin-left": "10px"}, 300);
-            $(this).next(".bottom-line").stop().animate({"width": "150px"}, 300);
-        });
-        $("#login-sign-in").mouseleave(function(event) {
-            $(this).stop().animate({"margin-left": "0"}, 300);
-            $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
-        });
 
     },
     data() {
@@ -443,6 +440,24 @@
   opacity: 1;
 }
 
+.sign-btn{
+    /*border:1px solid red;*/
+    /*width:230px;*/
+    cursor: pointer;
+    position:relative;
+
+}
+
+  .sign-btn.bottom-line{
+      position: absolute;
+      /*border:1px solid red;*/
+      width: 0;
+      height: 1px;
+      left:5px;
+      bottom: -1px;
+      background-color: #3b4c73;
+  }
+
 .btn-style{
   cursor: pointer;
   margin:20px 0;
@@ -467,7 +482,7 @@
     color: #596c84;
     &:hover{
         border-bottom:1px solid #123123;
-        transform:translateX(15px);
+        /*transform:translateX(15px);*/
         transition-duration: 0.5s;
     }
     /*border-radius: 3px;*/
@@ -478,18 +493,19 @@
       padding:3px 20px 3px 5px;
       /*border-radius: 3px;*/
       /*border-left:3px solid #384a69;*/
-      margin-left:10px;
+      /*margin-left:10px;*/
       font-size:20px;
+      /*position:relative;*/
       &:hover{
           border-bottom:1px solid #123123;
-          transform:translateX(10px);
+          /*transform:translateX(10px);*/
           transition-duration: 0.5s;
       }
   }
 
   .back-btn{
       cursor: pointer;
-        position:relative;
+      position:relative;
       /*border:1px solid #123123;*/
   }
 .back-btn .bottom-line{

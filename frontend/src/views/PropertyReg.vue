@@ -250,12 +250,12 @@
 
                 <el-form-item label="Description:">
                     <el-input
-                            placeholder="Enter the description for your property. No more than 1000 words."
+                            placeholder="Enter the description for your property. No more than 500 words."
                             prefix-icon="el-icon-edit"
                             v-model="form3.description"
                             type="textarea"
                             :rows="5"
-                            maxlength="1000">
+                            maxlength="500">
                     </el-input>
                 </el-form-item>
 
@@ -349,13 +349,13 @@
           </el-form-item>
 
           <el-form-item v-if="form5.Auction" label="Reserved Price:" prop="price">
-            <el-input v-model="form5.price" maxlength="11" >
+            <el-input v-model="form5.price" maxlength="10" >
                 <i slot="suffix" class="input-slot">{{form5.price |numFormat}} A$</i>
             </el-input>
           </el-form-item>
 
           <el-form-item v-if="form5.Auction" label="Starting Price:" prop="minimumPrice">
-              <el-input v-model="form5.minimumPrice"  maxlength="11" >
+              <el-input v-model="form5.minimumPrice"  maxlength="10" >
                   <i slot="suffix" class="input-slot">{{form5.minimumPrice|numFormat}} A$</i>
               </el-input>
           </el-form-item>

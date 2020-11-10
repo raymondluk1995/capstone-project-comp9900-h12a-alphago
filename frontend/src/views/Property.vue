@@ -206,19 +206,30 @@
                     <div v-if="this.propInfo.rab !== null">
     <!--                    <h3>Place new bid</h3>-->
                         <div class="new-bid-wrap" >
-<!--                            <el-form-item  prop="newBid">-->
-                            <el-input v-model="newBid" :disabled="this.propInfo.status==='R'" maxlength="11" placeholder="Place New Bid" >
-                                <i slot="suffix" class="input-slot">{{ newBid | numFormat }} A$</i>
+                            <el-form
+                                    class="bidform"
+                                    ref="bidform"
+                                    :model="bidform"
+                                    :rules="rules"
+                            >
+                            <el-col :span="21">
+                            <el-form-item  prop="newBid">
+                            <el-input v-model="bidform.newBid" :disabled="this.propInfo.status==='R'" maxlength="10" placeholder="Place New Bid" >
+                                <i slot="suffix" class="input-slot">{{ bidform.newBid | numFormat }} A$</i>
                             </el-input>
+                            </el-form-item>
+                            </el-col>
+                                <el-col :span="3">
                             <el-button class='wrap-button' type="primary" icon="el-icon-plus"  @click="addNewBid"></el-button>
-<!--                            </el-form-item>-->
-<!--                            </el-form>-->
+                                </el-col>
+                            </el-form>
+
                         </div>
 
                         <p v-show="propInfo.status ==='A'" style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
                     </div>
 
-                    <div v-else style="margin-top: 2px">
+                    <div v-else style="margin-top: 20px">
                         <el-button type=""
                                    class="btn"
                                    @click="Bidreg"
@@ -238,6 +249,50 @@
                     <el-button style="width:100%" @click="goto('login')">Login to Bid</el-button>
 <!--                    <el-button style="width:100%" @click="test">test</el-button>-->
                 </template>
+
+                <h5 style=" margin-top:100px;">Similar</h5>
+                <el-row type="flex" justify="center">
+                    <div style="width:100%">
+                        <el-col  v-for="item in propInfo.recommendations" :key="item.aid " @click="goDetails(item)">
+                            <div class="recomd">
+                                <el-row :gutter="20">
+                                    <el-col :span="8" style="border:1px solid red; padding:0;margin:0">
+                                        <img
+                                                style="height:80px;width:100%;"
+                                                :src="item.photo"
+                                                >
+                                        </img>
+                                    </el-col>
+
+                                    <el-col  :span="16">
+                                <el-row type="flex" justify="left" style="margin:10px 0;">
+                                    <span>{{item.address}}, {{item.suburb}}, {{item.state}}</span>
+                                </el-row>
+                                <el-row type="flex" justify="left" style="margin:10px 0;">
+                                    <el-col :span="8">
+                                        <i class="fas fa-bath" style="margin-right: 5px"></i> {{ item.bathroomNum}}
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <i class="fas fa-bed" style="margin-right: 5px"></i> {{ item.bedroomNum }}
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <i class="fas fa-car" style="margin-right: 5px"></i> {{ item.garageNum }}
+                                    </el-col>
+
+<!--                                    <el-col :span="4">-->
+<!--                                        <i class="fas fa-home" style="margin-right: 5px"></i> {{ item.area }} ㎡-->
+<!--                                    </el-col>-->
+<!--                                    <el-col :span="8">-->
+<!--                                        <i class="fas fa-tags" style="margin-right: 5px"></i> {{ item.type }}-->
+<!--                                    </el-col>-->
+                                </el-row>
+                                    </el-col>
+
+                                </el-row>
+                            </div>
+                        </el-col>
+                    </div>
+                </el-row>
 
             </el-col>
         </el-row>
@@ -472,7 +527,7 @@
 
             const checkinit = (rule, value, callback) => {
                 let price = value.replace(/,/g, "");
-                const pricereg = /^\d{11}$/;
+                const pricereg = /^\d{10}$/;
                     if (!pricereg.test(price)) {
                         if (parseInt(price) < parseInt(this.propInfo.latestPrice)) {
                             callback(new Error("Should larger than the latest price"));
@@ -480,6 +535,17 @@
                             callback();
                         }
                     }
+            };
+
+            const checkNewBid = (rule, value, callback) => {
+                const pricereg = /^\d{10}$/;
+                if (!pricereg.test(value)) {
+                    if (parseInt(value) < parseInt(this.propInfo.latestPrice)) {
+                        callback(new Error("Should larger than the latest price"));
+                    } else {
+                        callback();
+                    }
+                }
             };
 
 
@@ -499,7 +565,10 @@
                 timeFlag: false,
                 addNewCard:false,
                 rabId:'',
-                newBid: '',
+                bidform:{
+                    newBid: '',
+                },
+
                 newPlacedBid:'',
                 tipError: false,
                 time: '',
@@ -546,7 +615,7 @@
                 propInfo: {
                     id: '',
                     aid:'',
-                    rab:null,
+                    rab:'null',
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
@@ -555,7 +624,7 @@
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
-                    latestPrice:'',
+                    latestPrice:'100',
                     info: '',
                     bedroomNum:'',
                     bathroomNum:'',
@@ -593,6 +662,39 @@
                     firstname:'',
                     lastname:'',
                     highestPrice:'',
+                    recommendations:[
+                        {
+                            photo:'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=513256393,3533342652&fm=15&gp=0.jpg',
+                            address:'2 gearin alley',
+                            aid:15,
+                            bathroomNum:2,
+                            bedroomNum:2,
+                            garageNum:2,
+                            state:'NSW',
+                            suburb:'Mascot',
+                        },
+
+                        {
+                            photo:'',
+                            address:'2 gearin alley',
+                            aid:15,
+                            bathroomNum:2,
+                            bedroomNum:2,
+                            garageNum:2,
+                            state:'NSW',
+                            suburb:'Mascot',
+                        }
+                        ,{
+                            photo:'',
+                            address:'2 gearin alley',
+                            aid:15,
+                            bathroomNum:2,
+                            bedroomNum:2,
+                            garageNum:2,
+                            state:'NSW',
+                            suburb:'Mascot',
+                        }
+                    ],
                 },
                 form2: {
                     name: '',
@@ -613,14 +715,14 @@
                     expiredDate: [{required: true, message: " Please enter expired date", trigger: "blur"}, {validator:checkDate, trigger: "blur" },],
                     cvc: [{required: true, message: " Please enter cvc", trigger: "blur",},{validator:checkCVC, trigger: "blur" }],
                     // initPrice: [{required: true, message: " Please initial price", trigger: "blur",},{validator:checkinit, trigger: "blur" }],
-                    newBid: [{required: true, message: " Please enter new bid price", trigger: "blur"}, {validator: checkinit,trigger: "blur" },],
+                    newBid: [{required: true, message: " Please enter new bid price", trigger: "blur"}, {validator: checkNewBid,trigger: "blur" },],
                 },
             };
         },
 
         created() {
-            this.username = localStorage.getItem("username");
-            // this.username= '123';
+            // this.username = localStorage.getItem("username");
+            this.username= '123';
             this.id = this.$route.query.id;
             let h = document.documentElement.clientHeight  || document.body.clientHeight;
             this.vdaH = h - 147 + 'px';
@@ -696,9 +798,9 @@
                     this.form3.initPrice = val.replace(/\D/g,'')
                 });
             },
-            ['newBid'](val) {
+            ['bidform.newBid'](val) {
                 this.$nextTick(() => {
-                    this.newBid = val.replace(/\D/g,'')
+                    this.bidform.newBid = val.replace(/\D/g,'')
                 });
             },
         },
@@ -944,59 +1046,55 @@
 
 
             addNewBid() {
-                const BidReg = /^-?\d+(,\d{3})*(\.\d{1,2})?$/;
-                if (!BidReg.test(this.newBid)) {
-                    this.$message({
-                        type: "error",
-                        message: "Please place correct bid!",
-                    });
-                    return false;
-                }
-
-                this.$confirm("Are you sure place the new bid?", "tip", {
-                    confirmButtonText: "Submit",
-                    cancelButtonText: "Cancel",
-                    type: "warning",
-                })
-                    .then(() => {
-                        let data = new FormData();
-                        data.append('rabId', this.propInfo.rab);
-
-                        data.append('bidPrice', this.newBid);
-                        this.$axios.post('/bid', data)
-                            .then((response) => {
-                                if (response.status >= 200 && response.status < 300) {
-                                    if(response.data.code === 200){
-                                        this.propInfo.highestPrice = this.newBid;
-                                        // this.newPlacedBid = this.newBid;
-                                        this.newBid='';
-                                        this.$message({
-                                            type: "success",
-                                            message: "Place new bid successful!", })
-                                        // location.reload();
-                                    }else if(response.data.code === 400){
-                                        this.$message.error(response.msg);
-                                    }else{
-                                        this.$message.error(response.msg);
-                                        console.log(response.msg);
-                                    }
-                                } else {
-                                    this.$message.error(response.msg);
-                                    console.log(response.msg);
-                                }
+                this.$refs["bidform"].validate((valid) => {
+                        if (valid) {
+                            this.$confirm("Are you sure place the new bid?", "tip", {
+                                confirmButtonText: "Submit",
+                                cancelButtonText: "Cancel",
+                                type: "warning",
                             })
-                            .catch((response) => {
-                                console.log('error ', response);
-                                this.$message.error('New Bid failed!');
-                            })
+                                .then(() => {
+                                    let data = new FormData();
+                                    data.append('rabId', this.propInfo.rab);
+                                    data.append('bidPrice', this.bidform.newBid);
+                                    // console.log(this.bidform.newBid)
+                                    this.$axios.post('/bid', data)
+                                        .then((response) => {
+                                            if (response.status >= 200 && response.status < 300) {
+                                                if (response.data.code === 200) {
+                                                    this.propInfo.highestPrice = this.bidform.newBid;
+                                                    // this.newPlacedBid = this.newBid;
+                                                    this.bidform.newBid = '';
+                                                    this.$message({
+                                                        type: "success",
+                                                        message: "Place new bid successful!",
+                                                    })
+                                                    // location.reload();
+                                                } else if (response.data.code === 400) {
+                                                    this.$message.error(response.msg);
+                                                } else {
+                                                    this.$message.error(response.msg);
+                                                    console.log(response.msg);
+                                                }
+                                            } else {
+                                                this.$message.error(response.msg);
+                                                console.log(response.msg);
+                                            }
+                                        })
+                                        .catch((response) => {
+                                            console.log('error ', response);
+                                            this.$message.error('New Bid failed!');
+                                        })
 
-                    })
-                    .catch(() => {
-                        this.$message({
-                            type: "info",
-                            message: "ERROR",
-                        });
-                    });
+                                })
+                                .catch(() => {
+                                    this.$message({
+                                        type: "info",
+                                        message: "ERROR",
+                                    });
+                                });
+                        }
+           })
             },
             Bidreg() {
                 this.bidderFlag = true;
@@ -1132,10 +1230,18 @@
 </script>
 
 <style lang="scss">
-    .form{
-        margin-left:10%;
-        /*margin-top:20px;*/
-        width:80%;
+    .recomd{
+        background-color: rgba(159, 185, 229, 0.12);
+        margin-bottom:10px;
+        padding: 10px 20px;
+        width:100%;
+        &:hover{
+            background-color: rgba(193, 212, 240, 0.55);
+            transition-duration: 0.5s;
+        }
+    }
+    .newBid{
+        padding:0;
     }
     .property{
         /*background-color: #aaaaaa;*/
@@ -1215,9 +1321,9 @@
         /*border: #4d5861 1px solid;*/
     }
     .new-bid-wrap {
-        display: flex;
+        /*display: flex;*/
         /*align-items: center;*/
-        width:100%;
+        width:98%;
         margin-top:20px;
         .wrap-button{
             /*margin-left: 30px;*/
