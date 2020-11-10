@@ -246,22 +246,22 @@
                 </template>
 
                 <template v-else>
-                    <el-button style="width:100%" @click="goto('login')">Login to Bid</el-button>
+                    <el-button style="width:100%;margin-top: 20px" @click="goto('login')">Login to Bid</el-button>
 <!--                    <el-button style="width:100%" @click="test">test</el-button>-->
                 </template>
 
                 <h5 style=" margin-top:100px;">Similar</h5>
                 <el-row type="flex" justify="center">
                     <div style="width:100%">
-                        <el-col  v-for="item in propInfo.recommendations" :key="item.aid " @click="goDetails(item)">
-                            <div class="recomd">
+                        <el-col  v-for="item in propInfo.recommendations" :key="item.aid ">
+                            <div class="recomd"  @click="goDetails(item)">
                                 <el-row :gutter="20">
                                     <el-col :span="8" style="border:1px solid red; padding:0;margin:0">
                                         <img
                                                 style="height:80px;width:100%;"
                                                 :src="item.photo"
-                                                >
-                                        </img>
+                                                 alt=""/>
+
                                     </el-col>
 
                                     <el-col  :span="16">
@@ -615,7 +615,7 @@
                 propInfo: {
                     id: '',
                     aid:'',
-                    rab:'null',
+                    rab:null,
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
                     address: '',
@@ -624,7 +624,7 @@
                     startdate:'',
                     avatar:'',
                     bidderNum:'',
-                    latestPrice:'100',
+                    latestPrice:'',
                     info: '',
                     bedroomNum:'',
                     bathroomNum:'',
@@ -663,37 +663,37 @@
                     lastname:'',
                     highestPrice:'',
                     recommendations:[
-                        {
-                            photo:'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=513256393,3533342652&fm=15&gp=0.jpg',
-                            address:'2 gearin alley',
-                            aid:15,
-                            bathroomNum:2,
-                            bedroomNum:2,
-                            garageNum:2,
-                            state:'NSW',
-                            suburb:'Mascot',
-                        },
-
-                        {
-                            photo:'',
-                            address:'2 gearin alley',
-                            aid:15,
-                            bathroomNum:2,
-                            bedroomNum:2,
-                            garageNum:2,
-                            state:'NSW',
-                            suburb:'Mascot',
-                        }
-                        ,{
-                            photo:'',
-                            address:'2 gearin alley',
-                            aid:15,
-                            bathroomNum:2,
-                            bedroomNum:2,
-                            garageNum:2,
-                            state:'NSW',
-                            suburb:'Mascot',
-                        }
+                        // {
+                        //     photo:'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=513256393,3533342652&fm=15&gp=0.jpg',
+                        //     address:'2 gearin alley',
+                        //     aid:15,
+                        //     bathroomNum:2,
+                        //     bedroomNum:2,
+                        //     garageNum:2,
+                        //     state:'NSW',
+                        //     suburb:'Mascot',
+                        // },
+                        //
+                        // {
+                        //     photo:'',
+                        //     address:'2 gearin alley',
+                        //     aid:11,
+                        //     bathroomNum:2,
+                        //     bedroomNum:2,
+                        //     garageNum:2,
+                        //     state:'NSW',
+                        //     suburb:'Mascot',
+                        // }
+                        // ,{
+                        //     photo:'',
+                        //     address:'2 gearin alley',
+                        //     aid:15,
+                        //     bathroomNum:2,
+                        //     bedroomNum:2,
+                        //     garageNum:2,
+                        //     state:'NSW',
+                        //     suburb:'Mascot',
+                        // }
                     ],
                 },
                 form2: {
@@ -721,8 +721,8 @@
         },
 
         created() {
-            // this.username = localStorage.getItem("username");
-            this.username= '123';
+            this.username = localStorage.getItem("username");
+            // this.username= '123';
             this.id = this.$route.query.id;
             let h = document.documentElement.clientHeight  || document.body.clientHeight;
             this.vdaH = h - 147 + 'px';
@@ -810,9 +810,10 @@
                     // if (this.timeFlag === true) {
                     //     clearInterval(this.timer);
                     // }
-                    if(this.propInfo.status==='R'){
-                        this.countDown(this.propInfo.startdate, dayjs().valueOf());
-                    }else if(this.propInfo.status==='A'){
+                    // if(this.propInfo.status==='R'){
+                    //     this.countDown(this.propInfo.startdate, dayjs().valueOf());
+                    // }else
+                    if(this.propInfo.status==='A'){
                         this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                     }
 
@@ -878,6 +879,18 @@
                     default:
                         break;
                 }
+            },
+            goDetails (item) {
+                console.log('yes')
+                this.$router.push(
+                    {
+                        path: '/auction',
+                        query:
+                            {
+                                id: item.aid,
+                            }
+                    }
+                )
             },
 
             checktable1(){
@@ -1180,6 +1193,9 @@
 
             websocketonmessage(e){ //数据接收
                 let res = JSON.parse(e.data);
+                if(res.refresh === true){
+                    location.reload()
+                }
                 this.propInfo.latestPrice = res.price;
                 let Time = this.showTime(res.time);
                 this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
@@ -1231,6 +1247,7 @@
 
 <style lang="scss">
     .recomd{
+        cursor:pointer;
         background-color: rgba(159, 185, 229, 0.12);
         margin-bottom:10px;
         padding: 10px 20px;

@@ -61,25 +61,29 @@
 <!--              </div >-->
 <!--                =================-->
 
+<!--                <div class="back-btn">-->
+<!--                    <span  id="back-btn" style="padding:2px 5px;font-size:20px;" @click="back">Back <i class="el-icon-refresh-right"></i></span>-->
+<!--                    <div class="bottom-line"></div>-->
+<!--                </div>-->
 
-            <div style="margin-top:40px">
-                <el-row tyle="flex" style="text-align:center;">
+            <div style="margin-top:40px;text-align:center" >
+                <el-row tyle="flex" justify="center" >
                 <div class="sign-btn">
-                <span class="button2"
-                      v-if="loginByuser"
-                      @click="signInUser"
-                      id="login-sign-in"
-                >
+                    <span class="button2"
+                          v-if="loginByuser"
+                          @click="signInUser"
+                          id="sign-btn"
+                    >
                     <i class="el-icon-check"></i> Sign In</span>
                     <div class="bottom-line"></div>
                 </div>
 
                  <div class="sign-btn">
-                <span class="button2"
-                      v-if="!loginByuser"
-                      @click="signInEmail"
-                      id="login-sign-in2"
-                >
+                    <span class="button2"
+                          v-if="!loginByuser"
+                          @click="signInEmail"
+                          id="sign-btn2"
+                    >
                     <i class="el-icon-check"></i> Sign In</span>
                     <div class="bottom-line"></div>
                 </div>
@@ -135,9 +139,9 @@
         this.vdaH = h - 147 + 'px';
     },
     mounted(){
-        $("span").hover(function(event) {
-            $(this).stop().animate({"margin-left": "10px"}, 300);
-        });
+        // $("span").hover(function(event) {
+        //     $(this).stop().animate({"margin-left": "10px"}, 300);
+        // });
 
         $("#back-btn").hover(function(event) {
             $(this).stop().animate({"margin-left": "10px"}, 300);
@@ -164,33 +168,54 @@
         $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
       });
 
-        $("span").mouseleave(function(event) {
-            $(this).stop().animate({"margin-left": "0"}, 300);
-        });
+        // $("span").mouseleave(function(event) {
+        //     $(this).stop().animate({"margin-left": "0"}, 300);
+        // });
 
         $("#back-btn").mouseleave(function(event) {
             $(this).stop().animate({"margin-left": "0"}, 300);
             $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
         });
 
-
-        $("input").focus(function(event) {
-            //label动态上升，升至顶部
-            $(this).siblings("label").stop().animate({"bottom": "50px"}, 300);
-            //div模拟的下边框伸出，其width动态改变至input的width
-            $(this).next(".bottom-line").stop().animate({"width": "400px"}, 300);
+        $("#sign-btn").hover(function(event) {
+            $(this).stop().animate({"margin-left": "10px"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "150px"}, 300);
         });
 
-
-        // 输入框失去焦点时
-        $("input").blur(function(event) {
-          if(event.target.value.length === 0){
-            //label动态下降，恢复原位
-            $(this).siblings("label").stop().animate({bottom: "10px"}, 300);
-            //用div模拟的下边框缩回，其width动态恢复为默认宽度0
+        $("#sign-btn").mouseleave(function(event) {
+            $(this).stop().animate({"margin-left": "0"}, 300);
             $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
-          }
         });
+
+        $("#sign-btn2").hover(function(event) {
+            $(this).stop().animate({"margin-left": "10px"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "10px"}, 300);
+        });
+
+        $("#sign-btn2").mouseleave(function(event) {
+            $(this).stop().animate({"margin-left": "0"}, 300);
+            $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+        });
+
+
+
+        // $("input").focus(function(event) {
+        //     //label动态上升，升至顶部
+        //     $(this).siblings("label").stop().animate({"bottom": "50px"}, 300);
+        //     //div模拟的下边框伸出，其width动态改变至input的width
+        //     $(this).next(".bottom-line").stop().animate({"width": "400px"}, 300);
+        // });
+        //
+        //
+        // // 输入框失去焦点时
+        // $("input").blur(function(event) {
+        //   if(event.target.value.length === 0){
+        //     //label动态下降，恢复原位
+        //     $(this).siblings("label").stop().animate({bottom: "10px"}, 300);
+        //     //用div模拟的下边框缩回，其width动态恢复为默认宽度0
+        //     $(this).next(".bottom-line").stop().animate({"width": "0"}, 300);
+        //   }
+        // });
 
 
     },
@@ -440,20 +465,20 @@
   opacity: 1;
 }
 
-.sign-btn{
-    /*border:1px solid red;*/
-    /*width:230px;*/
-    cursor: pointer;
-    position:relative;
-
-}
-
-  .sign-btn.bottom-line{
+  .sign-btn{
+      /*border:1px solid black;*/
+      margin:0 auto;
+      width:150px;
+      cursor: pointer;
+      position:relative;
+      /*border:1px solid #123123;*/
+  }
+  .sign-btn .bottom-line{
       position: absolute;
-      /*border:1px solid red;*/
+      /*margin-left:40px;*/
       width: 0;
       height: 1px;
-      left:5px;
+      /*left:0;*/
       bottom: -1px;
       background-color: #3b4c73;
   }
@@ -489,18 +514,18 @@
     /*border-left:3px solid #384a69;*/
 }
   .button2{
-      cursor: pointer;
+      /*cursor: pointer;*/
       padding:3px 20px 3px 5px;
       /*border-radius: 3px;*/
       /*border-left:3px solid #384a69;*/
       /*margin-left:10px;*/
       font-size:20px;
       /*position:relative;*/
-      &:hover{
-          border-bottom:1px solid #123123;
-          /*transform:translateX(10px);*/
-          transition-duration: 0.5s;
-      }
+      /*&:hover{*/
+      /*    border-bottom:1px solid #123123;*/
+      /*    !*transform:translateX(10px);*!*/
+      /*    transition-duration: 0.5s;*/
+      /*}*/
   }
 
   .back-btn{
