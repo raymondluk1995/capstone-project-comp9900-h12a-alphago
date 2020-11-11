@@ -869,7 +869,7 @@ export default {
       this.suburbOrPostcode = "postcode";
     }
 
-    this.getProductBySearch();
+    this.initialSearch();
 
     this.currentPage = 1;
     this.originAddress = this.address;
@@ -1051,6 +1051,39 @@ export default {
       this.type = "Any";
     },
 
+    initialSearch() {
+      this.search = "";
+
+      if (this.postcode === "" && this.suburb === "") {
+        this.search = "";
+      } else if (this.postcode === "") {
+        //initially search by suburb name and state
+        this.search = this.search + "suburb=" + this.suburb;
+        this.search = this.search + "&state=" + this.state;
+      } else {
+        this.search = this.search + "postcode" + this.postcode;
+      }
+
+      if (this.search != "") {
+        this.search = this.search + "&currPage=1";
+      } else {
+        this.search = this.search + "currPage=1";
+      }
+
+      this.$axios
+        .post("/search", this.search)
+        .then((res) => {
+          this.propList = res.data.result.resVOList;
+          // console.log("propList is " + this.propList);
+          this.total = res.data.result.totalProp;
+          // console.log("total is  ", this.total);
+          this.currentPage = 1;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
     createNewSearch() {
       let curr_addr = document.getElementById("address").value;
       if (curr_addr === "") {
@@ -1067,7 +1100,7 @@ export default {
 
       // fix the bug at created
       let temp1 = curr_addr.split(",");
-      if (temp1.length != 1) {
+      if (temp1.length > 1) {
         let temp2 = temp1[0].split(" ");
         let temp3 = temp2.slice(0, temp2.length - 1);
         let temp4 = temp3.join(" ");
@@ -1139,9 +1172,9 @@ export default {
           return;
         }
 
-        this.search = this.search + "postcode=" + curr_addr;
+        this.search = this.search + "postcode=" + this.postcode;
 
-        this.tempPostcode = curr_addr;
+        this.tempPostcode = this.postcode;
         this.tempSuburb = "";
         this.tempState = "";
       }
@@ -1184,7 +1217,7 @@ export default {
       if (this.order !== "") {
         result = result + "&order=" + this.order;
       }
-      if (this.type !== "All") {
+      if (this.type !== "Any") {
         result = result + "&propertyType=" + this.type;
       }
       if (this.minArea != undefined && this.minArea > 0) {
