@@ -86,6 +86,7 @@
                   classname="form-control"
                   placeholder="Please search suburb name or postcode here"
                   v-on:placechanged="getAddressData"
+                  @keyup.enter="toSearch"
                   country="au"
                   types="(cities)"
                 >
@@ -751,6 +752,14 @@ export default {
       searchBase:"",
       
       originAddress:"",
+
+      suburbOrPostcode:"",
+
+      tempPostcode:"",
+      tempSuburb:"",
+      tempState:"",
+
+
       // propList: [
       //   {
       //     aid: 1,
@@ -857,18 +866,19 @@ export default {
         this.address = this.$route.query.suburb;
         this.suburb = this.$route.query.suburb;
         this.state = this.$route.query.state;
+        this.suburbOrPostcode = "suburb";
       }
     } else {
       this.address = this.$route.query.postcode;
       this.postcode = this.$router.query.postcode;
+      this.suburbOrPostcode = "postcode";
     }
 
     this.getProductBySearch();
 
     this.currentPage = 1;
     this.originAddress = this.address;
-    
-    
+      
   },
 
   mounted() {
@@ -979,16 +989,8 @@ export default {
     },
 
     toSearch() {
-      var addr = document.getElementById("address").value;
-      if (addr===""){
-        this.$router.push({
-          path:"/search",
-          query:{
-            currPage:1,
-          },
-        });
-        return ;
-      }
+      this.getProductBySearch();
+           
     },
     showFilter() {
       this.showFilterFlag = !this.showFilterFlag;
@@ -1056,10 +1058,9 @@ export default {
       this.type = "Any";
     },
 
-    createNewSearch() {
 
+    createNewSearch() {
       let curr_addr = document.getElementById("address").value;
-      console.log("1 Now the curr_addr is "+ curr_addr);
 
       // fix the bug at created
       let temp1 = curr_addr.split(",");
@@ -1071,12 +1072,14 @@ export default {
       }
 
       this.search = "";
-      console.log("2 Now the curr_addr is "+ curr_addr);
+
       if (isNaN(curr_addr)){ // if curr_addr is text
         if (this.suburb != "") { // The original passed address is a suburb
           if (this.suburb===curr_addr){ // the input has not changed
             this.search = this.search+ "suburb=" + this.suburb;
             this.search = this.search + "&state=" + this.state;
+            this.suburbOrPostcode = "suburb"; 
+            this.postcode = "";
           }
           else{ // the input suburb has changed
             if (this.address.locality === undefined){
@@ -1088,16 +1091,38 @@ export default {
             let new_suburb = this.address.locality;
             this.search = this.search + "suburb=" + new_suburb;
             this.search = this.search + "&state=" + new_state; 
+            
+            this.tempPostcode = "";
+            this.tempSuburb = new_suburb;
+            this.tempState = new_state;
           }  
         }
+        else{ //previously it was a postcode, now it is a suburb
+          if (this.address.locality === undefined){
+              console.log("The curr_addr is "+curr_addr+" and the this.suburb is "+this.suburb);
+              this.$message.error("Please validate the suburb name by Google Map first!");
+              return;
+            }
+            let new_state = this.address.administrative_area_level_1;
+            let new_suburb = this.address.locality;
+            this.search = this.search + "suburb=" + new_suburb;
+            this.search = this.search + "&state=" + new_state; 
+            this.tempPostcode = "";
+            this.tempSuburb = new_suburb;
+            this.tempState = new_state;
+        }
       }
-      else{
+      else{ // the curr_addr is postcode
         if (curr_addr.toString().length != 4) {
           this.$message.error("Please input a valid postcode!");
           return;
         }
 
         this.search = this.search + "postcode=" + curr_addr;
+        
+        this.tempPostcode = curr_addr;
+        this.tempSuburb = "";
+        this.tempState = "";
       }
       
 
@@ -1112,9 +1137,14 @@ export default {
     createNewFilterQuery(){
       let result = "";
       
-      result = result + "&startDate=" + this.dateFrom;
-      result = result + "&endDate=" + this.dateTo;
+      if(this.dateFrom!=""){
+        result = result + "&startDate=" + this.dateFrom;
+      }
 
+      if(this.dateTo!=""){
+        result = result + "&endDate=" + this.dateTo;
+      }
+      
       if (this.minPrice!=undefined && this.minPrice > 0 ) {
         let min_price = parseInt(this.minPrice)*1000;
         result = result + "&minPrice=" + min_price.toString();
@@ -1159,9 +1189,29 @@ export default {
           console.log("propList is " + this.propList);
           this.total = res.data.result.totalProp;
           console.log("total is  ", this.total);
-          this.currentPage = 1;
+          this.currentPage = 1; 
+          
+          
+          if(tempPostcode===""){
+            this.suburbOrPostcode = "suburb";
+          }
+          else{
+            this.suburbOrPostcode = "postcode";
+          }
+
+          this.postcode = this.tempPostcode;
+          this.suburb = this.tempSuburb;
+          this.state = this.tempState;
+
+          this.tempPostcode = "";
+          this.tempSuburb = "";
+          this.tempState = "";
+
         })
         .catch(function (error) {
+          this.tempPostcode = "";
+          this.tempSuburb = "";
+          this.tempState = "";
           console.log(error);
         });
     },
