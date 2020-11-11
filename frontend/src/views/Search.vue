@@ -126,9 +126,9 @@
 
         <!-- Filters Part  -->
 
-        <el-row type="flex" justify="center" style="margin-top: 10px">
+        <el-row type="flex" justify="center" style="margin:10px;width=95vh">
           <div id="filters" v-show="showFilterFlag">
-            <el-row :gutter="3" type="flex" justify="center">
+            <el-row :gutter="1" type="flex" justify="center">
               <el-col :span="5">
                 <el-popover placement="bottom">
                   <el-date-picker
@@ -319,8 +319,7 @@
                     slot="reference"
                   >
                     <i class="fas fa-info-circle" style="margin-right: 10px"></i
-                    >Type: {{ type
-                    }}<i class="el-icon-arrow-down el-icon--right"></i>
+                    >Type<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
                 </el-popover>
               </el-col>
@@ -1040,15 +1039,30 @@ export default {
       }
 
       if (this.$route.query.bedrooms != undefined) {
-        this.bedrooms = this.$route.query.bedrooms;
+        if(this.$route.query.bedrooms=="5"){
+          this.bedrooms = this.$route.query.bedrooms + "+";
+        }
+        else{
+          this.bedrooms = this.$route.query.bedrooms;
+        }  
       }
 
       if (this.$route.query.bathrooms != undefined) {
-        this.bathrooms = this.$route.query.bathrooms;
+        if(this.$route.query.bathrooms=="5"){
+          this.bathrooms = this.$route.query.bathrooms + "+";
+        }
+        else{
+          this.bathrooms = this.$route.query.bathrooms;
+        } 
       }
 
       if (this.$route.query.garages != undefined) {
-        this.garages = this.$route.query.garages;
+        if(this.$route.query.garages=="5"){
+          this.garages = this.$route.query.garages + "+";
+        }
+        else{
+          this.garages = this.$route.query.garages;
+        } 
       }
 
       if (this.$route.query.type != undefined) {
