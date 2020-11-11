@@ -865,11 +865,11 @@ export default {
       }
     } else {
       this.address = this.$route.query.postcode;
-      this.postcode = this.$router.query.postcode;
+      this.postcode = this.$route.query.postcode;
       this.suburbOrPostcode = "postcode";
     }
 
-    this.initialSearch();
+    // this.initialSearch();
 
     this.currentPage = 1;
     this.originAddress = this.address;
@@ -893,7 +893,10 @@ export default {
       $(this).stop().animate({ "margin-left": "0" }, 300);
       $(this).next(".bottom-line").stop().animate({ width: "0" }, 300);
     });
+    
 
+    console.log("this.postcode is ",this.postcode);
+    this.initialSearch();
     var addr = document.getElementById("address");
     addr.value = this.address;
 
