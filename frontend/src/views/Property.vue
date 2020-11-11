@@ -1147,7 +1147,7 @@
                                                 this.propInfo.rab = response.data.result;
                                                 this.$message.success("Register successful!");
                                                 // location.reload();
-                                                this.highestPrice = price;
+                                                this.propInfo.highestPrice = price;
                                             }
                                         } else if (response.data.code === 400) {
                                             this.$message.error(response.msg);
