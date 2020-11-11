@@ -1070,11 +1070,13 @@ export default {
       }
 
       if (this.$route.query.minPrice != undefined) {
-        this.minPrice = this.$route.query.minPrice;
+        let min_price = parseInt(this.$route.query.minPrice);
+        this.minPrice = Math.round(min_price/1000);
       }
 
       if (this.$route.query.maxPrice != undefined) {
-        this.maxPrice = this.$route.query.maxPrice;
+        let max_price = parseInt(this.$route.query.maxPrice);
+        this.maxPrice = Math.round(max_price/1000);
       }
 
       if (this.$route.query.minArea != undefined) {
