@@ -869,7 +869,7 @@ export default {
       this.suburbOrPostcode = "postcode";
     }
 
-    // this.initialSearch();
+    this.initialSearch();
 
     this.currentPage = 1;
     this.originAddress = this.address;
@@ -895,8 +895,7 @@ export default {
     });
     
 
-    console.log("this.postcode is ",this.postcode);
-    this.initialSearch();
+    // this.initialSearch();
     var addr = document.getElementById("address");
     addr.value = this.address;
 
