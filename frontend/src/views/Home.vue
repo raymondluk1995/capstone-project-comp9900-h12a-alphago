@@ -313,6 +313,7 @@ export default {
   z-index: -3;
   /*box-shadow: inset 0 2px 10px 4px #1a1b1d;*/
   background-image: url("../assets/bg.png");
+    background-size:100% 100%;
 }
 
 @media only screen and (max-width: 1300px) and (min-width: 1100px) {
