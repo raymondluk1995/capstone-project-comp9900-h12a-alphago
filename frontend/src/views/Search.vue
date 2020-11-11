@@ -1063,7 +1063,7 @@ export default {
         this.search = this.search + "suburb=" + this.suburb;
         this.search = this.search + "&state=" + this.state;
       } else {
-        this.search = this.search + "postcode" + this.postcode;
+        this.search = this.search + "postcode=" + this.postcode;
       }
 
       if (this.search != "") {
