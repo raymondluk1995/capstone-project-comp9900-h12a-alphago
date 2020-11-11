@@ -749,7 +749,8 @@ export default {
       pickerOptions: "",
 
       searchBase:"",
-
+      
+      originAddress:"",
       // propList: [
       //   {
       //     aid: 1,
@@ -865,6 +866,8 @@ export default {
     this.getProductBySearch();
 
     this.currentPage = 1;
+    this.originAddress = this.address;
+    
     
   },
 
@@ -1054,15 +1057,49 @@ export default {
     },
 
     createNewSearch() {
-      this.search = "";
-      if (this.suburb != "") {
-        this.search = "suburb=" + this.suburb;
-        this.search = this.search + "&state=" + this.state;
+
+      let curr_addr = document.getElementById("address").value;
+      console.log("1 Now the curr_addr is "+ curr_addr);
+
+      // fix the bug at created
+      let temp1 = curr_addr.split(",");
+      if(temp1.length!=1){
+        let temp2 = temp1[0].split(" ");
+        let temp3 = temp2.slice(0,temp2.length -1);
+        let temp4 = temp3.join(" ");
+        curr_addr = temp4;
       }
 
-      if (this.postcode != "") {
-        this.search = "postcode=" + this.postcode;
+      this.search = "";
+      console.log("2 Now the curr_addr is "+ curr_addr);
+      if (isNaN(curr_addr)){ // if curr_addr is text
+        if (this.suburb != "") { // The original passed address is a suburb
+          if (this.suburb===curr_addr){ // the input has not changed
+            this.search = this.search+ "suburb=" + this.suburb;
+            this.search = this.search + "&state=" + this.state;
+          }
+          else{ // the input suburb has changed
+            if (this.address.locality === undefined){
+              console.log("The curr_addr is "+curr_addr+" and the this.suburb is "+this.suburb);
+              this.$message.error("Please validate the suburb name by Google Map first!");
+              return;
+            }
+            let new_state = this.address.administrative_area_level_1;
+            let new_suburb = this.address.locality;
+            this.search = this.search + "suburb=" + new_suburb;
+            this.search = this.search + "&state=" + new_state; 
+          }  
+        }
       }
+      else{
+        if (curr_addr.toString().length != 4) {
+          this.$message.error("Please input a valid postcode!");
+          return;
+        }
+
+        this.search = this.search + "postcode=" + curr_addr;
+      }
+      
 
       if (this.showFilterFlag) {
         this.search = this.search + this.createNewFilterQuery();
