@@ -1100,7 +1100,13 @@ export default {
         return;
       }
 
-      // fix the bug at created
+      
+
+      this.search = "";
+
+      if (isNaN(curr_addr)) {
+
+        // fix the bug at created
       let temp1 = curr_addr.split(",");
       if (temp1.length > 1) {
         let temp2 = temp1[0].split(" ");
@@ -1108,10 +1114,6 @@ export default {
         let temp4 = temp3.join(" ");
         curr_addr = temp4;
       }
-
-      this.search = "";
-
-      if (isNaN(curr_addr)) {
         // if curr_addr is text
         if (this.suburb != "") {
           // The original passed address is a suburb
@@ -1174,8 +1176,9 @@ export default {
           return;
         }
 
+        console.log("Now the postcode is "+this.postcode);
         this.search = this.search + "postcode=" + this.postcode;
-
+        console.log("Now this.search is " + this.search);
         this.tempPostcode = this.postcode;
         this.tempSuburb = "";
         this.tempState = "";
@@ -1239,7 +1242,7 @@ export default {
       } else {
         this.search = "currPage=1";
       }
-
+      console.log("In gpbs now, this.search is "+ this.search);
       this.$axios
         .post("/search", this.search)
         .then((res) => {
