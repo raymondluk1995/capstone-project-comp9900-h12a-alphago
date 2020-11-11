@@ -11,6 +11,9 @@ import lombok.experimental.Accessors;
 public class SearchModel {
     // address table
     private String suburb;
+
+    // tao add state.
+    private String state;
     private String postcode;
     // auction
     private Long startDate;
@@ -35,6 +38,7 @@ public class SearchModel {
 
     public boolean isAllEmpty() {
         return this.suburb == null &&
+                this.state == null &&
                 this.postcode == null &&
                 this.startDate == null &&
                 this.endDate == null &&
