@@ -2,24 +2,47 @@
   <div id="search-page">
     <Header>
       <template v-if="this.hasLogin">
-        <el-dropdown trigger="hover" @command="handleCommand" style="align-items: center" placement="bottom">
-          <div class="user" >
-            <el-badge v-if="parseInt(this.unread) !== 0" :value="this.unread" :max="99" class="item">
+        <el-dropdown
+          trigger="hover"
+          @command="handleCommand"
+          style="align-items: center"
+          placement="bottom"
+        >
+          <div class="user">
+            <el-badge
+              v-if="parseInt(this.unread) !== 0"
+              :value="this.unread"
+              :max="99"
+              class="item"
+            >
               <el-avatar :size="70" :src="avatar"></el-avatar>
             </el-badge>
-            <el-avatar  v-else :size="70" :src="avatar"></el-avatar>
-
+            <el-avatar v-else :size="70" :src="avatar"></el-avatar>
           </div>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="profile" icon="el-icon-user-solid"> My Profile</el-dropdown-item>
-            <el-dropdown-item command="property"  icon="el-icon-house"> My Properties</el-dropdown-item>
-            <el-dropdown-item command="auction" icon="el-icon-s-home"> My Auctions</el-dropdown-item>
+            <el-dropdown-item command="profile" icon="el-icon-user-solid">
+              My Profile</el-dropdown-item
+            >
+            <el-dropdown-item command="property" icon="el-icon-house">
+              My Properties</el-dropdown-item
+            >
+            <el-dropdown-item command="auction" icon="el-icon-s-home">
+              My Auctions</el-dropdown-item
+            >
 
-            <el-dropdown-item command="notification"  icon="el-icon-bell">
-              Notifications <el-badge v-show="parseInt(this.unread) !== 0" class="mark" :value="this.unread" style="padding:0;background-color: white"/>
+            <el-dropdown-item command="notification" icon="el-icon-bell">
+              Notifications
+              <el-badge
+                v-show="parseInt(this.unread) !== 0"
+                class="mark"
+                :value="this.unread"
+                style="padding: 0; background-color: white"
+              />
             </el-dropdown-item>
 
-            <el-dropdown-item command="logout" icon="el-icon-turn-off"> Log out</el-dropdown-item>
+            <el-dropdown-item command="logout" icon="el-icon-turn-off">
+              Log out</el-dropdown-item
+            >
           </el-dropdown-menu>
         </el-dropdown>
       </template>
@@ -88,7 +111,7 @@
                   style="
                     height: 38px;
                     color: white;
-                    background-color: rgba(16, 117, 244,0.7);
+                    background-color: rgba(16, 117, 244, 0.7);
                     margin: 0;
                   "
                   @click="showFilter"
@@ -106,10 +129,13 @@
           <div id="filters" v-show="showFilterFlag">
             <el-row :gutter="3" type="flex" justify="center">
               <el-col :span="5">
-                <h4 id="filter-title">FILTERS:</h4>
-              </el-col>
-              <el-col :span="5">
-                <el-dropdown :hide-on-click="false" placement="bottom">
+                <el-popover placement="bottom">
+                  <el-date-picker
+                    v-model="dateFrom"
+                    type="date"
+                    placeholder="Choose the Start Date"
+                  >
+                  </el-date-picker>
                   <el-button
                     style="
                       color: white;
@@ -118,30 +144,26 @@
                       padding: 5px;
                       border-radius: 10px;
                     "
+                    slot="reference"
                   >
                     <i
                       class="fas fa-calendar-alt"
                       style="margin-right: 10px"
                     ></i
-                    >Date Range<i class="el-icon-arrow-down el-icon--right"></i>
+                    >Start Date<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
-                  <el-dropdown-menu slot="dropdown" style="margin: 0">
-                    <el-dropdown-item>
-                      <el-date-picker
-                        v-model="filterDates"
-                        type="daterange"
-                        range-separator="To"
-                        start-placeholder="Start date"
-                        end-placeholder="End date"
-                      >
-                      </el-date-picker>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                </el-popover>
               </el-col>
 
               <el-col :span="5">
-                <el-dropdown :hide-on-click="false" placement="bottom">
+                <el-popover placement="bottom">
+                  <el-date-picker
+                    v-model="dateTo"
+                    type="date"
+                    placeholder="Choose the End Date"
+                    :picker-options="pickerOptions" 
+                  >
+                  </el-date-picker>
                   <el-button
                     style="
                       color: white;
@@ -150,26 +172,69 @@
                       padding: 5px;
                       border-radius: 10px;
                     "
+                    slot="reference"
+                  >
+                    <i
+                      class="fas fa-calendar-alt"
+                      style="margin-right: 10px"
+                    ></i
+                    >End Date<i class="el-icon-arrow-down el-icon--right"></i>
+                  </el-button>
+                </el-popover>
+              </el-col>
+
+              <el-col :span="5">
+                <el-popover placement="bottom">
+                  <el-select
+                    v-model="bedrooms"
+                    placeholder="Select"
+                    class="selects"
+                  >
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                      justify="center"
+                    >
+                    </el-option>
+                  </el-select>
+
+                  <el-button
+                    style="
+                      color: white;
+                      background-color: rgba(20, 60, 127, 0.9);
+                      margin: 15px;
+                      padding: 5px;
+                      border-radius: 10px;
+                    "
+                    slot="reference"
                   >
                     <i class="fas fa-bed" style="margin-right: 10px"></i
                     >{{ bedrooms }} Bedrooms<i
                       class="el-icon-arrow-down el-icon--right"
                     ></i>
                   </el-button>
-                  <el-dropdown-menu slot="dropdown" style="margin: 0">
-                    <el-dropdown-item>
-                      <el-input-number
-                        v-model="bedrooms"
-                        :min="1"
-                        :max="10"
-                      ></el-input-number>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                </el-popover>
               </el-col>
 
               <el-col :span="5">
-                <el-dropdown :hide-on-click="false" placement="bottom">
+                <el-popover placement="bottom">
+                  <el-select
+                    v-model="bathrooms"
+                    placeholder="Select"
+                    class="selects"
+                  >
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                      justify="center"
+                    >
+                    </el-option>
+                  </el-select>
+
                   <el-button
                     style="
                       color: white;
@@ -178,26 +243,33 @@
                       padding: 5px;
                       border-radius: 10px;
                     "
+                    slot="reference"
                   >
                     <i class="fas fa-bath" style="margin-right: 10px"></i
                     >{{ bathrooms }} Bathrooms<i
                       class="el-icon-arrow-down el-icon--right"
                     ></i>
                   </el-button>
-                  <el-dropdown-menu slot="dropdown" style="margin: 0">
-                    <el-dropdown-item>
-                      <el-input-number
-                        v-model="bathrooms"
-                        :min="1"
-                        :max="10"
-                      ></el-input-number>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                </el-popover>
               </el-col>
 
               <el-col :span="5">
-                <el-dropdown :hide-on-click="false" placement="bottom">
+                <el-popover placement="bottom">
+                  <el-select
+                    v-model="garages"
+                    placeholder="Select"
+                    class="selects"
+                  >
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                      justify="center"
+                    >
+                    </el-option>
+                  </el-select>
+
                   <el-button
                     style="
                       color: white;
@@ -206,26 +278,33 @@
                       padding: 5px;
                       border-radius: 10px;
                     "
+                    slot="reference"
                   >
                     <i class="fas fa-car" style="margin-right: 10px"></i
                     >{{ garages }} Garages<i
                       class="el-icon-arrow-down el-icon--right"
                     ></i>
                   </el-button>
-                  <el-dropdown-menu slot="dropdown" style="margin: 0">
-                    <el-dropdown-item>
-                      <el-input-number
-                        v-model="garages"
-                        :min="1"
-                        :max="10"
-                      ></el-input-number>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                </el-popover>
               </el-col>
 
               <el-col :span="5">
-                <el-dropdown placement="bottom" @command="handleCommand_type">
+                <el-popover placement="bottom">
+                  <el-select
+                    v-model="type"
+                    placeholder="Select"
+                    class="selects"
+                  >
+                    <el-option
+                      v-for="item in propTypes"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                      justify="center"
+                    >
+                    </el-option>
+                  </el-select>
+
                   <el-button
                     style="
                       color: white;
@@ -234,27 +313,37 @@
                       padding: 5px;
                       border-radius: 10px;
                     "
+                    slot="reference"
                   >
                     <i class="fas fa-info-circle" style="margin-right: 10px"></i
                     >Type: {{ type
                     }}<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="All"> All </el-dropdown-item>
-                    <el-dropdown-item command="Apartment">
-                      Apartment
-                    </el-dropdown-item>
-                    <el-dropdown-item command="Unit"> Unit </el-dropdown-item>
-                    <el-dropdown-item command="House"> House </el-dropdown-item>
-                    <el-dropdown-item command="Studio">
-                      Studio
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                </el-popover>
               </el-col>
 
               <el-col :span="5">
-                <el-dropdown :hide-on-click="false" placement="bottom">
+                <el-popover placement="bottom">
+                  <el-row>
+                    <div>min ($k)</div>
+                    <el-input-number
+                      v-model="minPrice"
+                      :min="0"
+                      :max="maxPrice"
+                      size="small"
+                    ></el-input-number>
+                  </el-row>
+
+                  <el-row>
+                    <div>max ($k)</div>
+                    <el-input-number
+                      v-model="maxPrice"
+                      :min="minPrice"
+                      :max="100000"
+                      size="small"
+                    ></el-input-number>
+                  </el-row>
+
                   <el-button
                     style="
                       color: white;
@@ -263,35 +352,36 @@
                       padding: 5px;
                       border-radius: 10px;
                     "
+                    slot="reference"
                   >
                     <i class="fas fa-dollar-sign" style="margin-right: 10px"></i
                     >Price<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>
-                      <div>min ($k)</div>
-                      <el-input-number
-                        v-model="minPrice"
-                        :min="0"
-                        :max="100000"
-                        size="small"
-                      ></el-input-number>
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                      <div>max ($k)</div>
-                      <el-input-number
-                        v-model="maxPrice"
-                        :min="0"
-                        :max="100000"
-                        size="small"
-                      ></el-input-number>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                </el-popover>
               </el-col>
 
               <el-col :span="5">
-                <el-dropdown :hide-on-click="false" placement="bottom">
+                <el-popover placement="bottom">
+                  <el-row>
+                    <div>min (m<sup>2</sup>)</div>
+                    <el-input-number
+                      v-model="minArea"
+                      :min="0"
+                      :max="maxArea"
+                      size="small"
+                    ></el-input-number>
+                  </el-row>
+
+                  <el-row>
+                    <div>max (m<sup>2</sup>)</div>
+                    <el-input-number
+                      v-model="maxArea"
+                      :min="minArea"
+                      :max="100000"
+                      size="small"
+                    ></el-input-number>
+                  </el-row>
+
                   <el-button
                     style="
                       color: white;
@@ -300,40 +390,33 @@
                       padding: 5px;
                       border-radius: 10px;
                     "
+                    slot="reference"
                   >
-                    <i class="fas fa-home" style="margin-right: 10px"></i>Area<i
-                      class="el-icon-arrow-down el-icon--right"
-                    ></i>
+                    <i class="fas fa-home" style="margin-right: 10px"></i
+                    >Area<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>
-                      <div>min (m<sup>2</sup>)</div>
-                      <el-input-number
-                        v-model="minArea"
-                        :min="0"
-                        :max="10000"
-                        size="small"
-                      ></el-input-number>
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                      <div>max (m<sup>2</sup>)</div>
-                      <el-input-number
-                        v-model="maxArea"
-                        :min="0"
-                        :max="100000"
-                        size="small"
-                      ></el-input-number>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                </el-popover>
               </el-col>
 
-              <el-col :span="6">
-                <el-dropdown
-                  :hide-on-click="false"
-                  placement="bottom"
-                  @command="handleCommand2"
-                >
+
+
+              <el-col :span="5">
+                <el-popover placement="bottom">
+                  <el-select
+                    v-model="order"
+                    placeholder="Select"
+                    class="selects"
+                  >
+                    <el-option
+                      v-for="item in sortTypes"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                      justify="center"
+                    >
+                    </el-option>
+                  </el-select>
+
                   <el-button
                     style="
                       color: white;
@@ -342,35 +425,27 @@
                       padding: 5px;
                       border-radius: 10px;
                     "
+                    slot="reference"
                   >
                     <i class="el-icon-sort" style="margin-right: 10px"></i
                     >Sort<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="0">
-                      Recommended
-                    </el-dropdown-item>
-                    <el-dropdown-item command="+">
-                      Price: Low to High
-                    </el-dropdown-item>
-                    <el-dropdown-item command="-">
-                      Price: High to Low
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                </el-popover>
               </el-col>
+
+              
 
               <el-col :span="5">
                 <el-button
                   style="
                     color: white;
-                    background-color: rgb(40, 131, 19);
+                    background-color: rgba(127, 127, 127,0.9);
                     margin: 15px;
                     padding: 5px 10px;
                     border-radius: 10px;
                   "
-                  @click="handleSearch"
-                  ><i class="el-icon-check" style="margin-right: 10px"></i>Apply
+                  @click="handleClear"
+                  ><i class="el-icon-error" style="margin-right: 10px"></i>Clear Filter
                 </el-button>
               </el-col>
             </el-row>
@@ -384,7 +459,11 @@
           <div class="items">
             <ul :class="colNumObject">
               <li v-for="item in propList" :key="item.aid">
-                <v-card :class="vcardObject" max-width="2000" @click.native="goDetails(item)">
+                <v-card
+                  :class="vcardObject"
+                  max-width="2000"
+                  @click.native="goDetails(item)"
+                >
                   <div
                     style="
                       background-color: rgba(128, 128, 128, 0.3);
@@ -403,7 +482,9 @@
                   </el-carousel>
 
                   <el-row justify="center" type="flex">
-                    <v-card-title>{{ decapitateAddress(item.address) }}</v-card-title>
+                    <v-card-title>{{
+                      decapitateAddress(item.address)
+                    }}</v-card-title>
                   </el-row>
 
                   <el-row type="flex" justify="center" class="width:100%">
@@ -437,7 +518,7 @@
                         Auction Ends At: {{ showTime(item.endDate) }}
                       </div>
                       <div class="my-4 subtitle-1 result-type">
-                        Attended Bidders: <b>{{item.bidderNum}}</b>
+                        Attended Bidders: <b>{{ item.bidderNum }}</b>
                       </div>
                     </v-card-text>
 
@@ -538,21 +619,12 @@ export default {
 
   data() {
     return {
-      unread:'',
+      unread: "",
       isEmpty: false,
       hasLogin: false,
       searchPropertyList: [],
       filterPropertyList: [],
-      minPrice: 0,
-      maxPrice: 999999999,
-      minArea: 0,
-      maxArea: 999999999,
-      bedrooms: 1,
-      bathrooms: 1,
-      garages: 1,
-      order: "",
-      suburb:"",
-      postcode:"",
+
       //pagination starts
       total: 0,
       pageSize: 6,
@@ -560,13 +632,102 @@ export default {
       showPropList: [],
       // pagination ends
       search: "", // the search condition for whole page
-      type: "All",
-      filterDates: [
-        new Date(),
-        new Date(new Date().setFullYear(new Date().getFullYear() + 2)),
+      type: "Any",
+
+      // variables for filter in Search
+      dateFrom: "",
+      dateTo: "",
+      pickerOptions: "",
+
+      options: [
+        {
+          value: "",
+          label: "Any",
+        },
+
+        {
+          value: "1",
+          label: "1",
+        },
+        {
+          value: "2",
+          label: "2",
+        },
+        {
+          value: "3",
+          label: "3",
+        },
+        {
+          value: "4",
+          label: "4",
+        },
+        {
+          value: "5+",
+          label: "5+",
+        },
       ],
+
+      propTypes: [
+        {
+          value: "",
+          label: "Any",
+        },
+
+        {
+          value: "Apartment",
+          label: "Apartment",
+        },
+        {
+          value: "Commercial",
+          label: "Commercial",
+        },
+        {
+          value: "Unit",
+          label: "Unit",
+        },
+        {
+          value: "House",
+          label: "House",
+        },
+        {
+          value: "Studio",
+          label: "Studio",
+        },
+      ],
+
+
+      sortTypes: [
+        {
+          value: "",
+          label: "Default",
+        },
+
+        {
+          value: "+price",
+          label: "Price: Low To High",
+        },
+        {
+          value: "-price",
+          label: "Price: High To Low",
+        },
+        
+      ],
+
+      bedrooms: "",
+      bathrooms: "",
+      garages: "",
+      order: "",
+      suburb: "",
+      postcode: "",
+      minPrice: 0,
+      maxPrice: 999999999,
+      minArea: 0,
+      maxArea: 999999999,
+
+      // variables for filter Search ends
       filterFlag: false,
       address: "",
+      state: "",
       colNumObject: {
         // twoColUl: true,
         twoColUl: false,
@@ -580,10 +741,14 @@ export default {
         "my-12": true,
         cardWidth40: false,
         cardWidth: true,
-        vcard:true,
+        vcard: true,
       },
 
-      propList:[],
+      propList: [],
+
+      pickerOptions: "",
+
+      searchBase:"",
 
       // propList: [
       //   {
@@ -673,37 +838,33 @@ export default {
       this.hasLogin = true;
       this.avatar = localStorage.getItem("avatar");
       this.$axios
-              .get('/notification/unread')
-              .then(response => {
-                if (response.data.code === 200) {
-                  this.unread = response.data.result;
-                }
-              })
-              .catch(function (error) {
-                this.$message.error(error);
-              });
+        .get("/notification/unread")
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.unread = response.data.result;
+          }
+        })
+        .catch(function (error) {
+          this.$message.error(error);
+        });
     }
 
-
-    if(this.$route.query.postcode===undefined){
-      if (this.$route.query.suburb===undefined){
+    if (this.$route.query.postcode === undefined) {
+      if (this.$route.query.suburb === undefined) {
         this.address = "";
-      }
-      else{
+      } else {
         this.address = this.$route.query.suburb;
         this.suburb = this.$route.query.suburb;
+        this.state = this.$route.query.state;
       }
-      
-    }
-    else{
+    } else {
       this.address = this.$route.query.postcode;
       this.postcode = this.$router.query.postcode;
     }
 
     this.getProductBySearch();
 
-
-    this.currentPage =1 ;
+    this.currentPage = 1;
     this.showProperties();
   },
 
@@ -728,18 +889,6 @@ export default {
 
     var addr = document.getElementById("address");
     addr.value = this.address;
-
-    // if (this.propList.length == 1) {
-    //   this.colNumObject.twoColUl = false;
-    //   this.colNumObject.oneColUl = true;
-    //   this.vcardObject.cardWidth40 = true;
-    //   this.vcardObject.cardWidth = false;
-    // } else {
-    //   this.colNumObject.twoColUl = true;
-    //   this.colNumObject.oneColUl = false;
-    //   this.vcardObject.cardWidth60 = false;
-    //   this.vcardObject.cardWidth = true;
-    // }
 
     this.colNumObject.twoColUl = false;
     this.colNumObject.oneColUl = true;
@@ -824,7 +973,7 @@ export default {
       });
     },
 
-        toSearch() {
+    toSearch() {
       var addr = document.getElementById("address").value;
       if (addr===""){
         this.$router.push({
@@ -834,34 +983,6 @@ export default {
           },
         });
         return ;
-      }
-      if (isNaN(addr)) {
-        if (this.address.locality === undefined){
-          this.$message.error("Please validate the suburb name by Google Map first!");
-          return;
-        }
-        let state = this.address.administrative_area_level_1;
-        addr = this.address.locality;
-        this.$router.push({
-          path: "/search",
-          query: {
-            suburb: addr,
-            state: state,
-            currPage:1,
-          },
-        });
-      } else {
-        if (addr.toString().length != 4) {
-          this.$message.error("Please input a valid postcode!");
-          return;
-        }
-        this.$router.push({
-          path: "/search",
-          query: {
-            postcode: addr,
-            currPage: 1,
-          },
-        });
       }
     },
     showFilter() {
@@ -894,7 +1015,7 @@ export default {
     },
 
     getBidStatus(item) {
-      return(item.currentBid);
+      return item.currentBid;
     },
 
     checkPropList(val) {
@@ -915,56 +1036,78 @@ export default {
       this.address = addressData;
     },
 
-    handleSearch() {
-      this.filterFlag = true;
-      this.getProductBySearch();
+    handleClear() {
+      this.bedrooms = "";
+      this.bathrooms = "";
+      this.garages = "";
+      this.order = "";
+      this.minPrice = 0;
+      this.maxPrice = 999999999;
+      this.minArea = 0;
+      this.maxArea = 999999999;
+      this.dateFrom = "" ;
+      this.dateTo = "";
+      this.pickerOptions = "";
+      this.type = "Any";
     },
 
-    createNewSearch(){
+    createNewSearch() {
       this.search = "";
-      if(this.suburb!=""){
+      if (this.suburb != "") {
         this.search = "suburb=" + this.suburb;
+        this.search = this.search + "&state=" + this.state;
       }
-      
-      if(this.postcode!=""){
+
+      if (this.postcode != "") {
         this.search = "postcode=" + this.postcode;
       }
 
-      if (this.filterFlag) {
-        this.search = this.search + "&startDate=" + this.startDate;
-        this.search = this.search + "&endDate=" + this.endDate;
-
-        if (this.minPrice > 0) {
-          this.search = this.search + "&minPrice=" + this.minPrice;
-        }
-        if (this.maxPrice < 999999999) {
-          this.search = this.search + "&maxPrice=" + this.maxPrice;
-        }
-        if (this.bedrooms !== "") {
-          this.search = this.search + "&bedrooms=" + this.bedrooms;
-        }
-        if (this.bathrooms !== "") {
-          this.search = this.search + "&bathrooms=" + this.bathrooms;
-        }
-        if (this.garages !== "") {
-          this.search = this.search + "&garages=" + this.garages;
-        }
-
-        if (this.order !== "") {
-          this.search = this.search + "&order=" + this.order;
-        }
-        if (this.type !== "All") {
-          this.search = this.search + "&propertyType=" + this.type;
-        }
-        if (this.minArea != 0) {
-          this.search = this.search + "&minArea=" + this.minArea;
-        }
-        if (this.maxArea != 999999999) {
-          this.search = this.search + "&maxArea=" + this.maxArea;
-        }
+      if (this.showFilterFlag) {
+        this.search = this.search + this.createNewFilterQuery();
       }
+      this.searchBase = this.search;
     },
-    
+
+
+
+    createNewFilterQuery(){
+      let result = "";
+      result = result + "&startDate=" + this.dateFrom;
+      result = result + "&endDate=" + this.dateTo;
+
+      if (this.minPrice!=undefined && this.minPrice > 0 ) {
+        let min_price = parseInt(this.minPrice)*1000;
+        result = result + "&minPrice=" + min_price.toString();
+      }
+      if (this.maxPrice!=undefined && this.maxPrice < 100000) {
+        let max_price = parseInt(this.maxPrice)*1000;
+        result = result + "&maxPrice=" + max_price.toString();
+      }
+      if (this.bedrooms !== "") {
+        result = result + "&bedrooms=" + this.bedrooms;
+      }
+      if (this.bathrooms !== "") {
+        result = result + "&bathrooms=" + this.bathrooms;
+      }
+      if (this.garages !== "") {
+        result = result + "&garages=" + this.garages;
+      }
+
+      if (this.order !== "") {
+        result = result + "&order=" + this.order;
+      }
+      if (this.type !== "All") {
+        result = result + "&propertyType=" + this.type;
+      }
+      if (this.minArea!=undefined && this.minArea > 0) {
+        result = result + "&minArea=" + this.minArea;
+      }
+      if (this.maxArea!=undefined && this.maxArea < 100000) {
+        result = result + "&maxArea=" + this.maxArea;
+      }
+      return result;
+    },
+
     // Apply filter now, current page goes back to 1
     getProductBySearch() {
       this.createNewSearch();
@@ -973,9 +1116,9 @@ export default {
         .get("/search?" + this.search)
         .then((res) => {
           this.propList = res.data.result.resVOList;
-          console.log("propList is "+this.propList);
+          console.log("propList is " + this.propList);
           this.total = res.data.result.totalProp;
-          console.log("total is  ",this.total);
+          console.log("total is  ", this.total);
           this.currentPage = 1;
         })
         .catch(function (error) {
@@ -983,12 +1126,11 @@ export default {
         });
     },
 
-
-
     handleCurrentChange: function (currentPage) {
       this.currentPage = currentPage;
-      this.createNewSearch();
-      this.search = this.search+"&currPage="+this.currentPage;
+      // this.createNewSearch(); 
+      this.search = this.searchBase;
+      this.search = this.search + "&currPage=" + this.currentPage;
       this.$axios
         .get("/search?" + this.search)
         .then((res) => {
@@ -1003,16 +1145,15 @@ export default {
 
     showProperties() {
       this.showPropList = this.propList;
-      console.log("showPropList.length is "+ this.showPropList.length);
-      console.log("showPropList[0].address is "+ this.showPropList[0].address);
+      console.log("showPropList.length is " + this.showPropList.length);
+      console.log("showPropList[0].address is " + this.showPropList[0].address);
     },
 
-    decapitateAddress(addr){
-      if (addr.length<30){
+    decapitateAddress(addr) {
+      if (addr.length < 30) {
         return addr;
-      }
-      else{
-        return (addr.slice(0,30)+"...");
+      } else {
+        return addr.slice(0, 30) + "...";
       }
     },
 
@@ -1025,11 +1166,23 @@ export default {
       });
     },
   },
-  // watch: {
-  //   propList: function (val) {
-  //     this.checkPropList(val);
-  //   },
-  // },
+
+  watch: {
+    dateFrom: function (newVal, oldVal) {
+      if (this.dateFrom === "") {
+        this.pickerOptions = "";
+        return;
+      }
+
+      var date_from = this.dateFrom;
+      this.pickerOptions = {
+        disabledDate(time) {
+          return time.getTime() <= date_from;
+        },
+      };
+    },
+
+  },
 };
 </script>
 
@@ -1176,7 +1329,39 @@ li {
   text-align: center;
 }
 
-.vcard{
-  cursor:pointer;
+.vcard {
+  cursor: pointer;
 }
+
+.selects {
+  .el-select-dropdown__list {
+    width: 20% !important;
+  }
+
+  .el-scrollbar__view {
+    width: 20% !important;
+  }
+
+  .el-select-dropdown__item {
+    margin: 0 !important;
+  }
+}
+
+.el-popover {
+  width: 5vh !important;
+}
+
+.el-scrollbar__view {
+  width: 10vh !important;
+}
+
+.el-select-dropdown__list {
+  width: 5vh !important;
+}
+
+.el-select-dropdown__item {
+  margin: 0px;
+  padding-left: 20px;
+}
+
 </style>

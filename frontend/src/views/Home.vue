@@ -348,11 +348,7 @@ export default {
 }
 
 
-.el-input--prefix .el-input__inner {
-  border-radius: 50px !important;
-  height: 50px;
-  font-size: 15px;
-}
+
 
 .search {
   .input {
