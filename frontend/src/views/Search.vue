@@ -865,7 +865,7 @@ export default {
     this.getProductBySearch();
 
     this.currentPage = 1;
-    this.showProperties();
+    
   },
 
   mounted() {
@@ -894,6 +894,8 @@ export default {
     this.colNumObject.oneColUl = true;
     this.vcardObject.cardWidth40 = true;
     this.vcardObject.cardWidth = false;
+
+    history.pushState('','Search A Property','/search');
   },
 
   methods: {
@@ -1072,6 +1074,7 @@ export default {
 
     createNewFilterQuery(){
       let result = "";
+      
       result = result + "&startDate=" + this.dateFrom;
       result = result + "&endDate=" + this.dateTo;
 
@@ -1113,7 +1116,7 @@ export default {
       this.createNewSearch();
       this.search = this.search + "&currPage=1";
       this.$axios
-        .get("/search?" + this.search)
+        .post("/search", this.search)
         .then((res) => {
           this.propList = res.data.result.resVOList;
           console.log("propList is " + this.propList);
@@ -1132,7 +1135,7 @@ export default {
       this.search = this.searchBase;
       this.search = this.search + "&currPage=" + this.currentPage;
       this.$axios
-        .get("/search?" + this.search)
+        .post("/search",this.search)
         .then((res) => {
           this.propList = res.data.result.propList;
           this.total = res.data.result.total;
@@ -1140,13 +1143,7 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
-      this.showProperties();
-    },
-
-    showProperties() {
-      this.showPropList = this.propList;
-      console.log("showPropList.length is " + this.showPropList.length);
-      console.log("showPropList[0].address is " + this.showPropList[0].address);
+      
     },
 
     decapitateAddress(addr) {
