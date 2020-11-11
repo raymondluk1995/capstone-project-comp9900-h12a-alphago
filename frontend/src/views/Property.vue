@@ -1002,7 +1002,7 @@
                 // if (diff2 > 0) {
                 if(this.propInfo.status === 'R'){
                     // this.timeFlag = true;
-                    let st = dayjs(startTime).format("YYYY-MM-DD HH:mm:ss");
+                    let st = dayjs(endtime).format("YYYY-MM-DD HH:mm:ss");
                     this.time = `Will start at ${ this.showTime2(st) }`;
                     // if(diff2<=0){
                     //     // this.timeFlag = false;
@@ -1205,6 +1205,9 @@
                 let res = JSON.parse(e.data);
                 if(res.refresh === true){
                     location.reload()
+                }
+                if(res.newBidder===true){
+                    this.propInfo.bidderNum +=1;
                 }
                 this.propInfo.latestPrice = res.price;
                 let Time = this.showTime(res.time);
