@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     username: root
-    url: jdbc:mysql://13.238.115.166/property_sale?serverTimezone=Australia/Sydney&&useUnicode=true&characterEncoding=UTF-8&&useSSL=true
+    url: jdbc:mysql://3.24.78.45/property_sale?serverTimezone=Australia/Sydney&&useUnicode=true&characterEncoding=UTF-8&&useSSL=true
     password: znx5201314
 #    password: root
 #    url: jdbc:mysql://localhost:3306/property_sale?serverTimezone=Australia/Sydney&&useUnicode=true&characterEncoding=UTF-8&&useSSL=true
@@ -14,7 +14,7 @@ spring:
 # redis
   redis:
     password: 123456
-    host: 13.238.115.166
+    host: 3.24.78.45
     timeout: 5000
 
   # mail
@@ -39,7 +39,7 @@ spring:
           port: 465
   # rabbitmq
   rabbitmq:
-    host: 13.238.115.166
+    host: 3.24.78.45
     username: admin
     password: admin
     myExchange: alpha.go.sender
@@ -62,5 +62,5 @@ mybatis-plus:
 
 
 remote:
-  url: http://localhost:8060/img/
+  url: http://3.24.78.45:8060/img/
 

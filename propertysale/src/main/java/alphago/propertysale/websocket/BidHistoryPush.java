@@ -14,6 +14,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -59,6 +60,24 @@ public class BidHistoryPush {
                 }
             });
         }catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void refresh(long aid){
+        try {
+            HashMap<String, Boolean> m = new HashMap<>();
+            m.put("refresh", true);
+            String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(m);
+            map.get(String.valueOf(aid)).forEach(session -> {
+                        try {
+                            session.getBasicRemote().sendText(msg);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+            );
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
     }

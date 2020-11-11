@@ -15,7 +15,7 @@ import java.util.List;
  * @create: 2020-10-08 00:04
  **/
 public class FileUtil {
-    private static String remote = "http://localhost:8060/img/";
+    private static String remote = "http://3.24.78.45:8060/img/";
     /**
     * @Description: Check if the directory exist
     * @Author: Xiaohan

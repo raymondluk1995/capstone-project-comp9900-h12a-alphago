@@ -178,6 +178,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         if(currentRab != null) {
             auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid",aid).set("current_bid", currentRab.getRabId()));
         }
+        BidHistoryPush.refresh(aid);
     }
 
     @Override

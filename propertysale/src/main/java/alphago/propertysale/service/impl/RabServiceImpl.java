@@ -75,7 +75,8 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
                                 .setTime(bid.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
                                 .setUsername(userMapper.selectById(uid).getUsername())
                                 .setPrice(rab.getHighestPrice())
-                                .setOvertime(overtime));
+                                .setOvertime(overtime)
+                                .setNewBidder(true));
             }else{
                 throw new RuntimeException("Your bid price must larger than " + price + "!");
             }

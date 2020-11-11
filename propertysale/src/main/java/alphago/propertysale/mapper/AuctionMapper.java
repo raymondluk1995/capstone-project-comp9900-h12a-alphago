@@ -25,7 +25,7 @@ public interface AuctionMapper extends BaseMapper<Auction> {
     @Select("SELECT * FROM auction WHERE (status = 'R' OR status = 'A')")
     List<Auction> getAllRunningOrComingAuction();
 
-    @Select("SELECT au.aid, p.bathroom_num , p.bedroom_num , p.garage_num , ad.lat , ad.lng , ad.address ,ad.state ,ad.postcode,ad.suburb \n" +
+    @Select("SELECT au.aid, p.pid, p.bathroom_num , p.bedroom_num , p.garage_num , ad.lat , ad.lng , ad.address ,ad.state ,ad.postcode,ad.suburb \n" +
             "FROM auction au , property p , address ad \n" +
             "WHERE (au.status = 'A' OR au.status = 'R') \n" +
             "AND au.pid = p.pid \n" +

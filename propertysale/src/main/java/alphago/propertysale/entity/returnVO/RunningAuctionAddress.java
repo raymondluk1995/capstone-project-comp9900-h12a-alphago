@@ -19,6 +19,8 @@ public class RunningAuctionAddress {
 
     private Long aid;
 
+    private Long pid;
+
     private Integer bedroomNum;
 
     private Integer bathroomNum;

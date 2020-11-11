@@ -6,6 +6,7 @@ import alphago.propertysale.entity.returnVO.AuctionVO;
 import alphago.propertysale.entity.returnVO.RunningAuctionAddress;
 import alphago.propertysale.mapper.HistoryMapper;
 import alphago.propertysale.service.HistoryService;
+import alphago.propertysale.utils.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -64,6 +65,7 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> impl
             RunningAuctionAddress tmp = heap.poll();
             RecVO vo = new RecVO();
             BeanUtils.copyProperties(tmp, vo);
+            vo.setPhoto(FileUtil.getImages(tmp.getPid()).get(0));
             ret.add(vo);
         }
         return ret;

@@ -24,5 +24,5 @@ public class BidMsg implements Serializable {
     private String username;
     private String price;
     private boolean overtime;
-
+    private boolean newBidder;
 }

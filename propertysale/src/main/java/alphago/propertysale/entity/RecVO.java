@@ -28,4 +28,6 @@ public class RecVO {
 
     private Double lat;
     private Double lng;
+
+    private String photo;
 }
