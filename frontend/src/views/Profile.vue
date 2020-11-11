@@ -50,7 +50,7 @@
 
                     <el-row type="flex" justify="center" >
                         <el-form
-                                class="form"
+                                class="formprofile"
                                 ref="form"
                                 :model="form"
                                 label-width="100px"
@@ -449,7 +449,8 @@
         width:100%;
         /*text-align: center;*/
     }
-    .form {
+    .formprofile {
+        width:60%;
         padding: 30px;
         /*border: 1px solid #ccc;*/
         /*border-radius: 15px;*/

@@ -37,11 +37,18 @@
         <template v-if="!this.notFound && !this.hasEnded">
         <el-row type="flex" justify="center" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
             <el-col :span="16" style="margin: 0 50px 20px 30px; border:1px solid #ccc">
-                <h1 style="margin: 50px 50px 0 50px">{{ propInfo.address }}</h1>
-                <section style="margin: 15px 50px 0 50px">
+                <h3 style="margin: 50px 50px 0 50px;
+                            color:white;
+                            padding:20px;
+                            background-color:  rgba(23,39,73,0.86)
+                        "
+                > <i class="el-icon-location"></i> {{ propInfo.address }}</h3>
+                <section style="margin: 0 50px 0 50px">
 <!--                    <h1>{{ propInfo.address }}</h1>-->
                     <el-row class="banner" :class="addStatusColor(propInfo.status)">
-                        <h5 style="padding: 5px;">{{ time }}</h5>
+                        <h5 style="padding: 5px;"><i class="el-icon-time"></i>
+                            <span style="font-size: 15px">Time Left</span>
+                             {{ time }}</h5>
 
                     </el-row>
                     <el-carousel :interval="5000" arrow="always" :height="cheight">
@@ -96,7 +103,7 @@
                             <span> {{ propInfo.area}} <span style="font-size:15px">m2</span></span>
                         </el-col>
 
-                        <el-col class="tag-wrap2" :span="4">
+                        <el-col class="tag-wrap2" :span="5">
                             <img src="@/assets/type.png" alt="" />
                             <span> {{ propInfo.type}} </span>
                         </el-col>
@@ -123,7 +130,7 @@
 
                         <el-row style="margin-bottom:50px">
                         <el-col >
-                            <h3>Map</h3>
+                            <h3><i class="el-icon-map-location"></i> Map</h3>
                             <div class="map" id="map">
                                 <GmapMap
                                         :center="center"
@@ -146,7 +153,7 @@
 
 
                 <section v-show="propInfo.status ==='A'" style="margin: 0 50px 0 50px;height:400px;">
-                    <h3>Bid History</h3>
+                    <h3><i class="el-icon-paperclip"></i> Bid History</h3>
 
                     <el-table :data="propInfo.history"
                               :max-height="300"
@@ -156,6 +163,8 @@
                               tooltip-effect="light"
                               style="overflow-y: scroll; "
                               :default-sort = "{prop: 'price', order: 'descending'}"
+                              header-cell-style="background-color:rgba(24, 64, 128, 0.7);color:white"
+                              :row-class-name="highlight"
                     >
 
                         <template v-for="(item, index) in columns">
@@ -226,7 +235,7 @@
 
                         </div>
 
-                        <p v-show="propInfo.status ==='A'" style="color:rgba(78,102,146,0.35)">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
+                        <p v-show="propInfo.status ==='A'" style="color:rgba(78,102,146,0.35);font-size:15px">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
                     </div>
 
                     <div v-else style="margin-top: 20px">
@@ -250,7 +259,7 @@
 <!--                    <el-button style="width:100%" @click="test">test</el-button>-->
                 </template>
 
-                <h5 style=" margin-top:100px;">Similar</h5>
+                <h5 style=" margin-top:100px;"><i class="el-icon-magic-stick"></i> Similar</h5>
                 <el-row type="flex" justify="center">
                     <div style="width:100%">
                         <el-col  v-for="item in propInfo.recommendations" :key="item.aid ">
@@ -258,7 +267,7 @@
                                 <el-row :gutter="20">
                                     <el-col :span="8" style="padding:0;margin:0">
                                         <img
-                                                style="height:80px;width:100%;"
+                                                style="height:80px;width:100%;margin-top:8%;"
                                                 :src="item.photo"
                                                  alt=""/>
 
@@ -610,7 +619,7 @@
                     {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table},
                     {prop: 'uid', label: 'UID', width: '300'},
                     {prop: 'username', label: 'User', width: '300'},
-                    {prop: 'price', label: 'Current Bid',formatter: this.formatPrice,sortable:true}
+                    {prop: 'price', label: 'Bid Price',formatter: this.formatPrice,sortable:true}
                 ],
                 propInfo: {
                     id: '',
@@ -961,6 +970,12 @@
                 this.activateIndex = '0';
             },
 
+            highlight({row, rowIndex}) {
+                if (rowIndex === 0) {
+                    return 'highlight-row';
+                }
+                return '';
+            },
 
             addStatusColor(status) {
                 switch(status) {
@@ -1014,7 +1029,7 @@
                 }
                 else{
                     if(diff>0){
-                        this.time = `Time Left: ${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
+                        this.time = `${day} Days: ${hour} Hours: ${minute} Mins: ${second} Secs `;
                     }else{
                         // this.timeFlag = false;
                         // console.log('over');
@@ -1138,7 +1153,7 @@
                                 data.append('registerTime', dayjs().valueOf().toString());
                                 let price = this.form3.initPrice.replace(/,/g, "");
                                 data.append('initPrice', price);
-                                data.append('paymentId', this.selectCard)
+                                data.append('paymentId', this.selectCard);
 
                                 this.$axios.post('/rab/register', data)
                                     .then((response) => {
@@ -1231,9 +1246,10 @@
 
             test(){
                 const h = this.$createElement;
-                this.$notify({
+                this.$notify.info({
                     title: 'Bid Update!',
                     dangerouslyUseHTMLString: true,
+                    duration: 30*1000,
                     message:`User <strong>umr</strong> becomes the winner!\n<strong>Current bid:</strong> $123123123.\n<strong>Bid Time:</strong> ${this.showTime(dayjs().valueOf())}`
                 });
             },
@@ -1549,6 +1565,11 @@
     .el-notification {
         white-space:pre-wrap !important;
     }
+    .el-table .highlight-row {
+        font-weight:bold;
+        background-color: rgba(186, 205, 232, 0.73);
+    }
+
 
 
 
