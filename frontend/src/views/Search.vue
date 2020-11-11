@@ -162,7 +162,7 @@
                     v-model="dateTo"
                     type="date"
                     placeholder="Choose the End Date"
-                    :picker-options="pickerOptions" 
+                    :picker-options="pickerOptions"
                   >
                   </el-date-picker>
                   <el-button
@@ -393,13 +393,12 @@
                     "
                     slot="reference"
                   >
-                    <i class="fas fa-home" style="margin-right: 10px"></i
-                    >Area<i class="el-icon-arrow-down el-icon--right"></i>
+                    <i class="fas fa-home" style="margin-right: 10px"></i>Area<i
+                      class="el-icon-arrow-down el-icon--right"
+                    ></i>
                   </el-button>
                 </el-popover>
               </el-col>
-
-
 
               <el-col :span="5">
                 <el-popover placement="bottom">
@@ -434,19 +433,18 @@
                 </el-popover>
               </el-col>
 
-              
-
               <el-col :span="5">
                 <el-button
                   style="
                     color: white;
-                    background-color: rgba(127, 127, 127,0.9);
+                    background-color: rgba(127, 127, 127, 0.9);
                     margin: 15px;
                     padding: 5px 10px;
                     border-radius: 10px;
                   "
                   @click="handleClear"
-                  ><i class="el-icon-error" style="margin-right: 10px"></i>Clear Filter
+                  ><i class="el-icon-error" style="margin-right: 10px"></i>Clear
+                  Filter
                 </el-button>
               </el-col>
             </el-row>
@@ -696,7 +694,6 @@ export default {
         },
       ],
 
-
       sortTypes: [
         {
           value: "",
@@ -711,7 +708,6 @@ export default {
           value: "-price",
           label: "Price: High To Low",
         },
-        
       ],
 
       bedrooms: "",
@@ -749,16 +745,15 @@ export default {
 
       pickerOptions: "",
 
-      searchBase:"",
-      
-      originAddress:"",
+      searchBase: "",
 
-      suburbOrPostcode:"",
+      originAddress: "",
 
-      tempPostcode:"",
-      tempSuburb:"",
-      tempState:"",
+      suburbOrPostcode: "",
 
+      tempPostcode: "",
+      tempSuburb: "",
+      tempState: "",
 
       // propList: [
       //   {
@@ -878,7 +873,6 @@ export default {
 
     this.currentPage = 1;
     this.originAddress = this.address;
-      
   },
 
   mounted() {
@@ -908,7 +902,7 @@ export default {
     this.vcardObject.cardWidth40 = true;
     this.vcardObject.cardWidth = false;
 
-    history.pushState('','Search A Property','/search');
+    history.pushState("", "Search A Property", "/search");
   },
 
   methods: {
@@ -990,7 +984,6 @@ export default {
 
     toSearch() {
       this.getProductBySearch();
-           
     },
     showFilter() {
       this.showFilterFlag = !this.showFilterFlag;
@@ -1052,79 +1045,106 @@ export default {
       this.maxPrice = 999999999;
       this.minArea = 0;
       this.maxArea = 999999999;
-      this.dateFrom = "" ;
+      this.dateFrom = "";
       this.dateTo = "";
       this.pickerOptions = "";
       this.type = "Any";
     },
 
-
     createNewSearch() {
       let curr_addr = document.getElementById("address").value;
+      if (curr_addr === "") {
+        this.tempPostcode = "empty";
+        this.tempSuburb = "";
+        this.tempState = "";
+        this.search = "";
+        if (this.showFilterFlag) {
+          this.search = this.search + this.createNewFilterQuery();
+        }
+        this.searchBase = this.search;
+        return;
+      }
 
       // fix the bug at created
       let temp1 = curr_addr.split(",");
-      if(temp1.length!=1){
+      if (temp1.length != 1) {
         let temp2 = temp1[0].split(" ");
-        let temp3 = temp2.slice(0,temp2.length -1);
+        let temp3 = temp2.slice(0, temp2.length - 1);
         let temp4 = temp3.join(" ");
         curr_addr = temp4;
       }
 
       this.search = "";
 
-      if (isNaN(curr_addr)){ // if curr_addr is text
-        if (this.suburb != "") { // The original passed address is a suburb
-          if (this.suburb===curr_addr){ // the input has not changed
-            this.search = this.search+ "suburb=" + this.suburb;
+      if (isNaN(curr_addr)) {
+        // if curr_addr is text
+        if (this.suburb != "") {
+          // The original passed address is a suburb
+          if (this.suburb === curr_addr) {
+            // the input has not changed
+            this.search = this.search + "suburb=" + this.suburb;
             this.search = this.search + "&state=" + this.state;
-            this.suburbOrPostcode = "suburb"; 
-            this.postcode = "";
+            this.tempPostcode = "";
+            this.tempSuburb = this.suburb;
+            this.tempState = this.state;
+          } else {
+            // the input suburb has changed
+            if (this.address.locality === undefined) {
+              console.log(
+                "The curr_addr is " +
+                  curr_addr +
+                  " and the this.suburb is " +
+                  this.suburb
+              );
+              this.$message.error(
+                "Please validate the suburb name by Google Map first!"
+              );
+              return;
+            }
+            let new_state = this.address.administrative_area_level_1;
+            let new_suburb = this.address.locality;
+            this.search = this.search + "suburb=" + new_suburb;
+            this.search = this.search + "&state=" + new_state;
+
+            this.tempPostcode = "";
+            this.tempSuburb = new_suburb;
+            this.tempState = new_state;
           }
-          else{ // the input suburb has changed
-            if (this.address.locality === undefined){
-              console.log("The curr_addr is "+curr_addr+" and the this.suburb is "+this.suburb);
-              this.$message.error("Please validate the suburb name by Google Map first!");
-              return;
-            }
-            let new_state = this.address.administrative_area_level_1;
-            let new_suburb = this.address.locality;
-            this.search = this.search + "suburb=" + new_suburb;
-            this.search = this.search + "&state=" + new_state; 
-            
-            this.tempPostcode = "";
-            this.tempSuburb = new_suburb;
-            this.tempState = new_state;
-          }  
+        } else {
+          //previously it was a postcode, now it is a suburb
+          if (this.address.locality === undefined) {
+            console.log(
+              "The curr_addr is " +
+                curr_addr +
+                " and the this.suburb is " +
+                this.suburb
+            );
+            this.$message.error(
+              "Please validate the suburb name by Google Map first!"
+            );
+            return;
+          }
+          let new_state = this.address.administrative_area_level_1;
+          let new_suburb = this.address.locality;
+          this.search = this.search + "suburb=" + new_suburb;
+          this.search = this.search + "&state=" + new_state;
+          this.tempPostcode = "";
+          this.tempSuburb = new_suburb;
+          this.tempState = new_state;
         }
-        else{ //previously it was a postcode, now it is a suburb
-          if (this.address.locality === undefined){
-              console.log("The curr_addr is "+curr_addr+" and the this.suburb is "+this.suburb);
-              this.$message.error("Please validate the suburb name by Google Map first!");
-              return;
-            }
-            let new_state = this.address.administrative_area_level_1;
-            let new_suburb = this.address.locality;
-            this.search = this.search + "suburb=" + new_suburb;
-            this.search = this.search + "&state=" + new_state; 
-            this.tempPostcode = "";
-            this.tempSuburb = new_suburb;
-            this.tempState = new_state;
-        }
-      }
-      else{ // the curr_addr is postcode
+      } else {
+        // the curr_addr is postcode
         if (curr_addr.toString().length != 4) {
           this.$message.error("Please input a valid postcode!");
           return;
         }
 
         this.search = this.search + "postcode=" + curr_addr;
-        
+
         this.tempPostcode = curr_addr;
         this.tempSuburb = "";
         this.tempState = "";
       }
-      
 
       if (this.showFilterFlag) {
         this.search = this.search + this.createNewFilterQuery();
@@ -1132,25 +1152,23 @@ export default {
       this.searchBase = this.search;
     },
 
-
-
-    createNewFilterQuery(){
+    createNewFilterQuery() {
       let result = "";
-      
-      if(this.dateFrom!=""){
+
+      if (this.dateFrom != "") {
         result = result + "&startDate=" + this.dateFrom;
       }
 
-      if(this.dateTo!=""){
+      if (this.dateTo != "") {
         result = result + "&endDate=" + this.dateTo;
       }
-      
-      if (this.minPrice!=undefined && this.minPrice > 0 ) {
-        let min_price = parseInt(this.minPrice)*1000;
+
+      if (this.minPrice != undefined && this.minPrice > 0) {
+        let min_price = parseInt(this.minPrice) * 1000;
         result = result + "&minPrice=" + min_price.toString();
       }
-      if (this.maxPrice!=undefined && this.maxPrice < 100000) {
-        let max_price = parseInt(this.maxPrice)*1000;
+      if (this.maxPrice != undefined && this.maxPrice < 100000) {
+        let max_price = parseInt(this.maxPrice) * 1000;
         result = result + "&maxPrice=" + max_price.toString();
       }
       if (this.bedrooms !== "") {
@@ -1169,10 +1187,10 @@ export default {
       if (this.type !== "All") {
         result = result + "&propertyType=" + this.type;
       }
-      if (this.minArea!=undefined && this.minArea > 0) {
+      if (this.minArea != undefined && this.minArea > 0) {
         result = result + "&minArea=" + this.minArea;
       }
-      if (this.maxArea!=undefined && this.maxArea < 100000) {
+      if (this.maxArea != undefined && this.maxArea < 100000) {
         result = result + "&maxArea=" + this.maxArea;
       }
       return result;
@@ -1181,7 +1199,12 @@ export default {
     // Apply filter now, current page goes back to 1
     getProductBySearch() {
       this.createNewSearch();
-      this.search = this.search + "&currPage=1";
+      if (this.search != "") {
+        this.search = this.search + "&currPage=1";
+      } else {
+        this.search = "currPage=1";
+      }
+
       this.$axios
         .post("/search", this.search)
         .then((res) => {
@@ -1189,13 +1212,13 @@ export default {
           console.log("propList is " + this.propList);
           this.total = res.data.result.totalProp;
           console.log("total is  ", this.total);
-          this.currentPage = 1; 
-          
-          
-          if(tempPostcode===""){
+          this.currentPage = 1;
+
+          if (this.tempPostcode === "") {
             this.suburbOrPostcode = "suburb";
-          }
-          else{
+          } else if ((this.tempPostcode = "empty")) {
+            this.suburbOrPostcode = "";
+          } else {
             this.suburbOrPostcode = "postcode";
           }
 
@@ -1206,7 +1229,6 @@ export default {
           this.tempPostcode = "";
           this.tempSuburb = "";
           this.tempState = "";
-
         })
         .catch(function (error) {
           this.tempPostcode = "";
@@ -1218,11 +1240,11 @@ export default {
 
     handleCurrentChange: function (currentPage) {
       this.currentPage = currentPage;
-      // this.createNewSearch(); 
+      // this.createNewSearch();
       this.search = this.searchBase;
       this.search = this.search + "&currPage=" + this.currentPage;
       this.$axios
-        .post("/search",this.search)
+        .post("/search", this.search)
         .then((res) => {
           this.propList = res.data.result.propList;
           this.total = res.data.result.total;
@@ -1230,7 +1252,6 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
-      
     },
 
     decapitateAddress(addr) {
@@ -1265,7 +1286,6 @@ export default {
         },
       };
     },
-
   },
 };
 </script>
@@ -1447,5 +1467,4 @@ li {
   margin: 0px;
   padding-left: 20px;
 }
-
 </style>
