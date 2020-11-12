@@ -900,7 +900,13 @@ export default {
 
     // this.initialSearch();
     var addr = document.getElementById("address");
-    addr.value = this.address;
+    
+    if(this.postcode !=""){
+      addr.value = this.address;
+    }
+    else{
+      addr.value = this.suburb + ", "+ this.state;
+    }
 
     this.colNumObject.twoColUl = false;
     this.colNumObject.oneColUl = true;
