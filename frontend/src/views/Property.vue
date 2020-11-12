@@ -37,17 +37,23 @@
         <template v-if="!this.notFound && !this.hasEnded">
         <el-row type="flex" justify="center" style="background-color:#fff;box-shadow: inset 0px 15px 20px -15px rgba(70,92,132,0.45);">
             <el-col :span="16" style="margin: 0 50px 20px 30px; border:1px solid #ccc">
-                <h3 style="margin: 50px 50px 0 50px;
+                <el-row style="margin: 50px 50px 0 50px;
                             color:white;
-                            padding:20px;
                             background-color:  rgba(23,39,73,0.86)
-                        "
-                > <i class="el-icon-location"></i> {{ propInfo.address }}</h3>
+                        ">
+                    <el-col style="padding:20px 20px 0 0">
+                    <h3 style="margin:0 0 0 20px;"> <i class="el-icon-location"></i> {{ propInfo.address }}</h3>
+                    </el-col>
+                    <el-row style="margin-left:30px;margin-bottom:10px;">
+                        <span style="font-size:15px">{{ this.showTime2(propInfo.startdate)}} to {{this.showTime2(propInfo.enddate)}}</span>
+                    </el-row>
+                </el-row>
+
                 <section style="margin: 0 50px 0 50px">
 <!--                    <h1>{{ propInfo.address }}</h1>-->
                     <el-row class="banner" :class="addStatusColor(propInfo.status)">
                         <h5 style="padding: 5px;"><i class="el-icon-time"></i>
-                            <span style="font-size: 15px">Time Left</span>
+                            <span v-if="propInfo.status === 'A'" style="font-size: 15px">Time Left </span>
                              {{ time }}</h5>
 
                     </el-row>
@@ -110,21 +116,21 @@
 
                     </el-row>
 
-
+                        <h3><i class="el-icon-tickets"></i> Description</h3>
                         <el-row type="flex" style="margin: 20px 0;">
                     <p>{{ propInfo.description }}</p>
                         </el-row>
 
-                        <el-row type="flex" style="margin-bottom: 10px;">
+                        <h3><i class="el-icon-collection-tag"></i> Features</h3>
+                        <el-row class="items-tag" type="flex">
 <!--                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>-->
-                            <p class='tag-wrap' v-for="tag in (propInfo.position||'').split(',')" >{{ tag }}</p>
-                            <p class='tag-wrap3' v-for="tag in (propInfo.detail||'').split(',')" >{{ tag }}</p>
+                            <ul>
+                                <li  v-for="tag in ((propInfo.position||'') + (','+propInfo.detail||'')).split(',')">
+                                    <p class='tag-wrap' style="color:white" >{{ tag }}</p>
+                                </li>
+                            </ul>
                         </el-row>
 
-<!--                        <el-row type="flex" style="margin: 20px 0;">-->
-<!--                            <p class='tag-wrap3' v-for="tag in propInfo.detail.split(',')" >{{ tag }}</p>-->
-<!--&lt;!&ndash;                        <el-tag v-for="tag in propInfo.detail.split(',')" :key="tag.id">{{ tag }}</el-tag>&ndash;&gt;-->
-<!--                        </el-row>-->
                     </el-col>
                     </el-row>
 
@@ -212,9 +218,22 @@
 <!--                >{{ propInfo.bidderNum }} Bidders</el-button>-->
                 <template v-if="this.username !== null">
                 <template v-if="username !== propInfo.username">
-                    <div v-if="this.propInfo.rab !== null">
-    <!--                    <h3>Place new bid</h3>-->
-                        <div class="new-bid-wrap" >
+
+                    <div v-if="this.propInfo.rab !== null" style="text-align: center;
+                    margin-top:20px;
+                    background-color:rgba(123,161,231,0.15);"
+                   >
+                        <h5 style="background-color: rgba(30,45,98,0.66);
+                        height:50px;padding:15px;
+                        color:white"><i class="el-icon-s-finance" ></i> Place New Bid Here</h5>
+                        <el-row v-show="propInfo.status ==='A'" type="flex" justify="center">
+                            <span style="color:rgba(37,61,114,0.61);font-size:15px">Your Current Bid </span>
+                        </el-row>
+                        <el-row v-show="propInfo.status ==='A'" type="flex" justify="center">
+                        <span style="font-weight:bold"> ${{ propInfo.highestPrice | numFormat }}</span>
+                        </el-row>
+
+                        <el-row type="flex" justify="center" class="new-bid-wrap">
                             <el-form
                                     class="bidform"
                                     ref="bidform"
@@ -223,7 +242,7 @@
                             >
                             <el-col :span="21">
                             <el-form-item  prop="newBid">
-                            <el-input v-model="bidform.newBid" :disabled="this.propInfo.status==='R'" maxlength="10" placeholder="Place New Bid" >
+                            <el-input v-model="bidform.newBid" :disabled="this.propInfo.status==='R'" maxlength="10" placeholder="Bid Price" >
                                 <i slot="suffix" class="input-slot">{{ bidform.newBid | numFormat }} A$</i>
                             </el-input>
                             </el-form-item>
@@ -232,10 +251,11 @@
                             <el-button class='wrap-button' type="primary" icon="el-icon-plus"  @click="addNewBid"></el-button>
                                 </el-col>
                             </el-form>
+                        </el-row>
+                        <el-row style="margin-top:0;">
+                            <p style="font-size:10px"><i class="el-icon-info"></i> New bid price should larger than the latest bid price.</p>
+                        </el-row>
 
-                        </div>
-
-                        <p v-show="propInfo.status ==='A'" style="color:rgba(78,102,146,0.35);font-size:15px">Your Current Bid is $ {{ propInfo.highestPrice | numFormat }}</p>
                     </div>
 
                     <div v-else style="margin-top: 20px">
@@ -1371,9 +1391,7 @@
         /*align-items: center;*/
         width:98%;
         margin-top:20px;
-        .wrap-button{
-            /*margin-left: 30px;*/
-        }
+
     }
     .btn{
         font-size: 20px;
@@ -1505,7 +1523,7 @@
         /*width: 150px;*/
         /*height: 60px;*/
         padding:0 20px;
-        color: #004e85;
+        color: white;
         border: 1px solid #c4ccd5;
         border-radius: 3px;
         font-weight: bold;
@@ -1513,6 +1531,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color: rgba(0, 78, 133, 0.68);
 
     }
     .tag-wrap3 {
@@ -1568,6 +1587,16 @@
     .el-table .highlight-row {
         font-weight:bold;
         background-color: rgba(186, 205, 232, 0.73);
+    }
+
+
+    .items-tag li{
+        display:inline-block;
+    }
+
+    .items-tag ul li {
+        position: relative;
+        list-style-type:none;
     }
 
 
