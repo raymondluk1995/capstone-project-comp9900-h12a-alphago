@@ -165,10 +165,14 @@
                         <!--                        <el-button>Edit</el-button>-->
                     </el-row>
 
-                    <el-row type="flex" style="margin-bottom: 10px;">
+                    <el-row class="items-tag" type="flex" style="margin-bottom: 10px;">
                         <!--                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>-->
-                        <p class='tag-wrap' v-for="tag in (propInfo.position||'').split(',')" >{{ tag }}</p>
-                        <p class='tag-wrap3' v-for="tag in (propInfo.detail||'').split(',')" >{{ tag }}</p>
+<!--                        <p class='tag-wrap' v-for="tag in (propInfo.position||'').split(',')" >{{ tag }}</p>-->
+                        <ul>
+                            <li v-for="tag in ((propInfo.position||'')+(','+propInfo.detail||'')).split(',')">
+                                <p class='tag-wrap3' >{{ tag }}</p>
+                            </li>
+                        </ul>
                     </el-row>
                 </section>
 
@@ -328,31 +332,36 @@
                     //     pid:1,
                     //     status:'R',
                     //     address:'2 Gearin Alley, Mascot, NSW, 2020',
-                    //     position:'apple,pear',
-                    //     detail:'bbq,ppol',
-                    //     photos:['', ''],
+                    //     position:'Close to School,Close to Medical, Close to Train',
+                    //     detail:'BBQ,swimming pool',
+                    //     photos:['https://anywhere-live.s3.amazonaws.com/property_images/f7a6fd63-f66c-415b-b489-a8563120271d.jpg', ''],
                     //     bathroomNum:2,
                     //     bedroomNum:1,
                     //     garageNum:2,
-                    //     description:'this is adejdsifgjaodfgjiodgf.this is adejdsifgjaodfgjiodgf.this is adejdsifgjaodfgjiodgf.this is adejdsifgjaodfgjiodgf.this is adejdsifgjaodfgjiodgf.this is adejdsifgjaodfgjiodgf.this is adejdsifgjaodfgjiodgf.this is adejdsifgjaodfgjiodgf.'
+                    //     type:'Apartment',
+                    //     area:130,
+                    //     description:'The coveted Ebony development has something special about it. From the stunning BBQ area ' +
+                    //         'for all to enjoy or the communal veggie garden ready for you to create your own culinary masterpiece. ' +
+                    //         'This building is simply elegant in its design, from the impressive entry way to the artwork on display. ' +
+                    //         'This is a building you will be proud to say you are a part of.'
                     //
                     // },
                     // {
                     //     pid:2,
                     //     status: 'N',
-                    //     address:'123asd1231231231231231321231231312313',
-                    //     position:'apple,pear',
-                    //     detail:'bbq,ppol',
+                    //     address:'42 Rosebery Avenue, Rosebery, NSW, 2018',
+                    //     position:'pear,apple,pear',
+                    //     detail:'BBQ,swimming pool',
                     //     photos:['','']
                     // },
                     // {
                     //     pid:3,
                     //     aid:1,
+                    //     address:'325/347 Camberwell Road, Camberwell, 3124',
                     //     auction:true,
                     //     position:'apple,pear',
-                    //     detail:'bbq,ppol',
+                    //     detail:'BBQ,swimming pool',
                     //     status: 'A',
-                    //     address:'123asd',
                     //     photos:['','']
                     // }
                 ],
@@ -381,7 +390,9 @@
 
         created(){
             this.username = localStorage.getItem("username");
+            // this.username='123';
             // this.username = this.$store.state.username;
+
             if (this.username !== null) {
                 this.hasLogin = true;
                 this.avatar = localStorage.getItem("avatar");
@@ -404,6 +415,10 @@
                     .then(response => {
                         if (response.data.code === 200) {
                             this.unread = response.data.result;
+                        }else if(response.data.code === 400){
+                            this.$message.error(response.data.msg);
+                        }else{
+                            console.log(response.data.msg);
                         }
                     })
                     .catch(function (error) {
@@ -415,6 +430,7 @@
                 this.$router.push("/login");
             }
 
+            // this.avatar ='https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2931000230,881740929&fm=11&gp=0.jpg'
             // this.isEmpty = false;
             // this.propList = this.originPropertyList;
             // this.propInfo = this.originPropertyList[0];
@@ -465,8 +481,10 @@
                                     if (response.data.code === 200){
                                         this.logout();
                                         this.$router.replace("/");
+                                    }else if(response.data.code === 400){
+                                        this.$message.error(response.data.msg);
                                     }else{
-                                        console.log(response.msg)
+                                        console.log(response.data.msg);
                                     }
                                 }else{
                                     console.log(response.msg)
@@ -621,6 +639,9 @@
                                             message: 'Remove!'
                                         });
                                         location.reload();
+                                    }
+                                    else if(response.data.code === 400){
+                                        this.$message.error(response.data.msg);
                                     }else{
                                         console.log(response.msg);
                                         location.reload()
@@ -749,6 +770,14 @@
         justify-content: center;
         align-items: center;
 
+    }
+    .items-tag li{
+        display:inline-block;
+    }
+
+    .items-tag ul li {
+        position: relative;
+        list-style-type:none;
     }
 
 

@@ -541,6 +541,7 @@ export default {
 
   created() {
     this.username = localStorage.getItem("username");
+    this.username ='123';
     // this.username = this.$store.state.username;
     if (this.username !== null) {
       this.hasLogin = true;
@@ -550,6 +551,10 @@ export default {
             .then(response => {
                 if (response.data.code === 200) {
                     this.unread = response.data.result;
+                }else if(response.data.code === 400){
+                    this.$message.error(response.data.msg);
+                }else{
+                    console.log(response.data.msg);
                 }
             })
             .catch(function (error) {
@@ -559,8 +564,10 @@ export default {
     }
     else{
         this.$message.error("You should login first!");
-        this.$router.push("/login");
+        // this.$router.push("/login");
     }
+      this.avatar ='https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2931000230,881740929&fm=11&gp=0.jpg'
+
 
   },
   methods: {
@@ -586,8 +593,10 @@ export default {
                       if (response.data.code === 200){
                         this.logout();
                           this.$router.replace("/");
+                      }else if(response.data.code === 400){
+                          this.$message.error(response.data.msg);
                       }else{
-                        console.log(response.msg)
+                          console.log(response.data.msg);
                       }
                     }else{
                       console.log(response.msg)
