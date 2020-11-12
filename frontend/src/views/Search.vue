@@ -1000,7 +1000,8 @@ export default {
 
       if (input_addr != "") {
         // the input is not empty now
-        if (input_addr === this.suburb) {
+        let temp_str = this.suburb + ", " + this.state;
+        if (input_addr === temp_str) {
           // searched suburb has not changed
           this.search = "suburb=" + this.suburb;
           this.search = this.search + "&state=" + this.state;
@@ -1294,10 +1295,10 @@ export default {
     },
 
     decapitateAddress(addr) {
-      if (addr.length < 30) {
+      if (addr.length < 50) {
         return addr;
       } else {
-        return addr.slice(0, 30) + "...";
+        return addr.slice(0, 50) + "...";
       }
     },
 
