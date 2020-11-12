@@ -145,6 +145,7 @@
                     >
                     </el-date-picker>
                     <el-button
+                      v-if="dateFrom===''"
                       style="
                         color: white;
                         background-color: rgba(20, 60, 127, 0.9);
@@ -163,20 +164,9 @@
                         class="el-icon-arrow-down el-icon--right"
                       ></i>
                     </el-button>
-                  </el-popover>
-                </el-col>
 
-                <el-col :span="5">
-                  <el-popover placement="bottom">
-                    <el-date-picker
-                      v-model="dateTo"
-                      type="date"
-                      placeholder="Choose the End Date"
-                      :picker-options="pickerOptions"
-                      value-format="timestamp"
-                    >
-                    </el-date-picker>
                     <el-button
+                      v-else
                       style="
                         color: white;
                         background-color: rgba(20, 60, 127, 0.9);
@@ -191,7 +181,67 @@
                         class="fas fa-calendar-alt"
                         style="margin-right: 10px"
                       ></i
-                      >End Date<i class="el-icon-arrow-down el-icon--right"></i>
+                      >{{showDate(dateFrom)}}<i
+                        class="el-icon-arrow-down el-icon--right"
+                      ></i>
+                    </el-button>
+
+
+
+
+                  </el-popover>
+                </el-col>
+
+                <el-col :span="5">
+                  <el-popover placement="bottom">
+                    <el-date-picker
+                      v-model="dateTo"
+                      type="date"
+                      placeholder="Choose the End Date"
+                      :picker-options="pickerOptions"
+                      value-format="timestamp"
+                    >
+                    </el-date-picker>
+                    <el-button
+                      v-if="dateTo===''"
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
+                    >
+                      <i
+                        class="fas fa-calendar-alt"
+                        style="margin-right: 10px"
+                      ></i
+                      >End Date<i
+                        class="el-icon-arrow-down el-icon--right"
+                      ></i>
+                    </el-button>
+
+                    <el-button
+                      v-else
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
+                    >
+                      <i
+                        class="fas fa-calendar-alt"
+                        style="margin-right: 10px"
+                      ></i
+                      >{{showDate(dateTo)}}<i
+                        class="el-icon-arrow-down el-icon--right"
+                      ></i>
                     </el-button>
                   </el-popover>
                 </el-col>
@@ -1128,6 +1178,14 @@ export default {
       } else {
         this.address = this.$route.query.postcode;
       }
+    },
+
+    showDate(date){
+      let year = dayjs(date).year();
+      let month = dayjs(date).month()+1;
+      let day = dayjs(date).date();
+      let result = year + "-" + month + "-" + day;
+      return (result);
     },
 
     showTime(time) {
