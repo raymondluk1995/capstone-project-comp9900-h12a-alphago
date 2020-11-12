@@ -670,7 +670,7 @@
             :page-size="pageSize"
             :total="total"
             @current-change="handleCurrentChange"
-            :current-page="currentPage"
+            :current-page="currPage"
           ></el-pagination>
         </div>
       </el-row>
@@ -707,7 +707,9 @@ export default {
       //pagination starts
       total: 0,
       pageSize: 6,
-      currentPage: 1,
+      // total: 4,
+      // pageSize: 2,
+      currPage: 1,
       showPropList: [],
       // pagination ends
       search: "", // the search condition for whole page
@@ -935,7 +937,7 @@ export default {
 
     this.getProductBySearch();
 
-    this.currentPage = 1;
+    this.currPage = 1;
   },
 
   mounted() {
@@ -1109,7 +1111,7 @@ export default {
 
           this.total = res.data.result.totalProp;
 
-          this.currentPage = 1;
+          this.currPage = 1;
         })
         .catch(function (error) {
           console.log(error);
@@ -1352,7 +1354,7 @@ export default {
 
           this.total = res.data.result.totalProp;
 
-          this.currentPage = 1;
+          this.currPage = 1;
         })
         .catch(function (error) {
           console.log(error);
@@ -1360,10 +1362,22 @@ export default {
     },
 
     handleCurrentChange: function (currentPage) {
-      this.currentPage = currentPage;
+      this.currPage = currentPage;
       // this.createNewSearch();
       this.search = this.searchBase;
-      this.search = this.search + "&currPage=" + this.currentPage;
+      // console.log("Now this.search is "+this.search);
+      // console.log("Now the current page is ", this.currentPage);
+
+      if(this.search===""){
+        this.search = "currPage=" + this.currPage;
+      }
+      else{
+        this.search += "&currPage=" + this.currPage;
+      }
+
+      let newUrl = "/search?" + this.search;
+      
+      this.$router.push(newUrl);
       this.$axios
         .post("/search", this.search)
         .then((res) => {
