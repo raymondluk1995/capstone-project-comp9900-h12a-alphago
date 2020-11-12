@@ -1289,6 +1289,14 @@ export default {
         this.order = this.$route.query.order;
       }
 
+      if (this.$route.query.lat != undefined) {
+        this.latitude = this.$route.query.lat;
+      }
+
+      if (this.$route.query.long != undefined) {
+        this.longitude = this.$route.query.long;
+      }
+
       if (this.$route.query.postcode === undefined) {
         if (this.$route.query.suburb === undefined) {
           this.address = "";
