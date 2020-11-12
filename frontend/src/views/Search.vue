@@ -904,7 +904,7 @@ export default {
     if(this.postcode !=""){
       addr.value = this.address;
     }
-    else{
+    else if (this.suburb!=""){
       addr.value = this.suburb + ", "+ this.state;
     }
 
