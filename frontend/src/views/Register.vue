@@ -152,6 +152,14 @@ export default {
 
   },
   data() {
+    const validateUsername = (rule, value, callback) => {
+      const usernameReg = /^[A-Za-z0-9]+$/;
+      if (!usernameReg.test(value)) {
+        callback(new Error("Please enter the correct username"));
+      } else {
+        callback();
+      }
+    };
     const validateEmail = (rule, value, callback) => {
       const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!emailReg.test(value)) {
@@ -168,6 +176,22 @@ export default {
         callback();
       }
     };
+
+    const validatepswd = (rule, value, callback) => {
+      const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+      const password = reg.test(value);
+      if (value === '') {
+        callback(new Error('Please enter the password'))
+      } else if (value.length < 6) {
+        callback(new Error('Too short ! At least 6 characters'))
+      }else if (!password) {
+        callback(new Error('Must contain numeric digit, uppercase and lowercase letter'))
+      } else {
+        callback()
+      }
+    };
+
+
     const validatePasswordAgain = (rule, value, callback) => {
       let password = this.form.password;
       console.log(password);
@@ -195,13 +219,13 @@ export default {
         imageRaw:'',
       },
       rules: {
-        username: [{required: true, message: "Please enter username", trigger: "blur",},],
+        username: [{required: true, message: "Please enter username", trigger: "blur",}, { validator: validateUsername, trigger: "blur" },],
         firstname: [{required: true, message: "Please enter firstname", trigger: "blur",},],
         lastname: [{required: true, message: " Please enter lastname", trigger: "blur",},],
         phone: [{required: true, message: " Please enter phone", trigger: "blur",}, { validator: validatePhone, trigger: "blur" },],
         email: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
         validate: [{required: true, message: "Please enter validate code", trigger: "blur",},],
-        password: [{required: true, message: " Please enter password", trigger: "blur",},],
+        password: [{required: true, message: " Please enter password", trigger: "blur",},{validator:validatepswd, trigger:'blur'}],
         passwordAgain: [{required: true, message: " Please enter password again", trigger: "blur",}, { validator: validatePasswordAgain, trigger: "blur" },],
       },
     };

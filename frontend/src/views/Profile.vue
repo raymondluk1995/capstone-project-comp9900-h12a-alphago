@@ -10,7 +10,7 @@
         <el-row type="flex" justify="center">
             <el-col :span="10" >
                 <div class="img-size" :style={height:vdaH}>
-                    <img src="../assets/profile-bg.png" alt="" >
+                    <img src="../assets/profile.png" alt="" >
                 </div>
             </el-col>
 
@@ -193,7 +193,7 @@
                 }
                 else{
                     this.$message.error("You should login first!");
-                    // this.$router.push("/login");
+                    this.$router.push("/login");
                 }
 
             this.form.imageUrl = localStorage.getItem('avatar');
@@ -295,8 +295,10 @@
                                         this.$message('Last Name Reset Successful!');
                                         this.form.lastname = response.data.result;
                                         location.reload()
+                                    }else if(response.data.code === 400){
+                                        this.$message.error(response.data.msg);
                                     }else{
-                                        console.log(response.msg);
+                                        console.log(response.data.msg);
                                     }
                                 } else {
                                     console.log(response.msg);
@@ -325,8 +327,10 @@
                                         this.$message('First Name Reset Successful!');
                                         this.form.firstname = response.data.result;
                                         location.reload()
+                                    }else if(response.data.code === 400){
+                                        this.$message.error(response.data.msg);
                                     }else{
-                                        console.log(response.msg);
+                                        console.log(response.data.msg);
                                     }
                                 } else {
                                     console.log(response.msg);
@@ -355,8 +359,10 @@
                                         this.form.avatar = response.data.result;
                                         location.reload()
 
+                                    }else if(response.data.code === 400){
+                                        this.$message.error(response.data.msg);
                                     }else{
-                                        console.log(response.msg);
+                                        console.log(response.data.msg);
                                     }
                                 } else {
                                     console.log(response.msg);

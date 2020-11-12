@@ -760,6 +760,10 @@
             this.username = localStorage.getItem("username");
             // this.username= '123';
             this.id = this.$route.query.id;
+            if(this.id === undefined){
+                this.$message.error("Invalid Auction Page!");
+                this.$router.push("/");
+            }
             let h = document.documentElement.clientHeight  || document.body.clientHeight;
             this.vdaH = h - 147 + 'px';
             if (this.username !== null) {
@@ -906,8 +910,10 @@
                                         this.logout();
                                         location.reload();
                                         // this.$router.replace("/");
+                                    }else if(response.data.code === 400){
+                                        this.$message.error(response.data.msg);
                                     }else{
-                                        console.log(response.msg)
+                                        console.log(response.data.msg);
                                     }
                                 }else{
                                     console.log(response.msg)

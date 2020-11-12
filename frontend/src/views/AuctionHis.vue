@@ -339,6 +339,10 @@ export default {
                 .then(response => {
                   if (response.data.code === 200) {
                     this.unread = response.data.result;
+                  }else if(response.data.code === 400){
+                    this.$message.error(response.data.msg);
+                  }else{
+                    console.log(response.data.msg);
                   }
                 })
                 .catch(function (error) {
