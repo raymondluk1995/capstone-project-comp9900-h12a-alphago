@@ -1041,6 +1041,7 @@ export default {
 
       let search_str = "/search?" + this.search;
       this.$router.push(search_str);
+      this.$router.go(search_str);
     },
 
     showFilter() {
