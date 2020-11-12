@@ -107,7 +107,7 @@
                 </el-button>
               </el-col>
 
-              <el-col style="margin-left: 10px" :span="1" id="search-btn">
+              <el-col style="margin-left: 18px" :span="1" id="search-btn">
                 <el-button
                   style="
                     height: 38px;
@@ -147,6 +147,7 @@
                       border-radius: 10px;
                     "
                     slot="reference"
+                    class="small-font"
                   >
                     <i
                       class="fas fa-calendar-alt"
@@ -176,6 +177,7 @@
                       border-radius: 10px;
                     "
                     slot="reference"
+                    class="small-font"
                   >
                     <i
                       class="fas fa-calendar-alt"
@@ -212,6 +214,7 @@
                       border-radius: 10px;
                     "
                     slot="reference"
+                    class="small-font"
                   >
                     <i class="fas fa-bed" style="margin-right: 10px"></i
                     >{{ bedrooms }} Bedrooms<i
@@ -247,6 +250,7 @@
                       border-radius: 10px;
                     "
                     slot="reference"
+                    class="small-font"
                   >
                     <i class="fas fa-bath" style="margin-right: 10px"></i
                     >{{ bathrooms }} Bathrooms<i
@@ -282,6 +286,7 @@
                       border-radius: 10px;
                     "
                     slot="reference"
+                    class="small-font"
                   >
                     <i class="fas fa-car" style="margin-right: 10px"></i
                     >{{ garages }} Garages<i
@@ -317,6 +322,7 @@
                       border-radius: 10px;
                     "
                     slot="reference"
+                    class="small-font"
                   >
                     <i class="fas fa-info-circle" style="margin-right: 10px"></i
                     >Type<i class="el-icon-arrow-down el-icon--right"></i>
@@ -355,6 +361,7 @@
                       border-radius: 10px;
                     "
                     slot="reference"
+                    class="small-font"
                   >
                     <i class="fas fa-dollar-sign" style="margin-right: 10px"></i
                     >Price<i class="el-icon-arrow-down el-icon--right"></i>
@@ -393,6 +400,7 @@
                       border-radius: 10px;
                     "
                     slot="reference"
+                    class="small-font"
                   >
                     <i class="fas fa-home" style="margin-right: 10px"></i>Area<i
                       class="el-icon-arrow-down el-icon--right"
@@ -427,6 +435,7 @@
                       border-radius: 10px;
                     "
                     slot="reference"
+                    class="small-font"
                   >
                     <i class="el-icon-sort" style="margin-right: 10px"></i
                     >Sort<i class="el-icon-arrow-down el-icon--right"></i>
@@ -444,6 +453,7 @@
                     border-radius: 10px;
                   "
                   @click="handleClear"
+                  class="small-font"
                   ><i class="el-icon-error" style="margin-right: 10px"></i>Clear
                   Filter
                 </el-button>
@@ -1479,5 +1489,9 @@ li {
 .el-select-dropdown__item {
   margin: 0px;
   padding-left: 20px;
+}
+
+.small-font{
+  font-size: 10px !important;
 }
 </style>
