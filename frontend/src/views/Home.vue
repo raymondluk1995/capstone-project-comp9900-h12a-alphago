@@ -245,12 +245,16 @@ export default {
           return;
         }
         let state = this.address.administrative_area_level_1;
+        let latitude = this.address.latitude;
+        let longitude = this.address.longitude;
         addr = this.address.locality;
         this.$router.push({
           path: "/search",
           query: {
             suburb: addr,
             state: state,
+            lat : latitude,
+            long: longitude,
             currPage:1,
           },
         });
