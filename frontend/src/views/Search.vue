@@ -127,338 +127,353 @@
         <!-- Filters Part  -->
 
         <el-row type="flex" justify="center" style="margin:10px;width=95vh">
-          <div id="filters" v-show="showFilterFlag">
-            <el-row :gutter="1" type="flex" justify="center">
-              <el-col :span="5">
-                <el-popover placement="bottom">
-                  <el-date-picker
-                    v-model="dateFrom"
-                    type="date"
-                    placeholder="Choose the Start Date"
-                    value-format="timestamp"
-                  >
-                  </el-date-picker>
-                  <el-button
-                    style="
-                      color: white;
-                      background-color: rgba(20, 60, 127, 0.9);
-                      margin: 15px;
-                      padding: 5px;
-                      border-radius: 10px;
-                    "
-                    slot="reference"
-                    class="small-font"
-                  >
-                    <i
-                      class="fas fa-calendar-alt"
-                      style="margin-right: 10px"
-                    ></i
-                    >Start Date<i class="el-icon-arrow-down el-icon--right"></i>
-                  </el-button>
-                </el-popover>
-              </el-col>
-
-              <el-col :span="5">
-                <el-popover placement="bottom">
-                  <el-date-picker
-                    v-model="dateTo"
-                    type="date"
-                    placeholder="Choose the End Date"
-                    :picker-options="pickerOptions"
-                    value-format="timestamp"
-                  >
-                  </el-date-picker>
-                  <el-button
-                    style="
-                      color: white;
-                      background-color: rgba(20, 60, 127, 0.9);
-                      margin: 15px;
-                      padding: 5px;
-                      border-radius: 10px;
-                    "
-                    slot="reference"
-                    class="small-font"
-                  >
-                    <i
-                      class="fas fa-calendar-alt"
-                      style="margin-right: 10px"
-                    ></i
-                    >End Date<i class="el-icon-arrow-down el-icon--right"></i>
-                  </el-button>
-                </el-popover>
-              </el-col>
-
-              <el-col :span="5">
-                <el-popover placement="bottom">
-                  <el-select
-                    v-model="bedrooms"
-                    placeholder="Select"
-                    class="selects"
-                  >
-                    <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                      justify="center"
+          <div v-show="showFilterFlag">
+            <div id="filters">
+              <el-row
+                :gutter="1"
+                type="flex"
+                justify="center"
+                style="margin-top: 0"
+              >
+                <el-col :span="5">
+                  <el-popover placement="bottom">
+                    <el-date-picker
+                      v-model="dateFrom"
+                      type="date"
+                      placeholder="Choose the Start Date"
+                      value-format="timestamp"
                     >
-                    </el-option>
-                  </el-select>
-
-                  <el-button
-                    style="
-                      color: white;
-                      background-color: rgba(20, 60, 127, 0.9);
-                      margin: 15px;
-                      padding: 5px;
-                      border-radius: 10px;
-                    "
-                    slot="reference"
-                    class="small-font"
-                  >
-                    <i class="fas fa-bed" style="margin-right: 10px"></i
-                    >{{ bedrooms }} Bedrooms<i
-                      class="el-icon-arrow-down el-icon--right"
-                    ></i>
-                  </el-button>
-                </el-popover>
-              </el-col>
-
-              <el-col :span="5">
-                <el-popover placement="bottom">
-                  <el-select
-                    v-model="bathrooms"
-                    placeholder="Select"
-                    class="selects"
-                  >
-                    <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                      justify="center"
+                    </el-date-picker>
+                    <el-button
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
                     >
-                    </el-option>
-                  </el-select>
+                      <i
+                        class="fas fa-calendar-alt"
+                        style="margin-right: 10px"
+                      ></i
+                      >Start Date<i
+                        class="el-icon-arrow-down el-icon--right"
+                      ></i>
+                    </el-button>
+                  </el-popover>
+                </el-col>
 
-                  <el-button
-                    style="
-                      color: white;
-                      background-color: rgba(20, 60, 127, 0.9);
-                      margin: 15px;
-                      padding: 5px;
-                      border-radius: 10px;
-                    "
-                    slot="reference"
-                    class="small-font"
-                  >
-                    <i class="fas fa-bath" style="margin-right: 10px"></i
-                    >{{ bathrooms }} Bathrooms<i
-                      class="el-icon-arrow-down el-icon--right"
-                    ></i>
-                  </el-button>
-                </el-popover>
-              </el-col>
-
-              <el-col :span="5">
-                <el-popover placement="bottom">
-                  <el-select
-                    v-model="garages"
-                    placeholder="Select"
-                    class="selects"
-                  >
-                    <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                      justify="center"
+                <el-col :span="5">
+                  <el-popover placement="bottom">
+                    <el-date-picker
+                      v-model="dateTo"
+                      type="date"
+                      placeholder="Choose the End Date"
+                      :picker-options="pickerOptions"
+                      value-format="timestamp"
                     >
-                    </el-option>
-                  </el-select>
-
-                  <el-button
-                    style="
-                      color: white;
-                      background-color: rgba(20, 60, 127, 0.9);
-                      margin: 15px;
-                      padding: 5px;
-                      border-radius: 10px;
-                    "
-                    slot="reference"
-                    class="small-font"
-                  >
-                    <i class="fas fa-car" style="margin-right: 10px"></i
-                    >{{ garages }} Garages<i
-                      class="el-icon-arrow-down el-icon--right"
-                    ></i>
-                  </el-button>
-                </el-popover>
-              </el-col>
-
-              <el-col :span="5">
-                <el-popover placement="bottom">
-                  <el-select
-                    v-model="type"
-                    placeholder="Select"
-                    class="selects"
-                  >
-                    <el-option
-                      v-for="item in propTypes"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                      justify="center"
+                    </el-date-picker>
+                    <el-button
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
                     >
-                    </el-option>
-                  </el-select>
+                      <i
+                        class="fas fa-calendar-alt"
+                        style="margin-right: 10px"
+                      ></i
+                      >End Date<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </el-popover>
+                </el-col>
 
-                  <el-button
-                    style="
-                      color: white;
-                      background-color: rgba(20, 60, 127, 0.9);
-                      margin: 15px;
-                      padding: 5px;
-                      border-radius: 10px;
-                    "
-                    slot="reference"
-                    class="small-font"
-                  >
-                    <i class="fas fa-info-circle" style="margin-right: 10px"></i
-                    >Type<i class="el-icon-arrow-down el-icon--right"></i>
-                  </el-button>
-                </el-popover>
-              </el-col>
-
-              <el-col :span="5">
-                <el-popover placement="bottom">
-                  <el-row>
-                    <div>min ($k)</div>
-                    <el-input-number
-                      v-model="minPrice"
-                      :min="0"
-                      :max="maxPrice"
-                      size="small"
-                    ></el-input-number>
-                  </el-row>
-
-                  <el-row>
-                    <div>max ($k)</div>
-                    <el-input-number
-                      v-model="maxPrice"
-                      :min="minPrice"
-                      :max="100000"
-                      size="small"
-                    ></el-input-number>
-                  </el-row>
-
-                  <el-button
-                    style="
-                      color: white;
-                      background-color: rgba(20, 60, 127, 0.9);
-                      margin: 15px;
-                      padding: 5px;
-                      border-radius: 10px;
-                    "
-                    slot="reference"
-                    class="small-font"
-                  >
-                    <i class="fas fa-dollar-sign" style="margin-right: 10px"></i
-                    >Price<i class="el-icon-arrow-down el-icon--right"></i>
-                  </el-button>
-                </el-popover>
-              </el-col>
-
-              <el-col :span="5">
-                <el-popover placement="bottom">
-                  <el-row>
-                    <div>min (m<sup>2</sup>)</div>
-                    <el-input-number
-                      v-model="minArea"
-                      :min="0"
-                      :max="maxArea"
-                      size="small"
-                    ></el-input-number>
-                  </el-row>
-
-                  <el-row>
-                    <div>max (m<sup>2</sup>)</div>
-                    <el-input-number
-                      v-model="maxArea"
-                      :min="minArea"
-                      :max="100000"
-                      size="small"
-                    ></el-input-number>
-                  </el-row>
-
-                  <el-button
-                    style="
-                      color: white;
-                      background-color: rgba(20, 60, 127, 0.9);
-                      margin: 15px;
-                      padding: 5px;
-                      border-radius: 10px;
-                    "
-                    slot="reference"
-                    class="small-font"
-                  >
-                    <i class="fas fa-home" style="margin-right: 10px"></i>Area<i
-                      class="el-icon-arrow-down el-icon--right"
-                    ></i>
-                  </el-button>
-                </el-popover>
-              </el-col>
-
-              <el-col :span="5">
-                <el-popover placement="bottom">
-                  <el-select
-                    v-model="order"
-                    placeholder="Select"
-                    class="selects"
-                  >
-                    <el-option
-                      v-for="item in sortTypes"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                      justify="center"
+                <el-col :span="5">
+                  <el-popover placement="bottom">
+                    <el-select
+                      v-model="bedrooms"
+                      placeholder="Select"
+                      class="selects"
                     >
-                    </el-option>
-                  </el-select>
+                      <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                        justify="center"
+                      >
+                      </el-option>
+                    </el-select>
 
+                    <el-button
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
+                    >
+                      <i class="fas fa-bed" style="margin-right: 10px"></i
+                      >{{ bedrooms }} Bedrooms<i
+                        class="el-icon-arrow-down el-icon--right"
+                      ></i>
+                    </el-button>
+                  </el-popover>
+                </el-col>
+
+                <el-col :span="5">
+                  <el-popover placement="bottom">
+                    <el-select
+                      v-model="bathrooms"
+                      placeholder="Select"
+                      class="selects"
+                    >
+                      <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                        justify="center"
+                      >
+                      </el-option>
+                    </el-select>
+
+                    <el-button
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
+                    >
+                      <i class="fas fa-bath" style="margin-right: 10px"></i
+                      >{{ bathrooms }} Bathrooms<i
+                        class="el-icon-arrow-down el-icon--right"
+                      ></i>
+                    </el-button>
+                  </el-popover>
+                </el-col>
+
+                <el-col :span="5">
+                  <el-popover placement="bottom">
+                    <el-select
+                      v-model="garages"
+                      placeholder="Select"
+                      class="selects"
+                    >
+                      <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                        justify="center"
+                      >
+                      </el-option>
+                    </el-select>
+
+                    <el-button
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
+                    >
+                      <i class="fas fa-car" style="margin-right: 10px"></i
+                      >{{ garages }} Garages<i
+                        class="el-icon-arrow-down el-icon--right"
+                      ></i>
+                    </el-button>
+                  </el-popover>
+                </el-col>
+
+                <el-col :span="5">
+                  <el-popover placement="bottom">
+                    <el-select
+                      v-model="type"
+                      placeholder="Select"
+                      class="selects"
+                    >
+                      <el-option
+                        v-for="item in propTypes"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                        justify="center"
+                      >
+                      </el-option>
+                    </el-select>
+
+                    <el-button
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
+                    >
+                      <i
+                        class="fas fa-info-circle"
+                        style="margin-right: 10px"
+                      ></i
+                      >Type<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </el-popover>
+                </el-col>
+
+                <el-col :span="5">
+                  <el-popover placement="bottom">
+                    <el-row>
+                      <div>min ($k)</div>
+                      <el-input-number
+                        v-model="minPrice"
+                        :min="0"
+                        :max="maxPrice"
+                        size="small"
+                      ></el-input-number>
+                    </el-row>
+
+                    <el-row>
+                      <div>max ($k)</div>
+                      <el-input-number
+                        v-model="maxPrice"
+                        :min="minPrice"
+                        :max="100000"
+                        size="small"
+                      ></el-input-number>
+                    </el-row>
+
+                    <el-button
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
+                    >
+                      <i
+                        class="fas fa-dollar-sign"
+                        style="margin-right: 10px"
+                      ></i
+                      >Price<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </el-popover>
+                </el-col>
+
+                <el-col :span="5">
+                  <el-popover placement="bottom">
+                    <el-row>
+                      <div>min (m<sup>2</sup>)</div>
+                      <el-input-number
+                        v-model="minArea"
+                        :min="0"
+                        :max="maxArea"
+                        size="small"
+                      ></el-input-number>
+                    </el-row>
+
+                    <el-row>
+                      <div>max (m<sup>2</sup>)</div>
+                      <el-input-number
+                        v-model="maxArea"
+                        :min="minArea"
+                        :max="100000"
+                        size="small"
+                      ></el-input-number>
+                    </el-row>
+
+                    <el-button
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
+                    >
+                      <i class="fas fa-home" style="margin-right: 10px"></i
+                      >Area<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </el-popover>
+                </el-col>
+
+                <el-col :span="5">
+                  <el-popover placement="bottom">
+                    <el-select
+                      v-model="order"
+                      placeholder="Select"
+                      class="selects"
+                    >
+                      <el-option
+                        v-for="item in sortTypes"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                        justify="center"
+                      >
+                      </el-option>
+                    </el-select>
+
+                    <el-button
+                      style="
+                        color: white;
+                        background-color: rgba(20, 60, 127, 0.9);
+                        margin: 15px;
+                        padding: 5px;
+                        border-radius: 10px;
+                      "
+                      slot="reference"
+                      class="small-font"
+                    >
+                      <i class="el-icon-sort" style="margin-right: 10px"></i
+                      >Sort<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </el-popover>
+                </el-col>
+
+                <el-col :span="5">
                   <el-button
                     style="
                       color: white;
-                      background-color: rgba(20, 60, 127, 0.9);
+                      background-color: rgba(127, 127, 127, 0.9);
                       margin: 15px;
-                      padding: 5px;
+                      padding: 5px 10px;
                       border-radius: 10px;
                     "
-                    slot="reference"
+                    @click="handleClear"
                     class="small-font"
-                  >
-                    <i class="el-icon-sort" style="margin-right: 10px"></i
-                    >Sort<i class="el-icon-arrow-down el-icon--right"></i>
+                    ><i class="el-icon-error" style="margin-right: 10px"></i
+                    >Clear Filter
                   </el-button>
-                </el-popover>
-              </el-col>
-
-              <el-col :span="5">
-                <el-button
-                  style="
-                    color: white;
-                    background-color: rgba(127, 127, 127, 0.9);
-                    margin: 15px;
-                    padding: 5px 10px;
-                    border-radius: 10px;
-                  "
-                  @click="handleClear"
-                  class="small-font"
-                  ><i class="el-icon-error" style="margin-right: 10px"></i>Clear
-                  Filter
-                </el-button>
-              </el-col>
-            </el-row>
+                </el-col>
+              </el-row>
+            </div>
+            <p class="filter-footnote">* Please click the search button to apply filters</p>
           </div>
         </el-row>
       </template>
@@ -991,7 +1006,6 @@ export default {
           }
 
           this.search = "postcode=" + input_addr.toString();
-
         } else {
           // a new suburb is input
           if (this.address.locality === undefined) {
@@ -1008,17 +1022,16 @@ export default {
         }
       }
 
-      if(this.showFilterFlag){
+      if (this.showFilterFlag) {
         this.search = this.search + this.createNewFilterQuery();
       }
 
-      if(this.search===""){
+      if (this.search === "") {
         this.search = "currPage=1";
-      }
-      else{
+      } else {
         this.search += "&currPage=1";
       }
-      
+
       let search_str = "/search?" + this.search;
       this.$router.push(search_str);
     },
@@ -1049,30 +1062,27 @@ export default {
       }
 
       if (this.$route.query.bedrooms != undefined) {
-        if(this.$route.query.bedrooms=="5"){
+        if (this.$route.query.bedrooms == "5") {
           this.bedrooms = this.$route.query.bedrooms + "+";
-        }
-        else{
+        } else {
           this.bedrooms = this.$route.query.bedrooms;
-        }  
+        }
       }
 
       if (this.$route.query.bathrooms != undefined) {
-        if(this.$route.query.bathrooms=="5"){
+        if (this.$route.query.bathrooms == "5") {
           this.bathrooms = this.$route.query.bathrooms + "+";
-        }
-        else{
+        } else {
           this.bathrooms = this.$route.query.bathrooms;
-        } 
+        }
       }
 
       if (this.$route.query.garages != undefined) {
-        if(this.$route.query.garages=="5"){
+        if (this.$route.query.garages == "5") {
           this.garages = this.$route.query.garages + "+";
-        }
-        else{
+        } else {
           this.garages = this.$route.query.garages;
-        } 
+        }
       }
 
       if (this.$route.query.type != undefined) {
@@ -1081,12 +1091,12 @@ export default {
 
       if (this.$route.query.minPrice != undefined) {
         let min_price = parseInt(this.$route.query.minPrice);
-        this.minPrice = Math.round(min_price/1000);
+        this.minPrice = Math.round(min_price / 1000);
       }
 
       if (this.$route.query.maxPrice != undefined) {
         let max_price = parseInt(this.$route.query.maxPrice);
-        this.maxPrice = Math.round(max_price/1000);
+        this.maxPrice = Math.round(max_price / 1000);
       }
 
       if (this.$route.query.minArea != undefined) {
@@ -1491,7 +1501,14 @@ li {
   padding-left: 20px;
 }
 
-.small-font{
+.small-font {
   font-size: 10px !important;
+  color: white;
+}
+
+.filter-footnote{
+  font-size:10px;
+  margin-left:3vh;
+  margin-top:0;
 }
 </style>
