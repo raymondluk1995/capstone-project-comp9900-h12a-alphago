@@ -1491,7 +1491,7 @@ export default {
       this.$axios
         .post("/search", this.search)
         .then((res) => {
-          this.propList = res.data.result.propList;
+          this.propList = res.data.result.resVOList;
           this.total = res.data.result.totalProp;
           // console.log()
         })
