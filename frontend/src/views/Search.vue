@@ -1179,7 +1179,7 @@ export default {
           this.search = this.search + "&state=" + state;
 
           this.search = this.search + "&lat=" + this.address.latitude;
-          this.search = this.search + "&long=" + this.address.longitude;
+          this.search = this.search + "&lng=" + this.address.longitude;
         }
       }
 
@@ -1293,8 +1293,8 @@ export default {
         this.latitude = this.$route.query.lat;
       }
 
-      if (this.$route.query.long != undefined) {
-        this.longitude = this.$route.query.long;
+      if (this.$route.query.lng != undefined) {
+        this.longitude = this.$route.query.lng;
       }
 
       if (this.$route.query.postcode === undefined) {
@@ -1453,7 +1453,7 @@ export default {
 
       if(this.suburb!=""){
         this.search = this.search + "&lat=" + this.latitude;
-        this.search = this.search + "&long=" + this.longitude;
+        this.search = this.search + "&lng=" + this.longitude;
       }
 
       this.$axios
@@ -1492,7 +1492,8 @@ export default {
         .post("/search", this.search)
         .then((res) => {
           this.propList = res.data.result.propList;
-          this.total = res.data.result.total;
+          this.total = res.data.result.totalProp;
+          // console.log()
         })
         .catch(function (error) {
           console.log(error);
