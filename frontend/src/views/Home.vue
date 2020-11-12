@@ -79,7 +79,7 @@
 <!--              <div style="background-color: white;border-radius:50px 0 0 50px  ">-->
               <el-row type="flex" justify="center" >
               <el-col :span="1" style="z-index: 5;">
-                <div style="background-color: white; z-index: 5; height:49px; border-radius:50px 0 0 50px;">
+                <div style="z-index: 5; height:49px; border-radius:50px 0 0 50px;">
 
                 </div>
               </el-col>
