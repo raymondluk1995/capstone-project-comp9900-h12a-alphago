@@ -1093,7 +1093,7 @@ export default {
       this.$router.push(search_str);
       // this.$router.go(search_str);
 
-
+      console.log("Now it is before axios post");
       this.$axios
         .post("/search", this.search)
         .then((res) => {
