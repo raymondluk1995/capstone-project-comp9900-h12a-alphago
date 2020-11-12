@@ -279,9 +279,11 @@
 <!--                    <el-button style="width:100%" @click="test">test</el-button>-->
                 </template>
 
+                <div class="test-page" v-if="searchBarFixed"></div>
+                <div id="test-page"  :class="{'p-fixed':searchBarFixed}">
                 <h5 style=" margin-top:100px;"><i class="el-icon-magic-stick"></i> Similar</h5>
                 <el-row type="flex" justify="center">
-                    <div style="width:100%">
+                    <div style="width:400px">
                         <el-col  v-for="item in propInfo.recommendations" :key="item.aid ">
                             <div class="recomd"  @click="goDetails(item)">
                                 <el-row :gutter="20">
@@ -322,6 +324,9 @@
                         </el-col>
                     </div>
                 </el-row>
+                </div>
+
+
 
             </el-col>
         </el-row>
@@ -579,6 +584,8 @@
 
 
             return {
+                searchBarFixed: false,
+                offsetTop: 0,
                 unread:'',
                 activateIndex:'0',
                 websock: null,
@@ -643,7 +650,7 @@
                 ],
                 propInfo: {
                     id: '',
-                    aid:'12',
+                    aid:'',
                     rab:null,
                     // endDate: new Date(2000, 10, 10, 10, 10),
                     username:'',
@@ -835,6 +842,9 @@
         },
 
         mounted() {
+            window.addEventListener('scroll', this.handleScroll);
+
+
                 this.timer = setInterval(() => {
                     // if (this.timeFlag === true) {
                     //     clearInterval(this.timer);
@@ -842,7 +852,7 @@
                     if(this.propInfo.status==='R'){
                         this.countDown(this.propInfo.startdate, dayjs().valueOf());
                     }else if(this.propInfo.status==='A'){
-                        this.countDown(this.propInfo.enddate,this.propInfo.startdate);
+                        // this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                     }
 
                 }, 1000);
@@ -908,6 +918,15 @@
                         break;
                 }
             },
+
+            handleScroll() {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+                if (this.offsetTop === 0) {
+                    this.offsetTop = document.querySelector('#test-page').offsetTop;
+                }
+                scrollTop >= this.offsetTop ? this.searchBarFixed = true : this.searchBarFixed = false;
+            },
+
 
             goDetails (item) {
                 // console.log('yes')
@@ -1332,6 +1351,12 @@
     .el-date-editor.el-input__inner {
         width: 100%;
     }
+
+    .test-page{
+        width:90%;
+        margin-top:50px;
+    }
+
     .info{
         width:100%;
         height:500px;
@@ -1598,7 +1623,11 @@
         position: relative;
         list-style-type:none;
     }
-
+    .p-fixed {
+        position: fixed;
+        top: 0;
+        width:400px;
+    }
 
 
 
