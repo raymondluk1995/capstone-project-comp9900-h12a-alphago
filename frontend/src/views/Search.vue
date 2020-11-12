@@ -590,6 +590,21 @@
                       class="mx-4"
                       style="margin: 0; padding: 0"
                     ></v-divider>
+
+                    <v-card-text>
+                      <div class="my-4 subtitle-1 result-type v-success" v-if="item.hasRegistered">
+                        You have participated in this auction!
+                      </div>
+
+                      <div class="my-4 subtitle-1 result-type v-no" v-else>
+                        You have not the registered as a bidder of this auction!
+                      </div>
+                    </v-card-text>
+
+                    <v-divider
+                      class="mx-4"
+                      style="margin: 0; padding: 0"
+                    ></v-divider>
                     <v-card-text style="padding: 5px; margin: 0">
                       <el-row
                         type="flex"
@@ -629,7 +644,7 @@
                       >
                         <div class="comingSoon">
                           COMING SOON<br />
-                          PLEASE WAIT
+                          Guided Price: ${{getBidStatus(item) | numFormat}}
                         </div>
                       </el-row>
                     </v-card-text>
@@ -831,10 +846,11 @@ export default {
       //     startDate: new Date(2021, 10, 10, 12, 10),
       //     endDate: new Date(1995, 11, 17, 3, 24, 0),
       //     bidderNum: 5,
+      //     hasRegistered: true,
       //   },
       //   {
       //     aid: 2,
-      //     status: "S",
+      //     status: "A",
       //     bathroomNum: 2,
       //     bedroomNum: 1,
       //     garageNum: 2,
@@ -850,10 +866,11 @@ export default {
       //     startDate: new Date(2021, 10, 10, 12, 10),
       //     endDate: new Date(1995, 11, 17, 3, 24, 0),
       //     bidderNum: 6,
+      //     hasRegistered: false,
       //   },
       //   {
       //     aid: 3,
-      //     status: "S",
+      //     status: "R",
       //     bathroomNum: 2,
       //     bedroomNum: 1,
       //     garageNum: 2,
@@ -869,10 +886,11 @@ export default {
       //     startDate: new Date(2021, 10, 10, 12, 10),
       //     endDate: new Date(1995, 11, 17, 3, 24, 0),
       //     bidderNum: 7,
+      //     hasRegistered: false,
       //   },
       //   {
       //     aid: 4,
-      //     status: "S",
+      //     status: "R",
       //     bathroomNum: 2,
       //     bedroomNum: 1,
       //     garageNum: 2,
@@ -889,6 +907,7 @@ export default {
       //     startDate: new Date(2021, 10, 10, 12, 10),
       //     endDate: new Date(1995, 11, 17, 3, 24, 0),
       //     bidderNum: 5,
+      //     hasRegistered: false,
       //   },
       // ],
     };
@@ -1579,5 +1598,13 @@ li {
   font-size: 10px;
   margin-left: 3vh;
   margin-top: 0;
+}
+
+.v-success{
+  color:rgb(17, 128, 2);
+}
+
+.v-no{
+  color: rgb(251, 2, 7);
 }
 </style>
