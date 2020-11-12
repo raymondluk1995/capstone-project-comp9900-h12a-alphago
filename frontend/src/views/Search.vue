@@ -1091,7 +1091,21 @@ export default {
 
       let search_str = "/search?" + this.search;
       this.$router.push(search_str);
-      this.$router.go(search_str);
+      // this.$router.go(search_str);
+
+
+      this.$axios
+        .post("/search", this.search)
+        .then((res) => {
+          this.propList = res.data.result.resVOList;
+
+          this.total = res.data.result.totalProp;
+
+          this.currentPage = 1;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
 
     showFilter() {
