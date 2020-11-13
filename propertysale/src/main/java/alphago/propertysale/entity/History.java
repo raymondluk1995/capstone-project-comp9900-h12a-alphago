@@ -25,25 +25,38 @@ public class History implements Serializable {
     @TableId(value = "uid")
     private Long uid;
 
-    private Integer bedroomNum;
+    private Double bedroomNum;
 
-    private Integer bathroomNum;
+    private Double bathroomNum;
 
-    private Integer garageNum;
+    private Double garageNum;
 
     private Double lat;
 
     private Double lng;
 
-    private Integer cnt;
+    private Double bedroomCnt;
+
+    private Double bathroomCnt;
+
+    private Double garageCnt;
+
+    private Double latCnt;
+
+    private Double lngCnt;
 
     public static History emptyHistory(){
-        return new History().setCnt(0)
-                .setBathroomNum(0)
-                .setBedroomNum(0)
-                .setGarageNum(0)
+        return new History()
+                .setBathroomNum(0D)
+                .setBedroomNum(0D)
+                .setGarageNum(0D)
                 .setLat(0D)
-                .setLng(0D);
+                .setLng(0D)
+                .setBathroomCnt(0D)
+                .setBedroomCnt(0D)
+                .setGarageCnt(0D)
+                .setLatCnt(0D)
+                .setLngCnt(0D);
     }
 
 

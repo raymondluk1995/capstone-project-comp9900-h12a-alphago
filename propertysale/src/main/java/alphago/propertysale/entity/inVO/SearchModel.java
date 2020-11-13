@@ -14,17 +14,21 @@ public class SearchModel {
 
     // tao add state.
     private String state;
+
+    private Long lat;
+    private Long lng;
+
     private String postcode;
     // auction
     private Long startDate;
     private Long endDate;
 
-    private String minPrice;
-    private String maxPrice;
+    private Long minPrice;
+    private Long maxPrice;
 
-    //
-    private Integer bedRooms;
-    private Integer bathRooms;
+    // property features
+    private Integer bedrooms;
+    private Integer bathrooms;
     private Integer garages;
 
     private String propertyType;
@@ -44,10 +48,9 @@ public class SearchModel {
                 this.endDate == null &&
                 this.minPrice == null &&
                 this.maxPrice == null &&
-                this.bedRooms == null &&
-                this.bathRooms == null &&
+                this.bedrooms == null &&
+                this.bathrooms == null &&
                 this.garages == null &&
-                this.order == null &&
                 this.propertyType == null &&
                 this.minArea == null &&
                 this.maxArea == null;

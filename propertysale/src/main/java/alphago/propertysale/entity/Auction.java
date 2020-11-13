@@ -36,8 +36,9 @@ public class Auction {
     @TableField(value = "end_date")
     private LocalDateTime enddate;
     @TableField(value = "reserve_price")
-    private String price;
-    private String minimumPrice = "1000000";
+    private Long price;
+    private Long minimumPrice;
+    private Long highestPrice;
     private long currentBid;
     private String status;
     private long bidderNum = 0;

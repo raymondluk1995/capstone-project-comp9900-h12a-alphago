@@ -22,7 +22,7 @@ public class BidMsg implements Serializable {
     private Long time;
     private Long uid;
     private String username;
-    private String price;
+    private Long price;
     private boolean overtime;
     private boolean newBidder;
 }

@@ -7,16 +7,12 @@ import alphago.propertysale.entity.returnVO.RunningAuctionAddress;
 import alphago.propertysale.mapper.HistoryMapper;
 import alphago.propertysale.service.HistoryService;
 import alphago.propertysale.utils.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * <p>
@@ -29,20 +25,10 @@ import java.util.PriorityQueue;
 @Service
 public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> implements HistoryService {
 
+    private static final double AREA = 25;
+
     @Autowired
     HistoryMapper historyMapper;
-
-    @Override
-    public void updateHistory(long uid, AuctionVO auctionVO) {
-        historyMapper.update(null, new UpdateWrapper<History>().eq("uid", uid)
-                .setSql("bedroom_num = bedroom_num + " + auctionVO.getBedroomNum())
-                .setSql("bathroom_num = bathroom_num + " + auctionVO.getBathroomNum())
-                .setSql("garage_num = garage_num + " + auctionVO.getGarageNum())
-                .setSql("lat = lat + " + auctionVO.getLat())
-                .setSql("lng = lng + " + auctionVO.getLng())
-                .setSql("cnt = cnt + 1")
-        );
-    }
 
     public static List<RecVO> recommendations(RunningAuctionAddress query, List<RunningAuctionAddress> list){
         PriorityQueue<RunningAuctionAddress> heap =
@@ -51,7 +37,8 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> impl
         for(RunningAuctionAddress comp : list){
             if(comp.getAid().equals(query.getAid())) {continue;}
             comp.setScore(score(query, comp));
-            if(heap.size() < 3){
+            System.out.print(comp+"----> ");
+            if(heap.size() < 4){
                 heap.add(comp);
             }else{
                 if(comp.getScore() < heap.peek().getScore()){
@@ -60,31 +47,27 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> impl
                 }
             }
         }
-        List<RecVO> ret = new ArrayList<>();
+        LinkedList<RecVO> ret = new LinkedList<>();
         while (!heap.isEmpty()){
             RunningAuctionAddress tmp = heap.poll();
             RecVO vo = new RecVO();
             BeanUtils.copyProperties(tmp, vo);
+            vo.setBathroomNum(tmp.getBathroomNum().intValue());
+            vo.setBedroomNum(tmp.getBedroomNum().intValue());
+            vo.setGarageNum(tmp.getGarageNum().intValue());
             vo.setPhoto(FileUtil.getImages(tmp.getPid()).get(0));
-            ret.add(vo);
+            ret.addFirst(vo);
         }
         return ret;
     }
 
     private static double score(RunningAuctionAddress query, RunningAuctionAddress comp){
-        double ret = query.getBathroomNum() * comp.getBathroomNum()
-                + query.getBedroomNum() * comp.getBedroomNum()
-                + query.getGarageNum() * comp.getGarageNum()
-                + query.getLat() * comp.getLat()
-                + query.getLng() * comp.getLng();
+        double ret = Math.pow(query.getBathroomNum() - comp.getBathroomNum(),2)
+                + Math.pow(query.getBedroomNum() - comp.getBedroomNum(), 2)
+                + Math.pow(query.getGarageNum() - comp.getGarageNum(), 2)
+                + Math.pow((query.getLat() - comp.getLat()) / 10 , 2)
+                + Math.pow((query.getLng() - comp.getLng()) / 10 , 2);
 
-        double tmp = Math.sqrt(
-                comp.getBathroomNum() * comp.getBathroomNum()
-                + comp.getBedroomNum() * comp.getBedroomNum()
-                + comp.getGarageNum() * comp.getGarageNum()
-                + comp.getLat() * comp.getLat()
-                + comp.getLng() * comp.getLng()
-        );
-        return ret / tmp;
+        return ret;
     }
 }

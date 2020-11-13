@@ -27,7 +27,7 @@ public class AuctionVO {
     private String status;
     private long startdate;
     private long enddate;
-    private String latestPrice;
+    private Long latestPrice;
     private long bidderNum;
     // owner information
     private long uid;
@@ -51,7 +51,7 @@ public class AuctionVO {
     private String description;
     private List<String> photos;
 
-    private String highestPrice;
+    private Long highestPrice;
 
     private List<RecVO> recommendations;
 }

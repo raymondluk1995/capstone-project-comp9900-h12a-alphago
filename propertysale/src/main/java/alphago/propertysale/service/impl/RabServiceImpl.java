@@ -51,15 +51,16 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
         long uid = rab.getUid();
         Auction auction = auctionMapper.selectById(aid);
         if(auction.getStatus().equals("A")){
-            long bidId = auction.getCurrentBid();
-            String price = bidId == 0 ? "0" : rabMapper.selectById(bidId).getHighestPrice();
-            if(PriceUtil.priceCompare(price, rab.getInitPrice())<0){
+            Long curPrice = auction.getHighestPrice();
+            if(curPrice < rab.getInitPrice()){
                 rabMapper.insert(rab);
                 RabAction bid = new RabAction();
                 bid.setBidTime(rab.getRegisterTime()).setBidPrice(rab.getInitPrice()).setRabId(rab.getRabId());
                 rabActionMapper.insert(bid);
                 auctionMapper.update(null, new UpdateWrapper<Auction>()
-                        .eq("aid", aid).set("current_bid", rab.getRabId()));
+                        .eq("aid", aid)
+                        .set("current_bid", rab.getRabId())
+                        .set("highest_price", rab.getHighestPrice()));
 
                 boolean overtime = Auction.isExpr(aid);
 
@@ -78,12 +79,14 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
                                 .setOvertime(overtime)
                                 .setNewBidder(true));
             }else{
-                throw new RuntimeException("Your bid price must larger than " + price + "!");
+                throw new RuntimeException("Your bid price must larger than " + curPrice + "!");
             }
         }else if(!auction.getStatus().equals("R")){
             throw new RuntimeException("Auction: " + aid + " is finished!");
         }else {
             rabMapper.insert(rab);
+            BidHistoryPush.bidPush(aid,
+                    new BidMsg().setNewBidder(true));
         }
         auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).setSql("bidder_num=bidder_num+1"));
     }

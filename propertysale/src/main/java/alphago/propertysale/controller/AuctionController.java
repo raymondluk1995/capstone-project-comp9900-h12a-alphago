@@ -9,9 +9,11 @@ import alphago.propertysale.entity.returnVO.RabVO;
 import alphago.propertysale.service.*;
 import alphago.propertysale.shiro.JwtInfo;
 import alphago.propertysale.utils.FileUtil;
+import alphago.propertysale.utils.PriceUtil;
 import alphago.propertysale.utils.Result;
 import alphago.propertysale.utils.TimeUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
+import alphago.propertysale.websocket.BidMsg;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -92,7 +96,15 @@ public class AuctionController {
                 auctionVO.setRab(null);
             }
         }
-        auctionVO.setHistory(BidHistoryPush.getAuctionHistory(aid));
+        List<BidMsg> temp = BidHistoryPush.getAuctionHistory(aid);
+        List<BidMsg> history = new ArrayList<>();
+        for(Object obj : temp){
+            BidMsg bidMsg = new BidMsg();
+            BeanUtils.copyProperties(obj, bidMsg);
+            history.add(bidMsg);
+        }
+        history.sort(Comparator.comparing(BidMsg::getPrice));
+        auctionVO.setHistory(history);
         return Result.success(auctionVO);
     }
 
@@ -116,7 +128,7 @@ public class AuctionController {
 
             if(auction.getStatus().equals("A")||auction.getStatus().equals("S") || auction.getStatus().equals("F")){
                 if(auction.getCurrentBid() == 0){
-                    rabVO.setCurrentBid("NO BID");
+                    rabVO.setCurrentBid(null);
                 }else {
                     rabVO.setCurrentBid(rabService.getOne(new QueryWrapper<Rab>()
                             .eq("rab_id", auction.getCurrentBid()))

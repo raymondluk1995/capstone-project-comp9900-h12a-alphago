@@ -98,25 +98,23 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         auctionVO.setEnddate(auction.getEnddate().toInstant(TimeUtil.getMyZone()).toEpochMilli());
         // Update History
         Subject subject = SecurityUtils.getSubject();
-        List<RunningAuctionAddress> list = auctionMapper.getRunningAuctionAddress();
+
         RunningAuctionAddress rec = new RunningAuctionAddress();
         if (subject.isAuthenticated()) {
             JwtInfo info = (JwtInfo) subject.getPrincipal();
             long uid = info.getUid();
-            historyMapper.update(null, new UpdateWrapper<History>().eq("uid", uid)
-                    .setSql("bedroom_num = bedroom_num + " + auctionVO.getBedroomNum())
-                    .setSql("bathroom_num = bathroom_num + " + auctionVO.getBathroomNum())
-                    .setSql("garage_num = garage_num + " + auctionVO.getGarageNum())
-                    .setSql("lat = lat + " + auctionVO.getLat())
-                    .setSql("lng = lng + " + auctionVO.getLng())
-                    .setSql("cnt = cnt + 1"));
-            History history = historyMapper.selectById(uid);
-            BeanUtils.copyProperties(history, rec);
-        } else {
-            rec.setBathroomNum(property.getBathroomNum()).setBedroomNum(property.getBedroomNum())
-                    .setGarageNum(property.getGarageNum()).setLat(Double.valueOf(address.getLat())).setLng(Double.valueOf(address.getLng()));
+            HistoryUpdater updater = new HistoryUpdater().setUid(uid).setBathroomNum(property.getBathroomNum())
+                    .setBedroomNum(property.getBedroomNum()).setGarageNum(property.getGarageNum())
+                    .setLat(Double.parseDouble(address.getLat()))
+                    .setLng(Double.parseDouble(address.getLng()));
+            historyMapper.updateByVisit(updater);
         }
+        rec.setBathroomNum((double) property.getBathroomNum()).setBedroomNum((double) property.getBedroomNum())
+                .setGarageNum((double) property.getGarageNum())
+                .setLat(Double.valueOf(address.getLat())).setLng(Double.valueOf(address.getLng()));
         rec.setAid(aid);
+
+        List<RunningAuctionAddress> list = auctionMapper.getRunningAuctionAddress();
         auctionVO.setRecommendations(HistoryServiceImpl.recommendations(rec, list));
         return auctionVO;
     }
@@ -176,7 +174,11 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         }
         // set current rab
         if (currentRab != null) {
-            auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("current_bid", currentRab.getRabId()));
+            auctionMapper.update(null,
+                    new UpdateWrapper<Auction>()
+                            .eq("aid", aid)
+                            .set("current_bid", currentRab.getRabId())
+                            .set("highest_price", currentRab.getHighestPrice()));
         }
         BidHistoryPush.refresh(aid);
     }
@@ -202,7 +204,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             Rab rab = rabMapper.selectById(auction.getCurrentBid());
             message.setBidPrice(rab.getHighestPrice());
             // Auction Success
-            if (PriceUtil.priceCompare(rab.getHighestPrice(), auction.getPrice()) >= 0) {
+            if (rab.getHighestPrice()>= auction.getPrice()) {
                 auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "S"));
                 propertyMapper.update(null, new UpdateWrapper<Property>()
                         .eq("pid", auction.getPid())
@@ -228,7 +230,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 return;
             }
         } else {
-            message.setBidPrice("No Bid!");
+            message.setBidPrice(null);
         }
         // Auction Fail
         auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("status", "F"));
@@ -245,16 +247,26 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
 
     @Override
     public SearchVO getSearchVO(SearchModel model) {
+        Subject subject = SecurityUtils.getSubject();
         SearchVO vo = new SearchVO();
         Page<Auction> page = new Page<>(model.getCurrPage(), 6);
         IPage<Auction> res = null;
+        boolean update = false;
 
         List<SearchResVO> ret = new ArrayList<>();
         vo.setResVOList(ret);
         if (model.isAllEmpty()) {
             // if you are just a ranger.
-            res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
-                    .orderByDesc("aid"));
+            if(model.getOrder() == null) {
+                res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
+                        .orderByDesc("aid"));
+            }else if(model.getOrder().equals("price")){
+                res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
+                        .orderByAsc("highest_price"));
+            }else{
+                res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
+                        .orderByDesc("highest_price"));
+            }
             List<Auction> runningOrComingAuctions = /* auctionMapper.getAllRunningOrComingAuction();*/ res.getRecords();
             for (Auction auction : runningOrComingAuctions) {
                 SearchResVO searchResVO = new SearchResVO();
@@ -262,18 +274,17 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 if (auction.getStatus().equals("R")) {
                     // registered bid.
                     // set to minimum price
-                    searchResVO.setCurrentBid(auction.getMinimumPrice());
+                    searchResVO.setHighestPrice(auction.getMinimumPrice());
                 } else if (auction.getStatus().equals("A")) {
                     // if you are coming bid.
                     long currBid = auction.getCurrentBid();
                     if (currBid == 0) {
                         // set to Not bid
-
-                        searchResVO.setCurrentBid(auction.getMinimumPrice());
+                        searchResVO.setHighestPrice(auction.getMinimumPrice());
                     } else {
                         // set to rab.highest Price
                         Rab rab = rabMapper.selectById(auction.getCurrentBid());
-                        searchResVO.setCurrentBid(rab.getHighestPrice());
+                        searchResVO.setHighestPrice(rab.getHighestPrice());
                     }
                 }
                 Property property = propertyMapper.selectOne(new QueryWrapper<Property>().eq("pid", auction.getPid()));
@@ -292,11 +303,22 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             vo.setTotalProp(res.getTotal());
         } else {
             QueryWrapper<SearchResVO> voQueryWrapper = new QueryWrapper<>();
+            UpdateWrapper<History> updateWrapper = new UpdateWrapper<>();
             if (model.getSuburb() != null) {
                 voQueryWrapper.eq("a.suburb", model.getSuburb());
             }
             if (model.getState() != null) {
                 voQueryWrapper.eq("a.state", model.getState());
+            }
+            if (model.getLat() != null){
+                update = true;
+                updateWrapper.setSql("lat = lat +" + model.getLat());
+                updateWrapper.setSql("lat_cnt = lat_cnt + 1");
+            }
+            if (model.getLng() != null){
+                update = true;
+                updateWrapper.setSql("lng = lng +" + model.getLng());
+                updateWrapper.setSql("lng_cnt = lng_cnt + 1");
             }
             if (model.getPostcode() != null) {
                 voQueryWrapper.eq("a.postcode", model.getPostcode());
@@ -315,14 +337,23 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 voQueryWrapper.le("rab.highest_price", model.getMaxPrice());
             }
 
-            if (model.getBedRooms() != null) {
-                voQueryWrapper.eq("prop.bedroom_num", model.getBedRooms());
+            if (model.getBedrooms() != null) {
+                voQueryWrapper.eq("prop.bedroom_num", model.getBedrooms());
+                update = true;
+                updateWrapper.setSql("bedroom_num = bedroom_num +" + model.getBedrooms());
+                updateWrapper.setSql("bedroom_cnt = bedroom_cnt + 1");
             }
-            if (model.getBathRooms() != null) {
-                voQueryWrapper.eq("prop.bathroom_num", model.getBathRooms());
+            if (model.getBathrooms() != null) {
+                voQueryWrapper.eq("prop.bathroom_num", model.getBathrooms());
+                update = true;
+                updateWrapper.setSql("bathroom_num = bathroom_num +" + model.getBathrooms());
+                updateWrapper.setSql("bathroom_cnt = bathroom_cnt + 1");
             }
             if (model.getGarages() != null) {
                 voQueryWrapper.eq("prop.garage_num", model.getGarages());
+                update = true;
+                updateWrapper.setSql("garage_num = garage_num +" + model.getBedrooms());
+                updateWrapper.setSql("garage_cnt = garage_cnt + 1");
             }
             if (model.getPropertyType() != null) {
                 voQueryWrapper.eq("prop.type", model.getPropertyType());
@@ -334,18 +365,18 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             if (model.getMaxArea() != null) {
                 voQueryWrapper.le("prop.area", model.getMaxArea());
             }
-            if (model.getOrder() != null) {
-                if (model.getOrder().equals("price")) {
-                    // asc
-                    voQueryWrapper.orderByAsc("rab.highest_price");
-                } else if (model.getOrder().equals("-price")) {
-                    voQueryWrapper.orderByDesc("rab.highest_price");
-                }
-            }
             Page<SearchResVO> searchResVOPage = new Page<SearchResVO>(model.getCurrPage(), 6);
 
-            IPage<SearchResVO> searchResVOS = auctionMapper.getAllRunningOrComingRes(searchResVOPage, voQueryWrapper);
+            IPage<SearchResVO> searchResVOS = null;
 
+            if(model.getOrder() == null){
+                searchResVOS = auctionMapper.getAllRunningOrComingRes(searchResVOPage, voQueryWrapper);
+            } else if (model.getOrder().equals("price")) {
+                // asc
+                searchResVOS = auctionMapper.getAllRunningOrComingResASC(searchResVOPage, voQueryWrapper);
+            }else{
+                searchResVOS = auctionMapper.getAllRunningOrComingResDESC(searchResVOPage, voQueryWrapper);
+            }
             // get their address.
             List<SearchResVO> resVOS = searchResVOS.getRecords();
             for (SearchResVO searchResVO : resVOS) {
@@ -356,9 +387,35 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 searchResVO.setPhotos(FileUtil.getImages(searchResVO.getPid()));
             }
 
+            // update history
+            if(update && subject.isAuthenticated()){
+                long uid = ((JwtInfo)subject.getPrincipal()).getUid();
+                historyMapper.update(null, updateWrapper.eq("uid", uid));
+            }
             vo.setResVOList(searchResVOS.getRecords());
             vo.setCurrPage(model.getCurrPage());
             vo.setTotalProp(searchResVOS.getTotal());
+        }
+        // get recommendations
+        if(subject.isAuthenticated()) {
+            long uid = ((JwtInfo) subject.getPrincipal()).getUid();
+            RunningAuctionAddress query = new RunningAuctionAddress();
+            History history = historyMapper.selectById(uid);
+
+            if (history.getBathroomCnt() == 0) query.setBathroomNum(1D);
+            else query.setBathroomNum(history.getBathroomNum() / history.getBathroomCnt());
+            if (history.getBedroomCnt() == 0) query.setBedroomNum(2D);
+            else query.setBedroomNum(history.getBedroomNum() / history.getBedroomCnt());
+            if (history.getGarageCnt() == 0) query.setGarageNum(1D);
+            else query.setGarageNum(history.getGarageNum() / history.getGarageCnt());
+            if (history.getLat() == 0) query.setBathroomNum(-33.870893);
+            else query.setLat(history.getLat() / history.getLatCnt());
+            if (history.getLng() == 0) query.setLng(151.209303);
+            else query.setLng(history.getLng() / history.getLngCnt());
+
+
+            List<RunningAuctionAddress> list = auctionMapper.getRunningAuctionAddress();
+            vo.setRecommendations(HistoryServiceImpl.recommendations(query, list));
         }
         return vo;
     }

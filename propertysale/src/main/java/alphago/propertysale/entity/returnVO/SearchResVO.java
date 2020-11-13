@@ -1,5 +1,6 @@
 package alphago.propertysale.entity.returnVO;
 
+import alphago.propertysale.entity.RecVO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -16,7 +17,7 @@ public class SearchResVO {
     private Long pid;
     private Long aid;
     private String status;
-    private String currentBid; // R -> minimumprice A -> 0?"Not bid" : rab.highestPrice
+    private Long highestPrice;
     private LocalDateTime startdate;
     private LocalDateTime enddate;
 

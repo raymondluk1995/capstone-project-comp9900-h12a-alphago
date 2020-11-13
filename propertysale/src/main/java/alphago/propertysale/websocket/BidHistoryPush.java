@@ -49,8 +49,6 @@ public class BidHistoryPush {
 
     public static void bidPush(long aid , BidMsg bidMsg) {
         try {
-            addBidHistory(aid, bidMsg);
-
             String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(bidMsg);
             map.get(String.valueOf(aid)).forEach(session -> {
                 try {
@@ -62,6 +60,7 @@ public class BidHistoryPush {
         }catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        addBidHistory(aid, bidMsg);
     }
 
     public static void refresh(long aid){
@@ -90,7 +89,7 @@ public class BidHistoryPush {
     public static List<BidMsg> getAuctionHistory(long aid){
         RedisTemplate redis = RedisUtil.getRedis();
         Object history = redis.opsForValue().get("History:" + aid);
-        return history == null ? new ArrayList<BidMsg>() : (List<BidMsg>)history;
+        return history == null ? new ArrayList<>() : (List<BidMsg>)history;
     }
 
     public static void addBidHistory(long aid, BidMsg bidMsg){

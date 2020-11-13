@@ -32,9 +32,9 @@ public class Rab implements Serializable {
 
     private LocalDateTime registerTime;
 
-    private String initPrice;
+    private Long initPrice;
 
-    private String highestPrice;
+    private Long highestPrice;
 
-    private long paymentId;
+    private Long paymentId;
 }

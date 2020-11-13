@@ -28,6 +28,6 @@ public class RabVO {
     private long startdate;
     private long enddate;
 
-    private String currentBid;  //R: minimum price
-    private String highestPrice;
+    private Long currentBid;  //R: minimum price
+    private Long highestPrice;
 }

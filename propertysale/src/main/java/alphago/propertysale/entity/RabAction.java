@@ -25,7 +25,7 @@ public class RabAction implements Serializable {
 
     private Long rabId;
 
-    private String bidPrice;
+    private Long bidPrice;
 
     private LocalDateTime bidTime;
 

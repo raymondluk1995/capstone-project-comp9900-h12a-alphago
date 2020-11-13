@@ -17,15 +17,17 @@ public class RunningAuctionAddress {
 
     private double score;
 
+    private String status;
+
     private Long aid;
 
     private Long pid;
 
-    private Integer bedroomNum;
+    private Double bedroomNum;
 
-    private Integer bathroomNum;
+    private Double bathroomNum;
 
-    private Integer garageNum;
+    private Double garageNum;
 
     private Double lat;
 

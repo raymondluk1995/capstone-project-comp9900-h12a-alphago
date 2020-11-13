@@ -61,7 +61,7 @@ public class RabActionServiceImpl extends ServiceImpl<RabActionMapper, RabAction
         // Check highest price
         long bidId = auction.getCurrentBid();
         Rab bid = rabMapper.selectById(bidId);
-        if(PriceUtil.priceCompare(bid.getHighestPrice(), rabAction.getBidPrice()) >= 0){
+        if(bid.getHighestPrice() >= rabAction.getBidPrice()){
             throw new RuntimeException("The bid price is smaller than current highest price!");
         }
         // add bid
@@ -71,7 +71,10 @@ public class RabActionServiceImpl extends ServiceImpl<RabActionMapper, RabAction
                                             .eq("rab_id", rabAction.getRabId())
                                             .set("highest_price", rabAction.getBidPrice()));
         // update auction's current bid
-        auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).set("current_bid", rab.getRabId()));
+        auctionMapper.update(null, new UpdateWrapper<Auction>()
+                .eq("aid", aid)
+                .set("current_bid", rab.getRabId())
+                .set("highest_price", rab.getHighestPrice()));
 
         boolean overtime = Auction.isExpr(aid);
         if(overtime){

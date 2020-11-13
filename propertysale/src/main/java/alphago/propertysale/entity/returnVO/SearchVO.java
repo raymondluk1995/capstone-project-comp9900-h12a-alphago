@@ -1,5 +1,6 @@
 package alphago.propertysale.entity.returnVO;
 
+import alphago.propertysale.entity.RecVO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,4 +13,5 @@ public class SearchVO {
     private Long totalProp;
     private List<SearchResVO> resVOList;
 
+    private List<RecVO> recommendations;
 }

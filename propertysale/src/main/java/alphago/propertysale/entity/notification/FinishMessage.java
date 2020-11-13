@@ -26,7 +26,7 @@ public class FinishMessage implements Serializable {
     private long aid;
     private long pid;
     private String address;
-    private String bidPrice;
+    private Long bidPrice;
     // seller details
     private String sellerName;
     private String sellerFullName;

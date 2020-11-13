@@ -40,8 +40,6 @@ public class PropertyController {
     @Autowired
     private AddressService addressService;
     @Autowired
-    private MessageProducer messageProducer;
-    @Autowired
     private AuctionService auctionService;
     @Value("${remote.url}")
     private String url;
@@ -56,31 +54,10 @@ public class PropertyController {
 
         if(property.isAuction() && auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
                 System.currentTimeMillis() < 0) return Result.fail("Start Time Wrong!");
-
-        // Register Property
-        property.setOwner(ownerId);
-        propertyService.save(property);
-        // Save Address
-        Long pid = property.getPid();
-        address.setPid(pid);
-        addressService.save(address);
-
-        // upload file
         if(photos.length == 0) return Result.fail("No photos!");
-        ImgPorter[] imgPorters = new ImgPorter[photos.length];
-        for(int i = 0 ; i < photos.length ; i++){
-            imgPorters[i] = new ImgPorter().setImage(photos[i].getBytes())
-                    .setName(photos[i].getOriginalFilename())
-                    .setPid(pid).setUid(ownerId);
-        }
-        messageProducer.sendMsg(imgPorters , CheckCode.IMAGE);
-        // Register Auction
-        if(property.isAuction()){
-            auction.setPid(pid);
 
-            registerNewAuction(auction, property.getOwner());
-        }
-        Thread.sleep(1500);
+        propertyService.propertyRegister(ownerId, property, address, photos, auction);
+
         return Result.success("success");
     }
 
@@ -123,10 +100,7 @@ public class PropertyController {
         // Check
         long pid = auction.getPid();
         if(propertyService.getById(pid).isAuction()) return Result.fail("Property has already registered!");
-        else{
-            propertyService.update(new UpdateWrapper<Property>().eq("pid", auction.getPid()).set("auction", true));
-        }
-        registerNewAuction(auction, seller);
+        propertyService.propertyNewAuction(auction, seller);
 
         return Result.success("Add new Auction!");
     }
@@ -159,18 +133,5 @@ public class PropertyController {
         auctionService.auctionCancel(pid, aid);
 
         return Result.success("success!");
-    }
-
-
-    private void registerNewAuction(Auction auction, long seller){
-        auction.setStatus(Auction.REGISTERED);
-        auction.setSeller(seller);
-
-        auctionService.save(auction);
-        // Set count down
-        RedisTemplate redisTemplate = RedisUtil.valueRedis();
-        redisTemplate.opsForValue().set("Start:" + auction.getAid() , ""
-                , auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
-                        System.currentTimeMillis() , TimeUnit.MILLISECONDS);
     }
 }
