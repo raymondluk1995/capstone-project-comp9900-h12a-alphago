@@ -776,7 +776,7 @@ export default {
     return {
 
       searchBarFixed: false,
-      offsetTop: 0,
+      offsetTop: 200,
       unread: "",
       isEmpty: false,
       hasLogin: false,
