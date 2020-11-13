@@ -7,3 +7,24 @@ We have a meeting to discuss the project details like the website design and dat
 
 Week 3
 Still learning. And when other group member finished their part of proposal, I need to collect them and continuing explore the Springboot project. 
+
+Week 4
+This our team has been working on user module. For me, I start up a cloud server on 
+Amazon Web Services and establish the basic environment such as MySql Database, Redis Nosql, Docker
+and so on.
+
+Week 5
+This Week we finish the user module and some of the property management part. I think our work is on track but still met some difficulties. Fortunately, we solved most of them. Now our web system can work very well on user registration and login. Moreover, user can add new property.
+
+Week 6
+Even though this week is flexible week, our team still work very hard. This week, I spent most of time on functio such as start and cancle new Auction from existing property or new one. Because we job is fullfill the functionality so to the interaction between Front-end and Back-end is very improtant. So I also spent some time on testing the whole system.
+
+Week 7
+This week I finish the the functions about auction start, buyers' actions such as register new auction and bid. To ensure the auction can finish on time and increase system concurrency. I introduce timing function to our system.
+
+Week 8
+This week, we have basically completed the project. For me, firstly, I added some new functions in our property sale system such as Notification and Image Saver. Moreover, I needed to 
+maintain our web service. 
+
+Week 9
+This is last week, so we mainly test our function. Then we found many bugs in our system. So I spended mush time on solving these bugs. Besides that, we added search function in the system.
