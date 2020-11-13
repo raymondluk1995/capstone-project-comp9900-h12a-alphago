@@ -280,12 +280,12 @@
                 </template>
 
                 <div class="test-page" v-if="searchBarFixed"></div>
-                <div id="test-page"  :class="{'p-fixed':searchBarFixed}">
+                <div id="test-page" style="width:350px"  :class="{'p-fixed':searchBarFixed}">
                 <h5 style=" margin-top:100px;"><i class="el-icon-magic-stick"></i> Similar</h5>
                 <el-row type="flex" justify="center">
                     <div style="width:400px">
-                        <el-col  v-for="item in propInfo.recommendations" :key="item.aid ">
-                            <div class="recomd"  @click="goDetails(item)">
+                        <el-col  v-for="item in propInfo.recommendations" :key="item.aid " >
+                            <div class="recomd"  @click="goDetails(item)" :class="addStatusColor2(item.status)">
                                 <el-row :gutter="20">
                                     <el-col :span="8" style="padding:0;margin:0">
                                         <img
@@ -703,6 +703,7 @@
                         //     photo:'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=513256393,3533342652&fm=15&gp=0.jpg',
                         //     address:'2 gearin alley',
                         //     aid:15,
+                        //     status:'R',
                         //     bathroomNum:2,
                         //     bedroomNum:2,
                         //     garageNum:2,
@@ -714,6 +715,7 @@
                         //     photo:'',
                         //     address:'2 gearin alley',
                         //     aid:11,
+                        //     status:'A',
                         //     bathroomNum:2,
                         //     bedroomNum:2,
                         //     garageNum:2,
@@ -724,6 +726,7 @@
                         //     photo:'',
                         //     address:'2 gearin alley',
                         //     aid:15,
+                        //     status:'A',
                         //     bathroomNum:2,
                         //     bedroomNum:2,
                         //     garageNum:2,
@@ -856,7 +859,7 @@
                     if(this.propInfo.status==='R'){
                         this.countDown(this.propInfo.startdate, dayjs().valueOf());
                     }else if(this.propInfo.status==='A'){
-                        // this.countDown(this.propInfo.enddate,this.propInfo.startdate);
+                        this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                     }
 
                 }, 1000);
@@ -923,6 +926,13 @@
                     default:
                         break;
                 }
+            },
+            addStatusColor2(status) {
+                const colors = new Map([
+                    ["A", "status-process2"],
+                    ["R", "status-not-start2"],
+                ]);
+                return colors.get(status);
             },
 
             handleScroll() {
@@ -1267,7 +1277,7 @@
                     location.reload()
                 }
                 if(res.newBidder===true){
-                    this.propInfo.bidderNum +=1;
+                    this.propInfo.bidderNum = this.propInfo.bidderNum + 1;
                 }
                 this.propInfo.latestPrice = res.price;
                 let Time = this.showTime(res.time);
@@ -1633,6 +1643,14 @@
         position: fixed;
         top: 0;
         width:400px;
+    }
+
+    .status-not-start2 {
+        border-left: 10px solid rgba(231, 125, 109, 0.51);
+        /*border : 10px solid black;*/
+    }
+    .status-process2 {
+        border-left: 10px solid rgba(102, 199, 91, 0.4);
     }
 
 
