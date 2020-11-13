@@ -81,6 +81,24 @@ public class BidHistoryPush {
         }
     }
 
+    public static void newBidder(long aid){
+        try {
+            HashMap<String, Boolean> m = new HashMap<>();
+            m.put("newBidder", true);
+            String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(m);
+            map.get(String.valueOf(aid)).forEach(session -> {
+                        try {
+                            session.getBasicRemote().sendText(msg);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+            );
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void initHistory(long aid){
         RedisTemplate redis = RedisUtil.getRedis();
         redis.opsForValue().set("History:"+aid, new ArrayList<BidMsg>());

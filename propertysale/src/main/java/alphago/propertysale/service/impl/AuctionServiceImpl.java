@@ -14,7 +14,6 @@ import alphago.propertysale.mapper.*;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.shiro.JwtInfo;
 import alphago.propertysale.utils.FileUtil;
-import alphago.propertysale.utils.PriceUtil;
 import alphago.propertysale.utils.TimeUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
 import alphago.propertysale.websocket.BidMsg;
@@ -243,6 +242,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 .setCreateTime(LocalDateTime.now()).setIsRead(false).setUid(seller.getUid())
                 .setMessage(ObjectUtil.serialize(message));
         notificationMapper.addMessage(notification);
+        BidHistoryPush.refresh(aid);
     }
 
     @Override
@@ -334,25 +334,37 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 voQueryWrapper.ge("auc.minimum_price", model.getMinPrice());
             }
             if (model.getMaxPrice() != null) {
-                voQueryWrapper.le("rab.highest_price", model.getMaxPrice());
+                voQueryWrapper.le("auc.highest_price", model.getMaxPrice());
             }
 
             if (model.getBedrooms() != null) {
-                voQueryWrapper.eq("prop.bedroom_num", model.getBedrooms());
+                if(model.getBedrooms() == 5){
+                    voQueryWrapper.ge("prop.bedroom_num", model.getBedrooms());
+                }else {
+                    voQueryWrapper.eq("prop.bedroom_num", model.getBedrooms());
+                }
                 update = true;
                 updateWrapper.setSql("bedroom_num = bedroom_num +" + model.getBedrooms());
                 updateWrapper.setSql("bedroom_cnt = bedroom_cnt + 1");
             }
             if (model.getBathrooms() != null) {
-                voQueryWrapper.eq("prop.bathroom_num", model.getBathrooms());
+                if(model.getBathrooms() == 5){
+                    voQueryWrapper.ge("prop.bathroom_num", model.getBathrooms());
+                }else {
+                    voQueryWrapper.eq("prop.bathroom_num", model.getBathrooms());
+                }
                 update = true;
                 updateWrapper.setSql("bathroom_num = bathroom_num +" + model.getBathrooms());
                 updateWrapper.setSql("bathroom_cnt = bathroom_cnt + 1");
             }
             if (model.getGarages() != null) {
-                voQueryWrapper.eq("prop.garage_num", model.getGarages());
+                if(model.getGarages() == 5){
+                    voQueryWrapper.ge("prop.garage_num", model.getGarages());
+                }else {
+                    voQueryWrapper.eq("prop.garage_num", model.getGarages());
+                }
                 update = true;
-                updateWrapper.setSql("garage_num = garage_num +" + model.getBedrooms());
+                updateWrapper.setSql("garage_num = garage_num +" + model.getGarages());
                 updateWrapper.setSql("garage_cnt = garage_cnt + 1");
             }
             if (model.getPropertyType() != null) {
@@ -408,9 +420,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             else query.setBedroomNum(history.getBedroomNum() / history.getBedroomCnt());
             if (history.getGarageCnt() == 0) query.setGarageNum(1D);
             else query.setGarageNum(history.getGarageNum() / history.getGarageCnt());
-            if (history.getLat() == 0) query.setBathroomNum(-33.870893);
+            if (history.getLatCnt() == 0) query.setLat(-33.870893);
             else query.setLat(history.getLat() / history.getLatCnt());
-            if (history.getLng() == 0) query.setLng(151.209303);
+            if (history.getLngCnt() == 0) query.setLng(151.209303);
             else query.setLng(history.getLng() / history.getLngCnt());
 
 

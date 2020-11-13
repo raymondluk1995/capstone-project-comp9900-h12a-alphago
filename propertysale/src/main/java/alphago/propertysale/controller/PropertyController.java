@@ -53,7 +53,11 @@ public class PropertyController {
         long ownerId = info.getUid();
 
         if(property.isAuction() && auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
-                System.currentTimeMillis() < 0) return Result.fail("Start Time Wrong!");
+                System.currentTimeMillis() < 0) return Result.fail("Start Time Is Not Valid!");
+        if(auction.getEnddate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
+                auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() <= 0){
+            return Result.fail("End Date Must After Start Date!");
+        }
         if(photos.length == 0) return Result.fail("No photos!");
 
         propertyService.propertyRegister(ownerId, property, address, photos, auction);
@@ -96,6 +100,14 @@ public class PropertyController {
         Subject subject = SecurityUtils.getSubject();
         JwtInfo info = (JwtInfo) subject.getPrincipal();
         long seller = info.getUid();
+
+        if(auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
+                System.currentTimeMillis() < 0) return Result.fail("Start Time Is Not Valid!");
+
+        if(auction.getEnddate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
+                auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() <= 0){
+            return Result.fail("End Date Must After Start Date!");
+        }
 
         // Check
         long pid = auction.getPid();

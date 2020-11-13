@@ -3,6 +3,8 @@ package alphago.propertysale.entity.inVO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 
 // localhost:8080/search
 // localhost:8080/search?startDate=xxxx&aaa=xxx...
@@ -20,8 +22,8 @@ public class SearchModel {
 
     private String postcode;
     // auction
-    private Long startDate;
-    private Long endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     private Long minPrice;
     private Long maxPrice;

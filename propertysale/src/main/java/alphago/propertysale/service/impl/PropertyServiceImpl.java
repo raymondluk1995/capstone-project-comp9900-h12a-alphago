@@ -79,6 +79,9 @@ public class PropertyServiceImpl extends ServiceImpl<PropertyMapper , Property> 
     }
 
     private void registerNewAuction(Auction auction, long seller){
+        System.out.println(auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
+                System.currentTimeMillis());
+
         auction.setStatus(Auction.REGISTERED);
         auction.setSeller(seller);
         auction.setHighestPrice(auction.getMinimumPrice());
