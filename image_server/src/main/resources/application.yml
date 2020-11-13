@@ -1,9 +1,0 @@
-server:
-  port: 8060
-
-spring:
-  rabbitmq:
-    host: 52.62.246.254
-    username: admin
-    password: admin
-    myExchange: alpha.go.sender
