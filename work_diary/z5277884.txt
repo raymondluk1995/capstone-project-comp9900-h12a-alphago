@@ -1,0 +1,40 @@
+Week 1
+
+The group was formed. I created the Jira account and invited other members. Moreover,
+I started to learn the fundamental knowledge of front end from HTML and CSS. During 
+this week, under the leadership of Wanchao, we discussed the practical softwares and tools
+for this project.
+
+
+Week 2
+
+I had a meeting with Wanchao and Ziqi to decide the frontend layouts. After discussion, 
+there are approximately 8 pages in total. Furthermore, the whole team held a meeting to 
+decide the database schema and discussed how to realize project objectives on each web page.
+On weekends, I wrote user stories on the Jira software. Throughout the whole week, I kept on
+learning the fundamental CSS and JavaScript knowledge.
+
+
+Week 3
+
+On Tuesday, the whole team held a meeting to decide what contents should be returned in the JSON
+format from the back end to the front end. I finished the part of User Stories and Sprints in
+the proposal. During this week, I kept on learning the JavaScript, CSS and VueJS.
+
+Week 4
+In this week, I keep on learning JavaScript and VueJS. I helped in improving CSS in project and finding bugs. Also, I spent some time on researching how to use Google Map API in this project for address validation.
+
+Week 5 
+In this week, I finished the Google Map address validation part and the address autofilling. Also, some CSS modifications are done. Further learning on VueJS is still ongoing.
+
+
+Week 6
+In this week, I tried to modify the functionalities of search bar on the home page. I tried to make the autocomplete only returns suburb name and do not show any options when a user is typing a postcode. Also, the autocomplete options should be only available in Australia. I failed in the first few tries on the "vue-better-google-places-autocomplete" package for fixing its intrinsic bugs and restricting the country to be Australia. Eventually, I switched to another npm package called "vue-google-autocomplete".
+
+Moreover, I tested on changing different fonts and integrated a map display functionality to the property auction page.
+
+Week 7
+In this week, I wrote the Retrospective A and start to write the final report. After discussion with the Scrum master, now my role would be report writing and code testing.
+
+Week 8
+In this week, I finished the "Search" page and cooperated with the back end. Also, I finished the background part, the majority parts of the Software Architecture in the final report except the back end design part, and the database construction part. On weekends, I finished the Retrospective B report.

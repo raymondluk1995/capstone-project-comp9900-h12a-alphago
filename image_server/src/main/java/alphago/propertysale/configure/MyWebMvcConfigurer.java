@@ -1,5 +1,6 @@
 package alphago.propertysale.configure;
 
+import alphago.propertysale.utils.ImageUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MyWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/**").addResourceLocations("file:/home/zxhhaha/图片/");
+        System.out.println(ImageUtil.PATH);
+        registry.addResourceHandler("/**").addResourceLocations("file:"+ ImageUtil.PATH+"/");
     }
 }

@@ -19,7 +19,8 @@ import java.util.UUID;
  * @create: 2020-10-09 17:34
  **/
 public class ImageUtil {
-    private static final String PATH = ClassUtils.getDefaultClassLoader().getResource("static").getPath();
+//    private static final String PATH = ClassUtils.getDefaultClassLoader().getResource("static").getPath();
+    public static final String PATH = System.getProperty("user.dir");
     private static final String IMG = PATH + "/img/";
 
     public static void AvatarSave(AvatarPorter porter){
