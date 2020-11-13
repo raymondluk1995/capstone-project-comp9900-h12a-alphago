@@ -661,10 +661,10 @@
           </el-col>
 
           <el-col :span="5">
-            <div class="test-page" v-if="searchBarFixed"></div>
-          <div id="test-page" :class="{ 'p-fixed': searchBarFixed }">
-            <h5 style="margin-top: 100px">
-              <i class="el-icon-magic-stick"></i> Similar
+            <div class="test-page2" style="margin-top: 50px" v-if="searchBarFixed"></div>
+          <div id="test-page2" style="width:350px" :class="{ 'p-fixed2': searchBarFixed }">
+            <h5 style="margin-top: 50px">
+              <i class="el-icon-magic-stick"></i> Recommendations For You
             </h5>
             <el-row type="flex" justify="center">
               <div style="width: 400px">
@@ -776,7 +776,7 @@ export default {
     return {
 
       searchBarFixed: false,
-
+      offsetTop: 0,
       unread: "",
       isEmpty: false,
       hasLogin: false,
@@ -1024,7 +1024,7 @@ export default {
     this.initVariables();
 
     this.getProductBySearch();
-    
+
 
     this.currPage = 1;
   },
@@ -1523,7 +1523,7 @@ export default {
         document.documentElement.scrollTop ||
         document.body.scrollTop;
       if (this.offsetTop === 0) {
-        this.offsetTop = document.querySelector("#test-page").offsetTop;
+        this.offsetTop = document.querySelector("#test-page2").offsetTop;
       }
       scrollTop >= this.offsetTop
         ? (this.searchBarFixed = true)
@@ -1749,12 +1749,12 @@ li {
 }
 
 
-.test-page {
+.test-page2 {
   width: 90%;
   margin-top: 50px;
 }
 
-.p-fixed {
+.p-fixed2 {
   position: fixed;
   top: 0;
   width: 400px;
