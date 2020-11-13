@@ -661,10 +661,17 @@
           </el-col>
 
           <el-col :span="5">
+<<<<<<< HEAD
             <div class="test-page"  v-if="searchBarFixed"></div>
           <div id="test-page"  style="width:350px;margin-top: 50px" :class="{ 'p-fixed': searchBarFixed }">
             <h5 style="margin-top: 50px">
               <i class="el-icon-magic-stick"></i> Recommendations
+=======
+            <div class="test-page2" style="margin-top: 50px" v-if="searchBarFixed"></div>
+          <div id="test-page2" style="width:350px" :class="{ 'p-fixed2': searchBarFixed }">
+            <h5 style="margin-top: 50px">
+              <i class="el-icon-magic-stick"></i> Recommendations For You
+>>>>>>> frontend
             </h5>
             <el-row type="flex" justify="center">
               <div style="width: 400px">
@@ -774,9 +781,15 @@ export default {
 
   data() {
     return {
+<<<<<<< HEAD
       offsetTop: 0,
       searchBarFixed: false,
 
+=======
+
+      searchBarFixed: false,
+      offsetTop: 200,
+>>>>>>> frontend
       unread: "",
       isEmpty: false,
       hasLogin: false,
@@ -1523,7 +1536,11 @@ export default {
         document.documentElement.scrollTop ||
         document.body.scrollTop;
       if (this.offsetTop === 0) {
+<<<<<<< HEAD
         this.offsetTop = document.querySelector("#test-page").offsetTop;
+=======
+        this.offsetTop = document.querySelector("#test-page2").offsetTop;
+>>>>>>> frontend
       }
       scrollTop >= this.offsetTop
         ? (this.searchBarFixed = true)
@@ -1749,12 +1766,20 @@ li {
 }
 
 
+<<<<<<< HEAD
 .test-page {
+=======
+.test-page2 {
+>>>>>>> frontend
   width: 90%;
   margin-top: 50px;
 }
 
+<<<<<<< HEAD
 .p-fixed {
+=======
+.p-fixed2 {
+>>>>>>> frontend
   position: fixed;
   top: 0;
   width: 400px;
