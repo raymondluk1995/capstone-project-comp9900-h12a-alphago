@@ -10,10 +10,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 /**
- * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-25 21:06
+ * This configuration is the convertor to change
+ * the Timestamp from Front-end to the LocalDateTime class
  **/
 @Configuration
 public class LocalDateTimeConfig {

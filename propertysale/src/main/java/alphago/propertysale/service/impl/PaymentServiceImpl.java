@@ -1,6 +1,6 @@
 package alphago.propertysale.service.impl;
 
-import alphago.propertysale.entity.Payment;
+import alphago.propertysale.entity.POJO.Payment;
 import alphago.propertysale.mapper.PaymentMapper;
 import alphago.propertysale.service.PaymentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

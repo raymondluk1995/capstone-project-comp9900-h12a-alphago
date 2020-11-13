@@ -1,8 +1,8 @@
 package alphago.propertysale.service;
 
-import alphago.propertysale.entity.Address;
-import alphago.propertysale.entity.Auction;
-import alphago.propertysale.entity.Property;
+import alphago.propertysale.entity.POJO.Address;
+import alphago.propertysale.entity.POJO.Auction;
+import alphago.propertysale.entity.POJO.Property;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 

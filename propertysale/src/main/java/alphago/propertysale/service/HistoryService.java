@@ -1,8 +1,6 @@
 package alphago.propertysale.service;
 
-import alphago.propertysale.entity.History;
-import alphago.propertysale.entity.RecVO;
-import alphago.propertysale.entity.returnVO.AuctionVO;
+import alphago.propertysale.entity.POJO.History;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

@@ -1,6 +1,6 @@
 package alphago.propertysale.mapper;
 
-import alphago.propertysale.entity.User;
+import alphago.propertysale.entity.POJO.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

@@ -8,10 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @program: propertysale
  * @description: Rabbitmq configuration
- * @author: XIAO HAN
- * @create: 2020-10-09 15:28
+ *               Enable Json Convertor to message.
+ *               Serialize Java Object to Json String.
  **/
 @Configuration
 public class RabbitConfig {

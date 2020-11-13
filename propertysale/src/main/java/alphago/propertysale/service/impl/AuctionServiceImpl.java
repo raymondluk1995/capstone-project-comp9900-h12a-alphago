@@ -1,6 +1,6 @@
 package alphago.propertysale.service.impl;
 
-import alphago.propertysale.entity.*;
+import alphago.propertysale.entity.POJO.*;
 import alphago.propertysale.entity.inVO.SearchModel;
 import alphago.propertysale.entity.notification.FinishMessage;
 import alphago.propertysale.entity.notification.Notification;

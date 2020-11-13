@@ -1,12 +1,10 @@
 package alphago.propertysale.entity.returnVO;
 
-import alphago.propertysale.entity.RecVO;
 import alphago.propertysale.websocket.BidMsg;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
 import java.util.List;
 
 /**

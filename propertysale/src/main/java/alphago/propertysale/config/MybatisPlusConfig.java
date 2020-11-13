@@ -8,9 +8,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @program: propertysale
- * @description: configuration of mybatis plus
- * @author: XIAO HAN
- * @create: 2020-09-26 21:52
+ * @description: Configuration of mybatis plus
+ *               Enable PaginationInterceptor.
  **/
 @Configuration
 @EnableTransactionManagement

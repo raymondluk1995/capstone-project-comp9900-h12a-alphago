@@ -1,6 +1,6 @@
 package alphago.propertysale.mapper;
 
-import alphago.propertysale.entity.Payment;
+import alphago.propertysale.entity.POJO.Payment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Select;
 

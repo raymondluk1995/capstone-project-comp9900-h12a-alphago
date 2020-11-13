@@ -1,6 +1,6 @@
 package alphago.propertysale.service;
 
-import alphago.propertysale.entity.Rab;
+import alphago.propertysale.entity.POJO.Rab;
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 /**

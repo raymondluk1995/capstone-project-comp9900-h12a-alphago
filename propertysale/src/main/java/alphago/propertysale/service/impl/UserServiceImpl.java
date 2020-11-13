@@ -1,7 +1,7 @@
 package alphago.propertysale.service.impl;
 
-import alphago.propertysale.entity.History;
-import alphago.propertysale.entity.User;
+import alphago.propertysale.entity.POJO.History;
+import alphago.propertysale.entity.POJO.User;
 import alphago.propertysale.mapper.HistoryMapper;
 import alphago.propertysale.mapper.UserMapper;
 import alphago.propertysale.service.UserService;

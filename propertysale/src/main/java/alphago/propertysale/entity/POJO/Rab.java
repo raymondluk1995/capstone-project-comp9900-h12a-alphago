@@ -1,8 +1,8 @@
-package alphago.propertysale.entity;
+package alphago.propertysale.entity.POJO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,23 +14,27 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author Xiaohan Zhu
- * @since 2020-10-24
+ * @since 2020-10-20
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class RabAction implements Serializable {
+public class Rab implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "rab_id", type = IdType.AUTO)
     private Long rabId;
 
-    private Long bidPrice;
+    private Long aid;
 
-    private LocalDateTime bidTime;
+    private Long uid;
 
-    @TableId(value = "action_id", type = IdType.AUTO)
-    private Long actionId;
+    private LocalDateTime registerTime;
 
+    private Long initPrice;
 
+    private Long highestPrice;
+
+    private Long paymentId;
 }

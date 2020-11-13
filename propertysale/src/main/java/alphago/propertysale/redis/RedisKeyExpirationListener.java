@@ -1,23 +1,17 @@
 package alphago.propertysale.redis;
 
-import alphago.propertysale.entity.Auction;
+import alphago.propertysale.entity.POJO.Auction;
 import alphago.propertysale.service.AuctionService;
-import alphago.propertysale.utils.ApplicationContextUtil;
 import alphago.propertysale.utils.RedisUtil;
 import alphago.propertysale.utils.TimeUtil;
-import alphago.propertysale.websocket.BidHistoryPush;
-import alphago.propertysale.websocket.BidMsg;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.KeyExpirationEventMessageListener;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneOffset;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**

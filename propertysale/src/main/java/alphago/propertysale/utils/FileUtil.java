@@ -1,7 +1,6 @@
 package alphago.propertysale.utils;
 
-import alphago.propertysale.entity.User;
-import org.apache.shiro.util.Assert;
+import alphago.propertysale.entity.POJO.User;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;

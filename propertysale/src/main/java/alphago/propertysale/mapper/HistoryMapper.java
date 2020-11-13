@@ -1,7 +1,7 @@
 package alphago.propertysale.mapper;
 
-import alphago.propertysale.entity.History;
-import alphago.propertysale.entity.HistoryUpdater;
+import alphago.propertysale.entity.POJO.History;
+import alphago.propertysale.entity.POJO.HistoryUpdater;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Update;
 

@@ -1,15 +1,14 @@
 package alphago.propertysale.controller;
 
-import alphago.propertysale.entity.Address;
-import alphago.propertysale.entity.Auction;
-import alphago.propertysale.entity.Property;
-import alphago.propertysale.entity.Rab;
+import alphago.propertysale.entity.POJO.Address;
+import alphago.propertysale.entity.POJO.Auction;
+import alphago.propertysale.entity.POJO.Property;
+import alphago.propertysale.entity.POJO.Rab;
 import alphago.propertysale.entity.returnVO.AuctionVO;
 import alphago.propertysale.entity.returnVO.RabVO;
 import alphago.propertysale.service.*;
 import alphago.propertysale.shiro.JwtInfo;
 import alphago.propertysale.utils.FileUtil;
-import alphago.propertysale.utils.PriceUtil;
 import alphago.propertysale.utils.Result;
 import alphago.propertysale.utils.TimeUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
@@ -23,18 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 /**
- * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-19 20:06
+ * @description: Controller to deal with auction's request
+ *              Springboot will dispatch request to exact
+ *              function based on the URL.
  **/
 @RestController
 @RequestMapping("/auction")
@@ -49,46 +44,31 @@ public class AuctionController {
     RabService rabService;
     @Autowired
     RabActionService actionService;
-
     @Autowired
     HistoryService historyService;
 
-    // get rab's auction information
-    @RequiresAuthentication
-    @RequestMapping("/list/now")
-    public Result auctionListNow(){
-        Subject subject = SecurityUtils.getSubject();
-        JwtInfo info = (JwtInfo) subject.getPrincipal();
-        long uid = info.getUid();
 
-        List<Rab> list = rabService.getRunningAuctions(uid);
-
-        return Result.success(getAuctionList(list));
-    }
-
-    @RequiresAuthentication
-    @RequestMapping("/list/past")
-    public Result auctionListPast() {
-        Subject subject = SecurityUtils.getSubject();
-        JwtInfo info = (JwtInfo) subject.getPrincipal();
-        long uid = info.getUid();
-
-        List<Rab> list = rabService.getPastAuctions(uid);
-
-        return Result.success(getAuctionList(list));
-    }
-
-    // Get auction information based on Auction Id
+    /**
+     * Get auction information based on Auction Id
+     * If user is authenticated, also get the auction
+     * Bidders' information.
+     *
+     * Update User's visit history
+     *
+     * Also Get similar properties based on the auction inforamtion
+    */
     @RequestMapping("/information/{aid}")
     public Result auctionInformation(@PathVariable long aid){
         AuctionVO auctionVO = auctionService.getAuctionByAid(aid);
         Subject subject = SecurityUtils.getSubject();
+        // If the user is authenticated
         if(subject.isAuthenticated()) {
             JwtInfo info = (JwtInfo) subject.getPrincipal();
             long uid = info.getUid();
 
             Rab rab = rabService.getOne(new QueryWrapper<Rab>()
                     .eq("uid", uid).eq("aid", aid));
+
             if(rab != null) {
                 auctionVO.setRab(String.valueOf(rab.getRabId()));
                 auctionVO.setHighestPrice(rab.getHighestPrice());
@@ -96,6 +76,7 @@ public class AuctionController {
                 auctionVO.setRab(null);
             }
         }
+        // Get auction's bid history
         List<BidMsg> temp = BidHistoryPush.getAuctionHistory(aid);
         List<BidMsg> history = new ArrayList<>();
         for(Object obj : temp){
@@ -108,6 +89,46 @@ public class AuctionController {
         return Result.success(auctionVO);
     }
 
+    /**
+    * @Description: Get already started or not start auctions registered by the user
+    * @Param:
+    * @return: List of auction information
+    */
+    @RequiresAuthentication
+    @RequestMapping("/list/now")
+    public Result auctionListNow(){
+        // Get user id
+        Subject subject = SecurityUtils.getSubject();
+        JwtInfo info = (JwtInfo) subject.getPrincipal();
+        long uid = info.getUid();
+        // Get auctions
+        List<Rab> list = rabService.getRunningAuctions(uid);
+
+        return Result.success(getAuctionList(list));
+    }
+
+    /**
+     * @Description: Get finished auctions registered by the user
+     * @Param:
+     * @return: List of auction information
+     */
+    @RequiresAuthentication
+    @RequestMapping("/list/past")
+    public Result auctionListPast() {
+        Subject subject = SecurityUtils.getSubject();
+        JwtInfo info = (JwtInfo) subject.getPrincipal();
+        long uid = info.getUid();
+
+        List<Rab> list = rabService.getPastAuctions(uid);
+
+        return Result.success(getAuctionList(list));
+    }
+
+    /**
+    * @Description: Get bidder's information
+    * @Param: A list of auction which are registered by user
+    * @return: RabVO: information about bidder
+    */
     private List<RabVO> getAuctionList(List<Rab> list) {
         List<RabVO> ret = new ArrayList<>();
 
@@ -119,9 +140,9 @@ public class AuctionController {
 
             RabVO rabVO = new RabVO();
             BeanUtils.copyProperties(auction, rabVO, "startdate" , "enddate");
+            BeanUtils.copyProperties(property, rabVO);
             rabVO.setStartdate(auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli());
             rabVO.setEnddate(auction.getEnddate().toInstant(TimeUtil.getMyZone()).toEpochMilli());
-            BeanUtils.copyProperties(property, rabVO);
             rabVO.setAddress(address.getFullAddress());
             rabVO.setPhotos(photos);
             rabVO.setHighestPrice(rab.getHighestPrice());

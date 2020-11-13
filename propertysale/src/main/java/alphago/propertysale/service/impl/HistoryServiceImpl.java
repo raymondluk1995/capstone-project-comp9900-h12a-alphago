@@ -1,8 +1,7 @@
 package alphago.propertysale.service.impl;
 
-import alphago.propertysale.entity.History;
-import alphago.propertysale.entity.RecVO;
-import alphago.propertysale.entity.returnVO.AuctionVO;
+import alphago.propertysale.entity.POJO.History;
+import alphago.propertysale.entity.returnVO.RecVO;
 import alphago.propertysale.entity.returnVO.RunningAuctionAddress;
 import alphago.propertysale.mapper.HistoryMapper;
 import alphago.propertysale.service.HistoryService;

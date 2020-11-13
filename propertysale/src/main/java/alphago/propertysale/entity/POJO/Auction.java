@@ -1,4 +1,4 @@
-package alphago.propertysale.entity;
+package alphago.propertysale.entity.POJO;
 
 import alphago.propertysale.utils.RedisUtil;
 import com.baomidou.mybatisplus.annotation.IdType;

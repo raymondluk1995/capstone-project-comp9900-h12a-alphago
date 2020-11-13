@@ -1,8 +1,7 @@
 package alphago.propertysale.controller;
 
 
-import alphago.propertysale.entity.Auction;
-import alphago.propertysale.entity.Rab;
+import alphago.propertysale.entity.POJO.Rab;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.service.RabService;
 import alphago.propertysale.shiro.JwtInfo;
@@ -17,13 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-10-20
- */
+* @description: Control layer to deal with request sent to Registered Auction Bidder(RAB) Module
+*/
 @RestController
 @RequestMapping("/rab")
 public class RabController {
@@ -33,6 +27,11 @@ public class RabController {
     @Autowired
     RabService rabService;   // User register new auction
 
+    /**
+    * @Description: Potential Buyer register an auction to be the rab of its' RAB
+    * @Param:   rab: Registration Information
+    * @return: "Success" if no expectation, otherwise "Fail" with error messages
+    */
     @RequestMapping("/register")
     @RequiresAuthentication
     public Result register(Rab rab){

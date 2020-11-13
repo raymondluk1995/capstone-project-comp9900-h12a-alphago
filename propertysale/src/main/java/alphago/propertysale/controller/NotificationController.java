@@ -1,34 +1,23 @@
 package alphago.propertysale.controller;
 
 
-import alphago.propertysale.entity.notification.FinishMessage;
 import alphago.propertysale.entity.notification.Notification;
 import alphago.propertysale.entity.returnVO.NotificationVO;
 import alphago.propertysale.service.NotificationService;
 import alphago.propertysale.shiro.JwtInfo;
 import alphago.propertysale.utils.Result;
-import alphago.propertysale.utils.TimeUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-11-02
- */
+* @Description: Control layer to deal with request sent to notification Module
+*/
 @RestController
 @RequestMapping("/notification")
 public class NotificationController {
@@ -48,6 +37,10 @@ public class NotificationController {
         return Result.success(notificationService.countUnread(uid));
     }
 
+    /**
+    * @Description: Change notification's status
+     *  From unread to read
+    */
     @RequestMapping("/isRead")
     @RequiresAuthentication
     public Result isRead(long notiId){
@@ -56,7 +49,7 @@ public class NotificationController {
     }
 
     /**
-    * @Description: Get user's all notifications.
+    * @Description: Get all of user's notifications.
     */
     @RequestMapping("/all")
 //    @RequiresAuthentication

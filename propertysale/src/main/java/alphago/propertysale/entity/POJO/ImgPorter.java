@@ -1,4 +1,4 @@
-package alphago.propertysale.entity;
+package alphago.propertysale.entity.POJO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

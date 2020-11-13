@@ -2,9 +2,7 @@ package alphago.propertysale.exception;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-11-02 13:56
+ * @description: Exception if auction can not be found
  **/
 public class AuctionNotFoundException extends RuntimeException{
     public AuctionNotFoundException(String msg) {

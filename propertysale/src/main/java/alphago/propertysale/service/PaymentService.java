@@ -1,6 +1,6 @@
 package alphago.propertysale.service;
 
-import alphago.propertysale.entity.Payment;
+import alphago.propertysale.entity.POJO.Payment;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

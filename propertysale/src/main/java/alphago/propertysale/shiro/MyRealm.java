@@ -1,6 +1,6 @@
 package alphago.propertysale.shiro;
 
-import alphago.propertysale.entity.User;
+import alphago.propertysale.entity.POJO.User;
 import alphago.propertysale.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.shiro.authc.*;
