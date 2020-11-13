@@ -182,7 +182,7 @@
                             <div v-if="item.message.seller && !item.message.success" style="padding:0 50px;">
                                 <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
                                 <p>Sorry.. </p>
-                                <p v-if="item.message.bidPrice!=='No Bid!'">Your Property<span style="font-size:12px;color:#596c84">[PID:{{item.message.pid}}]</span> has passed in. The highest bid is ${{item.message.bidPrice| numFormat }}.</p>
+                                <p v-if="item.message.bidPrice!==null">Your Property<span style="font-size:12px;color:#596c84">[PID:{{item.message.pid}}]</span> has passed in. The highest bid is ${{item.message.bidPrice| numFormat }}.</p>
                                 <p v-else>Your Property<span style="font-size:12px;color:#596c84">[PID:{{item.message.pid}}]</span> has passed in. No bidders have participated in this auction.</p>
 
                                 <p style="

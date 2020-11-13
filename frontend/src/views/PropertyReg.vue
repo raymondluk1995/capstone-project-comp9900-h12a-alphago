@@ -250,12 +250,12 @@
 
                 <el-form-item label="Description:">
                     <el-input
-                            placeholder="Enter the description for your property. No more than 500 words."
+                            placeholder="Enter the description for your property. No more than 1000 words."
                             prefix-icon="el-icon-edit"
                             v-model="form3.description"
                             type="textarea"
                             :rows="5"
-                            maxlength="500">
+                            maxlength="1000">
                     </el-input>
                 </el-form-item>
 
