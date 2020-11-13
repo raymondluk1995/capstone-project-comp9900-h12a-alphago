@@ -236,16 +236,32 @@ export default {
     },
     toSearch() {
       var addr = document.getElementById("address").value;
+      if (addr===""){
+        this.$router.push({
+          path:"/search",
+          query:{
+            currPage:1,
+          },
+        });
+        return ;
+      }
       if (isNaN(addr)) {
         if (this.address.locality === undefined){
           this.$message.error("Please validate the suburb name by Google Map first!");
           return;
         }
+        let state = this.address.administrative_area_level_1;
+        let latitude = this.address.latitude;
+        let longitude = this.address.longitude;
         addr = this.address.locality;
         this.$router.push({
           path: "/search",
           query: {
             suburb: addr,
+            state: state,
+            lat : latitude,
+            long: longitude,
+            currPage:1,
           },
         });
       } else {
@@ -257,6 +273,7 @@ export default {
           path: "/search",
           query: {
             postcode: addr,
+            currPage: 1,
           },
         });
       }
