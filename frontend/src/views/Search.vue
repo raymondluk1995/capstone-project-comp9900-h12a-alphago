@@ -661,10 +661,10 @@
           </el-col>
 
           <el-col :span="5">
-            <div class="test-page" v-if="searchBarFixed"></div>
-          <div id="test-page" :class="{ 'p-fixed': searchBarFixed }">
-            <h5 style="margin-top: 100px">
-              <i class="el-icon-magic-stick"></i> Similar
+            <div class="test-page"  v-if="searchBarFixed"></div>
+          <div id="test-page"  style="width:350px;margin-top: 50px" :class="{ 'p-fixed': searchBarFixed }">
+            <h5 style="margin-top: 50px">
+              <i class="el-icon-magic-stick"></i> Recommendations
             </h5>
             <el-row type="flex" justify="center">
               <div style="width: 400px">
@@ -774,7 +774,7 @@ export default {
 
   data() {
     return {
-
+      offsetTop: 0,
       searchBarFixed: false,
 
       unread: "",
@@ -1024,7 +1024,7 @@ export default {
     this.initVariables();
 
     this.getProductBySearch();
-    
+
 
     this.currPage = 1;
   },
