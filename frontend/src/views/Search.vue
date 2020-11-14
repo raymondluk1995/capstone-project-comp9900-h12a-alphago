@@ -643,37 +643,36 @@
           </el-col>
 
           <el-col :span="5">
-            <div class="test-page" v-if="searchBarFixed"></div>
-            <div
-              id="test-page"
-              style="width: 350px; margin-top: 50px"
-              :class="{ 'p-fixed': searchBarFixed }"
-            >
-              <h5 style="margin-top: 50px">
-                <i class="el-icon-magic-stick"></i> Recommendations
-              </h5>
-              <el-row type="flex" justify="center">
-                <div style="width: 400px">
-                  <el-col v-for="item in recommendations" :key="item.aid">
-                    <div
-                      class="recomd"
-                      @click="goDetails(item)"
-                      :class="addStatusColor2(item.status)"
-                    >
-                      <el-row :gutter="20">
-                        <el-col :span="8" style="padding: 0; margin: 0">
-                          <img
-                            style="height: 80px; width: 100%; margin-top: 8%"
-                            :src="item.photo"
-                            alt=""
-                          />
-                        </el-col>
+            <div class="test-page"  v-if="searchBarFixed"></div>
+          <div id="test-page"  style="width:350px;margin-top: 50px" :class="{ 'p-fixed': searchBarFixed }">
+            <h5 style="margin-top: 50px">
+              <i class="el-icon-magic-stick"></i> Recommendations
+            </h5>
+            <el-row type="flex" justify="center">
+              <div style="width: 400px">
+                <el-col
+                  v-for="item in recommendations"
+                  :key="item.aid"
+                >
+                  <div class="recomd" @click="goDetails(item)">
+                    <el-row :gutter="20">
+                      <el-col :span="8" style="padding: 0; margin: 0">
+                        <img
+                          style="height: 80px; width: 100%; margin-top: 8%"
+                          :src="item.photo"
+                          alt=""
+                        />
+                      </el-col>
 
-                        <el-col :span="16">
-                          <el-row
-                            type="flex"
-                            justify="left"
-                            style="margin: 10px 0"
+                      <el-col :span="16">
+                        <el-row
+                          type="flex"
+                          justify="left"
+                          style="margin: 10px 0"
+                        >
+                          <span
+                            >{{ item.address }}, {{ item.suburb }},
+                            {{ item.state }} {{ item.postcode }}</span
                           >
                             <span
                               >{{ item.address }}, {{ item.suburb }},
@@ -1753,4 +1752,13 @@ li {
 .status-process2 {
   border-left: 10px solid rgba(102, 199, 91, 0.4);
 }
+.el-dropdown-menu{
+  padding: 25px 20px 25px 10px !important;
+}
+
+  .el-dropdown-menu__item{
+    margin:0 !important;
+  }
+
+
 </style>
