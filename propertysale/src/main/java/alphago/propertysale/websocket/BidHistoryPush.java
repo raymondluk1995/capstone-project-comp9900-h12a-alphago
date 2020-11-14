@@ -63,6 +63,7 @@ public class BidHistoryPush {
     */
     public static void bidPush(long aid , BidMsg bidMsg) {
         try {
+            if(map.get(String.valueOf(aid)) == null) return;
             String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(bidMsg);
             map.get(String.valueOf(aid)).forEach(session -> {
                 try {
@@ -85,6 +86,7 @@ public class BidHistoryPush {
             HashMap<String, Boolean> m = new HashMap<>();
             m.put("refresh", true);
             String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(m);
+            if(map.get(String.valueOf(aid)) == null) return;
             map.get(String.valueOf(aid)).forEach(session -> {
                         try {
                             session.getBasicRemote().sendText(msg);
@@ -106,6 +108,7 @@ public class BidHistoryPush {
             HashMap<String, Boolean> m = new HashMap<>();
             m.put("newBidder", true);
             String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(m);
+            if(map.get(String.valueOf(aid)) == null) return;
             map.get(String.valueOf(aid)).forEach(session -> {
                         try {
                             session.getBasicRemote().sendText(msg);
