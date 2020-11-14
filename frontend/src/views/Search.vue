@@ -98,6 +98,7 @@
                     height: 38px;
                     color: white;
                     background-color: rgb(20, 60, 127);
+                    margin-left:2px;
                   "
                   icon="el-icon-search"
                   @click="toSearch"
@@ -106,13 +107,13 @@
                 </el-button>
               </el-col>
 
-              <el-col :span="2" >
+              <el-col :span="1" >
                 <el-button
                   style="
                     height: 38px;
                     color: white;
                     background-color: rgba(16, 117, 244, 0.7);
-                    margin: 0;
+                    margin-left:18px;
                   "
                   @click="showFilter"
                 >
@@ -724,7 +725,7 @@
               </el-row>
               <el-row v-else>
 
-                  <p style="color:grey"><i class="el-icon-warning-outline"></i> Log in to see the recommendations for you.</p>
+                  <p style="color:grey;word-wrap:break-word"><i class="el-icon-warning-outline"></i> Log in to see the recommendations for you.</p>
               </el-row>
             </div>
           </el-col>
