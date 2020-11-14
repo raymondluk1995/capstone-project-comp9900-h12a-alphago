@@ -82,11 +82,11 @@ public class BidHistoryPush {
     * @Description: Inform auction page to refresh
     */
     public static void refresh(long aid){
+        if(map.get(String.valueOf(aid)) == null) return;
         try {
             HashMap<String, Boolean> m = new HashMap<>();
             m.put("refresh", true);
             String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(m);
-            if(map.get(String.valueOf(aid)) == null) return;
             map.get(String.valueOf(aid)).forEach(session -> {
                         try {
                             session.getBasicRemote().sendText(msg);
