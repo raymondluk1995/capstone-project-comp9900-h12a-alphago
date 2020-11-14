@@ -207,7 +207,7 @@
                                             </el-input>
                                         </el-form-item>
 
-                                        <el-form-item label="Minimum Price:" prop="minimumPrice">
+                                        <el-form-item label="Starting Price:" prop="minimumPrice">
                                             <el-input v-model="form.minimumPrice"  maxlength="11">
                                                 <i slot="suffix" class="input-slot">{{form.minimumPrice|numFormat}} A$</i>
                                             </el-input>

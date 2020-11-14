@@ -1278,17 +1278,18 @@
                 }
                 if(res.newBidder===true){
                     this.propInfo.bidderNum = this.propInfo.bidderNum + 1;
-                }
-                this.propInfo.latestPrice = res.price;
-                let Time = this.showTime(res.time);
-                this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
-                this.notice(res);
-                if(res.overtime === true){
-                    clearInterval(this.timer);
-                    this.propInfo.enddate = this.propInfo.enddate + 2*1000*60;
-                    this.timer = setInterval(() => {
-                        this.countDown(this.propInfo.enddate,this.propInfo.startdate);
-                    }, 1000);
+                }else{
+                    this.propInfo.latestPrice = res.price;
+                    let Time = this.showTime(res.time);
+                    this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
+                    this.notice(res);
+                    if(res.overtime === true){
+                        clearInterval(this.timer);
+                        this.propInfo.enddate = this.propInfo.enddate + 2*1000*60;
+                        this.timer = setInterval(() => {
+                            this.countDown(this.propInfo.enddate,this.propInfo.startdate);
+                        }, 1000);
+                    }
                 }
             },
 
@@ -1317,6 +1318,8 @@
                     message:`User <strong>${res.username}</strong> becomes the winner!\n<strong>Current bid:</strong> ${res.price | numFormat()}.\n<strong>Bid Time:</strong> ${this.showTime(res.time)}`
                 });
             },
+
+
             showCard(card){
                 var reg = /^(\d{4})\d+(\d{4})$/;
                 return card.replace(reg, "$1 **** **** $2");

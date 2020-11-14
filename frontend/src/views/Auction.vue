@@ -80,7 +80,7 @@
                                              :class="addStatusColor(item)"
                                              style="height:60px;padding:0 10px;">
                                         <div style="color:#2e2a10;float:left;font-weight: bold;margin-top:15px;">
-                                            <span style="font-size:15px;">Auction:</span>
+                                            <span style="font-size:15px;">Auction </span>
                                             <span style="font-size: 20px">{{ showTime(item.startdate)}}</span>
 <!--                                            <h5 >Auction: {{ showTime(item.startdate) }}</h5>-->
                                         </div>
@@ -97,7 +97,7 @@
                                             :class="addStatusColor(item)"
                                             style="height:60px;padding:0 10px;">
                                         <div style="float:left;font-weight: bold;margin-top:15px;">
-                                        <span style="font-size:15px;">End at:</span>
+                                        <span style="font-size:15px;">End at </span>
                                         <span style="font-size: 20px">{{ showTime(item.enddate)}}</span>
                                         </div>
                                         <div style="float:right;font-weight: bold;padding:15px;">

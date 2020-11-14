@@ -38,7 +38,7 @@
 
     <el-row type="flex" justify="center">
       <el-col :span="24">
-        <template v-if="!isEmpty">
+
           <el-row
             type="flex"
             justify="space-around"
@@ -61,7 +61,7 @@
               </el-select>
             </el-col>
           </el-row>
-
+          <template v-if="!isEmpty">
           <el-row type="flex" justify="space-around">
             <div class="items">
               <ul>
@@ -157,15 +157,15 @@
               </ul>
             </div>
           </el-row>
-        </template>
+          </template>
         <template v-else>
           <div class="empty-label">
             <el-alert
-              title="You do not have any auction history."
-              type="info"
-              center
-              show-icon
-              :closable="false"
+                    title="You do not have any auction history."
+                    type="info"
+                    center
+                    show-icon
+                    :closable="false"
             >
             </el-alert>
           </div>
@@ -210,40 +210,46 @@ export default {
         //     garageNum:2,
         //     type:'Apartment',
         //     area:123,
-        //     address:'2 Gearin Alley, Mascot, NSW',
-        //     photos:['https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1604152614&t=77f10b8e9e3d0e354e35cbbea5fe129a', ''],
-        //     highestPrice: 123123,
-        //     currentBid:123123,
-        //     startdate:'',
-        //     endddate:'',
+        //     address:'2 Gearin Alley, Mascot, NSW 2020',
+        //     photos:['https://anywhere-live.s3.amazonaws.com/property_images/554ff282-bfa4-49b9-bb34-9f0dfa32b373.jpg'],
+        //     highestPrice: 1200000,
+        //     currentBid:1200000,
+        //     startdate: new Date(2019,10,10,12,10),
+        //     enddate: new Date(2020,12,11,12,10),
         // }
         // ,{
         //     aid:2,
         //     status: 'F',
-        //     address:'123asd',
-        //     photos:['',''],
-        //     highestPrice: 123123,
-        //     currentBid:123123,
-        //     startdate: new Date(2019,10,10,12,10),
-        //     currentBid:123,
+        //     address:'6 Eildon Street, Doncaster Victoria 3108',
+        //     photos:['https://anywhere-live.s3.amazonaws.com/property_images/4e24ab60-188d-43cc-880a-7cedacc5d0eb.jpg'],
+        //     highestPrice: 500000,
+        //     currentBid:900000,
         //     reservedPrice: 10000,
-        //     startdate:'',
-        //     endddate:'',
+        //     startdate: new Date(2019,10,10,12,10),
+        //     enddate: new Date(2020,12,11,12,10),
+        //     bathroomNum:2,
+        //     bedroomNum:2,
+        //     area:120,
+        //     type:'House',
+        //     garageNum:2,
         // },
         // {
         //     aid:3,
         //     status: 'S',
-        //     address:'123asd',
-        //     photos:['',''],
+        //     address:'10 Craig Street, Keilor East Victoria 3033',
+        //     photos:['https://anywhere-live.s3.amazonaws.com/property_images/ed3eda11-d83c-40f7-b70f-4cdf4824538a.jpg'],
         //     startdate: new Date(2021,10,10,12,10),
         //     enddate: new Date(2023,10,10,10,10),
-        //     highestPrice: 123123,
-        //     currentBid:123,
+        //     highestPrice: 1000000,
+        //     currentBid:1200000,
         //     reservedPrice: 10000,
-        //     startdate:'',
-        //     endddate:'',
+        //     bathroomNum:2,
+        //     type:'House',
+        //     bedroomNum:1,
+        //     area:150,
+        //     garageNum:2,
         // },
-        //
+
         // {
         //     aid:5,
         //     status: 'F',

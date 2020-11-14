@@ -457,7 +457,7 @@ export default {
         dis3:true,
         dis4:true,
         dis5:true,
-
+        unread :'',
       place: null,
       inputDisable:true,
       dialogImageUrl: "",
@@ -541,7 +541,7 @@ export default {
 
   created() {
     this.username = localStorage.getItem("username");
-    this.username ='123';
+    // this.username ='123';
     // this.username = this.$store.state.username;
     if (this.username !== null) {
       this.hasLogin = true;
@@ -564,9 +564,9 @@ export default {
     }
     else{
         this.$message.error("You should login first!");
-        // this.$router.push("/login");
+        this.$router.push("/login");
     }
-      this.avatar ='https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2931000230,881740929&fm=11&gp=0.jpg'
+      // this.avatar ='https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2931000230,881740929&fm=11&gp=0.jpg'
 
 
   },
