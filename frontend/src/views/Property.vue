@@ -226,10 +226,11 @@
                         <h5 style="background-color: rgba(30,45,98,0.66);
                         height:50px;padding:15px;
                         color:white"><i class="el-icon-s-finance" ></i> Place New Bid Here</h5>
-                        <el-row v-show="propInfo.status ==='A'" type="flex" justify="center">
+                        <template v-if="propInfo.status ==='A'">
+                        <el-row  type="flex" justify="center">
                             <span style="color:rgba(37,61,114,0.61);font-size:15px">Your Current Bid </span>
                         </el-row>
-                        <el-row v-show="propInfo.status ==='A'" type="flex" justify="center">
+                        <el-row type="flex" justify="center">
                         <span style="font-weight:bold"> ${{ propInfo.highestPrice | numFormat }}</span>
                         </el-row>
 
@@ -255,6 +256,12 @@
                         <el-row style="margin-top:0;">
                             <p style="font-size:10px"><i class="el-icon-info"></i> New bid price should larger than the latest bid price.</p>
                         </el-row>
+                        </template>
+                        <template v-else>
+                            <el-row style="height:100px;padding:10px">
+                                <p style="font-size: 15px;color:lightslategrey">This auction has not started!</p>
+                            </el-row>
+                        </template>
 
                     </div>
 
