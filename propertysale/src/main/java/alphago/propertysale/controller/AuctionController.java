@@ -46,8 +46,6 @@ public class AuctionController {
     RabActionService actionService;
     @Autowired
     HistoryService historyService;
-
-
     /**
      * Get auction information based on Auction Id
      * If user is authenticated, also get the auction

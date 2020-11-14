@@ -278,7 +278,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             if(model.getOrder() == null) {
                 res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
                         .orderByDesc("aid"));
-            }else if(model.getOrder().equals("price")){
+            }else if(model.getOrder().equals("plusPrice")){
                 res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
                         .orderByAsc("highest_price"));
             }else{
@@ -401,7 +401,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
 
             if(model.getOrder() == null){
                 searchResVOS = auctionMapper.getAllRunningOrComingRes(searchResVOPage, voQueryWrapper);
-            } else if (model.getOrder().equals("price")) {
+            } else if (model.getOrder().equals("plusPrice")) {
                 // asc
                 searchResVOS = auctionMapper.getAllRunningOrComingResASC(searchResVOPage, voQueryWrapper);
             }else{

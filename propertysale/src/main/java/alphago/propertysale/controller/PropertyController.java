@@ -61,7 +61,7 @@ public class PropertyController {
         // Check if start date is valid
         if(property.isAuction() && auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
                 System.currentTimeMillis() < 0) return Result.fail("Start Time Is Not Valid!");
-        if(auction.getEnddate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
+        if(property.isAuction() && auction.getEnddate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
                 auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() <= 0){
             return Result.fail("End Date Must After Start Date!");
         }
