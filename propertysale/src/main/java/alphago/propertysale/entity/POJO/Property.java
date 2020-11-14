@@ -1,4 +1,4 @@
-package alphago.propertysale.entity;
+package alphago.propertysale.entity.POJO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -10,12 +10,10 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
+
 /**
- * @program: propertysale
- * @description: PropertyEntity
- * @author: XIAO HAN
- * @create: 2020-10-13 15:19
- **/
+ *  Plain Java Object of Property, which can be used to accept data from Front-end and interact with database.
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)

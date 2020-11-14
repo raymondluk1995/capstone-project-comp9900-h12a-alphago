@@ -1,7 +1,7 @@
 package alphago.propertysale.mapper;
 
-import alphago.propertysale.entity.Auction;
-import alphago.propertysale.entity.RabAction;
+import alphago.propertysale.entity.POJO.Auction;
+import alphago.propertysale.entity.POJO.RabAction;
 import alphago.propertysale.entity.returnVO.RunningAuctionAddress;
 import alphago.propertysale.entity.returnVO.SearchResVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
@@ -12,6 +12,10 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+
+/**
+ * @Description: Data access layer for Auction table in database
+ */
 
 public interface AuctionMapper extends BaseMapper<Auction> {
 

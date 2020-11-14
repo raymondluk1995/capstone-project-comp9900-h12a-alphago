@@ -1,17 +1,12 @@
 package alphago.propertysale.mapper;
 
-import alphago.propertysale.entity.History;
-import alphago.propertysale.entity.HistoryUpdater;
+import alphago.propertysale.entity.POJO.History;
+import alphago.propertysale.entity.POJO.HistoryUpdater;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Update;
 
 /**
- * <p>
- *  Mapper 接口
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-11-07
+ * @Description: Data access layer for History table in database
  */
 public interface HistoryMapper extends BaseMapper<History> {
 

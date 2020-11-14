@@ -1,30 +1,23 @@
 package alphago.propertysale.redis;
 
-import alphago.propertysale.entity.Auction;
+import alphago.propertysale.entity.POJO.Auction;
 import alphago.propertysale.service.AuctionService;
-import alphago.propertysale.utils.ApplicationContextUtil;
 import alphago.propertysale.utils.RedisUtil;
 import alphago.propertysale.utils.TimeUtil;
-import alphago.propertysale.websocket.BidHistoryPush;
-import alphago.propertysale.websocket.BidMsg;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.KeyExpirationEventMessageListener;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneOffset;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-20 16:58
+ * @description: The listener for Redis Key Exploration.
+ *               If key in redis has expired, the Listener will catch and handle it based on the Key.
  **/
 @Component
 public class RedisKeyExpirationListener extends KeyExpirationEventMessageListener {
@@ -39,6 +32,11 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
         return Long.parseLong(key.substring(key.indexOf(":") + 1));
     }
 
+    /**
+    * @Description: Handle the expired key.
+     *              If the key in the form of "Start:aid", the system starts the auction aid.
+     *              If the key in the form of "End:aid", the system find the auction aid.
+    */
     @Override
     public void onMessage(Message message, byte[] pattern) {
         String key = message.toString();

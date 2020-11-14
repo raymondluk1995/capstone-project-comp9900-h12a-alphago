@@ -6,12 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 
 /**
- * <p>
- *  Mapper 接口
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-11-02
+ * @Description: Data access layer for Notification table in database
  */
 public interface NotificationMapper extends BaseMapper<Notification> {
 

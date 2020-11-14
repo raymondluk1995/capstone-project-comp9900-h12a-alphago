@@ -4,12 +4,9 @@ import lombok.Data;
 
 /**
  * @program: vueblog
- * @description:
- * @author: XIAO HAN
- * @create: 2020-09-19 23:07
+ * @description: The Wrapper of the Result of all Controllers' return value
  **/
 @Data
-// 结果封装
 public class Result {
     private int code;
     private String msg;

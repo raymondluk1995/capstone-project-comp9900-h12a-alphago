@@ -9,12 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-11-02
+ *  This class is present user's notification message.
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

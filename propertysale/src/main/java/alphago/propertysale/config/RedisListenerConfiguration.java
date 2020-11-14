@@ -8,8 +8,6 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 /**
  * @program: propertysale
  * @description: Register redis listener
- * @author: XIAO HAN
- * @create: 2020-10-20 16:56
  **/
 @Configuration
 public class RedisListenerConfiguration {

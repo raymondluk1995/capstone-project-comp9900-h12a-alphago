@@ -6,9 +6,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-11-03 15:24
+ * @description: Return value Object of notification
  **/
 @Data
 @EqualsAndHashCode

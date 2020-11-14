@@ -5,12 +5,7 @@ import alphago.propertysale.entity.returnVO.NotificationVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.*;
 /**
- * <p>
- *  服务类
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-11-02
+ * @Description: Interface of service in Notification Controller
  */
 public interface NotificationService extends IService<Notification> {
 

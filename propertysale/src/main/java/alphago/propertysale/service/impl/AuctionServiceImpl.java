@@ -1,6 +1,6 @@
 package alphago.propertysale.service.impl;
 
-import alphago.propertysale.entity.*;
+import alphago.propertysale.entity.POJO.*;
 import alphago.propertysale.entity.inVO.SearchModel;
 import alphago.propertysale.entity.notification.FinishMessage;
 import alphago.propertysale.entity.notification.Notification;
@@ -29,7 +29,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,9 +36,7 @@ import java.util.List;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN, TAO XUE
- * @create: 2020-10-16 16:49
+ * @description: Implementation of Auction service
  **/
 @Service
 @Transactional
@@ -64,6 +61,10 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
 
     private static final int TOP = 3;
 
+
+    /**
+    * @Description: Get Auction information according to Auction id
+    */
     @Override
     public AuctionVO getAuctionByAid(long aid) {
         Auction auction = auctionMapper.selectById(aid);
@@ -118,6 +119,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         return auctionVO;
     }
 
+    /**
+     * @Description: Get Auction information according to Property id
+     */
     @Deprecated
     @Override
     public AuctionVO getAuctionByProperty(long pid) {
@@ -126,12 +130,23 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         return getAuctionByAid(auction.getAid());
     }
 
+    /**
+     * @Description: If a property is register as an auction:
+     *               'R': Auction not start
+     *               'A': Auction has started
+     *               'S': Auction finished, success
+     *               'F': Auction finished, passed in
+     *
+     */
     @Override
     public AuctionStatus getAuctionStatus(long pid) {
         Auction auction = auctionMapper.getRunningAuctionById(pid);
         return new AuctionStatus().setAid(auction.getAid()).setStatus(auction.getStatus());
     }
 
+    /**
+    * @Description: Cancel an auction
+    */
     @Override
     public void auctionCancel(long pid, long aid) {
         // delete all Rab
@@ -245,6 +260,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         BidHistoryPush.refresh(aid);
     }
 
+    /**
+    * @Description: Search auctions based on the search model
+    */
     @Override
     public SearchVO getSearchVO(SearchModel model) {
         Subject subject = SecurityUtils.getSubject();
@@ -260,7 +278,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             if(model.getOrder() == null) {
                 res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
                         .orderByDesc("aid"));
-            }else if(model.getOrder().equals("price")){
+            }else if(model.getOrder().equals("plusPrice")){
                 res = auctionMapper.selectPage(page, new QueryWrapper<Auction>().eq("status", 'A').or().eq("status", "R")
                         .orderByAsc("highest_price"));
             }else{
@@ -383,7 +401,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
 
             if(model.getOrder() == null){
                 searchResVOS = auctionMapper.getAllRunningOrComingRes(searchResVOPage, voQueryWrapper);
-            } else if (model.getOrder().equals("price")) {
+            } else if (model.getOrder().equals("plusPrice")) {
                 // asc
                 searchResVOS = auctionMapper.getAllRunningOrComingResASC(searchResVOPage, voQueryWrapper);
             }else{

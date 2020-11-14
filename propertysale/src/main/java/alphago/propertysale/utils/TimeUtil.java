@@ -6,9 +6,7 @@ import java.time.ZoneOffset;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-11-02 15:46
+ * @description: Get the system's timezone offset
  **/
 public class TimeUtil {
 

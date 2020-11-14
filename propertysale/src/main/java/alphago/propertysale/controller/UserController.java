@@ -1,9 +1,9 @@
 package alphago.propertysale.controller;
 
-import alphago.propertysale.entity.AvatarPorter;
+import alphago.propertysale.entity.POJO.AvatarPorter;
 import alphago.propertysale.entity.returnVO.InformationVO;
 import alphago.propertysale.entity.returnVO.LoginVO;
-import alphago.propertysale.entity.User;
+import alphago.propertysale.entity.POJO.User;
 import alphago.propertysale.rabbit.MessageProducer;
 import alphago.propertysale.service.UserService;
 import alphago.propertysale.shiro.JwtInfo;
@@ -14,44 +14,36 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-09-26
+ * @description: Control layer to deal with request sent to User Module
  */
 @RestController
 @RequestMapping("/user")
-
 public class UserController {
 
     @Autowired
     UserService userService;
 
     @Autowired
-    ServerUtil serverUtil;
-
-    @Autowired
     MessageProducer messageProducer;
 
     /**
      * @Description:  User Registration
-     * @return:
-     * @Author: Xiaohan
-     * @Date: 6/10/20
+     *                Add user's information into database and send avatar to Image Server if the provided Validation
+     *                Code is correct.
+     * @Param:        user: User's basic information
+     *                validate: User's validation code
+     *                avatar: Avatar uploaded by user
+     * @return: "Success" if no expectation, otherwise "Fail" with error messages
      */
     @RequestMapping("/register")
     Result save(User user , String validate , MultipartFile avatar) throws IOException {
@@ -74,9 +66,16 @@ public class UserController {
                     .setUid(user.getUid());
             messageProducer.sendMsg(porter, CheckCode.AVATAR);
         }
-        return Result.success("注册成功!");
+        return Result.success("Success!");
     }
 
+    /**
+    * @Description: User log in
+     *             If user's username and password are correct, login and set Jwt token into the Response's Http's head.
+    * @Param:      user: username and password provided by user
+     *             response: Response servlet
+    * @return:     "Success" if no expectation, otherwise "Fail" with error messages
+    */
     @RequestMapping("/login")
     @CrossOrigin
     Result login(User user , HttpServletResponse response){
@@ -97,6 +96,9 @@ public class UserController {
         return Result.success(ret);
     }
 
+    /**
+    * @Description: Login with email address.
+    */
     @RequestMapping("/emailLogin")
     Result login(String email , String password , HttpServletResponse response){
         User logUser = userService.getOne(new QueryWrapper<User>().eq("email", email));
@@ -116,6 +118,9 @@ public class UserController {
         return Result.success(ret);
     }
 
+    /**
+    * @Description: Reset Password
+    */
     @RequestMapping("/reset")
     Result resetPassword(User user, String validate) {
         User targetUser = userService.getOne(new QueryWrapper<User>().eq("username", user.getUsername()));
@@ -130,7 +135,9 @@ public class UserController {
         return Result.success("reset password successful!");
     }
 
-
+    /**
+    * @Description: Logout
+    */
     @RequestMapping("/logout")
     @RequiresAuthentication
     Result logout(){
@@ -142,6 +149,9 @@ public class UserController {
         return Result.success("退出成功！");
     }
 
+    /**
+    * @Description: Display users' basic information
+    */
     @RequestMapping("/information")
     @RequiresAuthentication
     Result information(){
@@ -158,6 +168,9 @@ public class UserController {
         return Result.success(information);
     }
 
+    /**
+    * @Description: Change firstname
+    */
     @RequestMapping("/information/changeFirstname")
     @RequiresAuthentication
     Result changeFirstName(String firstname){
@@ -170,6 +183,10 @@ public class UserController {
         return Result.success(firstname);
     }
 
+
+    /**
+     * @Description: Change lastname
+     */
     @RequestMapping("/information/changeLastname")
     @RequiresAuthentication
     Result changeLastName(String lastname){
@@ -182,6 +199,9 @@ public class UserController {
         return Result.success(lastname);
     }
 
+    /**
+     * @Description: Change email
+     */
     @RequestMapping("/information/changeEmail")
     @RequiresAuthentication
     Result changeEmail(String email , String validate){
@@ -201,6 +221,9 @@ public class UserController {
         return Result.success(email);
     }
 
+    /**
+     * @Description: Change avatar
+     */
     @RequestMapping("/information/changeAvatar")
     @RequiresAuthentication
     Result changeEmail(MultipartFile avatar) throws IOException {

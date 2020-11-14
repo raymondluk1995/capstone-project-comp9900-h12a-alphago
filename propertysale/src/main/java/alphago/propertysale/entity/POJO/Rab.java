@@ -1,4 +1,4 @@
-package alphago.propertysale.entity;
+package alphago.propertysale.entity.POJO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,13 +9,9 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-10-20
+ *  Plain Java Object of Registered Auction Bidder, which can be used to accept data from Front-end and interact with database.
  */
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)

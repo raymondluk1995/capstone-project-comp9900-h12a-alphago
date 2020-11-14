@@ -1,4 +1,4 @@
-package alphago.propertysale.entity;
+package alphago.propertysale.entity.POJO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -6,9 +6,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-13 22:29
+ * @description: Store Property's image in the binary form along with its name and the uid of its owner.
  **/
 @Data
 @NoArgsConstructor

@@ -8,14 +8,16 @@ import org.springframework.stereotype.Component;
 /**
  * @program: propertysale
  * @description: Get ApplicationContext
- * @author: XIAO HAN
- * @create: 2020-09-27 16:45
- **/
+ */
+
 @Component
 public class ApplicationContextUtil implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
+    /**
+     * @Description: Get Spring Context
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         ApplicationContextUtil.applicationContext = applicationContext;

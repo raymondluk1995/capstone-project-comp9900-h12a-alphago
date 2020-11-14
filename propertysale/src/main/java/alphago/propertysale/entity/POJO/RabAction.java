@@ -1,4 +1,4 @@
-package alphago.propertysale.entity;
+package alphago.propertysale.entity.POJO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.time.LocalDateTime;
@@ -8,13 +8,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+
 /**
- * <p>
- * 
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-10-24
+ *  Plain Java Object of Bid, which can be used to accept data from Front-end and interact with database.
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

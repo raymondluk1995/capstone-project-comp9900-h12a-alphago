@@ -1,6 +1,5 @@
 package alphago.propertysale.entity.returnVO;
 
-import alphago.propertysale.entity.RecVO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

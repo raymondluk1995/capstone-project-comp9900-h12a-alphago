@@ -1,6 +1,6 @@
 package alphago.propertysale.controller;
 
-import alphago.propertysale.entity.User;
+import alphago.propertysale.entity.POJO.User;
 import alphago.propertysale.rabbit.MessageProducer;
 import alphago.propertysale.service.UserService;
 import alphago.propertysale.utils.CheckCode;
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @program: propertysale
  * @description: Controller for dealing with Verification Code
- * @author: XIAO HAN
- * @create: 2020-10-06 21:58
  **/
 @RestController
 @RequestMapping("/verify")
@@ -24,17 +22,17 @@ public class VerificationController {
     @Autowired
     MessageProducer messageProducer;
     /**
-     *  Verification code for registration
+     *  Send Verification code for registration
      */
     @RequestMapping("/register")
     Result sendRegisterCode(String email){
         if(userService.emailExist(email)) return Result.fail("Email exist! Please Change!");
         messageProducer.sendMsg(email , CheckCode.REGISTER);
-        return Result.success("成功发送");
+        return Result.success("Success");
     }
 
     /**
-     *  Verification code for reset password
+     *  Send Verification code for reset password
      */
     @RequestMapping("/reset")
     Result sendResetCode(String username){
@@ -44,6 +42,6 @@ public class VerificationController {
         String email = user.getEmail();
         // send email if user exist
         messageProducer.sendMsg(email , CheckCode.RESET);
-        return Result.success("成功发送");
+        return Result.success("Success");
     }
 }

@@ -20,8 +20,6 @@ import java.util.Map;
 /**
  * @program: propertysale
  * @description: Shiro Configuration
- * @author: XIAO HAN
- * @create: 2020-09-26 22:11
  **/
 @Configuration
 public class ShiroConfig {
@@ -34,17 +32,20 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // set security manager
         shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
-        // 添加过滤器
+        // Set filter
         Map<String , Filter> filterMap = new HashMap<>();
         filterMap.put("jwtFilter" , jwtFilter);
         shiroFilterFactoryBean.setFilters(filterMap);
-        // 添加过滤路径
+        // Add filter path
         Map<String , String> filterChain = new HashMap<>();
         filterChain.put("/**" , "jwtFilter");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChain);
         return shiroFilterFactoryBean;
     }
 
+    /**
+    * @Description: Inject WebSecurityManager
+    */
     @Bean
     DefaultWebSecurityManager defaultWebSecurityManager(Realm realm){
         DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
@@ -58,6 +59,9 @@ public class ShiroConfig {
         return defaultWebSecurityManager;
     }
 
+    /**
+     * Inject costumed Realm
+     */
     @Bean
     Realm realm(){
         MyRealm myRealm = new MyRealm();

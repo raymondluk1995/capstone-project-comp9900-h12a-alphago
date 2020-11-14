@@ -1,35 +1,24 @@
 package alphago.propertysale.service.impl;
 
-import alphago.propertysale.entity.Auction;
-import alphago.propertysale.entity.Rab;
-import alphago.propertysale.entity.RabAction;
+import alphago.propertysale.entity.POJO.Auction;
+import alphago.propertysale.entity.POJO.Rab;
+import alphago.propertysale.entity.POJO.RabAction;
 import alphago.propertysale.mapper.AuctionMapper;
 import alphago.propertysale.mapper.RabActionMapper;
 import alphago.propertysale.mapper.RabMapper;
 import alphago.propertysale.mapper.UserMapper;
 import alphago.propertysale.service.RabActionService;
-import alphago.propertysale.utils.PriceUtil;
-import alphago.propertysale.utils.RedisUtil;
 import alphago.propertysale.utils.TimeUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
 import alphago.propertysale.websocket.BidMsg;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZoneOffset;
-import java.util.concurrent.TimeUnit;
-
 /**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-10-24
+ * @description: Implementation of Address service
  */
 @Service
 @Transactional

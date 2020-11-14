@@ -1,19 +1,15 @@
 package alphago.propertysale.entity.returnVO;
 
-import alphago.propertysale.entity.RecVO;
 import alphago.propertysale.websocket.BidMsg;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
 import java.util.List;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-19 21:52
+ * @description: Value Object of return value of Auction Controller
  **/
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -29,6 +25,7 @@ public class AuctionVO {
     private long enddate;
     private Long latestPrice;
     private long bidderNum;
+
     // owner information
     private long uid;
     private String username;
@@ -37,6 +34,7 @@ public class AuctionVO {
     private String email;
     private String phone;
     private String avatar;
+
     //property information
     private String address;
     private String lat;
