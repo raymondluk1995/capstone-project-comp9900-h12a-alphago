@@ -73,12 +73,11 @@
         <!-- Search Bar Part  -->
         <el-row
           type="flex"
-          justify="center"
+          justify="space-around"
           class="search"
-          style="margin-top: 10px"
+          style="margin: 10px 10% 0 10%;"
         >
-          <el-col :span="20" justify="center" type="flex">
-            <div>
+
               <el-col :span="20">
                 <vue-google-autocomplete
                   ref="address"
@@ -93,7 +92,7 @@
                 </vue-google-autocomplete>
               </el-col>
 
-              <el-col style="margin-left: 2px" :span="2" id="search-btn">
+              <el-col :span="2" >
                 <el-button
                   style="
                     height: 38px;
@@ -107,7 +106,7 @@
                 </el-button>
               </el-col>
 
-              <el-col style="margin-left: 18px" :span="1" id="search-btn">
+              <el-col :span="2" >
                 <el-button
                   style="
                     height: 38px;
@@ -120,8 +119,6 @@
                   <i class="fas fa-filter"></i> Filters
                 </el-button>
               </el-col>
-            </div>
-          </el-col>
         </el-row>
         <!-- Filters Part  -->
 
