@@ -9,12 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * <p>
- * 服务实现类
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-10-21
  */
 @Service
 @Transactional

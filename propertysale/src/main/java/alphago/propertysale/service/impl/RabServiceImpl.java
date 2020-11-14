@@ -21,12 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-10-20
+ * @description: Implementation of Rab service
  */
 @Service
 @Transactional
@@ -41,7 +36,7 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
     @Autowired
     private UserMapper userMapper;
     /**
-     *  If auction is on going,
+     *  Check if auction is on going,
      */
     @Override
     public void rabRegister(Rab rab) {
@@ -88,11 +83,17 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
         auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).setSql("bidder_num=bidder_num+1"));
     }
 
+    /**
+    * @Description: Check if user has registered the auction
+    */
     @Override
     public boolean isRegistered(long uid, long aid) {
         return rabMapper.selectOne(new QueryWrapper<Rab>().eq("uid", uid).eq("aid", aid)) != null;
     }
 
+    /**
+    * @Description: Get all of users' auctions
+    */
     @Override
     public List<Rab> getRunningAuctions(long uid) {
         List<Rab> auctions = rabMapper.getRunningAuctions(uid);
@@ -104,6 +105,9 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
         return auctions;
     }
 
+    /**
+    * @Description: Get all past auctions
+    */
     @Override
     public List<Rab> getPastAuctions(long uid) {
         return rabMapper.getPastAuctions(uid);

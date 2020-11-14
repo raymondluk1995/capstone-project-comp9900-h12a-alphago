@@ -17,12 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-11-02
+ * @description: Implementation of Notification service
  */
 @Service
 @Transactional

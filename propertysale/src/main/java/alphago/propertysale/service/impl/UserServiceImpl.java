@@ -11,12 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-09-26
+ * Impletation of user service
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -26,12 +21,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     HistoryMapper historyMapper;
 
+    /**
+    * @Description: User Register
+    */
     @Override
     public void userRegister(User user) {
         userMapper.insert(user);
         historyMapper.insert(History.emptyHistory().setUid(user.getUid()));
     }
 
+    /**
+    * @Description: Check if the email address already be registered
+    */
     @Override
     public boolean emailExist(String email) {
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("email", email));

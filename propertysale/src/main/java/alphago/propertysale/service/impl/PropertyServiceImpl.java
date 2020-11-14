@@ -26,9 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-13 15:30
+ * @description: Implementation of Property service
  **/
 @Service
 @Transactional
@@ -74,6 +72,9 @@ public class PropertyServiceImpl extends ServiceImpl<PropertyMapper , Property> 
         Thread.sleep(1500);
     }
 
+    /**
+    * @Description: Register new auction
+    */
     @Override
     public void propertyNewAuction(Auction auction, long seller) {
         propertyMapper.update(null, new UpdateWrapper<Property>()
@@ -81,6 +82,9 @@ public class PropertyServiceImpl extends ServiceImpl<PropertyMapper , Property> 
         registerNewAuction(auction, seller);
     }
 
+    /**
+     * @Description: Register new auction
+     */
     private void registerNewAuction(Auction auction, long seller){
         System.out.println(auction.getStartdate().toInstant(TimeUtil.getMyZone()).toEpochMilli() -
                 System.currentTimeMillis());

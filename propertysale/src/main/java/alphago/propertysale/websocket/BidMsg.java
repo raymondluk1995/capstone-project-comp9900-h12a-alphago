@@ -8,10 +8,10 @@ import java.io.Serializable;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-30 17:55
+ * @description: Pojo for biding message, which contains the information of
+ *               the bidder, bid price and the biding time.
  **/
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
