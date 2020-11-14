@@ -516,7 +516,8 @@
               </el-row>
             </div>
             <p class="filter-footnote">
-              * Please click the search button to apply filters. If the filter bar is concealed, the filters will not be applied.
+              * Please click the search button to apply filters. If the filter
+              bar is concealed, the filters will not be applied.
             </p>
           </div>
         </el-row>
@@ -591,25 +592,6 @@
                         class="mx-4"
                         style="margin: 0; padding: 0"
                       ></v-divider>
-
-                      <v-card-text>
-                        <div
-                          class="my-4 subtitle-1 result-type v-success"
-                          v-if="item.hasRegistered"
-                        >
-                          You have participated in this auction!
-                        </div>
-
-                        <div class="my-4 subtitle-1 result-type v-no" v-else>
-                          You have not the registered as a bidder of this
-                          auction!
-                        </div>
-                      </v-card-text>
-
-                      <v-divider
-                        class="mx-4"
-                        style="margin: 0; padding: 0"
-                      ></v-divider>
                       <v-card-text style="padding: 5px; margin: 0">
                         <el-row
                           type="flex"
@@ -661,73 +643,77 @@
           </el-col>
 
           <el-col :span="5">
-            <div class="test-page"  v-if="searchBarFixed"></div>
-          <div id="test-page"  style="width:350px;margin-top: 50px" :class="{ 'p-fixed': searchBarFixed }">
-            <h5 style="margin-top: 50px">
-              <i class="el-icon-magic-stick"></i> Recommendations
-            </h5>
-            <el-row type="flex" justify="center">
-              <div style="width: 400px">
-                <el-col
-                  v-for="item in recommendations"
-                  :key="item.aid"
-                >
-                  <div class="recomd" @click="goDetails(item)">
-                    <el-row :gutter="20">
-                      <el-col :span="8" style="padding: 0; margin: 0">
-                        <img
-                          style="height: 80px; width: 100%; margin-top: 8%"
-                          :src="item.photo"
-                          alt=""
-                        />
-                      </el-col>
+            <div class="test-page" v-if="searchBarFixed"></div>
+            <div
+              id="test-page"
+              style="width: 350px; margin-top: 50px"
+              :class="{ 'p-fixed': searchBarFixed }"
+            >
+              <h5 style="margin-top: 50px">
+                <i class="el-icon-magic-stick"></i> Recommendations
+              </h5>
+              <el-row type="flex" justify="center">
+                <div style="width: 400px">
+                  <el-col v-for="item in recommendations" :key="item.aid">
+                    <div
+                      class="recomd"
+                      @click="goDetails(item)"
+                      :class="addStatusColor2(item.status)"
+                    >
+                      <el-row :gutter="20">
+                        <el-col :span="8" style="padding: 0; margin: 0">
+                          <img
+                            style="height: 80px; width: 100%; margin-top: 8%"
+                            :src="item.photo"
+                            alt=""
+                          />
+                        </el-col>
 
-                      <el-col :span="16">
-                        <el-row
-                          type="flex"
-                          justify="left"
-                          style="margin: 10px 0"
-                        >
-                          <span
-                            >{{ item.address }}, {{ item.suburb }},
-                            {{ item.state }} {{ item.postcode }}</span
+                        <el-col :span="16">
+                          <el-row
+                            type="flex"
+                            justify="left"
+                            style="margin: 10px 0"
                           >
-                        </el-row>
-                        <el-row
-                          type="flex"
-                          justify="left"
-                          style="margin: 10px 0"
-                        >
-                          <el-col :span="8">
-                            <i
-                              class="fas fa-bath"
-                              style="margin-right: 5px"
-                            ></i>
-                            {{ item.bathroomNum }}
-                          </el-col>
-                          <el-col :span="8">
-                            <i class="fas fa-bed" style="margin-right: 5px"></i>
-                            {{ item.bedroomNum }}
-                          </el-col>
-                          <el-col :span="8">
-                            <i class="fas fa-car" style="margin-right: 5px"></i>
-                            {{ item.garageNum }}
-                          </el-col>
-
-                          <!--                                    <el-col :span="4">-->
-                          <!--                                        <i class="fas fa-home" style="margin-right: 5px"></i> {{ item.area }} ㎡-->
-                          <!--                                    </el-col>-->
-                          <!--                                    <el-col :span="8">-->
-                          <!--                                        <i class="fas fa-tags" style="margin-right: 5px"></i> {{ item.type }}-->
-                          <!--                                    </el-col>-->
-                        </el-row>
-                      </el-col>
-                    </el-row>
-                  </div>
-                </el-col>
-              </div>
-            </el-row>
-          </div>
+                            <span
+                              >{{ item.address }}, {{ item.suburb }},
+                              {{ item.state }} {{ item.postcode }}</span
+                            >
+                          </el-row>
+                          <el-row
+                            type="flex"
+                            justify="left"
+                            style="margin: 10px 0"
+                          >
+                            <el-col :span="8">
+                              <i
+                                class="fas fa-bath"
+                                style="margin-right: 5px"
+                              ></i>
+                              {{ item.bathroomNum }}
+                            </el-col>
+                            <el-col :span="8">
+                              <i
+                                class="fas fa-bed"
+                                style="margin-right: 5px"
+                              ></i>
+                              {{ item.bedroomNum }}
+                            </el-col>
+                            <el-col :span="8">
+                              <i
+                                class="fas fa-car"
+                                style="margin-right: 5px"
+                              ></i>
+                              {{ item.garageNum }}
+                            </el-col>
+                          </el-row>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </el-col>
+                </div>
+              </el-row>
+            </div>
           </el-col>
         </el-row>
       </template>
@@ -783,10 +769,10 @@ export default {
       filterPropertyList: [],
 
       //pagination starts
-      total: 0,
-      pageSize: 6,
-      // total: 4,
-      // pageSize: 2,
+      // total: 0,
+      // pageSize: 6,
+      total: 4,
+      pageSize: 2,
       currPage: 1,
       showPropList: [],
       // pagination ends
@@ -996,9 +982,6 @@ export default {
       ],
 
       recommendations: [],
-
-
-
     };
   },
 
@@ -1023,7 +1006,6 @@ export default {
     this.initVariables();
 
     this.getProductBySearch();
-
 
     this.currPage = 1;
   },
@@ -1110,6 +1092,14 @@ export default {
       }
     },
 
+    addStatusColor2(status) {
+      const colors = new Map([
+        ["A", "status-process2"],
+        ["R", "status-not-start2"],
+      ]);
+      return colors.get(status);
+    },
+
     handleCommand_type(command) {
       this.type = command;
     },
@@ -1186,6 +1176,8 @@ export default {
         this.search = this.search + this.createNewFilterQuery();
       }
 
+      this.searchBase = this.search;
+
       if (this.search === "") {
         this.search = "currPage=1";
       } else {
@@ -1196,7 +1188,7 @@ export default {
       this.$router.push(search_str);
       // this.$router.go(search_str);
 
-      console.log("Now it is before axios post");
+      // console.log("Now it is before axios post");
       this.$axios
         .post("/search", this.search)
         .then((res) => {
@@ -1450,7 +1442,7 @@ export default {
         this.search = "currPage=1";
       }
 
-      if(this.suburb!=""){
+      if (this.suburb != "") {
         this.search = this.search + "&lat=" + this.latitude;
         this.search = this.search + "&lng=" + this.longitude;
       }
@@ -1473,6 +1465,7 @@ export default {
 
     handleCurrentChange: function (currentPage) {
       this.currPage = currentPage;
+      this.scrollToTop();
       // this.createNewSearch();
       this.search = this.searchBase;
       // console.log("Now this.search is "+this.search);
@@ -1497,6 +1490,10 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+
+    scrollToTop() {
+      window.scrollTo(0, -1);
     },
 
     decapitateAddress(addr) {
@@ -1528,8 +1525,6 @@ export default {
         ? (this.searchBarFixed = true)
         : (this.searchBarFixed = false);
     },
-
-
   },
 
   watch: {
@@ -1625,7 +1620,7 @@ li {
   font-size: 18px;
   font-weight: bold;
   color: #fff;
-  background-color: #133264;
+  background-color: rgba(102, 199, 91, 0.4);
   border-radius: 3px;
   margin-top: 15px;
 }
@@ -1637,22 +1632,12 @@ li {
   font-size: 18px;
   font-weight: bold;
   color: #fff;
-  background-color: rgb(216, 158, 15);
+  background-color: rgba(231, 125, 109, 0.51);
   border-radius: 3px;
   margin-top: 15px;
 }
 
-.bid2 {
-  width: 90%;
-  padding: 3px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: bold;
-  color: #fff;
-  margin-top: 5px;
-  background-color: #133264;
-  border-radius: 3px;
-}
+
 
 li {
   margin-bottom: 20px;
@@ -1747,7 +1732,6 @@ li {
   color: rgb(251, 2, 7);
 }
 
-
 .test-page {
   width: 90%;
   margin-top: 50px;
@@ -1759,5 +1743,11 @@ li {
   width: 400px;
 }
 
-
+.status-not-start2 {
+  border-left: 10px solid rgba(231, 125, 109, 0.51);
+  /*border : 10px solid black;*/
+}
+.status-process2 {
+  border-left: 10px solid rgba(102, 199, 91, 0.4);
+}
 </style>
