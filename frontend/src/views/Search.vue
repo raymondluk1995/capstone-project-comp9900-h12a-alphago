@@ -655,7 +655,7 @@
             <div class="test-page" v-if="searchBarFixed"></div>
             <div
               id="test-page"
-              style="width: 350px; margin-top: 50px"
+              style="width: 400px; margin-top: 50px"
               :class="{ 'p-fixed': searchBarFixed }"
             >
               <h5 style="margin-top: 50px">

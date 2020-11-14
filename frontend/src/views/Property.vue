@@ -125,7 +125,7 @@
                         <el-row class="items-tag" type="flex">
 <!--                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>-->
                             <ul>
-                                <li  v-for="tag in ((propInfo.position||'') + (','+propInfo.detail||'')).split(',')">
+                                <li  v-for="tag in ((propInfo.position||'') + (propInfo.detail !==''? (',' + propInfo.detail):'')).split(',')">
                                     <p class='tag-wrap' style="color:white" >{{ tag }}</p>
                                 </li>
                             </ul>
@@ -228,7 +228,7 @@
                         color:white"><i class="el-icon-s-finance" ></i> Place New Bid Here</h5>
                         <template v-if="propInfo.status ==='A'">
                         <el-row  type="flex" justify="center">
-                            <span style="color:rgba(37,61,114,0.61);font-size:15px">Your Current Bid </span>
+                            <span style="color:rgba(37,61,114,0.61);font-size:15px;">Your Current Bid </span>
                         </el-row>
                         <el-row type="flex" justify="center">
                         <span style="font-weight:bold"> ${{ propInfo.highestPrice | numFormat }}</span>
@@ -258,6 +258,12 @@
                         </el-row>
                         </template>
                         <template v-else>
+                            <el-row  type="flex" justify="center">
+                                <span style="color:rgba(37,61,114,0.61);font-size:15px;margin-top:30px">Your Current Bid </span>
+                            </el-row>
+                            <el-row type="flex" justify="center">
+                                <span style="font-weight:bold"> ${{ propInfo.highestPrice | numFormat }}</span>
+                            </el-row>
                             <el-row style="height:100px;padding:10px">
                                 <p style="font-size: 15px;color:lightslategrey">This auction has not started!</p>
                             </el-row>
@@ -287,7 +293,7 @@
                 </template>
 
                 <div class="test-page" v-if="searchBarFixed"></div>
-                <div id="test-page" style="width:350px"  :class="{'p-fixed':searchBarFixed}">
+                <div id="test-page" style="width:400px"  :class="{'p-fixed':searchBarFixed}">
                 <h5 style=" margin-top:100px;"><i class="el-icon-magic-stick"></i> Similar</h5>
                 <el-row type="flex" justify="center">
                     <div style="width:400px">
@@ -592,7 +598,7 @@
 
             return {
                 searchBarFixed: false,
-                offsetTop: 0,
+                offsetTop:800,
                 unread:'',
                 activateIndex:'0',
                 websock: null,

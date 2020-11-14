@@ -297,7 +297,7 @@ export default {
                   .then((response) => {
                     if (response.data.code === 200) {
                       this.$store.commit('setAvatar', this.form.imageUrl);
-                      this.$message('Registration Successful!');
+                      this.$message.success('Registration Successful!');
                       this.$router.replace("/login");
                     } else if(response.data.code === 400){
                       this.$message.error(response.data.msg);

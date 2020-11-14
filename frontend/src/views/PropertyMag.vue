@@ -169,7 +169,7 @@
                         <!--                        <el-tag class='tag1' v-for="tag in propInfo.position.split(',')" effect="plain" :key="tag.id">{{ tag }}</el-tag>-->
 <!--                        <p class='tag-wrap' v-for="tag in (propInfo.position||'').split(',')" >{{ tag }}</p>-->
                         <ul>
-                            <li v-for="tag in ((propInfo.position||'')+(','+propInfo.detail||'')).split(',')">
+                            <li v-for="tag in ((propInfo.position||'')+(propInfo.detail !==''? (',' + propInfo.detail):'')).split(',')">
                                 <p class='tag-wrap3' >{{ tag }}</p>
                             </li>
                         </ul>
