@@ -28,17 +28,17 @@
           <el-row  type="flex" justify="center" >
             <el-col :span="8" >
               <el-form-item label="" prop="username">
-                <el-input v-model="form.username" placeholder="* Username" required="required"></el-input>
+                <el-input v-model="form.username" maxlength="15" placeholder="* Username" required="required"></el-input>
               </el-form-item>
               <el-row type="flex" justify="center">
                 <el-col :span="12">
               <el-form-item label="" prop="firstname">
-                <el-input v-model="form.firstname" placeholder="* Firstname"></el-input>
+                <el-input v-model="form.firstname" maxlength="15"  placeholder="* Firstname"></el-input>
               </el-form-item>
                 </el-col>
                 <el-col :span="12">
               <el-form-item label="" prop="lastname">
-                <el-input v-model="form.lastname" placeholder="* Lastname"></el-input>
+                <el-input v-model="form.lastname" maxlength="15" placeholder="* Lastname"></el-input>
               </el-form-item>
                 </el-col>
               </el-row>
@@ -152,10 +152,18 @@ export default {
 
   },
   data() {
+    const validName = (rule, value, callback) => {
+      const namereg = /^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/;
+      if (!namereg.test(value)) {
+        callback(new Error("Name should begin with an uppercase letter."));
+      } else {
+        callback();
+      }
+    };
     const validateUsername = (rule, value, callback) => {
       const usernameReg = /^[A-Za-z0-9]+$/;
       if (!usernameReg.test(value)) {
-        callback(new Error("Please enter the correct username"));
+        callback(new Error("Please enter the correct username, only consists number and letter"));
       } else {
         callback();
       }
@@ -171,7 +179,7 @@ export default {
     const validatePhone = (rule, value, callback) => {
       const phoneReg = /^((?:61)|(?:0))?4\d{8}$/;
       if (!phoneReg.test(value)) {
-        callback(new Error("Please enter the valid phone number"));
+        callback(new Error("Please enter the valid Australia phone number"));
       } else {
         callback();
       }
@@ -220,8 +228,8 @@ export default {
       },
       rules: {
         username: [{required: true, message: "Please enter username", trigger: "blur",}, { validator: validateUsername, trigger: "blur" },],
-        firstname: [{required: true, message: "Please enter firstname", trigger: "blur",},],
-        lastname: [{required: true, message: " Please enter lastname", trigger: "blur",},],
+        firstname: [{required: true, message: "Please enter firstname", trigger: "blur",},{ validator: validName, trigger: "blur" }],
+        lastname: [{required: true, message: " Please enter lastname", trigger: "blur",}, { validator: validName, trigger: "blur" }],
         phone: [{required: true, message: " Please enter phone", trigger: "blur",}, { validator: validatePhone, trigger: "blur" },],
         email: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
         validate: [{required: true, message: "Please enter validate code", trigger: "blur",},],

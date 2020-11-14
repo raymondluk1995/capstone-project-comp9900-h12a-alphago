@@ -1759,5 +1759,13 @@ li {
   width: 400px;
 }
 
+.el-dropdown-menu{
+  padding: 25px 20px 25px 10px !important;
+}
+
+  .el-dropdown-menu__item{
+    margin:0 !important;
+  }
+
 
 </style>
