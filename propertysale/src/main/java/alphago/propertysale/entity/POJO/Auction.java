@@ -15,8 +15,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * @program: propertysale
  * @description: Auction Entity
- * @author: XIAO HAN
- * @create: 2020-10-15 15:35
  **/
 @Data
 @Accessors(chain = true)
@@ -43,6 +41,11 @@ public class Auction {
     private String status;
     private long bidderNum = 0;
 
+    /**
+    * @Description: Check if an auction has finished
+    * @Param: aid: auction's Id
+    * @return: true, if auction has finished, otherwise false
+    */
     public static boolean isExpr(long aid){
         RedisTemplate redis = RedisUtil.valueRedis();
         String key = "End:"+aid;

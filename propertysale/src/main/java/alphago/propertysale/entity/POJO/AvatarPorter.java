@@ -7,9 +7,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-08 23:38
+ * @description: This class is used to wrap a avatar that can be transferred in Message Queue
  **/
 @Data
 @NoArgsConstructor

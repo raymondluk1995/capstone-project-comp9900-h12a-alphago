@@ -6,12 +6,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 /**
- * <p>
- *  Mapper 接口
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-10-20
+ * @Description: Data access layer for Rab table in database
  */
 public interface RabMapper extends BaseMapper<Rab> {
 

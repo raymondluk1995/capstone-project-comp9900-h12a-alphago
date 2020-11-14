@@ -34,9 +34,6 @@ public class UserController {
     UserService userService;
 
     @Autowired
-    ServerUtil serverUtil;
-
-    @Autowired
     MessageProducer messageProducer;
 
     /**

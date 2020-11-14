@@ -19,18 +19,8 @@ import java.io.IOException;
 
 /**
  * @program: propertysale
- * @description: 处理JwtToken 的 filter
- * @author: XIAO HAN
- * @create: 2020-09-26 22:29
+ * @description: Filter for handle JwtToken
  **/
-
-/**
-* @Description:
-* @Param:
-* @return:
-* @Author: Xiaohan
-* @Date: 29/9/20
-*/
 
 @Component
 public class JwtFilter extends AuthenticatingFilter {

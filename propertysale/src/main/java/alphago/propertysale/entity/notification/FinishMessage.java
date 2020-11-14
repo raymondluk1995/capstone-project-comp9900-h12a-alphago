@@ -10,9 +10,7 @@ import java.io.Serializable;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-11-01 22:39
+ * @description: Plain object presents notification of finish message
  **/
 @Data
 @EqualsAndHashCode

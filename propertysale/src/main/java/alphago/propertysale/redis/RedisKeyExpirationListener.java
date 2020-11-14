@@ -16,9 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-20 16:58
+ * @description: The listener for Redis Key Exploration.
+ *               If key in redis has expired, the Listener will catch and handle it based on the Key.
  **/
 @Component
 public class RedisKeyExpirationListener extends KeyExpirationEventMessageListener {
@@ -33,6 +32,11 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
         return Long.parseLong(key.substring(key.indexOf(":") + 1));
     }
 
+    /**
+    * @Description: Handle the expired key.
+     *              If the key in the form of "Start:aid", the system starts the auction aid.
+     *              If the key in the form of "End:aid", the system find the auction aid.
+    */
     @Override
     public void onMessage(Message message, byte[] pattern) {
         String key = message.toString();

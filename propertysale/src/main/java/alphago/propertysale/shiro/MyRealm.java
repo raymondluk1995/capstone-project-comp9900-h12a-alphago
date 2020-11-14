@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-09-26 22:15
+ * @description: Custom realm for authentication
  **/
 public class MyRealm extends AuthorizingRealm {
 
@@ -27,14 +25,14 @@ public class MyRealm extends AuthorizingRealm {
 
 
     /**
-    * 处理授权
+    * Authorization
     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         return null;
     }
     /**
-     * 处理验证
+     * Authentication
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {

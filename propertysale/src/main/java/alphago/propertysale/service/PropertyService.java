@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
+/**
+ * @Description: Interface of service in Property Controller
+ */
 public interface PropertyService extends IService<Property> {
     void propertyRegister(long uid, Property property, Address address,
                           MultipartFile[] photos, Auction auction) throws IOException, InterruptedException;

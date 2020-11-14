@@ -8,12 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-11-07
+ *  Plain Java Object of History, which can be used to accept data from Front-end and interact with database.
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

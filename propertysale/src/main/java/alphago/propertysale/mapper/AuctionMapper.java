@@ -13,6 +13,10 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
+/**
+ * @Description: Data access layer for Auction table in database
+ */
+
 public interface AuctionMapper extends BaseMapper<Auction> {
 
     @Select("SELECT aid, status FROM auction WHERE (status = 'R' OR status = 'A') AND pid = #{pid}")

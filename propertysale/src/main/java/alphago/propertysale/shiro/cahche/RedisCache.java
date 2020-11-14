@@ -12,9 +12,7 @@ import java.util.Set;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-09-27 15:45
+ * @description: Redis Cache for Shiro
  **/
 public class RedisCache<K,V> implements Cache<K , V> {
     private String cacheName;

@@ -6,9 +6,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-13 22:29
+ * @description: Store Property's image in the binary form along with its name and the uid of its owner.
  **/
 @Data
 @NoArgsConstructor

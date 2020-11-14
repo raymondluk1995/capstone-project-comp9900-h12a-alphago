@@ -10,21 +10,20 @@ import java.util.List;
 /**
  * @program: propertysale
  * @description: upload file to the server based on user id
- * @author: XIAO HAN
- * @create: 2020-10-08 00:04
  **/
 public class FileUtil {
     private static String remote = "http://3.24.78.45:8060/img/";
     /**
     * @Description: Check if the directory exist
-    * @Author: Xiaohan
-    * @Date: 8/10/20
     */
     public static boolean isDirectoryExist(String path){
         File file = new File(path);
         return file.exists();
     }
 
+    /**
+    * @Description: Get User's avatar from Image Server
+    */
     public static String getUserAvatar(User user){
         String path = user.getAvatarType() == null ?
                 "default/" + Character.toUpperCase(user.getFirstname().charAt(0)) + ".png" :
@@ -32,6 +31,9 @@ public class FileUtil {
         return remote + path;
     }
 
+    /**
+    * @Description: Get User's Image from Image Server
+    */
     public static String getUserAvatar(long uid, String type){
         String path = uid + "/avatar/avatar" + type;
         return remote + path;
@@ -39,8 +41,6 @@ public class FileUtil {
 
     /**
     * @Description: Get file's type
-    * @Author: Xiaohan
-    * @Date: 9/10/20
     */
     public static String getType(String fileName){
         return fileName.substring(fileName.lastIndexOf('.'));
@@ -48,8 +48,6 @@ public class FileUtil {
 
     /**
     * @Description: Get property cover from image server.
-    * @Author: Xiaohan
-    * @Date: 14/10/20
     */
     public static List<String> getImages(long pid){
         RestTemplate restTemplate = new RestTemplate();

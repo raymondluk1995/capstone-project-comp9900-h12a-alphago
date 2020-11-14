@@ -5,9 +5,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-09 20:46
+ * @description: Value object of user information
  **/
 @Data
 @Accessors(chain = true)

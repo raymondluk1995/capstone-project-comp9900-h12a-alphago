@@ -6,8 +6,6 @@ import java.util.Objects;
 /**
  * @program: propertysale
  * @description: POJO store user information for jwt
- * @author: XIAO HAN
- * @create: 2020-10-10 14:37
  **/
 public class JwtInfo implements Serializable {
     private long uid;

@@ -6,9 +6,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-11-07 23:45
+ * @description: Return value Object of Recommendation
  **/
 @Data
 @Accessors(chain = true)
