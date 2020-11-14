@@ -54,7 +54,9 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> impl
             vo.setBathroomNum(tmp.getBathroomNum().intValue());
             vo.setBedroomNum(tmp.getBedroomNum().intValue());
             vo.setGarageNum(tmp.getGarageNum().intValue());
-            vo.setPhoto(FileUtil.getImages(tmp.getPid()).get(0));
+            List<String> images = FileUtil.getImages(tmp.getPid());
+            if(images != null && images.size() > 0)
+                vo.setPhoto(FileUtil.getImages(tmp.getPid()).get(0));
             ret.addFirst(vo);
         }
         return ret;

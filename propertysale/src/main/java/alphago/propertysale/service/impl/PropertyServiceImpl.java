@@ -2,7 +2,7 @@ package alphago.propertysale.service.impl;
 
 import alphago.propertysale.entity.POJO.Address;
 import alphago.propertysale.entity.POJO.Auction;
-import alphago.propertysale.entity.POJO.ImgPorter;
+import alphago.propertysale.entity.ImgPorter;
 import alphago.propertysale.entity.POJO.Property;
 import alphago.propertysale.mapper.AddressMapper;
 import alphago.propertysale.mapper.AuctionMapper;
