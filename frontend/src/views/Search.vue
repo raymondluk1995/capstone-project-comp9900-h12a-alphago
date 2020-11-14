@@ -858,7 +858,7 @@ export default {
         },
 
         {
-          value: "+price",
+          value: "plusPrice",
           label: "Price: Low To High",
         },
         {
