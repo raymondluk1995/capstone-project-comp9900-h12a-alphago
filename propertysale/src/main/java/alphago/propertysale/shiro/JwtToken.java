@@ -4,9 +4,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 
 /**
  * @program: propertysale
- * @description: jwtToken
- * @author: XIAO HAN
- * @create: 2020-09-26 22:43
+ * @description: jwtToken to identify an authenticated user
  **/
 public class JwtToken implements AuthenticationToken {
     private JwtInfo user;

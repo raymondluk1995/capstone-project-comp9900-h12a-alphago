@@ -1,4 +1,4 @@
-package alphago.propertysale.entity;
+package alphago.propertysale.entity.returnVO;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -6,9 +6,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-11-07 23:45
+ * @description: Return value Object of Recommendation
  **/
 @Data
 @Accessors(chain = true)

@@ -5,9 +5,7 @@ import lombok.experimental.Accessors;
 import java.util.List;
 /**
  * @program: propertysale
- * @description:
- * @author: XIAO HAN
- * @create: 2020-10-14 10:53
+ * @description: Return value Object of Property
  **/
 @Data
 @Accessors(chain = true)

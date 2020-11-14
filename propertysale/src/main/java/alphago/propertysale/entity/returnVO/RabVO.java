@@ -8,8 +8,6 @@ import java.util.List;
 /**
  * @program: propertysale
  * @description: Auctions registered by user(rab)
- * @author: XIAO HAN
- * @create: 2020-10-25 14:45
  **/
 @Data
 @Accessors(chain = true)

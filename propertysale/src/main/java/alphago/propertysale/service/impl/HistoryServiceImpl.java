@@ -1,8 +1,7 @@
 package alphago.propertysale.service.impl;
 
-import alphago.propertysale.entity.History;
-import alphago.propertysale.entity.RecVO;
-import alphago.propertysale.entity.returnVO.AuctionVO;
+import alphago.propertysale.entity.POJO.History;
+import alphago.propertysale.entity.returnVO.RecVO;
 import alphago.propertysale.entity.returnVO.RunningAuctionAddress;
 import alphago.propertysale.mapper.HistoryMapper;
 import alphago.propertysale.service.HistoryService;
@@ -11,17 +10,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
+
 /**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-11-07
- */
+ * @program: propertysale
+ * @description: Implementation of History service
+ **/
 @Service
 public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> implements HistoryService {
 
@@ -30,6 +25,11 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> impl
     @Autowired
     HistoryMapper historyMapper;
 
+    /**
+    * @Description: Get recommendation based on user's history
+     *
+     *              Maintain a max heap to get Top K auction which have smallest difference.
+    */
     public static List<RecVO> recommendations(RunningAuctionAddress query, List<RunningAuctionAddress> list){
         PriorityQueue<RunningAuctionAddress> heap =
                 new PriorityQueue<>((a,b)-> Double.compare(b.getScore(), a.getScore()));
@@ -37,8 +37,7 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> impl
         for(RunningAuctionAddress comp : list){
             if(comp.getAid().equals(query.getAid())) {continue;}
             comp.setScore(score(query, comp));
-            System.out.print(comp+"----> ");
-            if(heap.size() < 4){
+            if(heap.size() < 5){
                 heap.add(comp);
             }else{
                 if(comp.getScore() < heap.peek().getScore()){
@@ -61,6 +60,9 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> impl
         return ret;
     }
 
+    /**
+    * @Description: Get score between two auction
+    */
     private static double score(RunningAuctionAddress query, RunningAuctionAddress comp){
         double ret = Math.pow(query.getBathroomNum() - comp.getBathroomNum(),2)
                 + Math.pow(query.getBedroomNum() - comp.getBedroomNum(), 2)

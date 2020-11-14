@@ -5,9 +5,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @program: propertysale
- * @description: Return POJO of login controller
- * @author: XIAO HAN
- * @create: 2020-10-08 15:46
+ * @description: Return Value Object of login controller
  **/
 @Data
 @Accessors(chain = true)

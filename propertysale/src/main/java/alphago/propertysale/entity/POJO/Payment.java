@@ -1,4 +1,4 @@
-package alphago.propertysale.entity;
+package alphago.propertysale.entity.POJO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,13 +7,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+
 /**
- * <p>
- * 
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-10-21
+ *  Plain Java Object of Payment method, which can be used to accept data from Front-end and interact with database.
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

@@ -10,8 +10,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * @program: propertysale
  * @description: RedisCache for Mybaits
- * @author: XIAO HAN
- * @create: 2020-10-11 14:39
  **/
 @Slf4j
 public class MybatisCache implements Cache {

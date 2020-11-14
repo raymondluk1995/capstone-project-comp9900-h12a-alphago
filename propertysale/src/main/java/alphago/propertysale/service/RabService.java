@@ -1,15 +1,10 @@
 package alphago.propertysale.service;
 
-import alphago.propertysale.entity.Rab;
+import alphago.propertysale.entity.POJO.Rab;
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 /**
- * <p>
- *  服务类
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-10-20
+ * @Description: Interface of service in Rab Controller
  */
 public interface RabService extends IService<Rab> {
 

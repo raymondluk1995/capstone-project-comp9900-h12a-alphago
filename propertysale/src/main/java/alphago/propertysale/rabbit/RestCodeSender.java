@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 /**
  * @program: propertysale
  * @description: Send Reset Code
- * @author: XIAO HAN
- * @create: 2020-10-08 21:03
  **/
 @Component
 @RabbitListener(bindings = @QueueBinding(value = @Queue(name = "resetSender" , autoDelete = "false") ,

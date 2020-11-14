@@ -13,13 +13,10 @@ import java.util.ArrayList;
 
 /**
  * @program: propertysale
- * @description: Websocket
- * @author: XIAO HAN
- * @create: 2020-10-16 17:20
+ * @description: Enable Websocket
  **/
 @Configuration
 public class WebsocketConfig extends ServerEndpointConfig.Configurator {
-    // 修改握手
     @Override
     public void modifyHandshake(ServerEndpointConfig sec, HandshakeRequest request, HandshakeResponse response) {
         Subject subject = SecurityUtils.getSubject();

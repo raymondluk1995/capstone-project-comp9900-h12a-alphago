@@ -5,7 +5,9 @@ import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
-
+/**
+* @Description: Value Object to accept search condition from front end
+*/
 // localhost:8080/search
 // localhost:8080/search?startDate=xxxx&aaa=xxx...
 @Data
@@ -41,7 +43,9 @@ public class SearchModel {
 
     private String order; // desc or asc
 
-
+    /**
+    * @Description: Check if the search filter is empty
+    */
     public boolean isAllEmpty() {
         return this.suburb == null &&
                 this.state == null &&

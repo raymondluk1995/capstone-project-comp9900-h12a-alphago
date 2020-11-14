@@ -1,4 +1,4 @@
-package alphago.propertysale.entity;
+package alphago.propertysale.entity.POJO;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -6,9 +6,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @program: propertysale
- * @description: History Apdator for History Mapper
- * @author: XIAO HAN
- * @create: 2020-11-12 21:43
+ * @description: To change user's History in databse
  **/
 @Data
 @Accessors(chain = true)

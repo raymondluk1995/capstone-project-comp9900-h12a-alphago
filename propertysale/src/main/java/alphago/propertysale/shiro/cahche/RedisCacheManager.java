@@ -8,8 +8,6 @@ import org.apache.shiro.cache.CacheManager;
  * @program: propertysale
  * @description: Redis Cache Manager for shiro
  *                  get corresponding cache based on the cache name;
- * @author: XIAO HAN
- * @create: 2020-09-27 15:43
  **/
 public class RedisCacheManager implements CacheManager {
     @Override

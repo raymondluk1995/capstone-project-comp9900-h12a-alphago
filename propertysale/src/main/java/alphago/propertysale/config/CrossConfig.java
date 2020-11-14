@@ -5,13 +5,15 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * @program: propertysale
- * @description: Solve cross problems
- * @author: XIAO HAN
- * @create: 2020-09-29 14:13
+ * Because our system is Front-end and Back-end separated.
+ * So we need to solve the cross-domain problems
  **/
 @Configuration
 public class CrossConfig implements WebMvcConfigurer {
+
+    /**
+    * @Description: Allow all types of request from all IP address.
+    */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")

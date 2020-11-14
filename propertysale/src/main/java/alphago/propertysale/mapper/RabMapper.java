@@ -1,17 +1,12 @@
 package alphago.propertysale.mapper;
 
-import alphago.propertysale.entity.Rab;
+import alphago.propertysale.entity.POJO.Rab;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 /**
- * <p>
- *  Mapper 接口
- * </p>
- *
- * @author Xiaohan Zhu
- * @since 2020-10-20
+ * @Description: Data access layer for Rab table in database
  */
 public interface RabMapper extends BaseMapper<Rab> {
 

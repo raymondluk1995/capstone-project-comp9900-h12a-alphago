@@ -17,13 +17,13 @@ import java.io.IOException;
 /**
  * @program: vueblog
  * @description: A Global ExceptionHandler
- * @author: XIAO HAN
- * @create: 2020-09-25 12:17
+ *               It will catch all kinds of (subclass) of RuntimeException in controller.
  **/
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    // 捕捉shiro的异常
+
+    // Catch Shiro Exception
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ShiroException.class)
     public Result handle401(ShiroException e) {
@@ -42,21 +42,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = IllegalArgumentException.class)
     public Result handler(IllegalArgumentException e) {
         e.printStackTrace();
-        log.error("Assert异常:-------------->{}",e.getMessage());
+        log.error("Assert Exception:-------------->{}",e.getMessage());
         return Result.fail(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(JWTDecodeException.class)
     public Result handler(JWTDecodeException e){
-//        log.error("解码错误",e);
         e.printStackTrace();
         return Result.fail(e.getMessage());
     }
 
     @ExceptionHandler(FileSizeLimitExceededException.class)
     public Result handler(FileSizeLimitExceededException e){
-        log.error("文件过大",e);
+        log.error("File is too large: ",e);
         return Result.fail(e.getMessage());
     }
 
@@ -64,21 +63,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = RuntimeException.class)
     public Result handler(RuntimeException e) {
         e.printStackTrace();
-        log.error("Assert异常:-------------->{}",e.getMessage());
+        log.error("Assert Exception:-------------->{}",e.getMessage());
         return Result.fail(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = AuctionNotFoundException.class)
     public Result handler(AuctionNotFoundException e) {
-        log.error("Assert异常:-------------->{}",e.getMessage());
+        log.error("Assert Exception:-------------->{}",e.getMessage());
         return Result.fail(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AuctionFinishedException.class)
     public Result handler(AuctionFinishedException e) {
-        log.error("Assert异常:-------------->{}",e.getMessage());
+        log.error("Assert Exception:-------------->{}",e.getMessage());
         return Result.fail(e.getMessage());
     }
 }
