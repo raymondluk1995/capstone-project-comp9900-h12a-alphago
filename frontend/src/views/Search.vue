@@ -73,7 +73,7 @@
         <!-- Search Bar Part  -->
         <el-row
           type="flex"
-          justify="space-around"
+          justify="center"
           class="search"
           style="margin: 10px 10% 0 10%;"
         >
@@ -98,7 +98,7 @@
                     height: 38px;
                     color: white;
                     background-color: rgb(20, 60, 127);
-                    margin-left:2px;
+                    margin-left:0px;
                   "
                   icon="el-icon-search"
                   @click="toSearch"
@@ -724,8 +724,9 @@
                 </div>
               </el-row>
               <el-row v-else>
-
-                  <p style="color:grey;word-wrap:break-word"><i class="el-icon-warning-outline"></i> Log in to see the recommendations for you.</p>
+                <div style="width:90%">
+                  <p style="color:grey;"><i class="el-icon-warning-outline"></i> Log in to see the recommendations.</p>
+                </div>
               </el-row>
             </div>
           </el-col>
