@@ -663,7 +663,8 @@
               <h5 style="margin-top: 50px">
                 <i class="el-icon-magic-stick"></i> Recommendations
               </h5>
-              <el-row type="flex" justify="center">
+
+              <el-row v-if="this.hasLogin" type="flex" justify="center">
                 <div style="width: 400px">
                   <el-col v-for="item in recommendations" :key="item.aid">
                     <div
@@ -723,6 +724,10 @@
                     </div>
                   </el-col>
                 </div>
+              </el-row>
+              <el-row v-else>
+
+                  <p style="color:grey"><i class="el-icon-warning-outline"></i> Log in to see the recommendations for you.</p>
               </el-row>
             </div>
           </el-col>
