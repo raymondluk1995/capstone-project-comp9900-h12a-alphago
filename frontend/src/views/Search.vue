@@ -581,7 +581,7 @@
                           Type: {{ item.type }}
                         </div>
                         <div class="my-4 subtitle-1 result-type">
-                          Auction Ends At: {{ showTime(item.endDate) }}
+                          Auction Ends At: {{ showTime(item.enddate) }}
                         </div>
                         <div class="my-4 subtitle-1 result-type">
                           Attended Bidders: <b>{{ item.bidderNum }}</b>
@@ -612,10 +612,10 @@
                           Type: {{ item.type }}
                         </div>
                         <div class="my-4 subtitle-1 result-type">
-                          Auction Starts At: {{ showTime(item.startDate) }}
+                          Auction Starts At: {{ showTime(item.startdate) }}
                         </div>
                         <div class="my-4 subtitle-1 result-type">
-                          Try To Be The First Bidder!
+                          Click in for more details!
                         </div>
                       </v-card-text>
 
