@@ -781,15 +781,8 @@ export default {
 
   data() {
     return {
-<<<<<<< HEAD
-      offsetTop: 0,
-      searchBarFixed: false,
-
-=======
-
       searchBarFixed: false,
       offsetTop: 200,
->>>>>>> frontend
       unread: "",
       isEmpty: false,
       hasLogin: false,
