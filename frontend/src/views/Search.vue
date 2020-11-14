@@ -98,7 +98,7 @@
                     height: 38px;
                     color: white;
                     background-color: rgb(20, 60, 127);
-                    margin-left:0px;
+                    margin-left:2px;
                   "
                   icon="el-icon-search"
                   @click="toSearch"
