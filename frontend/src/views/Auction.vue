@@ -615,7 +615,7 @@
     background-color: rgba(16, 160, 112, 0.75);
 }
 .banner-grey{
-    background-color: rgba(44, 49, 65, 0.56);
+    background-color: rgba(211, 98, 81, 0.81);
 }
 
 .items{
@@ -656,7 +656,7 @@
 }
 
 .status-not-start1 {
-    background-image: url("../assets/banner-bg-grey.png");
+    background-image: url("../assets/banner-bg-red.png");
 }
 .status-winner {
     background-image: url("../assets/banner-bg-yelo.png");
