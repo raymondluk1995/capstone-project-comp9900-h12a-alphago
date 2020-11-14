@@ -123,7 +123,6 @@
             </div>
           </el-col>
         </el-row>
-
         <!-- Filters Part  -->
 
         <el-row type="flex" justify="center" style="margin:10px;width=95vh">
@@ -522,6 +521,18 @@
           </div>
         </el-row>
       </template>
+
+      <el-row type="flex" justify="center">
+        <el-col :span="20" justify="center" type="flex">
+          <div>
+            <el-col :span="20">
+              <p>
+                There are {{ this.total }} properties matched.
+              </p>
+            </el-col>
+          </div>
+        </el-col>
+      </el-row>
 
       <!-- SEARCH RESULTS -->
       <template v-if="!isEmpty">
@@ -1388,7 +1399,6 @@ export default {
 
       this.search = this.search + this.createNewFilterQuery();
 
-
       this.searchBase = this.search;
     },
 
@@ -1640,8 +1650,6 @@ li {
   margin-top: 15px;
 }
 
-
-
 li {
   margin-bottom: 20px;
 }
@@ -1754,11 +1762,11 @@ li {
   border-left: 10px solid rgba(102, 199, 91, 0.4);
 }
 
-.el-dropdown-menu{
+.el-dropdown-menu {
   padding: 25px 20px 25px 10px !important;
 }
 
-.el-dropdown-menu__item{
-  margin:0 !important;
+.el-dropdown-menu__item {
+  margin: 0 !important;
 }
 </style>
