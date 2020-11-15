@@ -146,7 +146,7 @@
                                 >
                                     <GmapMarker
                                             v-for="m in markers"
-                                            :key="m"
+                                            :key="m.id"
                                             :position="m.position"
                                             :clickable="true"
                                             :draggable="true"
@@ -169,7 +169,7 @@
                               tooltip-effect="light"
                               style="overflow-y: scroll; "
                               :default-sort = "{prop: 'price', order: 'descending'}"
-                              header-cell-style="background-color:rgba(24, 64, 128, 0.7);color:white"
+                              :header-cell-style="{background:'rgba(24, 64, 128, 0.7)',color:'white'}"
                               :row-class-name="highlight"
                     >
 
@@ -1269,7 +1269,7 @@
 
             // to update the highest bid
             initWebSocket(){
-                const uri =  `ws://54.253.249.138:8070/auction/${this.propInfo.aid}`;
+                const uri =  `ws://127.0.0.1:8070/auction/${this.propInfo.aid}`;
                 this.websock = new WebSocket(uri);
                 this.websock.onmessage = this.websocketonmessage;
                 this.websock.onopen = this.websocketonopen;
@@ -1343,6 +1343,9 @@
         },
         destroyed() {
             this.websock.close() //离开路由之后断开websocket连接
+            $('#google-map').remove();
+            window.google = {}
+
         },
     };
 </script>

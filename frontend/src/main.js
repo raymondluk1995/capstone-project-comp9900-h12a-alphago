@@ -40,8 +40,8 @@ Vue.use(ElementUI);
 Vue.prototype.$axios = axios;
 
 // register the default baseURL for axios
-axios.defaults.baseURL = 'http://54.253.249.138:8070';
-
+// axios.defaults.baseURL = 'http://54.253.249.138:8070';
+axios.defaults.baseURL = 'http://127.0.0.1:8070';
 axios.interceptors.request.use(
     config => {
       config.headers["jwt"] = localStorage.getItem('jwt');

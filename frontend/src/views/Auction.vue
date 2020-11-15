@@ -37,7 +37,7 @@
 
         <el-row type="flex" justify="center">
             <el-col :span="24" style="background: white;">
-                    <el-row type="flex" justify="space-around" style="background-color: #3b4c73;box-shadow: 0 2px 5px 2px #d5dbea;">
+                    <el-row type="flex" justify="center" style="background-color: #3b4c73;box-shadow: 0 2px 5px 2px #d5dbea;">
                         <el-col :span="4">
                             <el-select
                                     v-model="filter"
@@ -71,6 +71,9 @@
                     </el-row>
 
                 <template v-if="!isEmpty">
+                    <el-row style="background-color: #6e85a3;text-align: center;">
+                        <span style="margin-top:5px; color:white;">Here is the auctions you have participated in.</span>
+                    </el-row>
                     <el-row type="flex" justify="space-around">
                     <div class="items">
                         <ul>
@@ -538,7 +541,7 @@
             showTime(time){
                 // let time = dayjs(day).format("YYYY-MM-DD HH:mm:ss");
                 let MONTH =['Jan', 'Feb', 'Mar','Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                let day = dayjs(time).day();
+                let day = dayjs(time).date();
                 let mon = MONTH[dayjs(time).month()];
                 let year = dayjs(time).year();
                 let hour = dayjs(time).hour();

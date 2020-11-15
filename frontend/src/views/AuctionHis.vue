@@ -41,10 +41,10 @@
 
           <el-row
             type="flex"
-            justify="space-around"
+            justify="center"
             style="background-color: #3b4c73; box-shadow: 0 2px 5px 2px #d5dbea"
           >
-            <el-col>
+            <el-col :span="4">
               <el-select
                 v-model="filter"
                 style="margin: 10px 17%; width: 200px"
@@ -60,8 +60,26 @@
                 </el-option>
               </el-select>
             </el-col>
+
+            <el-col :span="6" >
+              <div class="reg-btn" style="margin-top:15px;">
+                                <span  id="reg-btn"
+                                       style="
+
+                                           color:white;
+                                           padding:2px 5px;
+                                           font-size:20px;
+                                            /*position:absolute;*/
+                                            "
+                                       @click="goto('auctionmag')">
+                                    <i class="el-icon-right"></i> Back</span>
+              </div>
+            </el-col>
           </el-row>
           <template v-if="!isEmpty">
+            <el-row style="background-color: #85a1c5;text-align: center;">
+              <span style="margin-top:5px; color:white;">Here is the auctions you have participated in.</span>
+            </el-row>
           <el-row type="flex" justify="space-around">
             <div class="items">
               <ul>
@@ -660,5 +678,16 @@ export default {
     .status-not-start1 {
         background-image: url("../assets/banner-bg-green.png");
         /*background-color: #f56c6c;*/
+    }
+    .reg-btn{
+      cursor: pointer;
+      position:relative;
+      float:right;
+      &:hover{
+        transform:translateX(10px);
+        transition-duration: 0.5s;
+        border-bottom:1px solid white
+      }
+      /*float:left;*/
     }
 </style>

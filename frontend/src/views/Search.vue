@@ -747,7 +747,7 @@
             :page-size="pageSize"
             :total="total"
             @current-change="handleCurrentChange"
-            :current-page="currPage"
+            :current-page="parseInt(currPage)"
           ></el-pagination>
         </div>
       </el-row>
