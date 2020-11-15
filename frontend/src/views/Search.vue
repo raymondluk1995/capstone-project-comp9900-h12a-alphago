@@ -139,6 +139,7 @@
                       type="date"
                       placeholder="Choose the Start Date"
                       value-format="timestamp"
+                      :picker-options="pickerOptions1"
                     >
                     </el-date-picker>
                     <el-button
@@ -190,7 +191,7 @@
                       v-model="dateTo"
                       type="date"
                       placeholder="Choose the End Date"
-                      :picker-options="pickerOptions"
+                      :picker-options="pickerOptions2"
                       value-format="timestamp"
                     >
                     </el-date-picker>
@@ -797,7 +798,22 @@ export default {
       // variables for filter in Search
       dateFrom: "",
       dateTo: "",
-      pickerOptions: "",
+
+      pickerOptions1: {
+        disabledDate(time) {
+          let today = new Date();
+          let yesterday = today.setDate(today.getDate()-1);
+          return time.getTime() < yesterday;
+        },
+      },
+
+      pickerOptions2: {
+        disabledDate(time) {
+          let today = new Date();
+          let yesterday = today.setDate(today.getDate()-1);
+          return time.getTime() < yesterday;
+        },
+      },
 
       options: [
         {
@@ -906,7 +922,6 @@ export default {
 
       propList: [],
 
-      pickerOptions: "",
 
       searchBase: "",
 
@@ -1380,7 +1395,7 @@ export default {
       this.maxArea = 999999999;
       this.dateFrom = "";
       this.dateTo = "";
-      this.pickerOptions = "";
+      this.pickerOptions2 = this.pickerOptions1;
       this.type = "Any";
     },
 
@@ -1547,12 +1562,12 @@ export default {
   watch: {
     dateFrom: function (newVal, oldVal) {
       if (this.dateFrom === "") {
-        this.pickerOptions = "";
+        this.pickerOptions2 = this.pickerOptions1;
         return;
       }
 
       var date_from = this.dateFrom;
-      this.pickerOptions = {
+      this.pickerOptions2 = {
         disabledDate(time) {
           return time.getTime() <= date_from;
         },
