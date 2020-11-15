@@ -260,7 +260,7 @@ export default {
             suburb: addr,
             state: state,
             lat : latitude,
-            long: longitude,
+            lng: longitude,
             currPage:1,
           },
         });
