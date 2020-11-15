@@ -1102,7 +1102,7 @@
                         // this.timeFlag = false;
                         // console.log('over');
                         this.time = `This auction is Over!`;
-                        location.reload()
+                        // location.reload()
                     }
                 }
 
@@ -1291,6 +1291,9 @@
                 }
                 if(res.newBidder===true){
                     this.propInfo.bidderNum = this.propInfo.bidderNum + 1;
+                    if(res.username!==null){
+                        this.notice2(res);
+                    }
                 }else{
                     this.propInfo.latestPrice = res.price;
                     let Time = this.showTime(res.time);
@@ -1313,13 +1316,12 @@
                 console.log('close',e);
             },
 
-            test(){
+            notice2(res) {
                 const h = this.$createElement;
-                this.$notify.info({
-                    title: 'Bid Update!',
+                this.$notify({
+                    title: 'New Bidder!',
                     dangerouslyUseHTMLString: true,
-                    duration: 30*1000,
-                    message:`User <strong>umr</strong> becomes the winner!\n<strong>Current bid:</strong> $123123123.\n<strong>Bid Time:</strong> ${this.showTime(dayjs().valueOf())}`
+                    message:`User <strong>${res.username}</strong> register as a new bidder!\n`
                 });
             },
 
