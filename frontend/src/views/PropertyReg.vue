@@ -315,7 +315,7 @@
             </div>
         </el-tab-pane>
 
-        <el-tab-pane label="Auction" :disabled="dis4"name="4">
+        <el-tab-pane label="Auction" :disabled="dis4" name="4">
           <el-row type="flex" justify="center">
             <el-col :span="20">
               <el-form

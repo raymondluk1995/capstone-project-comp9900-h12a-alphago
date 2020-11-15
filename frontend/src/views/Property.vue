@@ -146,7 +146,7 @@
                                 >
                                     <GmapMarker
                                             v-for="m in markers"
-                                            :key="m.id"
+                                            :key="m"
                                             :position="m.position"
                                             :clickable="true"
                                             :draggable="true"
