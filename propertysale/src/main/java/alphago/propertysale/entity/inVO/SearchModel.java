@@ -19,8 +19,8 @@ public class SearchModel {
     // tao add state.
     private String state;
 
-    private Long lat;
-    private Long lng;
+    private String lat;
+    private String lng;
 
     private String postcode;
     // auction
