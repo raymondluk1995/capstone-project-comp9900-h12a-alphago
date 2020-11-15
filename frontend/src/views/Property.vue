@@ -1269,7 +1269,7 @@
 
             // to update the highest bid
             initWebSocket(){
-                const uri =  `ws://127.0.0.1:8070/auction/${this.propInfo.aid}`;
+                const uri =  `ws://54.253.249.138:8070/auction/${this.propInfo.aid}`;
                 this.websock = new WebSocket(uri);
                 this.websock.onmessage = this.websocketonmessage;
                 this.websock.onopen = this.websocketonopen;
