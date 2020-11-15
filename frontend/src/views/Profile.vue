@@ -55,7 +55,6 @@
                                 :model="form"
                                 label-width="100px"
                                 label-position="left"
-                                :rules="rules"
                         >
                         <el-col :span="24">
                             <el-row tyle="flex" justify="center" style="margin:10px 5%">
