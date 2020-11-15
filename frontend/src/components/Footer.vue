@@ -1,5 +1,5 @@
 <template>
-    <div class="footer">
+    <div class="footer" id="footer">
     <el-row type="flex" justify="center" style="align-items: center;">
       <div class="footer-wrap">
         <p>
