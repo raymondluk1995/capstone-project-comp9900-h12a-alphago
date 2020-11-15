@@ -72,7 +72,7 @@
 
                 <template v-if="!isEmpty">
                     <el-row style="background-color: #6e85a3;text-align: center;">
-                        <span style="margin-top:5px; color:white;">Here is the auctions you have participated in.</span>
+                        <span style="margin-top:5px; color:white;">Here are the auctions you have participated in.</span>
                     </el-row>
                     <el-row type="flex" justify="space-around">
                     <div class="items">
