@@ -1253,11 +1253,11 @@ export default {
       }
 
       if (this.$route.query.startDate != undefined) {
-        this.dateFrom = this.$route.query.startDate;
+        this.dateFrom = new Date(parseInt(this.$route.query.startDate));
       }
 
       if (this.$route.query.endDate != undefined) {
-        this.dateTo = this.$route.query.endDate;
+        this.dateTo = new Date(parseInt(this.$route.query.endDate));
       }
 
       if (this.$route.query.bedrooms != undefined) {
