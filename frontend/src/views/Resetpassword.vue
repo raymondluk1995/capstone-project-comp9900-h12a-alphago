@@ -138,7 +138,7 @@ export default {
                         this.$message.error("Validate code incorrect");
                         this.form.validate = '';
                       } else {
-                        console.log(response.msg);
+                        console.log(response.data.msg);
                       }
                     }
                   })

@@ -427,7 +427,7 @@
                                         console.log(response.data.msg);
                                     }
                                 }else{
-                                    console.log(response.msg)
+                                    console.log(response.data.msg)
                                 }
                             })
                         break;

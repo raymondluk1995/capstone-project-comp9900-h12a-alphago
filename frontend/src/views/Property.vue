@@ -932,7 +932,7 @@
                                         console.log(response.data.msg);
                                     }
                                 }else{
-                                    console.log(response.msg)
+                                    console.log(response.data.msg)
                                 }
                             })
                         break;
@@ -1168,14 +1168,14 @@
                                                     })
                                                     // location.reload();
                                                 } else if (response.data.code === 400) {
-                                                    this.$message.error(response.msg);
+                                                    this.$message.error(response.data.msg);
                                                 } else {
-                                                    this.$message.error(response.msg);
-                                                    console.log(response.msg);
+                                                    this.$message.error(response.data.msg);
+                                                    console.log(response.data.msg);
                                                 }
                                             } else {
-                                                this.$message.error(response.msg);
-                                                console.log(response.msg);
+                                                this.$message.error(response.data.msg);
+                                                console.log(response.data.msg);
                                             }
                                         })
                                         .catch((response) => {
@@ -1231,11 +1231,11 @@
                                                 this.$message.success("Register successful!");
                                                 // location.reload();
                                                 this.propInfo.highestPrice = this.form3.initPrice.replace(/,/g, "");
+                                            }else if (response.data.code === 400) {
+                                                this.$message.error(response.data.msg);
                                             }
-                                        } else if (response.data.code === 400) {
-                                            this.$message.error(response.msg);
-                                        } else {
-                                            console.log(response.msg);
+                                        }  else {
+                                            console.log(response.data.msg);
                                         }
                                     })
                                     .catch((res) => {

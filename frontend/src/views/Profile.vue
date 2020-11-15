@@ -267,10 +267,10 @@
                                         this.form.validate = '';
                                     }
                                     else{
-                                        console.log(response.msg);
+                                        console.log(response.data.msg);
                                     }
                                 } else {
-                                    console.log(response.msg);
+                                    console.log(response.data.msg);
                                 }
                             })
                             .catch((res) => {
@@ -301,7 +301,7 @@
                                         console.log(response.data.msg);
                                     }
                                 } else {
-                                    console.log(response.msg);
+                                    console.log(response.data.msg);
                                 }
                             })
                             .catch((res) => {
@@ -333,7 +333,7 @@
                                         console.log(response.data.msg);
                                     }
                                 } else {
-                                    console.log(response.msg);
+                                    console.log(response.data.msg);
                                 }
                             })
                             .catch((res) => {
@@ -365,7 +365,7 @@
                                         console.log(response.data.msg);
                                     }
                                 } else {
-                                    console.log(response.msg);
+                                    console.log(response.data.msg);
                                 }
                             })
                             .catch((res) => {
@@ -411,7 +411,7 @@
                                 if (response.data.code === 400) {
                                     this.$message.error('Email already exist!');
                                     this.form.email = '';
-                                }else if(response.data.code ===200){
+                                }else if(response.data.code === 200){
                                     this.timerstart = true;
                                     this.count = 180;
                                     this.show = false;

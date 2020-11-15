@@ -487,7 +487,7 @@
                                         console.log(response.data.msg);
                                     }
                                 }else{
-                                    console.log(response.msg)
+                                    console.log(response.data.msg)
                                 }
                             })
                         break;
@@ -530,10 +530,10 @@
                                 this.$message.success("Cancel successful!");
                                 location.reload();
                             }else if(response.data.code === 400){
-                                this.$message.error(response.msg);
+                                this.$message.error(response.data.msg);
                             }
                         }else{
-                            console.log(response.msg);
+                            console.log(response.data.msg);
                         }
                     })
                     .catch((res) => {
@@ -642,11 +642,11 @@
                                     else if(response.data.code === 400){
                                         this.$message.error(response.data.msg);
                                     }else{
-                                        console.log(response.msg);
+                                        console.log(response.data.msg);
                                         location.reload()
                                     }
                                 }else{
-                                    console.log(response.msg)
+                                    console.log(response.data.msg)
                                 }
                             })
                     })

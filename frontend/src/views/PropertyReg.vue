@@ -733,7 +733,7 @@ export default {
                           this.$message.error(response.data.msg);
                       }
                     } else{
-                      console.log(response.msg);
+                      console.log(response.data.msg);
                     }
                   })
                   .catch((response) => {
