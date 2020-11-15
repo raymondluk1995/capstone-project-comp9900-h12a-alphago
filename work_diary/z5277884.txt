@@ -40,4 +40,4 @@ Week 8
 In this week, I finished the "Search" page and cooperated with the back end. Also, I finished the background part, the majority parts of the Software Architecture in the final report except the back end design part, and the database construction part. On weekends, I finished the Retrospective B report.
 
 Week 9
-In this week, I kept fixing bugs showing up in the search module, and made it work as expected. Also, I wrote the Third-Party Functionalities and the Implementation Challenge parts, and 3.2 Search module in the Functionalities part in the final report.
+In this week, I kept fixing bugs showing up in the search module, and made it work as expected. Also, I wrote the Third-Party Functionalities and the Implementation Challenge parts, and 3.2 Search module in the Functionalities part in the final report. Moreover, the "Data Model" part in the report is updated.
