@@ -9,6 +9,7 @@ export default new Vuex.Store({
         jwt: localStorage.getItem("jwt") || '',
         firstname: localStorage.getItem("firstname") || '',
         avatar: localStorage.getItem("avatar") || '',
+        countdown: localStorage.getItem("countdown") || '',
     },
     getters: {
         getFirstname: function (state) {
@@ -40,6 +41,11 @@ export default new Vuex.Store({
         setUserName(state, username) {
             localStorage.setItem("username", username);
             state.username = username;
+        },
+
+        setcountdown(state, countdown) {
+            localStorage.setItem("countdown", countdown);
+            state.countdown = countdown;
         },
 
         setLogout(state) {

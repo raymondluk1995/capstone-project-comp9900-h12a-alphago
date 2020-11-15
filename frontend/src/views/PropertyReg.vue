@@ -878,13 +878,20 @@ export default {
                   this.$axios
                       .post('/payment/add', data)
                       .then(response => {
-                          let newCard = response.data.result;
-                          this.cards.push({
-                              paymentId:newCard.paymentId,
-                              name:newCard.name,
-                              cardNumber:newCard.cardNumber,
-                              cvc:newCard.cvc,
-                              expiredDate:newCard.expiryDate});
+                          if (response.data.code === 200){
+                              let newCard = response.data.result;
+                              this.cards.push({
+                                  paymentId:newCard.paymentId,
+                                  name:newCard.name,
+                                  cardNumber:newCard.cardNumber,
+                                  cvc:newCard.cvc,
+                                  expiredDate:newCard.expiryDate});
+                          }else if(response.data.code === 400){
+                              this.$message.error(response.data.msg);
+                          }else{
+                              console.log(response.data.msg);
+                          }
+
                       })
                       .catch(function (error) {
                           console.log(error)

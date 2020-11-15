@@ -31,7 +31,7 @@
                                     :on-change="imgBroadcastChange"
                                     :before-upload="beforeAvatarUpload"
                             >
-                                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
+                                <img v-if="form4.imageUrl" :src="form4.imageUrl" class="avatar" />
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </div>
@@ -55,15 +55,16 @@
                                 :model="form"
                                 label-width="100px"
                                 label-position="left"
+                                :rules="rules"
+                                style="margin-top:30px"
                         >
-                        <el-col :span="24">
-                            <el-row tyle="flex" justify="center" style="margin:10px 5%">
                             <el-form-item v-if="!canEditEmail" label="Email:" prop="email">
                                 <span> {{form.oldemail}} </span>
 <!--                                <el-input style="width:70%;float:left;" v-model="form.oldemail" :disabled="!canEditEmail"></el-input>-->
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editE"><i class="el-icon-edit"></i> Edit</el-button>
                             </el-form-item>
-                            <el-form-item v-else label="Email:" prop="email">
+
+                            <el-form-item v-else label="Email:" prop="email" >
                                 <el-input style="width:70%;float:left;" placeholder="Input your new email" v-model="form.email"></el-input>
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelE">Cancel</el-button>
                                 <el-input
@@ -76,30 +77,51 @@
                                 <el-button round style="width:25%;float:right;margin-top:10px;" type="ordinary" v-show="!show">{{ count }} s</el-button>
                                 <el-button round style="width:25%;float:right;margin-top:10px;" type="success" @click="submitE">Submit</el-button>
                             </el-form-item>
-
+                        </el-form>
+                    </el-row>
+                <el-row type="flex" justify="center" >
+                        <el-form
+                                class="formprofile"
+                                ref="form2"
+                                :model="form2"
+                                label-width="100px"
+                                label-position="left"
+                                :rules="rules"
+                        >
                             <el-form-item v-if="!canEditFirstname" label="First Name:" prop="firstname">
-                                <span> {{form.ofirstname}} </span>
+                                <span> {{form2.ofirstname}} </span>
 <!--                                <el-input style="width:70%;float:left;" v-model="form.ofirstname" :disabled="!canEditFirstname"></el-input>-->
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editF"><i class="el-icon-edit"></i> Edit</el-button>
                             </el-form-item>
+
                             <el-form-item v-else label="First Name:" prop="firstname">
-                                <el-input style="width:70%;float:left;" placeholder="Change your first name" v-model="form.firstname"></el-input>
+                                <el-input style="width:70%;float:left;" placeholder="Change your first name" v-model="form2.firstname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelF">Cancel</el-button>
                                 <el-button round style="width:25%;float:right;margin-top:10px;" type="success" @click="submitF">Submit</el-button>
                             </el-form-item>
-
+                        </el-form>
+                </el-row>
+                <el-row type="flex" justify="center" >
+                        <el-form
+                                class="formprofile"
+                                ref="form3"
+                                :model="form3"
+                                label-width="100px"
+                                label-position="left"
+                                :rules="rules"
+                        >
                             <el-form-item v-if="!canEditLastname" label="Last Name:" prop="lastname">
-                                <span> {{form.olastname}} </span>
+                                <span> {{form3.olastname}} </span>
 <!--                                <el-input style="width:70%;float:left;" v-model="form.olastname" :disabled="!canEditLastname"></el-input>-->
                                 <el-button round style="width:25%;float:right;" type="primary" @click="editL"><i class="el-icon-edit"></i> Edit</el-button>
                             </el-form-item>
+
                             <el-form-item v-else label="Last Name:" prop="lastname">
-                                <el-input style="width:70%;float:left;" placeholder="Change your last name" v-model="form.lastname"></el-input>
+                                <el-input style="width:70%;float:left;" placeholder="Change your last name" v-model="form3.lastname"></el-input>
                                 <el-button round style="width:25%;float:right;" type="ordinary" @click="cancelL">Cancel</el-button>
                                 <el-button round style="width:25%;float:right;margin-top:10px;" type="success" @click="submitL">Submit</el-button>
                             </el-form-item>
-                            </el-row>
-                        </el-col>
+                        </el-form>
 
 <!--                        <el-col :span="6" :offset="1" >-->
 <!--                            <div class="user-avatar-container" >-->
@@ -126,7 +148,7 @@
 <!--                                </template>-->
 <!--                            </div>-->
 <!--                        </el-col>-->
-                        </el-form>
+<!--                        </el-form>-->
                     </el-row>
             </el-col>
         </el-row>
@@ -173,16 +195,23 @@
                 timerstart:false,
                 form: {
                     username: "",
-                    firstname: "",
-                    lastname: "",
-                    ofirstname:'',
-                    olastname:'',
                     email: "",
                     oldemail:'',
-                    imageRaw:'',
-                    imageUrl:'',
                     validate:'',
                 },
+                form2:{
+                    ofirstname:'',
+                    firstname: "",
+                },
+                form3:{
+                    lastname: "",
+                    olastname:'',
+                },
+                form4:{
+                    imageRaw:'',
+                    imageUrl:'',
+                },
+
                 rules: {
                     firstname: [{required: true, message: " Please enter firstname", trigger: "blur",}, { validator: validName, trigger: "blur" }],
                     validate: [{required: true, message: " Please enter validate code", trigger: "blur",}, ],
@@ -211,9 +240,9 @@
                 .then(response => {
                         this.form.username = response.data.result.username,
                         this.form.oldemail = response.data.result.email,
-                        this.form.olastname = response.data.result.lastname,
-                        this.form.ofirstname = response.data.result.firstname
-                        this.form.imageUrl = response.data.result.avatar
+                        this.form3.olastname = response.data.result.lastname,
+                        this.form2.ofirstname = response.data.result.firstname
+                        this.form4.imageUrl = response.data.result.avatar
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -243,7 +272,7 @@
                 this.canEditFirstname = true;
             },
             cancelA(){
-                this.form.imageUrl = localStorage.getItem('avatar')
+                this.form4.imageUrl = localStorage.getItem('avatar');
                 this.changeA=false;
                 // this.form.imageUrl = 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2931000230,881740929&fm=11&gp=0.jpg'
             },
@@ -253,15 +282,14 @@
                 this.canEditEmail = false;
             },
             cancelL(){
-                this.form.lastname = '';
+                this.form3.lastname = '';
                 this.canEditLastname = false;
             },
             cancelF(){
-                this.form.firstname = '';
+                this.form2.firstname = '';
                 this.canEditFirstname = false;
             },
             submitE(){
-                this.canEditEmail = false;
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         let data = new FormData();
@@ -271,9 +299,14 @@
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
-                                        this.$message('Email Reset Successful!');
-                                        this.form.email = response.data.result;
-                                        location.reload()
+                                        this.$message.success('Email Reset Successful!');
+                                        this.form.oldemail = response.data.result;
+                                        this.canEditEmail = false;
+                                        this.form.validate = '';
+                                        this.form.email = '';
+                                        this.timer = null;
+                                        clearInterval(this.timer);
+                                        // location.reload()
                                     }else if(response.data.code === 400){
                                         this.$message.error("Validate code incorrect");
                                         this.form.validate = '';
@@ -294,19 +327,20 @@
                     }
                 });
             },
+
             submitL(){
-                this.canEditLastname = false;
-                this.$refs["form"].validate((valid) => {
+                this.$refs["form3"].validate((valid) => {
                     if (valid) {
                         let data = new FormData();
-                        data.append('lastname', this.form.lastname);
+                        data.append('lastname', this.form3.lastname);
                         this.$axios.post('/user/information/changeLastname', data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
-                                        this.$message('Last Name Reset Successful!');
-                                        this.form.lastname = response.data.result;
-                                        location.reload()
+                                        this.canEditLastname = false;
+                                        this.$message.success('Last Name Reset Successful!');
+                                        this.form3.olastname = response.data.result;
+                                        this.form3.lastname = '';
                                     }else if(response.data.code === 400){
                                         this.$message.error(response.data.msg);
                                     }else{
@@ -325,20 +359,22 @@
                     }
                 });
             },
+
             submitF(){
-                this.canEditFirstname = false;
-                this.$refs["form"].validate((valid) => {
+                this.$refs["form2"].validate((valid) => {
                     if (valid) {
                         let data = new FormData();
-                        data.append('firstname', this.form.firstname);
+                        data.append('firstname', this.form2.firstname);
                         this.$axios.post('/user/information/changeFirstname', data)
                             .then((response) => {
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
                                         this.$store.commit('setFirstName', response.data.result);
-                                        this.$message('First Name Reset Successful!');
-                                        this.form.firstname = response.data.result;
-                                        location.reload()
+                                        this.$message.success('First Name Reset Successful!');
+                                        this.form2.ofirstname = response.data.result;
+                                        this.canEditFirstname = false;
+                                        this.form2.firstname = '';
+
                                     }else if(response.data.code === 400){
                                         this.$message.error(response.data.msg);
                                     }else{
@@ -358,36 +394,30 @@
                 });
             },
             submitA(){
-                this.$refs["form"].validate((valid) => {
-                    if (valid) {
-                        let data = new FormData();
-                        data.append('avatar', this.form.imageRaw);
-                        this.$axios.post('/user/information/changeAvatar', data)
-                            .then((response) => {
-                                if (response.status >= 200 && response.status < 300) {
-                                    if(response.data.code === 200){
-                                        this.$store.commit('setAvatar', response.data.result);
-                                        this.$message('Avatar Reset Successful!');
-                                        this.form.avatar = response.data.result;
-                                        location.reload()
+                let data = new FormData();
+                data.append('avatar', this.form4.imageRaw);
+                this.$axios.post('/user/information/changeAvatar', data)
+                    .then((response) => {
+                        if (response.status >= 200 && response.status < 300) {
+                            if(response.data.code === 200){
+                                this.$store.commit('setAvatar', response.data.result);
+                                this.$message.success('Avatar Reset Successful!');
+                                this.form4.avatar = response.data.result;
+                                location.reload()
 
-                                    }else if(response.data.code === 400){
-                                        this.$message.error(response.data.msg);
-                                    }else{
-                                        console.log(response.data.msg);
-                                    }
-                                } else {
-                                    console.log(response.data.msg);
-                                }
-                            })
-                            .catch((res) => {
-                                console.log('error', res);
-                                this.$message.error('Reset Avatar Error');
-                            });
-                    } else {
-                        return false;
-                    }
-                });
+                            }else if(response.data.code === 400){
+                                this.$message.error(response.data.msg);
+                            }else{
+                                console.log(response.data.msg);
+                            }
+                        } else {
+                            console.log(response.data.msg);
+                        }
+                    })
+                    .catch((res) => {
+                        console.log('error', res);
+                        this.$message.error('Reset Avatar Error');
+                    });
             },
 
             goto(name) {
@@ -410,8 +440,8 @@
                 return isImage && isLt2M;
             },
             imgBroadcastChange(file) {
-                this.form.imageRaw = file.raw;
-                this.form.imageUrl = URL.createObjectURL(file.raw);
+                this.form4.imageRaw = file.raw;
+                this.form4.imageUrl = URL.createObjectURL(file.raw);
                 this.changeA=true;
             },
             validate() {
@@ -430,6 +460,9 @@
                                     $(".validate").addClass("huise")
 
                                     // document.getElementById('validate').style.cursor = 'not-allowed'
+                                    let endMsRes = (new Date()).getTime() + 180 * 1000;
+                                    // setcountdown('myEndTime', JSON.stringify(endMsRes));
+
                                     this.timer = setInterval(() => {
                                         if (this.count > 0 && this.count <= 180) {
                                             this.count--
@@ -469,7 +502,7 @@
     }
     .formprofile {
         width:60%;
-        padding: 30px;
+        padding: 0 30px;
         /*border: 1px solid #ccc;*/
         /*border-radius: 15px;*/
     }
