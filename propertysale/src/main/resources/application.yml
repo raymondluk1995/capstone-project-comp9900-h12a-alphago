@@ -48,11 +48,6 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     cache-enabled: true
-  global-config:
-    db-config:
-      logic-delete-field: flag
-      logic-delete-value: 1
-      logic-not-delete-value: 0
 
 # Cloud Server Address
 remote:
