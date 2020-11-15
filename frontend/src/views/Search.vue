@@ -113,7 +113,7 @@
                     height: 38px;
                     color: white;
                     background-color: rgba(16, 117, 244, 0.7);
-                    margin-left:18px;
+                    margin-left:55%;
                   "
                   @click="showFilter"
                 >
