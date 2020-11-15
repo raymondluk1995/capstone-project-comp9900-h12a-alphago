@@ -494,7 +494,7 @@
                 font-weight: bold">404</span>
             </el-row>
             <el-row type="flex" justify="center">
-                <span style="font-size:20px;color:rgba(89,108,132,0.88);">Oops..This auction can not be found.</span>
+                <span style="font-size:20px;color:rgba(89,108,132,0.88);">This auction can not be found.</span>
             </el-row>
             </div>
         </template>
@@ -503,18 +503,18 @@
             <div >
 
                 <div class="img-404">
-                    <img src="../assets/sad.png" alt="" >
+                    <img src="../assets/auction.png" alt="" >
                 </div>
 
                 <el-row type="flex" justify="center">
-                <span style="
-                margin-top:10px;
-                font-size: 100px;
-               color:#475669;
-                font-weight: bold">403</span>
+<!--                <span style="-->
+<!--                margin-top:10px;-->
+<!--                font-size: 100px;-->
+<!--               color:#475669;-->
+<!--                font-weight: bold">403</span>-->
                 </el-row>
                 <el-row type="flex" justify="center">
-                    <span style="font-size:20px;color:rgba(89,108,132,0.88);">Oops..This auction has ended.</span>
+                    <span style="margin-top:50px;font-size:20px;color:rgba(120,123,148,0.61);">This auction has ended.</span>
                 </el-row>
             </div>
         </template>
