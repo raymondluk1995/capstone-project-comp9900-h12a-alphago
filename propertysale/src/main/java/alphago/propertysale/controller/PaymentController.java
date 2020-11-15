@@ -53,7 +53,9 @@ public class PaymentController {
         JwtInfo info = (JwtInfo) SecurityUtils.getSubject().getPrincipal();
         long uid = info.getUid();
         // no duplicate card.
-        Payment temp = paymentService.getOne(new QueryWrapper<Payment>().eq("card_Number", payment.getCardNumber()));
+        Payment temp = paymentService.getOne(new QueryWrapper<Payment>()
+                .eq("card_Number", payment.getCardNumber())
+                .eq("uid", uid));
         if (temp != null) {
             return Result.fail("You have this card already. Try other one.");
         }
