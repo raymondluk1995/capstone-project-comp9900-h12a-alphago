@@ -44,6 +44,7 @@
         <el-step title="Keywords"></el-step>
         <el-step title="Photos"></el-step>
         <el-step title="Auction"></el-step>
+          <el-step title="Payment"></el-step>
       </el-steps>
     </div>
 
@@ -360,7 +361,6 @@
               </el-input>
           </el-form-item>
 
-
                   </el-col>
                 </el-row>
               </el-form>
@@ -371,7 +371,89 @@
             </div>
         </el-tab-pane>
 
-        <el-tab-pane label="Submit" :disabled="dis5" name="5">
+          <el-tab-pane  label="Payment" :disabled="dis5" name="5">
+              <el-row v-show="!addNewCard" type="flex" justify="center" style="margin-top:50px">
+                  <el-col :span="13">
+                      <el-row>
+                          <el-radio-group v-model="form6.selectCard" >
+                              <el-radio
+                                      class="radio"
+                                      :label="item.paymentId"
+                                      :key="item.paymentId"
+                                      :value="item.paymentId"
+                                      v-for="item in cards"
+
+                                      border
+                              >
+                                  {{showCard(item.cardNumber)}}
+                              </el-radio>
+                          </el-radio-group>
+                      </el-row>
+<!--                      <el-row>-->
+<!--                          <div class="btns3">-->
+<!--                              <el-col class="el-radio" style="height:40px">-->
+<!--                                                <span class="add-btn"-->
+<!--                                                      @click="addnew"-->
+<!--                                                >-->
+<!--                                                    <div style="margin:12px 0;text-align: center">-->
+<!--                                                    <i class="el-icon-plus">-->
+<!--                                                    </i> Add New Card-->
+<!--                                                    </div>-->
+
+<!--                                                </span>-->
+
+<!--                              </el-col>-->
+<!--                          </div>-->
+<!--                      </el-row>-->
+                      <el-row>
+                          <div class="next-btn" style="margin-top:40px">
+                              <el-button type="primary" icon="el-icon-plus" round @click="addnew">Add New Card</el-button>
+                              <el-button type="success" icon="el-icon-right" round @click="checktable6">Next</el-button>
+                          </div>
+
+                      </el-row>
+
+                  </el-col>
+              </el-row>
+
+              <el-row v-show="addNewCard" type="flex" justify="center">
+                  <el-col :span="15">
+                      <el-form
+                              class="form"
+                              ref="form6"
+                              :model="form6"
+                              :rules="rules"
+                      >
+                          <el-form-item prop="name">
+                              <el-input v-model="form6.name" placeholder="Name" clearable></el-input>
+                          </el-form-item>
+                          <el-form-item prop="cardNumber">
+                              <el-input v-model="form6.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>
+                          </el-form-item>
+                          <el-row>
+                              <el-col :span=12>
+                                  <el-form-item prop="expiredDate">
+                                      <el-input v-model="form6.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>
+                                  </el-form-item>
+                              </el-col >
+                              <el-col :span=12>
+                                  <el-form-item prop="cvc" >
+                                      <el-input v-model="form6.cvc" placeholder="CVC" maxlength="3"></el-input>
+                                  </el-form-item>
+                              </el-col>
+                          </el-row>
+                          <el-row>
+                              <div class="next-btn" style="margin-top:40px">
+                                  <el-button type="primary" icon="el-icon-plus" round @click="submitcard">Submit New Card</el-button>
+                                  <el-button type="success" icon="el-icon-left" round @click="backcard">Back</el-button>
+                              </div>
+                          </el-row>
+                      </el-form>
+                  </el-col>
+              </el-row>
+          </el-tab-pane>
+
+        <el-tab-pane label="Submit" :disabled="dis6" name="6">
           <el-form :model="form"  label-width="80px" label-position="left">
           <el-row type="flex" justify="center">
           <label style="font-size:20px;margin: 80px 0;font-weight: bold;">Congratulations! You have finished a property registration.</label>
@@ -457,6 +539,7 @@ export default {
         dis3:true,
         dis4:true,
         dis5:true,
+        dis6:true,
         unread :'',
       place: null,
       inputDisable:true,
@@ -464,6 +547,51 @@ export default {
       dialogVisible: false,
       hasLogin: false,
       activateIndex: '0',
+        addNewCard:false,
+        cards:[
+            //     {
+            //     paymentId:'12',
+            //     name:'Tom',
+            //     cardNumber:'4321432143214321',
+            //     cvc:'123',
+            // },
+            //     {
+            //         paymentId:'11',
+            //         name:'Bob',
+            //         cardNumber:'1234123412341234',
+            //         cvc:'012',
+            //     },
+            //     {
+            //         paymentId:'15',
+            //         name:'Tom',
+            //         cardNumber:'4321432143214321',
+            //         cvc:'123',
+            //     },
+            // {
+            //     paymentId:'16',
+            //     name:'Bob',
+            //     cardNumber:'1234123412341234',
+            //     cvc:'012',
+            // },
+            // {
+            //     paymentId:'17',
+            //     name:'Tom',
+            //     cardNumber:'4321432143214321',
+            //     cvc:'123',
+            // },
+            // {
+            //     paymentId:'16',
+            //     name:'Bob',
+            //     cardNumber:'1234123412341234',
+            //     cvc:'012',
+            // },
+            // {
+            //     paymentId:'17',
+            //     name:'Tom',
+            //     cardNumber:'4321432143214321',
+            //     cvc:'123',
+            // }
+        ],
         options: [{
             value: 'Apartment',
             label: 'Apartment'
@@ -514,11 +642,19 @@ export default {
         },
         form5: {
             minimumPrice:'',
-            Auction:true,
+            Auction:false,
             daterange:[],
             price: "",
             coord:'',
       },
+        form6:{
+            selectCard:'',
+            name: '',
+            cardNumber: '',
+            expiredDate: '',
+            cvc: '',
+        },
+
       rules: {
         bedroomNum:[{ required: true, message: " Please enter bedroom number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
         garageNum:[{ required: true, message: " Please enter garage number", trigger: "blur"},{validator:checkInt, trigger: "blur" },],
@@ -535,6 +671,10 @@ export default {
         country: [{required: true, message: " Please enter country", trigger: "blur",},],
         price: [{required: true, message: " Please enter price", trigger: "blur"}, {validator: checkInt,trigger: "blur" },],
           minimumPrice: [{required: true, message: " Please enter start price", trigger: "blur"}, {validator: checkStart,trigger: "blur" },],
+
+
+
+
       },
     };
   },
@@ -607,6 +747,17 @@ export default {
           break;
       }
     },
+      addnew(){
+          this.addNewCard = true;
+      },
+
+      backcard(){
+          this.form6.cvc = '';
+          this.form6.name = '';
+          this.form6.cardNumber = '';
+          this.form6.expiredDate = '';
+          this.addNewCard = false;
+      },
 
     beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 2;
@@ -672,9 +823,78 @@ export default {
               }
           },
       checktable5(){
-          this.$refs["form5"].validate((valid) =>{
+        if(this.form5.Auction === true){
+            this.$refs["form5"].validate((valid) =>{
+                if (valid) {
+                    this.dis5 = false;
+                    this.activateIndex = '5';
+                    this.$axios
+                        .get('/payment/get/')
+                        .then(response => {
+                            this.cards = response.data.result;
+                            if(this.cards.length !== 0){
+                                this.form6.selectCard = this.cards[0].paymentId;
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        });
+
+
+                }
+                else{
+                    this.$message.error("Please complete the form.");
+                }
+            })
+        }else{
+            this.dis6 = false;
+            this.activateIndex = '6';
+        }
+
+      },
+
+      checktable6(){
+        if(this.form6.selectCard!==''){
+            this.dis6 = false;
+            this.activateIndex = '6';
+        }else{
+            this.$message.error("Please select or add a card!");
+        }
+
+      },
+
+      submitcard(){
+          this.$refs["form6"].validate((valid) =>{
               if (valid) {
-                  this.dis5 = false;
+                  let data = new FormData();
+                  data.append('name', this.form6.name);
+
+                  let card = this.form6.cardNumber.replace(/\s+/g, "");
+                  data.append('cardNumber', card);
+                  let date = this.form6.expiredDate.replace(/\//g, "");
+                  data.append('expiryDate', date);
+                  data.append('cvv', this.form6.cvc);
+
+                  this.$axios
+                      .post('/payment/add', data)
+                      .then(response => {
+                          let newCard = response.data.result;
+                          this.cards.push({
+                              paymentId:newCard.paymentId,
+                              name:newCard.name,
+                              cardNumber:newCard.cardNumber,
+                              cvc:newCard.cvc,
+                              expiredDate:newCard.expiryDate});
+                      })
+                      .catch(function (error) {
+                          console.log(error)
+                      });
+                  this.form6.cvc = '';
+                  this.form6.name = '';
+                  this.form6.cardNumber = '';
+                  this.form6.expiredDate = '';
+
+                  this.addNewCard = false;
                   this.activateIndex = '5';
               }
               else{
@@ -754,11 +974,41 @@ export default {
       console.log(name);
       this.$router.push({ name: name });
     },
+      showCard(card){
+          var reg = /^(\d{4})\d+(\d{4})$/;
+          return card.replace(reg, "$1 **** **** $2");
+      },
     back() {
       this.$router.go(-1);
     },
   },
+
   watch:{
+      ['form6.cardNumber'](val) {
+          this.$nextTick(() => {
+              this.form6.cardNumber = val.replace(/\D/g,'').replace(/....(?!$)/g,'$& ');
+          });
+      },
+
+      ['form6.expiredDate'](val) {
+          this.$nextTick(() => {
+              this.form6.expiredDate = val.replace(/\D/g,'').replace(/..(?!$)/g,'$&\/');
+          });
+      },
+      form5: {
+          handler: function (val) {
+              if ((val.Auction===true)) {
+                  this.dis5 = false;
+              } else {
+                  this.dis5 = true;
+                  this.form5.minimumPrice = '';
+                  this.form5.price = '';
+                  this.form5.daterange = '';
+              }
+          },
+          deep: true //对象的深度验证
+      },
+
     place: function(newPlace,oldPlace){
       if(this.place==null){
         this.$set(this.form1,'address',"");

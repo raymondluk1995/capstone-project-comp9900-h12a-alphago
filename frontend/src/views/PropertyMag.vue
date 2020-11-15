@@ -185,9 +185,10 @@
                                     :rules="rules"
                                     label-width="150px"
                                     label-position="left"
+                                    style="padding:0"
                             >
-                                <el-row :gutter="50">
-                                    <el-col :span="24">
+                                <el-row :gutter="50" type="flex" justify="center">
+                                    <el-col :span="15">
                                         <el-form-item label="Time Range:" prop="daterange">
                                             <el-date-picker style="width:100%"
                                                             v-model="form.daterange"
@@ -202,13 +203,13 @@
                                         </el-form-item>
 
                                         <el-form-item label="Reserved Price:" prop="price">
-                                            <el-input v-model="form.price"  maxlength="11">
+                                            <el-input v-model="form.price"  maxlength="10">
                                                 <i slot="suffix" class="input-slot">{{form.price|numFormat}} A$</i>
                                             </el-input>
                                         </el-form-item>
 
                                         <el-form-item label="Starting Price:" prop="minimumPrice">
-                                            <el-input v-model="form.minimumPrice"  maxlength="11">
+                                            <el-input v-model="form.minimumPrice"  maxlength="10">
                                                 <i slot="suffix" class="input-slot">{{form.minimumPrice|numFormat}} A$</i>
                                             </el-input>
                                         </el-form-item>
@@ -216,10 +217,90 @@
 
                                     </el-col>
                                 </el-row>
+                                <el-row style="border-top:2px solid lightslategrey;text-align:center">
+                                    <p style="color:#b5b5b5;margin-top:20px">Select your payment card</p>
+                                </el-row>
+
+                                <el-row v-show="!addNewCard" type="flex" justify="center" style="margin-top:10px">
+                                    <el-col :span="13">
+                                        <el-row>
+                                            <el-radio-group v-model="selectCard" >
+                                                <el-radio
+                                                        class="radio"
+                                                        :label="item.paymentId"
+                                                        :key="item.paymentId"
+                                                        :value="item.paymentId"
+                                                        v-for="item in cards"
+
+                                                        border
+                                                >
+                                                    {{showCard(item.cardNumber)}}
+                                                </el-radio>
+                                            </el-radio-group>
+                                        </el-row>
+                                        <el-row>
+                                            <div class="btns3">
+                                                <el-col class="el-radio" style="height:40px">
+                                                    <span class="add-btn"
+                                                          @click="addnew"
+                                                    >
+                                                        <div style="margin:12px 0;text-align: center">
+                                                        <i class="el-icon-plus">
+                                                        </i> Add New Card
+                                                        </div>
+
+                                                    </span>
+
+                                                </el-col>
+                                            </div>
+                                        </el-row>
+
+                                    </el-col>
+                                </el-row>
+
+                                <el-row v-show="addNewCard" type="flex" justify="center">
+                                    <el-col :span="15">
+
+                                        <el-form
+                                                class="form"
+                                                ref="form2"
+                                                :model="form2"
+                                                :rules="rules"
+                                                style="padding:0"
+                                        >
+                                            <el-form-item prop="name">
+                                                <el-input v-model="form2.name" placeholder="Name" clearable></el-input>
+                                            </el-form-item>
+                                            <el-form-item prop="cardNumber">
+                                                <el-input v-model="form2.cardNumber"  maxlength="19"  placeholder="Card Number"></el-input>
+                                            </el-form-item>
+                                            <el-row>
+                                                <el-col :span=12>
+                                                    <el-form-item prop="expiredDate">
+                                                        <el-input v-model="form2.expiredDate" placeholder="MM/YY"  maxlength="5"></el-input>
+                                                    </el-form-item>
+                                                </el-col >
+                                                <el-col :span=12>
+                                                    <el-form-item prop="cvc" >
+                                                        <el-input v-model="form2.cvc" placeholder="CVC" maxlength="3"></el-input>
+                                                    </el-form-item>
+                                                </el-col>
+                                            </el-row>
+<!--                                            <el-row>-->
+<!--                                                <div class="next-btn" style="margin-top:40px">-->
+<!--                                                    <el-button type="primary" icon="el-icon-plus" round @click="submitcard">Submit New Card</el-button>-->
+<!--                                                    <el-button type="success" icon="el-icon-left" round @click="backcard">Back</el-button>-->
+<!--                                                </div>-->
+<!--                                            </el-row>-->
+                                        </el-form>
+                                    </el-col>
+                                </el-row>
                             </el-form>
-                                <div slot="footer" class="dialog-footer">
+                                <div  style="margin-top:10px;text-align: end" >
 <!--                                    <el-button @click="backAuc">Back</el-button>-->
-                                    <el-button type="primary" @click="submitReg(propInfo.pid)">Submit</el-button>
+                                    <el-button v-show="addNewCard" type="primary" icon="el-icon-plus" @click="submitcard">Submit New Card</el-button>
+                                    <el-button v-show="addNewCard" type="success" icon="el-icon-left" @click="backcard">Back</el-button>
+                                    <el-button v-show="!addNewCard" type="primary" @click="submitReg(propInfo.pid)">Submit</el-button>
                                 </div>
                         </el-dialog>
 
@@ -299,11 +380,58 @@
                 }
             };
             return {
+                addNewCard:false,
+                cards:[
+                    //     {
+                    //     paymentId:'12',
+                    //     name:'Tom',
+                    //     cardNumber:'4321432143214321',
+                    //     cvc:'123',
+                    // },
+                    //     {
+                    //         paymentId:'11',
+                    //         name:'Bob',
+                    //         cardNumber:'1234123412341234',
+                    //         cvc:'012',
+                    //     },
+                    //     {
+                    //         paymentId:'15',
+                    //         name:'Tom',
+                    //         cardNumber:'4321432143214321',
+                    //         cvc:'123',
+                    //     },
+                    // {
+                    //     paymentId:'16',
+                    //     name:'Bob',
+                    //     cardNumber:'1234123412341234',
+                    //     cvc:'012',
+                    // },
+                    // {
+                    //     paymentId:'17',
+                    //     name:'Tom',
+                    //     cardNumber:'4321432143214321',
+                    //     cvc:'123',
+                    // },
+                    // {
+                    //     paymentId:'16',
+                    //     name:'Bob',
+                    //     cardNumber:'1234123412341234',
+                    //     cvc:'012',
+                    // },
+                    // {
+                    //     paymentId:'17',
+                    //     name:'Tom',
+                    //     cardNumber:'4321432143214321',
+                    //     cvc:'123',
+                    // }
+                ],
                 unread:'',
+                selectCard:'',
                 Aucreg:false,
                 active:'',
                 isEmpty:false,
                 hasLogin:false,
+
                 filter: "all",
                 isSelected: '',
                 photos:[],
@@ -380,6 +508,12 @@
                     price:'',
                     minimumPrice:'',
                 },
+                form2:{
+                    name: '',
+                    cardNumber: '',
+                    expiredDate: '',
+                    cvc: '',
+                },
                 pickerOptions: {
                     // disabledDate(time) {
                     //     return parseInt(time.getTime()) < Date.now()
@@ -387,6 +521,7 @@
                 },
             };
         },
+
 
         created(){
             this.username = localStorage.getItem("username");
@@ -513,6 +648,59 @@
                 ]);
                 return colors.get(item);
             },
+            showCard(card){
+                var reg = /^(\d{4})\d+(\d{4})$/;
+                return card.replace(reg, "$1 **** **** $2");
+            },
+            addnew(){
+                this.addNewCard = true;
+            },
+            submitcard(){
+                this.$refs["form2"].validate((valid) =>{
+                    if (valid) {
+                        let data = new FormData();
+                        data.append('name', this.form2.name);
+
+                        let card = this.form2.cardNumber.replace(/\s+/g, "");
+                        data.append('cardNumber', card);
+                        let date = this.form2.expiredDate.replace(/\//g, "");
+                        data.append('expiryDate', date);
+                        data.append('cvv', this.form2.cvc);
+
+                        this.$axios
+                            .post('/payment/add', data)
+                            .then(response => {
+                                let newCard = response.data.result;
+                                this.cards.push({
+                                    paymentId:newCard.paymentId,
+                                    name:newCard.name,
+                                    cardNumber:newCard.cardNumber,
+                                    cvc:newCard.cvc,
+                                    expiredDate:newCard.expiryDate});
+                            })
+                            .catch(function (error) {
+                                console.log(error)
+                            });
+                        this.form2.cvc = '';
+                        this.form2.name = '';
+                        this.form2.cardNumber = '';
+                        this.form2.expiredDate = '';
+
+                        this.addNewCard = false;
+                    }
+                    else{
+                        this.$message.error("Please complete the form.");
+                    }
+                })
+            },
+
+            backcard(){
+                this.form2.cvc = '';
+                this.form2.name = '';
+                this.form2.cardNumber = '';
+                this.form2.expiredDate = '';
+                this.addNewCard = false;
+            },
 
             cancelAuc(item){
                 this.$confirm('Cancel this Auction?', 'Alert', {
@@ -554,38 +742,43 @@
                 )
             },
             submitReg(pid){
-                this.$refs["form"].validate((valid) => {
-                    if (valid) {
-                        let data = new FormData();
-                        data.append('pid', pid);
-                        data.append('startdate', this.form.daterange[0]);
-                        data.append('enddate', this.form.daterange[1]);
-                        data.append('price', this.form.price);
-                        data.append('minimumPrice', this.form.minimumPrice);
+                if(this.selectCard!==''){
+                    this.$refs["form"].validate((valid) => {
+                        if (valid) {
+                            let data = new FormData();
+                            data.append('pid', pid);
+                            data.append('startdate', this.form.daterange[0]);
+                            data.append('enddate', this.form.daterange[1]);
+                            data.append('price', this.form.price);
+                            data.append('minimumPrice', this.form.minimumPrice);
 
-                        this.$axios.post('/property/newAuction', data)
-                            .then((response) => {
-                                if (response.status >= 200 && response.status < 300) {
-                                    if(response.data.code === 200){
-                                        this.$message.success("Register successful!");
-                                        this.Aucreg = false;
-                                        location.reload()
-                                    }else if(response.data.code === 400){
-                                        this.Aucreg = false;
-                                        this.$message.error(response.data.msg);
+                            this.$axios.post('/property/newAuction', data)
+                                .then((response) => {
+                                    if (response.status >= 200 && response.status < 300) {
+                                        if(response.data.code === 200){
+                                            this.$message.success("Register successful!");
+                                            this.Aucreg = false;
+                                            location.reload()
+                                        }else if(response.data.code === 400){
+                                            this.Aucreg = false;
+                                            this.$message.error(response.data.msg);
+                                        }
+                                    }else{
+                                        console.log(response.data.msg);
                                     }
-                                }else{
-                                    console.log(response.data.msg);
-                                }
-                            })
-                            .catch((response) => {
-                                console.log('error', response);
-                                this.$message.error('New Auction Register Error');
-                            });
-                    } else {
-                        return false;
-                    }
-                });
+                                })
+                                .catch((response) => {
+                                    console.log('error', response);
+                                    this.$message.error('New Auction Register Error');
+                                });
+                        } else {
+                            return false;
+                        }
+                    });
+                }
+                else{
+                    this.$message.error('Please select or add a card!');
+                }
             },
 
             addStatusColor(status) {
@@ -601,7 +794,24 @@
                 this.form.minimumPrice = '';
                 this.form.price = '';
                 this.form.daterange = '';
+                this.form2.cvc = '';
+                this.form2.name = '';
+                this.form2.cardNumber = '';
+                this.form2.expiredDate = '';
+                this.addNewCard = false;
                 this.Aucreg = true;
+                this.$axios
+                    .get('/payment/get/')
+                    .then(response => {
+                        this.cards = response.data.result;
+                        if(this.cards.length !== 0){
+                            this.selectCard = this.cards[0].paymentId;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+
             },
 
             changeSearch(value) {
@@ -670,6 +880,17 @@
             ['form.minimumPrice'](val) {
                 this.$nextTick(() => {
                     this.form.minimumPrice = val.replace(/\D/g,'');
+                });
+            },
+            ['form2.cardNumber'](val) {
+                this.$nextTick(() => {
+                    this.form2.cardNumber = val.replace(/\D/g,'').replace(/....(?!$)/g,'$& ');
+                });
+            },
+
+            ['form2.expiredDate'](val) {
+                this.$nextTick(() => {
+                    this.form2.expiredDate = val.replace(/\D/g,'').replace(/..(?!$)/g,'$&\/');
                 });
             },
         }
