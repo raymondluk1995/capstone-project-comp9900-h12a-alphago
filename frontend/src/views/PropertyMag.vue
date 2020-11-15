@@ -529,9 +529,9 @@
                             if(response.data.code === 200){
                                 this.$message.success("Cancel successful!");
                                 location.reload();
+                            }else if(response.data.code === 400){
+                                this.$message.error(response.msg);
                             }
-                        } else if(response.data.code === 400){
-                            this.$message.error(response.msg);
                         }else{
                             console.log(response.msg);
                         }
@@ -568,19 +568,18 @@
                                 if (response.status >= 200 && response.status < 300) {
                                     if(response.data.code === 200){
                                         this.$message.success("Register successful!");
-                                        // this.propInfo.auction = true;
                                         this.Aucreg = false;
                                         location.reload()
+                                    }else if(response.data.code === 400){
+                                        this.Aucreg = false;
+                                        this.$message.error(response.data.msg);
                                     }
-                                } else if(response.data.code === 400){
-                                    this.Aucreg = false;
-                                    this.$message.error(response.msg);
                                 }else{
-                                    console.log(response.msg);
+                                    console.log(response.data.msg);
                                 }
                             })
-                            .catch((res) => {
-                                console.log('error', res);
+                            .catch((response) => {
+                                console.log('error', response);
                                 this.$message.error('New Auction Register Error');
                             });
                     } else {

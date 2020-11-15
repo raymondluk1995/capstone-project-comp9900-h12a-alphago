@@ -730,16 +730,14 @@ export default {
                         this.$message.success("Property register successful");
                         this.$router.replace("/propmag");
                       }else if(response.data.code === 400){
-                          console.log('there')
                           this.$message.error(response.data.msg);
-                          location.reload()
                       }
                     } else{
                       console.log(response.msg);
                     }
                   })
-                  .catch((res) => {
-            console.log('error', res);
+                  .catch((response) => {
+            console.log('error', response);
             this.$message.error('Property Register Error');
           });
 
