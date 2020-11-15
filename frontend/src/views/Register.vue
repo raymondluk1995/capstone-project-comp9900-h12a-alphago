@@ -425,7 +425,7 @@ export default {
       let types = ["image/jpeg", "image/jpg", "image/png"];
       const isImage = types.includes(file.type);
       if (!isImage) {
-        this.$message.error("上传图片只能是 JPG、JPEG、PNG 格式!");
+        this.$message.error("Uploaded image must be in PNG or JPG format!");
       }
       if (!isLt2M) {
         this.$message.error("Image size can not larger than 2MB!");
