@@ -55,6 +55,7 @@
                                 :model="form"
                                 label-width="100px"
                                 label-position="left"
+                                :rules="rules"
                         >
                         <el-col :span="24">
                             <el-row tyle="flex" justify="center" style="margin:10px 5%">
@@ -145,6 +146,14 @@
             Header,
         },
         data() {
+            const validName = (rule, value, callback) => {
+                const namereg = /^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/;
+                if (!namereg.test(value)) {
+                    callback(new Error("Name should begin with an uppercase letter."));
+                } else {
+                    callback();
+                }
+            };
             const validateEmail = (rule, value, callback) => {
                 const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (!emailReg.test(value)) {
@@ -176,9 +185,9 @@
                     validate:'',
                 },
                 rules: {
-                    firstname: [{required: true, message: " Please enter firstname", trigger: "blur",},],
-                    validate: [{required: true, message: " Please enter validate code", trigger: "blur",},],
-                    lastname: [{required: true, message: " Please enter lastname", trigger: "blur",},],
+                    firstname: [{required: true, message: " Please enter firstname", trigger: "blur",}, { validator: validName, trigger: "blur" }],
+                    validate: [{required: true, message: " Please enter validate code", trigger: "blur",}, ],
+                    lastname: [{required: true, message: " Please enter lastname", trigger: "blur",},{ validator: validName, trigger: "blur" }],
                     email: [{required: true, message: "Please enter email address", trigger: "blur",}, { validator: validateEmail, trigger: "blur" },],
                 },
             };
@@ -240,12 +249,16 @@
                 // this.form.imageUrl = 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2931000230,881740929&fm=11&gp=0.jpg'
             },
             cancelE(){
+                this.form.email ='';
+                this.form.validate = '';
                 this.canEditEmail = false;
             },
             cancelL(){
+                this.form.lastname = '';
                 this.canEditLastname = false;
             },
             cancelF(){
+                this.form.firstname = '';
                 this.canEditFirstname = false;
             },
             submitE(){
