@@ -265,7 +265,7 @@
                             </div>
 
                             <div v-if="!item.message.seller && item.message.success" style="padding:0 50px;">
-                                <p style="font-size: 18px;font-weight:bold">Dear {{item.message.sellerName}}</p>
+                                <p style="font-size: 18px;font-weight:bold">Dear {{item.message.bidderName}}</p>
                                 <p>Congratulations!</p>
                                 <p>Your win the Property<span style="font-size:12px;color:#596c84">[PID:{{item.message.pid}}]</span>.
                                  Your highest bid is ${{item.message.bidPrice|numFormat}}.</p>
