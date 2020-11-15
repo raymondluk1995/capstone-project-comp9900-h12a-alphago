@@ -554,7 +554,7 @@ export default {
 
 .img-size-reg img {
   max-width: 100%;
-  height: 100%;
+  /*height: 100%;*/
   display:block;
 }
 
