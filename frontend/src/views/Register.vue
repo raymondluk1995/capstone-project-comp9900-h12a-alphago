@@ -88,6 +88,7 @@
                   >{{ count }} s</el-button
                 >
               </el-form-item>
+              
               <el-form-item label="" prop="validate">
                 <el-input
                   v-model="form.validate"
@@ -102,7 +103,7 @@
                   placeholder="* Password"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="" prop="passwordAgain">
+              <el-form-item label="" prop="passwordAgain" style="margin-top:20px;">
                 <el-input
                   type="password"
                   v-model="form.passwordAgain"
@@ -247,7 +248,7 @@ export default {
       } else if (!password) {
         callback(
           new Error(
-            "Must contain numeric digit, uppercase and lowercase letter"
+            "Digit, uppercase and lowercase letters required"
           )
         );
       } else {
@@ -551,6 +552,9 @@ export default {
   height:100%;
 }
 
+.el-form-item__error{
+  font-size:10px !important;
+}
 
 .img-size-reg img {
   max-width: 100%;
