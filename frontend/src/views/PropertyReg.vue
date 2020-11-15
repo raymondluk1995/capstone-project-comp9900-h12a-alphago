@@ -727,15 +727,14 @@ export default {
                   .then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                       if(response.data.code === 200){
-                        console.log(response.data);
                         this.$message.success("Property register successful");
                         this.$router.replace("/propmag");
+                      }else if(response.data.code === 400){
+                          console.log('there')
+                          this.$message.error(response.data.msg);
+                          location.reload()
                       }
-                    } else if(response.data.code === 400){
-                      console.log(response.data);
-                      this.$message.success("Property register failure");
-                      location.reload()
-                    }else{
+                    } else{
                       console.log(response.msg);
                     }
                   })
