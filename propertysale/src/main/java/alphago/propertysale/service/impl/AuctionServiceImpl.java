@@ -259,7 +259,6 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
         notificationMapper.addMessage(notification);
         BidHistoryPush.refresh(aid);
     }
-
     /**
     * @Description: Search auctions based on the search model
     */

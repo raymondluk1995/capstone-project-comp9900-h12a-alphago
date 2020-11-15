@@ -1,6 +1,6 @@
 package alphago.propertysale.controller;
 
-import alphago.propertysale.entity.POJO.AvatarPorter;
+import alphago.propertysale.entity.AvatarPorter;
 import alphago.propertysale.entity.returnVO.InformationVO;
 import alphago.propertysale.entity.returnVO.LoginVO;
 import alphago.propertysale.entity.POJO.User;
