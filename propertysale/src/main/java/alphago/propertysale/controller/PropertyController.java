@@ -13,6 +13,7 @@ import alphago.propertysale.utils.FileUtil;
 import alphago.propertysale.utils.Result;
 import alphago.propertysale.utils.TimeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
@@ -85,7 +86,7 @@ public class PropertyController {
 
         // Get all properties based on use's Id
         List<Property> properties = propertyService.list(new QueryWrapper<Property>().
-                eq("owner", owner));
+                eq("owner", owner).eq("deleted", false));
         if(properties.size() == 0) return Result.fail("You haven't post any property!");
         List<PropertyVO> voList = new ArrayList<>();
 
@@ -145,9 +146,11 @@ public class PropertyController {
     @RequestMapping("/delete")
     @RequiresAuthentication
     public Result deleteProperty(String pid){
-        if(propertyService.getById(pid) == null) return Result.fail("Already deleted!");
+        Property p = propertyService.getById(pid);
+        if(p == null) return Result.fail("No such Property!");
+        if(p.getDeleted()) return Result.fail("Property P"+ pid + " has already be deleted");
 
-        propertyService.removeById(pid);
+        propertyService.update(new UpdateWrapper<Property>().eq("pid", pid).set("deleted", true));
 
         return Result.success("Remove Property: " + pid);
     }

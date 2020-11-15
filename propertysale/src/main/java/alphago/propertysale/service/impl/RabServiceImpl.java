@@ -78,7 +78,7 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
             throw new RuntimeException("Auction: " + aid + " is finished!");
         }else {
             rabMapper.insert(rab);
-            BidHistoryPush.newBidder(aid);
+            BidHistoryPush.bidPush(aid, new BidMsg().setNewBidder(true));
         }
         auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).setSql("bidder_num=bidder_num+1"));
     }

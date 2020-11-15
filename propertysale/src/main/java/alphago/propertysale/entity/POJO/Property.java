@@ -46,6 +46,5 @@ public class Property implements Serializable {
 
     private boolean publicAccess;
 
-    @TableLogic
     private Boolean deleted = false;
 }
