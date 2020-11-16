@@ -1251,10 +1251,10 @@
                                         .then((response) => {
                                             if (response.status >= 200 && response.status < 300) {
                                                 if (response.data.code === 200) {
-                                                    this.propInfo.rab = response.data.result;
+                                                    this.propInfo.rab = response.data.result.id;
                                                     this.$message.success("Register successful!");
                                                     // location.reload();
-                                                    // this.propInfo.highestPrice = this.form3.initPrice.replace(/,/g, "");
+                                                    this.propInfo.highestPrice = response.data.result.price;
                                                 } else if (response.data.code === 400) {
                                                     this.$message.error(response.data.msg);
                                                 }
