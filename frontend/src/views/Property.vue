@@ -1284,14 +1284,11 @@
                                 .then((response) => {
                                     if (response.status >= 200 && response.status < 300) {
                                         if (response.data.code === 200) {
-                                            this.propInfo.rab = response.data.result;
+                                            this.propInfo.rab = response.data.result.id;
                                             this.$message.success("Register successful!");
                                             // location.reload();
-                                            if(this.propInfo.status ==='A'){
-                                                this.propInfo.highestPrice = this.form3.initPrice.replace(/,/g, "");
-                                            }else{
-                                                this.propInfo.highestPrice = this.propInfo.latestPrice;
-                                            }
+                                            this.propInfo.highestPrice = response.data.result.price;
+
                                         } else if (response.data.code === 400) {
                                             this.$message.error(response.data.msg);
                                         }
@@ -1367,7 +1364,7 @@
                         }, 1000);
                     }
                 }else{
-                    this.propInfo.latestPrice = this.propInfo.latestPrice + 10;
+                    this.propInfo.latestPrice = res.price;
                 }
 
             },
