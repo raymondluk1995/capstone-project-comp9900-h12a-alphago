@@ -75,10 +75,10 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
                 throw new RuntimeException("Your bid price must larger than " + curPrice + "!");
             }
         }else if(!auction.getStatus().equals("R")){
-            throw new RuntimeException("Auction: " + aid + " is finished!");
+            throw new RuntimeException("Auction: " + aid + " has finished!");
         }else {
             rabMapper.insert(rab);
-            BidHistoryPush.bidPush(aid, new BidMsg().setNewBidder(true));
+            BidHistoryPush.newBidder(aid);
         }
         auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid).setSql("bidder_num=bidder_num+1"));
     }
