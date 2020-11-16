@@ -162,6 +162,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
      */
     @Override
     public void initHistory(long aid) {
+        // Check status
+        Auction auction = auctionMapper.selectById(aid);
+        if(!auction.getStatus().equals("R")) return;
         // get all rabs
         List<Rab> rabList = rabMapper.selectList(new QueryWrapper<Rab>().eq("aid", aid));
         // sort by highest price
@@ -200,6 +203,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
     @Override
     public void finishAuction(long aid) {
         Auction auction = auctionMapper.selectById(aid);
+        // Check status
+        if(!auction.getStatus().equals("A")) return;
+
         Property property = propertyMapper.selectById(auction.getPid());
         Address address = addressMapper.selectById(property.getPid());
         User seller = userMapper.selectById(auction.getSeller());
