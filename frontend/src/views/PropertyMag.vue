@@ -515,9 +515,9 @@
                     cvc: '',
                 },
                 pickerOptions: {
-                    // disabledDate(time) {
-                    //     return parseInt(time.getTime()) < Date.now()
-                    // }
+                    disabledDate(time) {
+                        return parseInt(time.getTime()) < Date.now()
+                    }
                 },
             };
         },
