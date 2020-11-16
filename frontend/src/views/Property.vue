@@ -1243,7 +1243,9 @@
                                 data.append('aid', this.id);
                                 data.append('registerTime', dayjs().valueOf().toString());
                                 let price = this.form3.initPrice.replace(/,/g, "");
-                                data.append('initPrice', price);
+                                if(this.propInfo.status ==='A'){
+                                    data.append('initPrice', price);
+                                }
                                 data.append('paymentId', this.selectCard);
 
                                 this.$axios.post('/rab/register', data)
