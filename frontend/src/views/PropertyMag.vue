@@ -203,13 +203,13 @@
                                         </el-form-item>
 
                                         <el-form-item label="Reserved Price:" prop="price">
-                                            <el-input v-model="form.price"  maxlength="10">
+                                            <el-input v-model="form.price"  maxlength="9">
                                                 <i slot="suffix" class="input-slot">{{form.price|numFormat}} A$</i>
                                             </el-input>
                                         </el-form-item>
 
                                         <el-form-item label="Starting Price:" prop="minimumPrice">
-                                            <el-input v-model="form.minimumPrice"  maxlength="10">
+                                            <el-input v-model="form.minimumPrice"  maxlength="9">
                                                 <i slot="suffix" class="input-slot">{{form.minimumPrice|numFormat}} A$</i>
                                             </el-input>
                                         </el-form-item>

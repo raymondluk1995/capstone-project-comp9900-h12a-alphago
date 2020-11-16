@@ -350,13 +350,13 @@
           </el-form-item>
 
           <el-form-item v-if="form5.Auction" label="Reserved Price:" prop="price">
-            <el-input v-model="form5.price" maxlength="10" >
+            <el-input v-model="form5.price" maxlength="9" >
                 <i slot="suffix" class="input-slot">{{form5.price |numFormat}} A$</i>
             </el-input>
           </el-form-item>
 
           <el-form-item v-if="form5.Auction" label="Starting Price:" prop="minimumPrice">
-              <el-input v-model="form5.minimumPrice"  maxlength="10" >
+              <el-input v-model="form5.minimumPrice"  maxlength="9" >
                   <i slot="suffix" class="input-slot">{{form5.minimumPrice|numFormat}} A$</i>
               </el-input>
           </el-form-item>
@@ -548,50 +548,7 @@ export default {
       hasLogin: false,
       activateIndex: '0',
         addNewCard:false,
-        cards:[
-            //     {
-            //     paymentId:'12',
-            //     name:'Tom',
-            //     cardNumber:'4321432143214321',
-            //     cvc:'123',
-            // },
-            //     {
-            //         paymentId:'11',
-            //         name:'Bob',
-            //         cardNumber:'1234123412341234',
-            //         cvc:'012',
-            //     },
-            //     {
-            //         paymentId:'15',
-            //         name:'Tom',
-            //         cardNumber:'4321432143214321',
-            //         cvc:'123',
-            //     },
-            // {
-            //     paymentId:'16',
-            //     name:'Bob',
-            //     cardNumber:'1234123412341234',
-            //     cvc:'012',
-            // },
-            // {
-            //     paymentId:'17',
-            //     name:'Tom',
-            //     cardNumber:'4321432143214321',
-            //     cvc:'123',
-            // },
-            // {
-            //     paymentId:'16',
-            //     name:'Bob',
-            //     cardNumber:'1234123412341234',
-            //     cvc:'012',
-            // },
-            // {
-            //     paymentId:'17',
-            //     name:'Tom',
-            //     cardNumber:'4321432143214321',
-            //     cvc:'123',
-            // }
-        ],
+        cards:[],
         options: [{
             value: 'Apartment',
             label: 'Apartment'

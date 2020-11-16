@@ -243,7 +243,7 @@
                             >
                             <el-col :span="21">
                             <el-form-item  prop="newBid">
-                            <el-input v-model="bidform.newBid" :disabled="this.propInfo.status==='R'" maxlength="10" placeholder="Bid Price" >
+                            <el-input v-model="bidform.newBid" :disabled="this.propInfo.status==='R'" maxlength="9" placeholder="Bid Price" >
                                 <i slot="suffix" class="input-slot">{{ bidform.newBid | numFormat }} A$</i>
                             </el-input>
                             </el-form-item>
@@ -459,7 +459,7 @@
                                 >
                                     <el-form-item prop="initPrice">
                                         <h6>Input your initial bid to proceed.</h6>
-                                        <el-input v-model="form3.initPrice" maxlength="10"  placeholder="Initial Price"></el-input>
+                                        <el-input v-model="form3.initPrice" maxlength="9"  placeholder="Initial Price"></el-input>
                                         <p>Your initial bid is ${{ form3.initPrice | numFormat }}.</p>
                                     </el-form-item>
                                 </el-form>
