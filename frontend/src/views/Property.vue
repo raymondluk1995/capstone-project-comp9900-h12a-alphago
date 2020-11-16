@@ -217,7 +217,7 @@
 <!--                <el-button type="" :disabled="true" style="margin-top: 10px;color:#173b77;font-size: 20px;background-color:#a0b9df; width:100%"-->
 <!--                >{{ propInfo.bidderNum }} Bidders</el-button>-->
                 <template v-if="this.username !== null">
-                <template v-if="username !== propInfo.username">
+                <template v-if="this.username !== propInfo.username">
 
                     <div v-if="this.propInfo.rab !== null" style="text-align: center;
                     margin-top:20px;
