@@ -82,6 +82,7 @@ public class BidHistoryPush {
     * @Description: Inform auction page to refresh
     */
     public static void refresh(long aid){
+        System.out.println("refresh " + map.get(String.valueOf(aid)));
         if(map.get(String.valueOf(aid)) == null) return;
         try {
             HashMap<String, Boolean> m = new HashMap<>();
