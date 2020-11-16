@@ -61,6 +61,7 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
                     auctionMapper.update(null, new UpdateWrapper<Auction>()
                             .eq("aid", aid)
                             .setSql("end_date = date_add(end_date, INTERVAL 2 MINUTE)")
+                            .set("highest_price", rab.getHighestPrice())
                     );
                 }
 
