@@ -28,8 +28,8 @@
           </el-form-item>
           <el-form-item label="" prop="validate">
             <el-input  style="width:70%;float:left;" v-model="form.validate" placeholder="* Verify your Validate code here"></el-input>
-            <el-button  style="width:28%;float:right;" v-show="show" type="" @click="validate"> <i class="el-icon-s-promotion"></i> Validate</el-button>
-            <el-button  style="width:28%;float:right;" v-show="!show" type="ordinary">{{ count }} s</el-button>
+            <el-button  style="width:25%;float:right;" v-show="show" type="" @click="validate"> <i class="el-icon-s-promotion"></i> Validate</el-button>
+            <el-button  style="width:25%;float:right;" v-show="!show" type="ordinary">{{ count }} s</el-button>
           </el-form-item>
             </el-col>
           </el-row>
