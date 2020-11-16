@@ -17,7 +17,6 @@ public class SearchResVO {
     private Long aid;
     private String status;
     private Long highestPrice;
-    private Long minimumPrice;
     private LocalDateTime startdate;
     private LocalDateTime enddate;
 
