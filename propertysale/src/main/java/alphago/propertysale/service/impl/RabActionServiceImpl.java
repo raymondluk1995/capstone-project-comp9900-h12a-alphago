@@ -70,6 +70,8 @@ public class RabActionServiceImpl extends ServiceImpl<RabActionMapper, RabAction
             auctionMapper.update(null, new UpdateWrapper<Auction>()
                 .eq("aid", aid)
                 .setSql("end_date = date_add(end_date, INTERVAL 2 MINUTE)")
+                .set("highest_price", rab.getHighestPrice())
+                .set("highest_price", rab.getHighestPrice()));
             );
         }
 
