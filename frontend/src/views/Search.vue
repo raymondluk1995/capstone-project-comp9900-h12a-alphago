@@ -1358,8 +1358,16 @@ export default {
       let year = dayjs(time).year();
       let hour = dayjs(time).hour();
       let min = dayjs(time).minute();
-      let formatTime = `${day} ${mon} ${year}, ${hour}:${min}`;
+      let formatTime = `${this.addZero(day)} ${mon} ${year}, ${this.addZero(hour)}:${this.addZero(min)}`;
+
       return formatTime;
+    },
+    addZero(num){
+      if (parseInt(num) >= 10) {
+        return num;
+      } else {
+        return `0${num}`;
+      }
     },
 
     getBidStatus(item) {

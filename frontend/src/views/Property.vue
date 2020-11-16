@@ -1127,6 +1127,14 @@
                 return `${ st }`;
             },
 
+            addZero(num){
+                if (parseInt(num) >= 10) {
+                    return num;
+                } else {
+                    return `0${num}`;
+                }
+            },
+
             showTime2(time){
                 // let time = dayjs(day).format("YYYY-MM-DD HH:mm:ss");
                 let MONTH =['Jan', 'Feb', 'Mar','Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -1135,7 +1143,8 @@
                 let year = dayjs(time).year();
                 let hour = dayjs(time).hour();
                 let min = dayjs(time).minute();
-                let formatTime = `${day} ${mon} ${year}, ${hour}:${min}`;
+                let formatTime = `${this.addZero(day)} ${mon} ${year}, ${this.addZero(hour)}:${this.addZero(min)}`;
+
                 return formatTime;
             },
 
