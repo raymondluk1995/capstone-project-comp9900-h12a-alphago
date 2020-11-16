@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
 * @description: Control layer to deal with request sent to Registered Auction Bidder(RAB) Module
@@ -50,7 +52,10 @@ public class RabController {
 
         rabService.rabRegister(rab);
 
-        return Result.success(rab.getRabId());
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("id", rab.getRabId());
+        ret.put("price", rab.getInitPrice());
+        return Result.success(ret);
     }
 }
 
