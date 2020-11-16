@@ -431,6 +431,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 searchResVO.setAddress(address.getFullAddress());
                 // photos
                 searchResVO.setPhotos(FileUtil.getImages(searchResVO.getPid()));
+                if(searchResVO.getStatus().equals("R")){
+                    searchResVO.setHighestPrice(searchResVO.getMinimumPrice());
+                }
             }
 
             // update history
