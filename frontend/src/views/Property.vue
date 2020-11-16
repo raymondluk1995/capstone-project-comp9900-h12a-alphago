@@ -1363,7 +1363,7 @@
                         }, 1000);
                     }
                 }else{
-                    this.propInfo.latestPrice = this.propInfo.latestPrice + 1000;
+                    this.propInfo.latestPrice = this.propInfo.latestPrice + 10;
                 }
 
             },
