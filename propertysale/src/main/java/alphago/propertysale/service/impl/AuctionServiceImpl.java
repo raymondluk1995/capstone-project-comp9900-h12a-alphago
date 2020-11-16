@@ -164,7 +164,10 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
     public void initHistory(long aid) {
         // Check status
         Auction auction = auctionMapper.selectById(aid);
-        if(!auction.getStatus().equals("R")) return;
+        if(!auction.getStatus().equals("R")){
+            BidHistoryPush.refresh(aid);
+            return;
+        }
         // get all rabs
         List<Rab> rabList = rabMapper.selectList(new QueryWrapper<Rab>().eq("aid", aid));
         // sort by highest price
@@ -197,6 +200,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                             .set("current_bid", currentRab.getRabId())
                             .set("highest_price", currentRab.getHighestPrice()));
         }
+
         BidHistoryPush.refresh(aid);
     }
 
@@ -204,7 +208,10 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
     public void finishAuction(long aid) {
         Auction auction = auctionMapper.selectById(aid);
         // Check status
-        if(!auction.getStatus().equals("A")) return;
+        if(!auction.getStatus().equals("A")){
+            BidHistoryPush.refresh(aid);
+            return;
+        }
 
         Property property = propertyMapper.selectById(auction.getPid());
         Address address = addressMapper.selectById(property.getPid());
