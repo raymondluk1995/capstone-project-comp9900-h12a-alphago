@@ -79,7 +79,8 @@ public class RabServiceImpl extends ServiceImpl<RabMapper, Rab> implements RabSe
         }else {
             rab.setHighestPrice(auction.getMinimumPrice()).setInitPrice(auction.getMinimumPrice());
             auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid", aid)
-                    .setSql("minimum_price = minimum_price+10"));
+                    .setSql("minimum_price = minimum_price+10")
+                    .setSql("highest_price = highest_price+10"));
             rabMapper.insert(rab);
             BidHistoryPush.newBidder(aid, rab.getInitPrice() + 10);
         }
