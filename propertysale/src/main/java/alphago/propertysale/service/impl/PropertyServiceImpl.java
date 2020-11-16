@@ -69,7 +69,6 @@ public class PropertyServiceImpl extends ServiceImpl<PropertyMapper , Property> 
             auction.setPid(pid);
             registerNewAuction(auction, property.getOwner());
         }
-        Thread.sleep(1500);
     }
 
     /**
