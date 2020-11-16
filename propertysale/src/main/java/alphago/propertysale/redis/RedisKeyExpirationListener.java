@@ -43,12 +43,8 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
         if(key.startsWith("Start:")){
             long aid = getAuctionId(key);
             Auction auction = auctionService.getById(aid);
-            auctionService.update(new UpdateWrapper<Auction>().eq("aid" , aid).set("status" , Auction.AUCTION));
             RedisTemplate redis = RedisUtil.getRedis();
-
-
             auctionService.initHistory(aid);
-
             System.out.println(auction.getEnddate());
             long expr = auction.getEnddate().toInstant(TimeUtil.getMyZone()).toEpochMilli() - System.currentTimeMillis();
             redis.opsForValue().set("End:"+aid,"", expr, TimeUnit.MILLISECONDS);
