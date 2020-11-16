@@ -108,7 +108,7 @@ public class BidHistoryPush {
         try {
             HashMap<String, Boolean> m = new HashMap<>();
             m.put("newBidder", true);
-            m.put("username", true);
+            m.put("username", null);
             String msg = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(m);
             if(map.get(String.valueOf(aid)) == null) return;
             map.get(String.valueOf(aid)).forEach(session -> {
