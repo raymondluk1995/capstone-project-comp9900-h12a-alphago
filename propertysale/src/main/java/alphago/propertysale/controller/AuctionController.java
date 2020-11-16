@@ -75,15 +75,17 @@ public class AuctionController {
             }
         }
         // Get auction's bid history
-        List<BidMsg> temp = BidHistoryPush.getAuctionHistory(aid);
-        List<BidMsg> history = new ArrayList<>();
-        for(Object obj : temp){
-            BidMsg bidMsg = new BidMsg();
-            BeanUtils.copyProperties(obj, bidMsg);
-            history.add(bidMsg);
+        if(auctionVO.getStatus().equals("A")) {
+            List<BidMsg> temp = BidHistoryPush.getAuctionHistory(aid);
+            List<BidMsg> history = new ArrayList<>();
+            for (Object obj : temp) {
+                BidMsg bidMsg = new BidMsg();
+                BeanUtils.copyProperties(obj, bidMsg);
+                history.add(bidMsg);
+            }
+            history.sort(Comparator.comparing(BidMsg::getPrice));
+            auctionVO.setHistory(history);
         }
-        history.sort(Comparator.comparing(BidMsg::getPrice));
-        auctionVO.setHistory(history);
         return Result.success(auctionVO);
     }
 

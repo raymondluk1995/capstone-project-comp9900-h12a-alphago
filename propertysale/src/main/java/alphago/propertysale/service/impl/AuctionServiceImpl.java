@@ -14,6 +14,7 @@ import alphago.propertysale.mapper.*;
 import alphago.propertysale.service.AuctionService;
 import alphago.propertysale.shiro.JwtInfo;
 import alphago.propertysale.utils.FileUtil;
+import alphago.propertysale.utils.RedisUtil;
 import alphago.propertysale.utils.TimeUtil;
 import alphago.propertysale.websocket.BidHistoryPush;
 import alphago.propertysale.websocket.BidMsg;
@@ -168,12 +169,13 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
             BidHistoryPush.refresh(aid);
             return;
         }
+        auctionMapper.update(null, new UpdateWrapper<Auction>().eq("aid" , aid).set("status" , Auction.AUCTION));
         // get all rabs
         List<Rab> rabList = rabMapper.selectList(new QueryWrapper<Rab>().eq("aid", aid));
         // sort by highest price
         rabList.sort(Comparator.comparing(Rab::getInitPrice));
-        // bid
-        BidHistoryPush.initHistory(aid);
+        // bid history
+        List<BidMsg> history = new ArrayList<>();
         Rab currentRab = null;
         for (Rab rab : rabList) {
             currentRab = rab;
@@ -188,10 +190,11 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                     .setTime(bid.getBidTime().toInstant(TimeUtil.getMyZone()).toEpochMilli())
                     .setOvertime(false);
 
-            BidHistoryPush.addBidHistory(aid, msg);
+            history.add(msg);
 
             rabActionMapper.insert(bid);
         }
+        RedisUtil.getRedis().opsForValue().set("History:"+aid, history);
         // set current rab
         if (currentRab != null) {
             auctionMapper.update(null,
@@ -254,6 +257,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, Auction> impl
                 notification.setUid(bidder.getUid()).setMessage(ObjectUtil.serialize(message));
                 notificationMapper.addMessage(notification);
 
+                BidHistoryPush.refresh(aid);
                 return;
             }
         } else {
