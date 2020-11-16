@@ -28,8 +28,8 @@
           </el-form-item>
           <el-form-item label="" prop="validate">
             <el-input  style="width:70%;float:left;" v-model="form.validate" placeholder="* Verify your Validate code here"></el-input>
-            <el-button  style="width:30%;float:right;" v-show="show" type="" @click="validate"> <i class="el-icon-s-promotion"></i> Validate</el-button>
-            <el-button  style="width:30%;float:right;" v-show="!show" type="ordinary">{{ count }} s</el-button>
+            <el-button  style="width:28%;float:right;" v-show="show" type="" @click="validate"> <i class="el-icon-s-promotion"></i> Validate</el-button>
+            <el-button  style="width:28%;float:right;" v-show="!show" type="ordinary">{{ count }} s</el-button>
           </el-form-item>
             </el-col>
           </el-row>
@@ -69,6 +69,43 @@ export default {
     this.vdaH = h - 147 + 'px';
   },
   data() {
+    const validateUsername = (rule, value, callback) => {
+      const usernameReg = /^[A-Za-z0-9]+$/;
+      if (!usernameReg.test(value)) {
+        callback(
+                new Error(
+                        "Please enter the correct username, only consists number and letter"
+                )
+        );
+      } else {
+        callback();
+      }
+    };
+    const validatepswd = (rule, value, callback) => {
+      const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+      const password = reg.test(value);
+      if (value === "") {
+        callback(new Error("Please enter the password"));
+      } else if (value.length < 6) {
+        callback(new Error("Too short ! At least 6 characters"));
+      } else if (!password) {
+        callback(
+                new Error(
+                        "Digit, uppercase and lowercase letters required"
+                )
+        );
+      } else {
+        callback();
+      }
+    };
+    const validateEmail = (rule, value, callback) => {
+      const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!emailReg.test(value)) {
+        callback(new Error("Please enter the correct email address"));
+      } else {
+        callback();
+      }
+    };
     const validatePasswordAgain = (rule, value, callback) => {
       let password = this.form.password;
       console.log(password);
@@ -90,10 +127,10 @@ export default {
         validate:''
       },
       rules: {
-        username: [{required: true, message: "Please enter username", trigger: "blur",},],
-        password: [{required: true, message: "Please enter new password", trigger: "blur",},],
+        username: [{required: true, message: "Please enter username", trigger: "blur",},{ validator: validateUsername, trigger: "blur" }],
+        password: [{required: true, message: "Please enter new password", trigger: "blur",},{ validator: validatepswd, trigger: "blur" }],
         passwordAgain: [{required: true, message: "Please enter the password again", trigger: "blur",}, { validator: validatePasswordAgain, trigger: "blur" },],
-        validate: [{required: true, message: "Please enter validate code", trigger: "blur",},],
+        validate: [{required: true, message: "Please enter validate code", trigger: "blur",},{ validator: validateEmail, trigger: "blur" }],
       },
     };
   },

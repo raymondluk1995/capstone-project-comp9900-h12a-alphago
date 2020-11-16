@@ -62,7 +62,7 @@
                         </el-select>
                     </el-col>
                 </el-row>
-                <el-collapse class="notice">
+                <el-collapse v-model="activeName" class="notice">
                     <div v-for="(item,index) in NoticeShow" @click="hasRead(item)">
                     <el-collapse-item
                             :key="item.notiId"
@@ -371,6 +371,7 @@
         },
         data() {
             return {
+                activeName: '',
                 columns: [
                     {prop: 'time', label: 'Time',width: '300',formatter: this.showTime_table},
                     {prop: 'uid', label: 'UID', width: '300'},
@@ -596,6 +597,7 @@
                 }
             },
             changeSearch(value) {
+                this.activeName='';
                 let filterNotice = [];
                 if(value === 'all'){
                     filterNotice = this.Notice;

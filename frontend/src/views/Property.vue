@@ -1290,28 +1290,24 @@
                 this.initWebSocket();
             },
 
-            websocketonmessage(e){ 
+            websocketonmessage(e){
                 let res = JSON.parse(e.data);
                 if(res.refresh === true){
                     location.reload()
                 }
                 if(res.newBidder===true){
                     this.propInfo.bidderNum = this.propInfo.bidderNum + 1;
-                    if(res.username!==null){
-                        this.notice2(res);
-                    }
-                }else{
-                    this.propInfo.latestPrice = res.price;
-                    let Time = this.showTime(res.time);
-                    this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
-                    this.notice(res);
-                    if(res.overtime === true){
-                        clearInterval(this.timer);
-                        this.propInfo.enddate = this.propInfo.enddate + 2*1000*60;
-                        this.timer = setInterval(() => {
-                            this.countDown(this.propInfo.enddate,this.propInfo.startdate);
-                        }, 1000);
-                    }
+                }
+                this.propInfo.latestPrice = res.price;
+                let Time = this.showTime(res.time);
+                this.propInfo.history.push({time:Time, uid:res.uid, username:res.username, price:res.price});
+                this.notice(res);
+                if(res.overtime === true){
+                    clearInterval(this.timer);
+                    this.propInfo.enddate = this.propInfo.enddate + 2*1000*60;
+                    this.timer = setInterval(() => {
+                        this.countDown(this.propInfo.enddate,this.propInfo.startdate);
+                    }, 1000);
                 }
             },
 
