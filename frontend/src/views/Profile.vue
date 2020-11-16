@@ -170,7 +170,7 @@
             const validName = (rule, value, callback) => {
                 const namereg = /^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/;
                 if (!namereg.test(value)) {
-                    callback(new Error("Name should begin with an uppercase letter."));
+                    callback(new Error("Name should begin with an uppercase letter followed by lowercase letter."));
                 } else {
                     callback();
                 }
