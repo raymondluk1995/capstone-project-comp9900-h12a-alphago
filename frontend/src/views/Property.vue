@@ -447,8 +447,8 @@
 
 
                         <el-tab-pane label="Submit" name="2" >
-                            <el-col :span="20">
-                            <el-row type="flex" justify="center">
+                            <el-col  :span="20">
+                            <el-row v-if="this.propInfo.status==='A'" type="flex" justify="center">
 
                                 <el-form
                                         class="form"
@@ -457,13 +457,20 @@
                                         :rules="rules"
 
                                 >
-                                    <el-form-item  prop="initPrice">
+                                    <el-form-item prop="initPrice">
                                         <h6>Input your initial bid to proceed.</h6>
-                                        <el-input v-model="form3.initPrice" maxlength="11"  placeholder="Initial Price"></el-input>
+                                        <el-input v-model="form3.initPrice" maxlength="10"  placeholder="Initial Price"></el-input>
                                         <p>Your initial bid is ${{ form3.initPrice | numFormat }}.</p>
                                     </el-form-item>
                                 </el-form>
                             </el-row>
+                            <el-row v-if="this.propInfo.status==='R'" type="flex" justify="center">
+                                <p>To be a new bidder, you should pay the initial bid.</p>
+                            </el-row>
+                            <el-row v-if="this.propInfo.status==='R'" type="flex" justify="center">
+                                 <h3>$ {{propInfo.latestPrice | numFormat}}</h3>
+                            </el-row>
+
                             <el-row>
                                 <div class="btns2">
                                     <span  style="padding:2px 5px;" @click="submitCard"><i class="el-icon-right"></i> Submit</span>
@@ -471,6 +478,7 @@
 
                             </el-row>
                             </el-col>
+
                         </el-tab-pane>
                     </el-tabs>
                 </el-form>
@@ -1307,6 +1315,7 @@
                 if(res.newBidder===true){
                     this.propInfo.bidderNum = this.propInfo.bidderNum + 1;
                 }
+
                 if(res.username!==null){
                     this.propInfo.latestPrice = res.price;
                     let Time = this.showTime(res.time);
@@ -1319,6 +1328,8 @@
                             this.countDown(this.propInfo.enddate,this.propInfo.startdate);
                         }, 1000);
                     }
+                }else{
+                    this.propInfo.latestPrice = this.propInfo.latestPrice + 1000;
                 }
 
             },
