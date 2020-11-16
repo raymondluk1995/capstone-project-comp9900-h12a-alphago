@@ -1245,7 +1245,7 @@
                                                 this.propInfo.rab = response.data.result;
                                                 this.$message.success("Register successful!");
                                                 // location.reload();
-                                                this.propInfo.highestPrice = this.form3.initPrice.replace(/,/g, "");
+                                                // this.propInfo.highestPrice = this.form3.initPrice.replace(/,/g, "");
                                             }else if (response.data.code === 400) {
                                                 this.$message.error(response.data.msg);
                                             }
@@ -1330,14 +1330,6 @@
                 console.log('close',e);
             },
 
-            notice2(res) {
-                const h = this.$createElement;
-                this.$notify({
-                    title: 'New Bidder!',
-                    dangerouslyUseHTMLString: true,
-                    message:`User <strong>${res.username}</strong> register as a new bidder!\n`
-                });
-            },
 
             notice(res) {
                 const h = this.$createElement;
