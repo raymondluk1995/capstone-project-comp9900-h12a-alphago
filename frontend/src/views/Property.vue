@@ -1236,44 +1236,76 @@
 
             submitCard(){
                     if(this.selectCard !== '') {
-                        this.$refs["form3"].validate((valid) => {
-                            if (valid) {
-                                let data = new FormData();
+                        if(this.propInfo.status ==='A') {
+                            this.$refs["form3"].validate((valid) => {
+                                if (valid) {
+                                    let data = new FormData();
 
-                                data.append('aid', this.id);
-                                data.append('registerTime', dayjs().valueOf().toString());
-                                let price = this.form3.initPrice.replace(/,/g, "");
-                                if(this.propInfo.status ==='A'){
+                                    data.append('aid', this.id);
+                                    data.append('registerTime', dayjs().valueOf().toString());
+                                    let price = this.form3.initPrice.replace(/,/g, "");
                                     data.append('initPrice', price);
-                                }
-                                data.append('paymentId', this.selectCard);
+                                    data.append('paymentId', this.selectCard);
 
-                                this.$axios.post('/rab/register', data)
-                                    .then((response) => {
-                                        if (response.status >= 200 && response.status < 300) {
-                                            if (response.data.code === 200) {
-                                                this.propInfo.rab = response.data.result;
-                                                this.$message.success("Register successful!");
-                                                // location.reload();
-                                                // this.propInfo.highestPrice = this.form3.initPrice.replace(/,/g, "");
-                                            }else if (response.data.code === 400) {
-                                                this.$message.error(response.data.msg);
+                                    this.$axios.post('/rab/register', data)
+                                        .then((response) => {
+                                            if (response.status >= 200 && response.status < 300) {
+                                                if (response.data.code === 200) {
+                                                    this.propInfo.rab = response.data.result;
+                                                    this.$message.success("Register successful!");
+                                                    // location.reload();
+                                                    // this.propInfo.highestPrice = this.form3.initPrice.replace(/,/g, "");
+                                                } else if (response.data.code === 400) {
+                                                    this.$message.error(response.data.msg);
+                                                }
+                                            } else {
+                                                console.log(response.data.msg);
                                             }
-                                        }  else {
-                                            console.log(response.data.msg);
+                                        })
+                                        .catch((res) => {
+                                            console.log('error', res);
+                                            this.$message.error('Error');
+                                        });
+                                    this.addNewCard = false;
+                                    this.bidderFlag = false;
+                                } else {
+                                    return false;
+                                }
+                            });
+                        }else{
+                            let data = new FormData();
+
+                            data.append('aid', this.id);
+                            data.append('registerTime', dayjs().valueOf().toString());
+                            data.append('paymentId', this.selectCard);
+                            data.append('price', this.propInfo.latestPrice);
+
+                            this.$axios.post('/rab/register', data)
+                                .then((response) => {
+                                    if (response.status >= 200 && response.status < 300) {
+                                        if (response.data.code === 200) {
+                                            this.propInfo.rab = response.data.result;
+                                            this.$message.success("Register successful!");
+                                            // location.reload();
+                                            // this.propInfo.highestPrice = this.form3.initPrice.replace(/,/g, "");
+                                        } else if (response.data.code === 400) {
+                                            this.$message.error(response.data.msg);
                                         }
-                                    })
-                                    .catch((res) => {
-                                        console.log('error', res);
-                                        this.$message.error('Error');
-                                    });
-                                this.addNewCard = false;
-                                this.bidderFlag = false;
-                            } else {
-                                return false;
-                            }
-                        });
-                    }else{
+                                    } else {
+                                        console.log(response.data.msg);
+                                    }
+                                })
+                                .catch((res) => {
+                                    console.log('error', res);
+                                    this.$message.error('Error');
+                                });
+                            this.addNewCard = false;
+                            this.bidderFlag = false;
+
+                        }
+
+                    }
+                    else{
                         this.$message.error('You should select a card before submit.');
                     }
             },
