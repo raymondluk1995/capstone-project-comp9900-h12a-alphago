@@ -130,7 +130,7 @@ export default {
         username: [{required: true, message: "Please enter username", trigger: "blur",},{ validator: validateUsername, trigger: "blur" }],
         password: [{required: true, message: "Please enter new password", trigger: "blur",},{ validator: validatepswd, trigger: "blur" }],
         passwordAgain: [{required: true, message: "Please enter the password again", trigger: "blur",}, { validator: validatePasswordAgain, trigger: "blur" },],
-        validate: [{required: true, message: "Please enter validate code", trigger: "blur",},{ validator: validateEmail, trigger: "blur" }],
+        validate: [{required: true, message: "Please enter validate code", trigger: "blur",}],
       },
     };
   },
