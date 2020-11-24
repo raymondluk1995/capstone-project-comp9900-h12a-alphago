@@ -16,5 +16,5 @@ Team members:
   3. run **npm run serve**, this should direct you to localhost:8080/
   
 ## Running of Back-End
-  1. download the latest release
+  1. download the **propertysale-0.0.1-SNAPSHOT.jar** file from the latest release named **AlphaGo Auction Backend** on the right column of the repository page.
   2. run **java -jar propertysale-0.0.1-SNAPSHOT**
