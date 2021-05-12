@@ -13,7 +13,7 @@
     "element-ui": "^2.4.5",
     "jquery": "^3.5.1",
     "qs": "^6.9.4",
-    "swiper": "^6.3.2",
+    "swiper": "^6.5.1",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
     "vue-better-google-places-autocomplete": "^1.1.0",
