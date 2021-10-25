@@ -2,6 +2,8 @@
 This is the capstone project of UNSW Master of IT program. This project is a web application of an online property auction. 
 For project demo, please click to [AlphaGo Auction](http://54.253.249.138/alpha) This demo is deployed on AWS.
 
+This project got 92 out of 100 eventually.
+
 Team members:
   - Wanchao Huang (Scrum Master and Front End)
   - Raymond Lu  (Front End)
